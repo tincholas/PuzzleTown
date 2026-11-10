@@ -893,6 +893,11 @@ export function solveByDeduction(
 
         // 6b. Woodcutter and Farm each need a House
         if (locked === 'farm' || locked === 'woodcutter') {
+          // If startingGrid is provided, only deduce a neighbor for buildings ACTUALLY placed on the player's board!
+          if (startingGrid && startingGrid[r][c] !== locked) {
+            continue;
+          }
+
           const houseNeighbors = ortho.filter((n) =>
             domains[n.r][n.c].has('house')
           );
@@ -980,6 +985,10 @@ export function solveByDeduction(
         }
 
         if (locked === 'house') {
+          if (startingGrid && startingGrid[r][c] !== 'house') {
+            continue;
+          }
+
           const partnerNeighbors = ortho.filter(
             (n) =>
               domains[n.r][n.c].has('woodcutter') ||
@@ -1021,6 +1030,10 @@ export function solveByDeduction(
             locked === 'farm' ||
             locked === 'town_hall')
         ) {
+          if (startingGrid && startingGrid[r][c] !== locked) {
+            continue;
+          }
+
           const roadNeighbors = ortho.filter((n) =>
             domains[n.r][n.c].has('road')
           );
@@ -1693,36 +1706,14 @@ export function getNextHint(
 
   const result = solveByDeduction(level, playerGrid);
 
-  // 1. Prefer direct single-rule placements (e.g. "Tree Needs Woodcutter", "Only Remaining Spot", "Farm Needs House")
-  for (const step of result.steps) {
-    if (
-      step.action === 'place' &&
-      playerGrid[step.r][step.c] === 'empty' &&
-      !step.ruleName.startsWith('Only ') &&
-      step.ruleName !== 'Only Remaining Spot'
-    ) {
-      return step;
-    }
-  }
-
-  // 2. Next prefer "Only Remaining Spot" (Hidden Single for a building type)
-  for (const step of result.steps) {
-    if (
-      step.action === 'place' &&
-      playerGrid[step.r][step.c] === 'empty' &&
-      step.ruleName === 'Only Remaining Spot'
-    ) {
-      return step;
-    }
-  }
-
-  // 3. Next any remaining 'place' step (including full Process of Elimination explanations)
+  // 1. Strictly in chronological deduction order: return the earliest placement that is valid right now
   for (const step of result.steps) {
     if (step.action === 'place' && playerGrid[step.r][step.c] === 'empty') {
       return step;
     }
   }
 
+  // 2. If no placement is ready, return the earliest un-marked empty cell
   for (const step of result.steps) {
     if (
       step.action === 'mark_empty' &&

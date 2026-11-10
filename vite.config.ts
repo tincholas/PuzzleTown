@@ -8,7 +8,7 @@ export default defineConfig({
     react(),
     VitePWA({
       registerType: 'autoUpdate',
-      includeAssets: ['favicon.svg', 'icons/icon-192.svg', 'icons/icon-512.svg'],
+      includeAssets: ['favicon.svg', 'icons/app-icon.png', 'icons/icon-192.svg', 'icons/icon-512.svg'],
       manifest: {
         name: 'PuzzleTown — Logic Village Builder',
         short_name: 'PuzzleTown',
@@ -21,6 +21,12 @@ export default defineConfig({
         start_url: './',
         scope: './',
         icons: [
+          {
+            src: 'icons/app-icon.png',
+            sizes: '512x512',
+            type: 'image/png',
+            purpose: 'any maskable'
+          },
           {
             src: 'icons/icon-192.svg',
             sizes: '192x192',
