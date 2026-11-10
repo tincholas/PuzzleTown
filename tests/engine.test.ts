@@ -171,12 +171,17 @@ describe('Campaign Levels — Uniqueness & Pure Logical Deduction Audit', () => 
       const deduction = solveByDeduction(level);
       expect(deduction.solved).toBe(true);
 
-      // 4. Hint system works from empty initial board
+      // 4. Hint system works from empty initial board and never uses vague explanations
       const marks = Array.from({ length: level.size }, () =>
         Array(level.size).fill(false)
       );
       const hint = getNextHint(level.initialGrid, marks, level);
       expect(hint).not.toBeNull();
+      for (const step of deduction.steps) {
+        expect(step.explanation).not.toContain(
+          'would make it impossible to satisfy'
+        );
+      }
     });
   }
 });

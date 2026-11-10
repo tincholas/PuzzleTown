@@ -14,7 +14,6 @@ import {
   formatTileName,
   getOrthoNeighbors,
   getSurrounding8Neighbors,
-  hasRoadPathToTownHall,
   isRoadTileOnValidPath,
   validateBoard
 } from './validator';
@@ -94,10 +93,6 @@ function canBeRoadEndpointOrRoad(domain: Set<TileType>): boolean {
   );
 }
 
-/**
- * Computes shortest number of road cells required to connect (sr, sc) and (tr, tc)
- * using only cells that have 'road' in their domain.
- */
 function shortestPossibleRoadDistance(
   domains: Set<TileType>[][],
   sr: number,
@@ -143,7 +138,6 @@ function shortestPossibleRoadDistance(
 
 /**
  * Fast connected-road-subgraph enumerator (Redelmeier-style) from Town Hall.
- * Finds all valid road configurations of size `targetRoads` on `grid` (up to `maxFound`).
  */
 export function findValidRoadNetworksForBuildings(
   baseGrid: TileType[][],
@@ -169,7 +163,6 @@ export function findValidRoadNetworksForBuildings(
 
   if (!th || requiredTerminals.length === 0) return [];
 
-  // Every required terminal and Town Hall must have at least one empty ortho neighbor
   for (const term of [th, ...requiredTerminals]) {
     if (
       !getOrthoNeighbors(size, term.r, term.c).some(
@@ -181,8 +174,6 @@ export function findValidRoadNetworksForBuildings(
   }
 
   const grid = baseGrid.map((r) => [...r]);
-
-  // Connected subgraph growth starting from empty neighbors of Town Hall
   const initialFrontier = getOrthoNeighbors(size, th.r, th.c).filter(
     (n) => grid[n.r][n.c] === 'empty'
   );
@@ -191,14 +182,12 @@ export function findValidRoadNetworksForBuildings(
     if (results.length >= maxFound) return;
 
     if (chosen.length === targetRoads) {
-      // Check if every terminal is adjacent to at least one chosen road
       for (const term of requiredTerminals) {
         const connected = getOrthoNeighbors(size, term.r, term.c).some(
           (n) => grid[n.r][n.c] === 'road'
         );
         if (!connected) return;
       }
-      // Verify every chosen road tile lies on a simple path (no dead-end spurs)
       for (const rc of chosen) {
         if (!isRoadTileOnValidPath(grid, rc.r, rc.c)) return;
       }
@@ -206,7 +195,6 @@ export function findValidRoadNetworksForBuildings(
       return;
     }
 
-    // Pruning: Manhattan distance from current road component to any unconnected terminal
     const remBudget = targetRoads - chosen.length;
     for (const term of requiredTerminals) {
       let minStepsNeeded = Infinity;
@@ -241,7 +229,6 @@ export function findValidRoadNetworksForBuildings(
       grid[nextCell.r][nextCell.c] = 'road';
       const nextChosen = [...chosen, nextCell];
 
-      // Expand frontier with orthogonal empty neighbors of nextCell not already in chosen/untried/forbidden
       const nextUntried = untried.slice(i + 1);
       for (const n of getOrthoNeighbors(size, nextCell.r, nextCell.c)) {
         const nKey = `${n.r},${n.c}`;
@@ -266,6 +253,8 @@ export function findValidRoadNetworksForBuildings(
 
 /**
  * Purely deductive human-rule solver (no guessing / no arbitrary trial-and-error).
+ * Tracks per-cell elimination reasons so that if a cell is solved by process of elimination,
+ * the hint clearly explains BOTH why the cell must be a building AND why all other buildings were ruled out.
  */
 export function solveByDeduction(
   level: LevelDefinition,
@@ -277,12 +266,33 @@ export function solveByDeduction(
   const hasTownHall = level.inventory.town_hall > 0;
   const maxRoads = level.inventory.road;
 
+  // Store concise reasons why specific candidates were eliminated at each cell (r, c)
+  const cellElimReasons: Record<string, Partial<Record<TileType, string>>> = {};
+  const recordElimReason = (
+    r: number,
+    c: number,
+    eliminatedType: TileType,
+    reason: string
+  ) => {
+    const key = `${r},${c}`;
+    if (!cellElimReasons[key]) cellElimReasons[key] = {};
+    if (!cellElimReasons[key][eliminatedType]) {
+      cellElimReasons[key][eliminatedType] = reason;
+    }
+  };
+
+  /**
+   * Called when a rule directly locks (r, c) or eliminates the last alternative.
+   * If `isDirectForce` is false (locked via process of elimination), builds a clear summary
+   * explaining why the remaining tile is the only possibility left at (r, c)!
+   */
   const recordLockIfNew = (
     r: number,
     c: number,
     prevSize: number,
     ruleName: string,
-    explanation: string
+    explanation: string,
+    isDirectForce = false
   ) => {
     if (prevSize > 1 && domains[r][c].size === 1) {
       const locked = getLockedTile(domains[r][c])!;
@@ -295,13 +305,43 @@ export function solveByDeduction(
           explanation
         });
       } else if (locked !== 'tree' && locked !== 'rock') {
+        let finalRuleName = ruleName;
+        let finalExplanation = explanation;
+
+        if (!isDirectForce) {
+          // Locked by eliminating the last alternative! Build a crystal-clear summary of why `locked` is the only option left.
+          const reasons = cellElimReasons[`${r},${c}`] ?? {};
+          const otherBuildings = BUILDING_TYPES.filter(
+            (b) => b !== locked && level.inventory[b] > 0
+          );
+          const ruledOutNotes = otherBuildings
+            .map((b) => {
+              const rText = reasons[b];
+              return rText
+                ? `not ${formatTileName(b)} (${rText})`
+                : `not ${formatTileName(b)}`;
+            })
+            .join(', ');
+
+          const mustBeBuildingReason =
+            reasons['empty'] ?? 'this spot must contain a building';
+
+          if (isBuilding(locked)) {
+            finalRuleName = `Only ${formatTileName(locked)} Fits`;
+            finalExplanation = `${xy(r, c)} must be a ${formatTileName(locked)}: ${mustBeBuildingReason}, and it is ${ruledOutNotes}.`;
+          } else {
+            finalRuleName = `Must Be Road`;
+            finalExplanation = `${xy(r, c)} cannot be a building or empty (${explanation}), so it must be a Road.`;
+          }
+        }
+
         steps.push({
           r,
           c,
           action: 'place',
           tileType: locked,
-          ruleName,
-          explanation
+          ruleName: finalRuleName,
+          explanation: finalExplanation
         });
       }
     }
@@ -321,6 +361,13 @@ export function solveByDeduction(
         for (let c = 0; c < size; c++) {
           if (!mustBeBuilding(domains[r][c]) && canBeAnyBuilding(domains[r][c])) {
             const prev = domains[r][c].size;
+            const reason =
+              level.rowClues[r] === 0
+                ? `Row ${r + 1} needs 0 buildings`
+                : `Row ${r + 1} already has all ${level.rowClues[r]} building(s)`;
+            for (const b of BUILDING_TYPES) {
+              recordElimReason(r, c, b, reason);
+            }
             if (removeBuildingsFromDomain(domains[r][c])) {
               progress = true;
               recordLockIfNew(
@@ -330,7 +377,8 @@ export function solveByDeduction(
                 'Row Clue Complete',
                 level.rowClues[r] === 0
                   ? `Row ${r + 1} has a clue of 0, so no buildings can be placed in Row ${r + 1}.`
-                  : `Row ${r + 1} already has all ${level.rowClues[r]} of its buildings, so ${xy(r, c)} cannot be a building.`
+                  : `Row ${r + 1} already has all ${level.rowClues[r]} of its buildings, so ${xy(r, c)} cannot be a building.`,
+                true
               );
             }
           }
@@ -347,6 +395,13 @@ export function solveByDeduction(
         for (let r = 0; r < size; r++) {
           if (!mustBeBuilding(domains[r][c]) && canBeAnyBuilding(domains[r][c])) {
             const prev = domains[r][c].size;
+            const reason =
+              level.colClues[c] === 0
+                ? `Column ${c + 1} needs 0 buildings`
+                : `Column ${c + 1} already has all ${level.colClues[c]} building(s)`;
+            for (const b of BUILDING_TYPES) {
+              recordElimReason(r, c, b, reason);
+            }
             if (removeBuildingsFromDomain(domains[r][c])) {
               progress = true;
               recordLockIfNew(
@@ -356,7 +411,8 @@ export function solveByDeduction(
                 'Column Clue Complete',
                 level.colClues[c] === 0
                   ? `Column ${c + 1} has a clue of 0, so no buildings can be placed in Column ${c + 1}.`
-                  : `Column ${c + 1} already has all ${level.colClues[c]} of its buildings, so ${xy(r, c)} cannot be a building.`
+                  : `Column ${c + 1} already has all ${level.colClues[c]} of its buildings, so ${xy(r, c)} cannot be a building.`,
+                true
               );
             }
           }
@@ -379,14 +435,11 @@ export function solveByDeduction(
           const removedEmpty = domains[r][c].delete('empty');
           const removedRoad = domains[r][c].delete('road');
           if (removedEmpty || removedRoad) {
+            const reason = `Row ${r + 1} needs ${level.rowClues[r]} building(s) and only ${buildingCandidates.length} valid building spot(s) exist in this row`;
+            recordElimReason(r, c, 'empty', reason);
+            recordElimReason(r, c, 'road', reason);
             progress = true;
-            recordLockIfNew(
-              r,
-              c,
-              prev,
-              'Row Must Be Filled',
-              `Row ${r + 1} needs ${level.rowClues[r]} building(s) and only ${buildingCandidates.length} valid building spot(s) remain in this row.`
-            );
+            recordLockIfNew(r, c, prev, 'Row Must Be Filled', reason, false);
           }
         }
       }
@@ -406,14 +459,11 @@ export function solveByDeduction(
           const removedEmpty = domains[r][c].delete('empty');
           const removedRoad = domains[r][c].delete('road');
           if (removedEmpty || removedRoad) {
+            const reason = `Column ${c + 1} needs ${level.colClues[c]} building(s) and only ${buildingCandidates.length} valid building spot(s) exist in this column`;
+            recordElimReason(r, c, 'empty', reason);
+            recordElimReason(r, c, 'road', reason);
             progress = true;
-            recordLockIfNew(
-              r,
-              c,
-              prev,
-              'Column Must Be Filled',
-              `Column ${c + 1} needs ${level.colClues[c]} building(s) and only ${buildingCandidates.length} valid building spot(s) remain in this column.`
-            );
+            recordLockIfNew(r, c, prev, 'Column Must Be Filled', reason, false);
           }
         }
       }
@@ -432,6 +482,10 @@ export function solveByDeduction(
           const hasHouse = ortho.some((n) => domains[n.r][n.c].has('house'));
           if (!hasTree || !hasHouse) {
             dom.delete('woodcutter');
+            const shortReason = !hasTree
+              ? 'not next to a Tree'
+              : 'no adjacent spot for a House';
+            recordElimReason(r, c, 'woodcutter', shortReason);
             progress = true;
             recordLockIfNew(
               r,
@@ -446,19 +500,25 @@ export function solveByDeduction(
         }
 
         if (dom.has('town_hall')) {
-          const hasBlockedNeighbor = surr8.some((n) => {
+          const blocker = surr8.find((n) => {
             const nd = domains[n.r][n.c];
             return nd.has('tree') || nd.has('rock') || mustBeBuilding(nd);
           });
-          if (hasBlockedNeighbor) {
+          if (blocker) {
             dom.delete('town_hall');
+            recordElimReason(
+              r,
+              c,
+              'town_hall',
+              `too close to ${xy(blocker.r, blocker.c)}`
+            );
             progress = true;
             recordLockIfNew(
               r,
               c,
               prev,
               'Town Hall Perimeter',
-              `Town Hall requires all 8 surrounding squares to be clear of trees, rocks, and buildings.`
+              `Town Hall requires all 8 surrounding squares to be clear, and ${xy(blocker.r, blocker.c)} is in its perimeter.`
             );
           }
         }
@@ -471,6 +531,12 @@ export function solveByDeduction(
           );
           if (!hasPartner) {
             dom.delete('house');
+            recordElimReason(
+              r,
+              c,
+              'house',
+              'no adjacent spot for a Woodcutter or Farm'
+            );
             progress = true;
             recordLockIfNew(
               r,
@@ -486,6 +552,7 @@ export function solveByDeduction(
           const hasHouse = ortho.some((n) => domains[n.r][n.c].has('house'));
           if (!hasHouse) {
             dom.delete('farm');
+            recordElimReason(r, c, 'farm', 'no adjacent spot for a House');
             progress = true;
             recordLockIfNew(
               r,
@@ -509,6 +576,12 @@ export function solveByDeduction(
               );
               if (!hasRoadNeighbor) {
                 dom.delete(roadBuilding);
+                recordElimReason(
+                  r,
+                  c,
+                  roadBuilding,
+                  'no orthogonal exit for a Road'
+                );
                 progress = true;
                 recordLockIfNew(
                   r,
@@ -521,13 +594,13 @@ export function solveByDeduction(
             }
           }
 
-          // Road tile must have at least 2 orthogonal neighbors that can be road/town_hall/woodcutter/farm
           if (dom.has('road')) {
             const connNeighbors = ortho.filter((n) =>
               canBeRoadEndpointOrRoad(domains[n.r][n.c])
             );
             if (connNeighbors.length < 2) {
               dom.delete('road');
+              recordElimReason(r, c, 'road', 'would be a dead-end road');
               progress = true;
               recordLockIfNew(
                 r,
@@ -552,6 +625,12 @@ export function solveByDeduction(
           if (cc !== c && domains[r][cc].has(locked)) {
             const prev = domains[r][cc].size;
             domains[r][cc].delete(locked);
+            recordElimReason(
+              r,
+              cc,
+              locked,
+              `Row ${r + 1} already has a ${formatTileName(locked)} at ${xy(r, c)}`
+            );
             progress = true;
             recordLockIfNew(
               r,
@@ -566,6 +645,12 @@ export function solveByDeduction(
           if (rr !== r && domains[rr][c].has(locked)) {
             const prev = domains[rr][c].size;
             domains[rr][c].delete(locked);
+            recordElimReason(
+              rr,
+              c,
+              locked,
+              `Column ${c + 1} already has a ${formatTileName(locked)} at ${xy(r, c)}`
+            );
             progress = true;
             recordLockIfNew(
               rr,
@@ -581,6 +666,12 @@ export function solveByDeduction(
           if (domains[n.r][n.c].has(locked)) {
             const prev = domains[n.r][n.c].size;
             domains[n.r][n.c].delete(locked);
+            recordElimReason(
+              n.r,
+              n.c,
+              locked,
+              `touches ${formatTileName(locked)} at ${xy(r, c)}`
+            );
             progress = true;
             recordLockIfNew(
               n.r,
@@ -592,6 +683,14 @@ export function solveByDeduction(
           }
           if (locked === 'town_hall' && canBeAnyBuilding(domains[n.r][n.c])) {
             const prev = domains[n.r][n.c].size;
+            for (const b of BUILDING_TYPES) {
+              recordElimReason(
+                n.r,
+                n.c,
+                b,
+                `in Town Hall perimeter around ${xy(r, c)}`
+              );
+            }
             if (removeBuildingsFromDomain(domains[n.r][n.c])) {
               progress = true;
               recordLockIfNew(
@@ -630,6 +729,12 @@ export function solveByDeduction(
           if (getLockedTile(domains[cell.r][cell.c]) !== pType) {
             const prev = domains[cell.r][cell.c].size;
             domains[cell.r][cell.c].delete(pType);
+            recordElimReason(
+              cell.r,
+              cell.c,
+              pType,
+              `all ${targetCount} ${formatTileName(pType)}(s) already placed`
+            );
             progress = true;
             recordLockIfNew(
               cell.r,
@@ -655,19 +760,21 @@ export function solveByDeduction(
               cell.c,
               prev,
               'Only Remaining Spot',
-              `${xy(cell.r, cell.c)} is the only remaining valid spot for the required ${formatTileName(pType)}.`
+              `${xy(cell.r, cell.c)} is the only remaining valid spot on the board for the required ${formatTileName(pType)}.`,
+              true
             );
           }
         }
       }
     }
 
-    // --- RULE 6: Forced Adjacency Partners for Confirmed Buildings & Trees ---
+    // --- RULE 6: Forced Adjacency Partners & Line Claiming ---
     for (let r = 0; r < size; r++) {
       for (let c = 0; c < size; c++) {
         const locked = getLockedTile(domains[r][c]);
         const ortho = getOrthoNeighbors(size, r, c);
 
+        // 6a. Tree needs a Woodcutter
         if (locked === 'tree') {
           const wcNeighbors = ortho.filter((n) =>
             domains[n.r][n.c].has('woodcutter')
@@ -685,12 +792,70 @@ export function solveByDeduction(
                 target.c,
                 prev,
                 'Tree Needs Woodcutter',
-                `Every Tree must have a Woodcutter next to it, and ${xy(target.r, target.c)} is the only valid spot next to the Tree at ${xy(r, c)}.`
+                `Every Tree must have a Woodcutter next to it, and ${xy(target.r, target.c)} is the only valid spot next to the Tree at ${xy(r, c)}.`,
+                true
               );
+            }
+          } else if (wcNeighbors.length > 1) {
+            // Line Claiming: if all possible Woodcutter spots for this Tree lie in the same Row or Column,
+            // no OTHER cell in that Row/Column can be a Woodcutter!
+            const sharedRow = wcNeighbors.every(
+              (n) => n.r === wcNeighbors[0].r
+            )
+              ? wcNeighbors[0].r
+              : -1;
+            const sharedCol = wcNeighbors.every(
+              (n) => n.c === wcNeighbors[0].c
+            )
+              ? wcNeighbors[0].c
+              : -1;
+
+            if (sharedRow !== -1) {
+              for (let cc = 0; cc < size; cc++) {
+                if (
+                  !wcNeighbors.some((n) => n.c === cc) &&
+                  domains[sharedRow][cc].has('woodcutter')
+                ) {
+                  const prev = domains[sharedRow][cc].size;
+                  domains[sharedRow][cc].delete('woodcutter');
+                  const reason = `Row ${sharedRow + 1}'s Woodcutter is claimed by the Tree at ${xy(r, c)}`;
+                  recordElimReason(sharedRow, cc, 'woodcutter', reason);
+                  progress = true;
+                  recordLockIfNew(
+                    sharedRow,
+                    cc,
+                    prev,
+                    'Row Woodcutter Claimed',
+                    reason
+                  );
+                }
+              }
+            }
+            if (sharedCol !== -1) {
+              for (let rr = 0; rr < size; rr++) {
+                if (
+                  !wcNeighbors.some((n) => n.r === rr) &&
+                  domains[rr][sharedCol].has('woodcutter')
+                ) {
+                  const prev = domains[rr][sharedCol].size;
+                  domains[rr][sharedCol].delete('woodcutter');
+                  const reason = `Column ${sharedCol + 1}'s Woodcutter is claimed by the Tree at ${xy(r, c)}`;
+                  recordElimReason(rr, sharedCol, 'woodcutter', reason);
+                  progress = true;
+                  recordLockIfNew(
+                    rr,
+                    sharedCol,
+                    prev,
+                    'Column Woodcutter Claimed',
+                    reason
+                  );
+                }
+              }
             }
           }
         }
 
+        // 6b. Woodcutter and Farm each need a House
         if (locked === 'farm' || locked === 'woodcutter') {
           const houseNeighbors = ortho.filter((n) =>
             domains[n.r][n.c].has('house')
@@ -708,8 +873,65 @@ export function solveByDeduction(
                 target.c,
                 prev,
                 `${formatTileName(locked)} Needs House`,
-                `The ${formatTileName(locked)} at ${xy(r, c)} must touch a House, and ${xy(target.r, target.c)} is its only valid neighbor.`
+                `The ${formatTileName(locked)} at ${xy(r, c)} must touch a House, and ${xy(target.r, target.c)} is its only valid neighbor.`,
+                true
               );
+            }
+          } else if (houseNeighbors.length > 1) {
+            // Line Claiming: if all possible House spots for this Woodcutter/Farm lie in the same Row or Column,
+            // no OTHER cell in that Row/Column can be a House!
+            const sharedRow = houseNeighbors.every(
+              (n) => n.r === houseNeighbors[0].r
+            )
+              ? houseNeighbors[0].r
+              : -1;
+            const sharedCol = houseNeighbors.every(
+              (n) => n.c === houseNeighbors[0].c
+            )
+              ? houseNeighbors[0].c
+              : -1;
+
+            if (sharedRow !== -1) {
+              for (let cc = 0; cc < size; cc++) {
+                if (
+                  !houseNeighbors.some((n) => n.c === cc) &&
+                  domains[sharedRow][cc].has('house')
+                ) {
+                  const prev = domains[sharedRow][cc].size;
+                  domains[sharedRow][cc].delete('house');
+                  const reason = `Row ${sharedRow + 1}'s House must sit next to the ${formatTileName(locked)} at ${xy(r, c)}`;
+                  recordElimReason(sharedRow, cc, 'house', reason);
+                  progress = true;
+                  recordLockIfNew(
+                    sharedRow,
+                    cc,
+                    prev,
+                    'Row House Claimed',
+                    reason
+                  );
+                }
+              }
+            }
+            if (sharedCol !== -1) {
+              for (let rr = 0; rr < size; rr++) {
+                if (
+                  !houseNeighbors.some((n) => n.r === rr) &&
+                  domains[rr][sharedCol].has('house')
+                ) {
+                  const prev = domains[rr][sharedCol].size;
+                  domains[rr][sharedCol].delete('house');
+                  const reason = `Column ${sharedCol + 1}'s House must sit next to the ${formatTileName(locked)} at ${xy(r, c)}`;
+                  recordElimReason(rr, sharedCol, 'house', reason);
+                  progress = true;
+                  recordLockIfNew(
+                    rr,
+                    sharedCol,
+                    prev,
+                    'Column House Claimed',
+                    reason
+                  );
+                }
+              }
             }
           }
         }
@@ -728,6 +950,12 @@ export function solveByDeduction(
             for (const t of Array.from(dom)) {
               if (t !== 'woodcutter' && t !== 'farm') {
                 dom.delete(t);
+                recordElimReason(
+                  target.r,
+                  target.c,
+                  t,
+                  `must be a Woodcutter or Farm for the House at ${xy(r, c)}`
+                );
                 modified = true;
               }
             }
@@ -766,7 +994,8 @@ export function solveByDeduction(
                 target.c,
                 prev,
                 'Road Entry Point',
-                `The ${formatTileName(locked)} at ${xy(r, c)} needs a Road connection, and ${xy(target.r, target.c)} is its only available exit.`
+                `The ${formatTileName(locked)} at ${xy(r, c)} needs a Road connection, and ${xy(target.r, target.c)} is its only available exit.`,
+                true
               );
             }
           }
@@ -795,6 +1024,8 @@ export function solveByDeduction(
             if (!canReachAnyTH) {
               const prev = domains[r][c].size;
               domains[r][c].delete(bType);
+              const reason = `too far from Town Hall to connect within ${maxRoads} Road(s)`;
+              recordElimReason(r, c, bType, reason);
               progress = true;
               recordLockIfNew(
                 r,
@@ -808,7 +1039,6 @@ export function solveByDeduction(
         }
       }
 
-      // If all buildings are determined, deduce the Road network via connected road enumeration
       let allBuildingsLocked = true;
       for (const b of BUILDING_TYPES) {
         let count = 0;
@@ -836,7 +1066,6 @@ export function solveByDeduction(
           maxRoads,
           4
         ).filter((net) => {
-          // Must respect any already-locked road or empty cells in `domains`
           const netSet = new Set(net.map((c) => `${c.r},${c.c}`));
           for (let r = 0; r < size; r++) {
             for (let c = 0; c < size; c++) {
@@ -870,18 +1099,21 @@ export function solveByDeduction(
                   c,
                   prev,
                   'Required Road Path',
-                  `${xy(r, c)} is required to connect the village buildings to the Town Hall within ${maxRoads} Road tile(s).`
+                  `${xy(r, c)} is required to connect the village buildings to the Town Hall within ${maxRoads} Road tile(s).`,
+                  true
                 );
               } else if (inNone && domains[r][c].has('road')) {
                 const prev = domains[r][c].size;
                 domains[r][c].delete('road');
+                recordElimReason(r, c, 'road', 'not on the Road path');
                 progress = true;
                 recordLockIfNew(
                   r,
                   c,
                   prev,
                   'Unneeded for Road Path',
-                  `${xy(r, c)} is not part of the ${maxRoads}-tile Road path to the Town Hall.`
+                  `${xy(r, c)} is not part of the ${maxRoads}-tile Road path to the Town Hall.`,
+                  true
                 );
               }
             }
@@ -890,23 +1122,23 @@ export function solveByDeduction(
       }
     }
 
-    // --- RULE 8: Single-Line / Global Consistency Lookahead ---
+    // --- RULE 8: Specific Contradiction Lookahead ---
     if (!progress) {
       outerLookahead: for (let r = 0; r < size; r++) {
         for (let c = 0; c < size; c++) {
           if (domains[r][c].size <= 1) continue;
           for (const candidate of Array.from(domains[r][c])) {
-            if (
-              !isAssignmentConsistentWithLineAndInventory(
-                domains,
-                level,
-                r,
-                c,
-                candidate
-              )
-            ) {
+            const contradiction = findSpecificAssignmentContradiction(
+              domains,
+              level,
+              r,
+              c,
+              candidate
+            );
+            if (contradiction !== null) {
               const prev = domains[r][c].size;
               domains[r][c].delete(candidate);
+              recordElimReason(r, c, candidate, contradiction);
               progress = true;
               recordLockIfNew(
                 r,
@@ -914,8 +1146,9 @@ export function solveByDeduction(
                 prev,
                 'Logical Elimination',
                 candidate === 'empty'
-                  ? `${xy(r, c)} cannot be left empty without breaking row/column or road requirements.`
-                  : `Placing ${formatTileName(candidate)} at ${xy(r, c)} would make it impossible to satisfy the remaining row/column or adjacency clues.`
+                  ? `${xy(r, c)} cannot be empty because ${contradiction}.`
+                  : `${xy(r, c)} cannot be ${formatTileName(candidate)} because ${contradiction}.`,
+                false
               );
               break outerLookahead;
             }
@@ -934,13 +1167,17 @@ export function solveByDeduction(
   };
 }
 
-function isAssignmentConsistentWithLineAndInventory(
+/**
+ * Tests if setting (testR, testC) = candidate leads to a direct logical contradiction,
+ * and returns a specific, human-readable explanation of WHICH rule breaks (or null if consistent).
+ */
+function findSpecificAssignmentContradiction(
   baseDomains: Set<TileType>[][],
   level: LevelDefinition,
   testR: number,
   testC: number,
   candidate: TileType
-): boolean {
+): string | null {
   const size = level.size;
   const domains: Set<TileType>[][] = baseDomains.map((row) =>
     row.map((s) => new Set(s))
@@ -953,7 +1190,9 @@ function isAssignmentConsistentWithLineAndInventory(
 
     for (let r = 0; r < size; r++) {
       for (let c = 0; c < size; c++) {
-        if (domains[r][c].size === 0) return false;
+        if (domains[r][c].size === 0) {
+          return `${xy(r, c)} would have no valid tile options left`;
+        }
       }
     }
 
@@ -965,7 +1204,12 @@ function isAssignmentConsistentWithLineAndInventory(
         if (mustBeBuilding(domains[r][c])) minB++;
         if (canBeAnyBuilding(domains[r][c])) maxB++;
       }
-      if (minB > level.rowClues[r] || maxB < level.rowClues[r]) return false;
+      if (minB > level.rowClues[r]) {
+        return `Row ${r + 1} would exceed its limit of ${level.rowClues[r]} building(s)`;
+      }
+      if (maxB < level.rowClues[r]) {
+        return `Row ${r + 1} wouldn't have enough valid spots left for its ${level.rowClues[r]} required building(s)`;
+      }
       if (minB === level.rowClues[r]) {
         for (let c = 0; c < size; c++) {
           if (
@@ -994,7 +1238,12 @@ function isAssignmentConsistentWithLineAndInventory(
         if (mustBeBuilding(domains[r][c])) minB++;
         if (canBeAnyBuilding(domains[r][c])) maxB++;
       }
-      if (minB > level.colClues[c] || maxB < level.colClues[c]) return false;
+      if (minB > level.colClues[c]) {
+        return `Column ${c + 1} would exceed its limit of ${level.colClues[c]} building(s)`;
+      }
+      if (maxB < level.colClues[c]) {
+        return `Column ${c + 1} wouldn't have enough valid spots left for its ${level.colClues[c]} required building(s)`;
+      }
       if (minB === level.colClues[c]) {
         for (let r = 0; r < size; r++) {
           if (
@@ -1019,7 +1268,9 @@ function isAssignmentConsistentWithLineAndInventory(
     for (let r = 0; r < size; r++) {
       for (let c = 0; c < size; c++) {
         const dom = domains[r][c];
-        if (dom.size === 0) return false;
+        if (dom.size === 0) {
+          return `${xy(r, c)} would have no valid tile options left`;
+        }
         const ortho = getOrthoNeighbors(size, r, c);
         const surr8 = getSurrounding8Neighbors(size, r, c);
 
@@ -1067,7 +1318,9 @@ function isAssignmentConsistentWithLineAndInventory(
           const wcNeighbors = ortho.filter((n) =>
             domains[n.r][n.c].has('woodcutter')
           );
-          if (wcNeighbors.length === 0) return false;
+          if (wcNeighbors.length === 0) {
+            return `the Tree at ${xy(r, c)} would have no valid spot for its required Woodcutter`;
+          }
           if (wcNeighbors.length === 1) {
             const target = wcNeighbors[0];
             if (domains[target.r][target.c].size > 1) {
@@ -1081,7 +1334,9 @@ function isAssignmentConsistentWithLineAndInventory(
           const houseNeighbors = ortho.filter((n) =>
             domains[n.r][n.c].has('house')
           );
-          if (houseNeighbors.length === 0) return false;
+          if (houseNeighbors.length === 0) {
+            return `the ${formatTileName(locked)} at ${xy(r, c)} would have no valid spot for its required House`;
+          }
           if (houseNeighbors.length === 1) {
             const target = houseNeighbors[0];
             if (domains[target.r][target.c].size > 1) {
@@ -1091,6 +1346,7 @@ function isAssignmentConsistentWithLineAndInventory(
             }
           }
         }
+
         if (locked && isBuilding(locked)) {
           for (let cc = 0; cc < size; cc++) {
             if (cc !== c && domains[r][cc].delete(locked)) changed = true;
@@ -1122,7 +1378,12 @@ function isAssignmentConsistentWithLineAndInventory(
           if (domains[r][c].has(pType)) maxCount++;
         }
       }
-      if (minCount > target || maxCount < target) return false;
+      if (minCount > target) {
+        return `more than ${target} ${formatTileName(pType)}(s) would be forced`;
+      }
+      if (maxCount < target) {
+        return `there wouldn't be enough valid spots left to place all ${target} required ${formatTileName(pType)}(s)`;
+      }
       if (minCount === target) {
         for (let r = 0; r < size; r++) {
           for (let c = 0; c < size; c++) {
@@ -1152,7 +1413,11 @@ function isAssignmentConsistentWithLineAndInventory(
   const allLocked = domains.every((row) => row.every((d) => d.size === 1));
   if (allLocked) {
     const grid = domains.map((row) => row.map((d) => getLockedTile(d)!));
-    return validateBoard(grid, level).isSolved;
+    const val = validateBoard(grid, level);
+    if (!val.isSolved) {
+      return `the road network could not connect all Woodcutters and Farms to the Town Hall within ${level.inventory.road} Road tile(s)`;
+    }
+    return null;
   }
 
   if (level.inventory.town_hall > 0) {
@@ -1162,7 +1427,9 @@ function isAssignmentConsistentWithLineAndInventory(
         if (domains[r][c].has('town_hall')) thCells.push({ r, c });
       }
     }
-    if (thCells.length === 0) return false;
+    if (thCells.length === 0) {
+      return `no valid spot would remain for the Town Hall`;
+    }
 
     for (let r = 0; r < size; r++) {
       for (let c = 0; c < size; c++) {
@@ -1173,18 +1440,19 @@ function isAssignmentConsistentWithLineAndInventory(
               shortestPossibleRoadDistance(domains, r, c, th.r, th.c) <=
               level.inventory.road
           );
-          if (!canConnect) return false;
+          if (!canConnect) {
+            return `the ${formatTileName(locked)} at ${xy(r, c)} could no longer connect to the Town Hall within ${level.inventory.road} Road tile(s)`;
+          }
         }
       }
     }
   }
 
-  return true;
+  return null;
 }
 
 /**
  * Exhaustive backtracking solver to count the number of valid solutions (up to maxSolutions).
- * Uses connected-road subgraph enumeration so road verification is instantaneous.
  */
 export function countSolutions(
   level: LevelDefinition,
@@ -1376,6 +1644,30 @@ export function getNextHint(
 
   const result = solveByDeduction(level, playerGrid);
 
+  // 1. Prefer direct single-rule placements (e.g. "Tree Needs Woodcutter", "Only Remaining Spot", "Farm Needs House")
+  for (const step of result.steps) {
+    if (
+      step.action === 'place' &&
+      playerGrid[step.r][step.c] === 'empty' &&
+      !step.ruleName.startsWith('Only ') &&
+      step.ruleName !== 'Only Remaining Spot'
+    ) {
+      return step;
+    }
+  }
+
+  // 2. Next prefer "Only Remaining Spot" (Hidden Single for a building type)
+  for (const step of result.steps) {
+    if (
+      step.action === 'place' &&
+      playerGrid[step.r][step.c] === 'empty' &&
+      step.ruleName === 'Only Remaining Spot'
+    ) {
+      return step;
+    }
+  }
+
+  // 3. Next any remaining 'place' step (including full Process of Elimination explanations)
   for (const step of result.steps) {
     if (step.action === 'place' && playerGrid[step.r][step.c] === 'empty') {
       return step;
