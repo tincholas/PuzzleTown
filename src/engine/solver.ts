@@ -282,6 +282,35 @@ export function solveByDeduction(
   };
 
   /**
+   * Summarizes why other currently-empty neighbors of (centerR, centerC) cannot hold `targetType`.
+   */
+  const explainWhyOtherOrthoNeighborsWereRuledOut = (
+    centerR: number,
+    centerC: number,
+    chosenNeighbor: Coord,
+    targetType: TileType
+  ): string => {
+    const otherEmpty = getOrthoNeighbors(size, centerR, centerC).filter(
+      (n) =>
+        (n.r !== chosenNeighbor.r || n.c !== chosenNeighbor.c) &&
+        !isFixedObstacle(level.initialGrid[n.r][n.c]) &&
+        (!startingGrid || startingGrid[n.r][n.c] === 'empty')
+    );
+    if (otherEmpty.length === 0) return '';
+
+    const parts = otherEmpty.map((n) => {
+      const reason =
+        cellElimReasons[`${n.r},${n.c}`]?.[targetType] ??
+        cellElimReasons[`${n.r},${n.c}`]?.['empty'];
+      return reason
+        ? `${xy(n.r, n.c)} cannot be a ${formatTileName(targetType)} (${reason})`
+        : `${xy(n.r, n.c)} cannot be a ${formatTileName(targetType)}`;
+    });
+
+    return ` — ${parts.join('; ')}`;
+  };
+
+  /**
    * Called when a rule directly locks (r, c) or eliminates the last alternative.
    * If `isDirectForce` is false (locked via process of elimination), builds a clear summary
    * explaining why the remaining tile is the only possibility left at (r, c)!
@@ -787,18 +816,25 @@ export function solveByDeduction(
               dom.clear();
               dom.add('woodcutter');
               progress = true;
+              const otherWhy = explainWhyOtherOrthoNeighborsWereRuledOut(
+                r,
+                c,
+                target,
+                'woodcutter'
+              );
               recordLockIfNew(
                 target.r,
                 target.c,
                 prev,
                 'Tree Needs Woodcutter',
-                `Every Tree must have a Woodcutter next to it, and ${xy(target.r, target.c)} is the only valid spot next to the Tree at ${xy(r, c)}.`,
+                `Every Tree must have a Woodcutter next to it, so ${xy(target.r, target.c)} is the only valid spot next to the Tree at ${xy(r, c)}${otherWhy}.`,
                 true
               );
             }
           } else if (wcNeighbors.length > 1) {
-            // Line Claiming: if all possible Woodcutter spots for this Tree lie in the same Row or Column,
-            // no OTHER cell in that Row/Column can be a Woodcutter!
+            const spotsLabel = wcNeighbors
+              .map((n) => xy(n.r, n.c))
+              .join(' or ');
             const sharedRow = wcNeighbors.every(
               (n) => n.r === wcNeighbors[0].r
             )
@@ -818,7 +854,7 @@ export function solveByDeduction(
                 ) {
                   const prev = domains[sharedRow][cc].size;
                   domains[sharedRow][cc].delete('woodcutter');
-                  const reason = `Row ${sharedRow + 1}'s Woodcutter is claimed by the Tree at ${xy(r, c)}`;
+                  const reason = `Row ${sharedRow + 1}'s Woodcutter must sit at ${spotsLabel} next to the Tree at ${xy(r, c)}`;
                   recordElimReason(sharedRow, cc, 'woodcutter', reason);
                   progress = true;
                   recordLockIfNew(
@@ -839,7 +875,7 @@ export function solveByDeduction(
                 ) {
                   const prev = domains[rr][sharedCol].size;
                   domains[rr][sharedCol].delete('woodcutter');
-                  const reason = `Column ${sharedCol + 1}'s Woodcutter is claimed by the Tree at ${xy(r, c)}`;
+                  const reason = `Column ${sharedCol + 1}'s Woodcutter must sit at ${spotsLabel} next to the Tree at ${xy(r, c)}`;
                   recordElimReason(rr, sharedCol, 'woodcutter', reason);
                   progress = true;
                   recordLockIfNew(
@@ -868,18 +904,25 @@ export function solveByDeduction(
               dom.clear();
               dom.add('house');
               progress = true;
+              const otherWhy = explainWhyOtherOrthoNeighborsWereRuledOut(
+                r,
+                c,
+                target,
+                'house'
+              );
               recordLockIfNew(
                 target.r,
                 target.c,
                 prev,
                 `${formatTileName(locked)} Needs House`,
-                `The ${formatTileName(locked)} at ${xy(r, c)} must touch a House, and ${xy(target.r, target.c)} is its only valid neighbor.`,
+                `The ${formatTileName(locked)} at ${xy(r, c)} must touch a House, and ${xy(target.r, target.c)} is its only valid neighbor${otherWhy}.`,
                 true
               );
             }
           } else if (houseNeighbors.length > 1) {
-            // Line Claiming: if all possible House spots for this Woodcutter/Farm lie in the same Row or Column,
-            // no OTHER cell in that Row/Column can be a House!
+            const spotsLabel = houseNeighbors
+              .map((n) => xy(n.r, n.c))
+              .join(' or ');
             const sharedRow = houseNeighbors.every(
               (n) => n.r === houseNeighbors[0].r
             )
@@ -899,7 +942,7 @@ export function solveByDeduction(
                 ) {
                   const prev = domains[sharedRow][cc].size;
                   domains[sharedRow][cc].delete('house');
-                  const reason = `Row ${sharedRow + 1}'s House must sit next to the ${formatTileName(locked)} at ${xy(r, c)}`;
+                  const reason = `Row ${sharedRow + 1}'s only House must sit at ${spotsLabel} next to the ${formatTileName(locked)} at ${xy(r, c)}`;
                   recordElimReason(sharedRow, cc, 'house', reason);
                   progress = true;
                   recordLockIfNew(
@@ -920,7 +963,7 @@ export function solveByDeduction(
                 ) {
                   const prev = domains[rr][sharedCol].size;
                   domains[rr][sharedCol].delete('house');
-                  const reason = `Column ${sharedCol + 1}'s House must sit next to the ${formatTileName(locked)} at ${xy(r, c)}`;
+                  const reason = `Column ${sharedCol + 1}'s only House must sit at ${spotsLabel} next to the ${formatTileName(locked)} at ${xy(r, c)}`;
                   recordElimReason(rr, sharedCol, 'house', reason);
                   progress = true;
                   recordLockIfNew(
@@ -989,12 +1032,18 @@ export function solveByDeduction(
               dom.clear();
               dom.add('road');
               progress = true;
+              const otherWhy = explainWhyOtherOrthoNeighborsWereRuledOut(
+                r,
+                c,
+                target,
+                'road'
+              );
               recordLockIfNew(
                 target.r,
                 target.c,
                 prev,
                 'Road Entry Point',
-                `The ${formatTileName(locked)} at ${xy(r, c)} needs a Road connection, and ${xy(target.r, target.c)} is its only available exit.`,
+                `The ${formatTileName(locked)} at ${xy(r, c)} needs a Road connection, and ${xy(target.r, target.c)} is its only available exit${otherWhy}.`,
                 true
               );
             }
