@@ -8,9 +8,9 @@ declare global {
   }
 }
 
-// Measurement ID can be configured via environment variable or edited directly here
+// Measurement ID configured for Google Analytics 4
 const GA_MEASUREMENT_ID: string =
-  (import.meta.env.VITE_GA_MEASUREMENT_ID as string) || '';
+  (import.meta.env.VITE_GA_MEASUREMENT_ID as string) || 'G-48BBTYYXFV';
 
 const FEEDBACK_WEBHOOK_URL: string =
   (import.meta.env.VITE_FEEDBACK_WEBHOOK_URL as string) || '';
