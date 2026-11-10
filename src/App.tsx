@@ -7,7 +7,9 @@ import {
   Info,
   Lightbulb,
   Sparkles,
-  Star
+  Star,
+  ThumbsDown,
+  ThumbsUp
 } from 'lucide-react';
 import {
   ActiveTool,
@@ -34,6 +36,14 @@ import {
   TileType
 } from './engine/types';
 import { validateBoard } from './engine/validator';
+import {
+  FeedbackRating,
+  getSavedFeedback,
+  initAnalytics,
+  trackLevelComplete,
+  trackLevelFeedback,
+  trackLevelStart
+} from './utils/analytics';
 import {
   isSoundMuted,
   playErrorSound,
@@ -129,9 +139,45 @@ export const App: React.FC = () => {
   } | null>(null);
   const [isMuted, setIsMuted] = useState<boolean>(() => isSoundMuted());
 
+  // Player Level Feedback (Thumbs Up / Down)
+  const [feedbackByLevel, setFeedbackByLevel] = useState<
+    Record<number, FeedbackRating>
+  >(() => getSavedFeedback());
+  const [feedbackSubmitted, setFeedbackSubmitted] = useState<boolean>(false);
+
+  // Initialize analytics & track initial level start on app mount
+  useEffect(() => {
+    initAnalytics();
+    trackLevelStart(level.id, level.title, level.chapter);
+  }, []);
+
+  // Reset feedback submission status when level changes
+  useEffect(() => {
+    setFeedbackSubmitted(false);
+  }, [level.id]);
+
   const handleToggleSound = () => {
     const nextMuted = !toggleSound();
     setIsMuted(nextMuted);
+  };
+
+  const handleFeedback = (rating: FeedbackRating) => {
+    playPlaceRoadSound();
+    setFeedbackByLevel((prev) => ({
+      ...prev,
+      [level.id]: rating
+    }));
+    setFeedbackSubmitted(true);
+
+    trackLevelFeedback({
+      levelId: level.id,
+      levelTitle: level.title,
+      chapter: level.chapter,
+      rating,
+      stars: liveStars,
+      hintsUsed,
+      mistakesMade
+    });
   };
 
   const activeLevelPlaceables = useMemo(
@@ -153,7 +199,7 @@ export const App: React.FC = () => {
     [grid, level]
   );
 
-  // Automatically record star rating & trigger victory confetti/sound when solved
+  // Automatically record star rating & trigger victory confetti/sound/analytics when solved
   useEffect(() => {
     if (validation.isSolved) {
       playVictorySound();
@@ -187,6 +233,16 @@ export const App: React.FC = () => {
           ? 2
           : 1;
 
+      // Track completion event in Google Analytics
+      trackLevelComplete(
+        level.id,
+        level.title,
+        level.chapter,
+        earnedStars,
+        hintsUsed,
+        mistakesMade
+      );
+
       setSavedProgress((prev) => {
         const existing = prev.starsByLevel[level.id] ?? 0;
         if (earnedStars > existing) {
@@ -206,6 +262,7 @@ export const App: React.FC = () => {
   }, [validation.isSolved, hintsUsed, mistakesMade, level.id]);
 
   const startNewLevel = (newLevel: LevelDefinition) => {
+    trackLevelStart(newLevel.id, newLevel.title, newLevel.chapter);
     setLevel(newLevel);
     setGrid(newLevel.initialGrid.map((r) => [...r]));
     setMarks(
@@ -670,6 +727,43 @@ export const App: React.FC = () => {
                 ? 'Flawless logical deduction!'
                 : 'Every building and road is connected in harmony.'}
             </p>
+
+            {/* Level Feedback (Thumbs Up / Down) */}
+            <div className="victory-feedback">
+              <span className="feedback-label">How was this level?</span>
+              <div className="feedback-buttons">
+                <button
+                  type="button"
+                  className={`feedback-thumb-btn thumb-up ${
+                    feedbackByLevel[level.id] === 'like' ? 'selected' : ''
+                  }`}
+                  onClick={() => handleFeedback('like')}
+                  title="I liked this level!"
+                  aria-label="Thumbs up"
+                >
+                  <ThumbsUp size={17} />
+                  <span>Liked</span>
+                </button>
+                <button
+                  type="button"
+                  className={`feedback-thumb-btn thumb-down ${
+                    feedbackByLevel[level.id] === 'dislike' ? 'selected' : ''
+                  }`}
+                  onClick={() => handleFeedback('dislike')}
+                  title="Needs improvement"
+                  aria-label="Thumbs down"
+                >
+                  <ThumbsDown size={17} />
+                  <span>Disliked</span>
+                </button>
+              </div>
+              {feedbackSubmitted && (
+                <span className="feedback-thanks-msg">
+                  Thanks for your feedback!
+                </span>
+              )}
+            </div>
+
             <div className="victory-actions">
               <button
                 type="button"
