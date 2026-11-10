@@ -1,4 +1,5 @@
 import React, { useEffect, useMemo, useState } from 'react';
+import confetti from 'canvas-confetti';
 import {
   AlertTriangle,
   ArrowRight,
@@ -33,6 +34,16 @@ import {
   TileType
 } from './engine/types';
 import { validateBoard } from './engine/validator';
+import {
+  isSoundMuted,
+  playErrorSound,
+  playLineClueRippleSound,
+  playMarkEmptySound,
+  playPlaceBuildingSound,
+  playPlaceRoadSound,
+  playVictorySound,
+  toggleSound
+} from './utils/sound';
 
 interface HistorySnapshot {
   grid: TileType[][];
@@ -110,6 +121,19 @@ export const App: React.FC = () => {
   const [showLevelsModal, setShowLevelsModal] = useState<boolean>(false);
   const [dismissedTip, setDismissedTip] = useState<boolean>(false);
 
+  // Animations & Sound
+  const [justPlacedCell, setJustPlacedCell] = useState<Coord | null>(null);
+  const [animatingLine, setAnimatingLine] = useState<{
+    axis: 'row' | 'col';
+    index: number;
+  } | null>(null);
+  const [isMuted, setIsMuted] = useState<boolean>(() => isSoundMuted());
+
+  const handleToggleSound = () => {
+    const nextMuted = !toggleSound();
+    setIsMuted(nextMuted);
+  };
+
   const activeLevelPlaceables = useMemo(
     () => PLACEABLE_TYPES.filter((t) => level.inventory[t] > 0),
     [level]
@@ -129,9 +153,33 @@ export const App: React.FC = () => {
     [grid, level]
   );
 
-  // Automatically record star rating when solved
+  // Automatically record star rating & trigger victory confetti/sound when solved
   useEffect(() => {
     if (validation.isSolved) {
+      playVictorySound();
+      confetti({
+        particleCount: 75,
+        spread: 65,
+        origin: { y: 0.62 },
+        colors: ['#f59e0b', '#10b981', '#ea580c', '#fef3c7', '#38bdf8', '#a78bfa']
+      });
+      const t1 = setTimeout(() => {
+        confetti({
+          particleCount: 45,
+          angle: 60,
+          spread: 55,
+          origin: { x: 0.1, y: 0.7 },
+          colors: ['#f59e0b', '#10b981', '#ea580c', '#fef3c7']
+        });
+        confetti({
+          particleCount: 45,
+          angle: 120,
+          spread: 55,
+          origin: { x: 0.9, y: 0.7 },
+          colors: ['#f59e0b', '#10b981', '#ea580c', '#38bdf8']
+        });
+      }, 250);
+
       const earnedStars =
         hintsUsed === 0 && mistakesMade === 0
           ? 3
@@ -152,6 +200,8 @@ export const App: React.FC = () => {
         }
         return prev;
       });
+
+      return () => clearTimeout(t1);
     }
   }, [validation.isSolved, hintsUsed, mistakesMade, level.id]);
 
@@ -317,6 +367,7 @@ export const App: React.FC = () => {
           const nextGrid = grid.map((row) => [...row]);
           nextGrid[r][c] = 'empty';
           setGrid(nextGrid);
+          playMarkEmptySound();
         }
       } else {
         const targetVal =
@@ -333,6 +384,7 @@ export const App: React.FC = () => {
         }
         setMarks(nextMarks);
         setExcludedByCell(nextExcluded);
+        playMarkEmptySound();
       }
       return;
     }
@@ -345,6 +397,7 @@ export const App: React.FC = () => {
         const nextGrid = grid.map((row) => [...row]);
         nextGrid[r][c] = 'empty';
         setGrid(nextGrid);
+        playMarkEmptySound();
         return;
       }
       if (currentTile === 'empty') {
@@ -355,6 +408,7 @@ export const App: React.FC = () => {
           dragTargetValue,
           isDragContinue
         );
+        playMarkEmptySound();
       }
       return;
     }
@@ -369,6 +423,7 @@ export const App: React.FC = () => {
     ) {
       // Unmark on tap instead of accidentally placing a building onto a ruled-out square
       toggleBuildingExclusionOnCell(r, c, activeTool, false, false);
+      playMarkEmptySound();
       return;
     }
 
@@ -377,11 +432,21 @@ export const App: React.FC = () => {
 
     if (currentTile === activeTool) {
       nextGrid[r][c] = 'empty';
+      playMarkEmptySound();
     } else {
       nextGrid[r][c] = activeTool;
+      if (activeTool === 'road') {
+        playPlaceRoadSound();
+      } else {
+        playPlaceBuildingSound();
+      }
+      setJustPlacedCell({ r, c });
+      setTimeout(() => setJustPlacedCell(null), 400);
+
       const newVal = validateBoard(nextGrid, level);
       if (newVal.cellErrors[`${r},${c}`]) {
         setMistakesMade((m) => m + 1);
+        playErrorSound();
       }
     }
 
@@ -405,6 +470,7 @@ export const App: React.FC = () => {
       const nextGrid = grid.map((row) => [...row]);
       nextGrid[r][c] = 'empty';
       setGrid(nextGrid);
+      playMarkEmptySound();
       return;
     }
 
@@ -413,12 +479,18 @@ export const App: React.FC = () => {
       const nextMarks = marks.map((row) => [...row]);
       nextMarks[r][c] = !nextMarks[r][c];
       setMarks(nextMarks);
+      playMarkEmptySound();
     } else {
       toggleBuildingExclusionOnCell(r, c, activeTool);
+      playMarkEmptySound();
     }
   };
 
   const handleLineClueClick = (axis: 'row' | 'col', index: number) => {
+    playLineClueRippleSound(level.size);
+    setAnimatingLine({ axis, index });
+    setTimeout(() => setAnimatingLine(null), 500);
+
     pushHistory();
     const nextMarks = marks.map((row) => [...row]);
     const nextExcluded = cloneExcludedGrid(excludedByCell);
@@ -491,11 +563,13 @@ export const App: React.FC = () => {
           savedProgress.starsByLevel[level.id] ?? liveStars
         }
         canUndo={history.length > 0}
+        isMuted={isMuted}
         onUndo={handleUndo}
         onReset={handleReset}
         onHint={handleHint}
         onOpenRules={() => setShowRulesModal(true)}
         onOpenLevels={() => setShowLevelsModal(true)}
+        onToggleSound={handleToggleSound}
       />
 
       {/* Contextual Banner Area */}
@@ -546,6 +620,8 @@ export const App: React.FC = () => {
           validation={validation}
           activeHint={activeHint}
           selectedCell={selectedCell}
+          justPlacedCell={justPlacedCell}
+          animatingLine={animatingLine}
           onCellAction={handleCellAction}
           onCellRightClick={handleCellRightClick}
           onLineClueClick={handleLineClueClick}

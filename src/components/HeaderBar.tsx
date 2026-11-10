@@ -5,7 +5,9 @@ import {
   Lightbulb,
   RotateCcw,
   Star,
-  Undo2
+  Undo2,
+  Volume2,
+  VolumeX
 } from 'lucide-react';
 import { LevelDefinition } from '../engine/types';
 
@@ -13,41 +15,112 @@ interface HeaderBarProps {
   level: LevelDefinition;
   currentStars: number;
   canUndo: boolean;
+  isMuted?: boolean;
   onUndo: () => void;
   onReset: () => void;
   onHint: () => void;
   onOpenRules: () => void;
   onOpenLevels: () => void;
+  onToggleSound?: () => void;
 }
 
 export const HeaderBar: React.FC<HeaderBarProps> = ({
   level,
   currentStars,
   canUndo,
+  isMuted = false,
   onUndo,
   onReset,
   onHint,
   onOpenRules,
-  onOpenLevels
+  onOpenLevels,
+  onToggleSound
 }) => {
   return (
     <header className="header-bar">
-      {/* Top-Left Brand + Star Badge */}
-      <div className="header-left">
-        <div className="brand-title">PuzzleTown</div>
-        <div
-          className="star-badge"
-          title="Earn 3 stars by solving without hints or errors"
-        >
-          {[1, 2, 3].map((idx) => (
-            <Star
-              key={idx}
-              size={18}
-              className={
-                idx <= currentStars ? 'star-icon filled' : 'star-icon empty'
-              }
-            />
-          ))}
+      <div className="header-left-and-actions">
+        {/* Brand + Live Stars */}
+        <div className="header-left">
+          <div className="brand-title">PuzzleTown</div>
+          <div
+            className="star-badge"
+            title="Earn 3 stars by solving without hints or errors"
+          >
+            {[1, 2, 3].map((idx) => (
+              <Star
+                key={idx}
+                size={18}
+                className={
+                  idx <= currentStars ? 'star-icon filled' : 'star-icon empty'
+                }
+              />
+            ))}
+          </div>
+        </div>
+
+        {/* Circular Tactile Action Buttons */}
+        <div className="header-actions">
+          <button
+            type="button"
+            className="round-btn btn-yellow"
+            onClick={onUndo}
+            disabled={!canUndo}
+            title="Undo last move"
+            aria-label="Undo"
+          >
+            <Undo2 size={21} strokeWidth={2.6} />
+          </button>
+          <button
+            type="button"
+            className="round-btn btn-teal"
+            onClick={onReset}
+            title="Reset board"
+            aria-label="Reset"
+          >
+            <RotateCcw size={21} strokeWidth={2.6} />
+          </button>
+          <button
+            type="button"
+            className="round-btn btn-amber"
+            onClick={onHint}
+            title="Get a logical deduction hint"
+            aria-label="Hint"
+          >
+            <Lightbulb size={21} strokeWidth={2.6} />
+          </button>
+          {onToggleSound && (
+            <button
+              type="button"
+              className={`round-btn btn-purple ${isMuted ? 'muted' : ''}`}
+              onClick={onToggleSound}
+              title={isMuted ? 'Turn Sound On' : 'Mute Sound'}
+              aria-label={isMuted ? 'Turn Sound On' : 'Mute Sound'}
+            >
+              {isMuted ? (
+                <VolumeX size={20} strokeWidth={2.6} />
+              ) : (
+                <Volume2 size={20} strokeWidth={2.6} />
+              )}
+            </button>
+          )}
+          <button
+            type="button"
+            className="round-btn btn-blue"
+            onClick={onOpenRules}
+            title="Building Rules & Guide"
+            aria-label="Rules"
+          >
+            <BookOpen size={20} strokeWidth={2.6} />
+          </button>
+          <button
+            type="button"
+            className="round-btn btn-coral"
+            onClick={onOpenLevels}
+            title="Select Level"
+            aria-label="Select Level"
+          >
+            <Grid size={20} strokeWidth={2.6} />
+          </button>
         </div>
       </div>
 
@@ -71,56 +144,6 @@ export const HeaderBar: React.FC<HeaderBarProps> = ({
             {level.density ? ` • ${Math.round(level.density * 100)}% dense` : ''}
           </div>
         </div>
-      </div>
-
-      {/* Top-Right Circular Tactile Action Buttons */}
-      <div className="header-actions">
-        <button
-          type="button"
-          className="round-btn btn-yellow"
-          onClick={onUndo}
-          disabled={!canUndo}
-          title="Undo last move"
-          aria-label="Undo"
-        >
-          <Undo2 size={22} strokeWidth={2.6} />
-        </button>
-        <button
-          type="button"
-          className="round-btn btn-teal"
-          onClick={onReset}
-          title="Reset board"
-          aria-label="Reset"
-        >
-          <RotateCcw size={22} strokeWidth={2.6} />
-        </button>
-        <button
-          type="button"
-          className="round-btn btn-amber"
-          onClick={onHint}
-          title="Get a logical deduction hint"
-          aria-label="Hint"
-        >
-          <Lightbulb size={22} strokeWidth={2.6} />
-        </button>
-        <button
-          type="button"
-          className="round-btn btn-blue"
-          onClick={onOpenRules}
-          title="Building Rules & Guide"
-          aria-label="Rules"
-        >
-          <BookOpen size={21} strokeWidth={2.6} />
-        </button>
-        <button
-          type="button"
-          className="round-btn btn-coral"
-          onClick={onOpenLevels}
-          title="Select Level"
-          aria-label="Select Level"
-        >
-          <Grid size={21} strokeWidth={2.6} />
-        </button>
       </div>
     </header>
   );

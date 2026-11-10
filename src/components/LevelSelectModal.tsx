@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { Sparkles, Star, X } from 'lucide-react';
 import { CAMPAIGN_CONFIGS, getCampaignLevel } from '../engine/campaignLevels';
 
@@ -17,8 +17,6 @@ export const LevelSelectModal: React.FC<LevelSelectModalProps> = ({
   onGenerateBonus,
   onClose
 }) => {
-  const [selectedChapter, setSelectedChapter] = useState<number | 'all'>('all');
-
   const chapters = [1, 2, 3, 4, 5].map((ch) => {
     const configs = CAMPAIGN_CONFIGS.filter((c) => c.chapter === ch);
     const levels = configs.map((cfg) => getCampaignLevel(cfg.id));
@@ -31,11 +29,6 @@ export const LevelSelectModal: React.FC<LevelSelectModalProps> = ({
 
   const totalPossibleStars = CAMPAIGN_CONFIGS.length * 3;
   const totalStars = Object.values(starsByLevel).reduce((a, b) => a + b, 0);
-
-  const displayedChapters =
-    selectedChapter === 'all'
-      ? chapters
-      : chapters.filter((c) => c.chapter === selectedChapter);
 
   return (
     <div className="modal-backdrop" onClick={onClose}>
@@ -60,29 +53,8 @@ export const LevelSelectModal: React.FC<LevelSelectModalProps> = ({
           </button>
         </div>
 
-        {/* Chapter Quick Filter Tabs */}
-        <div className="chapter-filter-tabs">
-          <button
-            type="button"
-            className={`chapter-tab-btn ${selectedChapter === 'all' ? 'active' : ''}`}
-            onClick={() => setSelectedChapter('all')}
-          >
-            All (100)
-          </button>
-          {chapters.map((ch) => (
-            <button
-              key={ch.chapter}
-              type="button"
-              className={`chapter-tab-btn ${selectedChapter === ch.chapter ? 'active' : ''}`}
-              onClick={() => setSelectedChapter(ch.chapter)}
-            >
-              Ch {ch.chapter} ({ch.levels.length})
-            </button>
-          ))}
-        </div>
-
         <div className="modal-body">
-          {displayedChapters.map((ch) => (
+          {chapters.map((ch) => (
             <div key={ch.chapter} className="chapter-section">
               <div className="chapter-section-header">
                 <h3 className="chapter-heading">

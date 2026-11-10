@@ -21,6 +21,8 @@ interface GameBoardProps {
   validation: BoardValidationResult;
   activeHint: DeductionHint | null;
   selectedCell: Coord | null;
+  justPlacedCell?: Coord | null;
+  animatingLine?: { axis: 'row' | 'col'; index: number } | null;
   onCellAction: (
     r: number,
     c: number,
@@ -64,6 +66,8 @@ export const GameBoard: React.FC<GameBoardProps> = ({
   validation,
   activeHint,
   selectedCell,
+  justPlacedCell,
+  animatingLine,
   onCellAction,
   onCellRightClick,
   onLineClueClick
@@ -147,7 +151,7 @@ export const GameBoard: React.FC<GameBoardProps> = ({
       onPointerCancel={handleBoardPointerUp}
     >
       <div
-        className="board-grid-with-clues"
+        className={`board-grid-with-clues ${validation.isSolved ? 'board-solved' : ''}`}
         style={
           {
             '--grid-size': size
@@ -164,11 +168,14 @@ export const GameBoard: React.FC<GameBoardProps> = ({
           const status = validation.colStatus[c];
           const current = validation.colCounts[c];
           const remaining = clue - current;
+          const isColAnimating =
+            animatingLine?.axis === 'col' && animatingLine?.index === c;
+
           return (
             <button
               key={`col-${c}`}
               type="button"
-              className={`clue-badge col-clue status-${status}`}
+              className={`clue-badge col-clue status-${status} ${remaining === 0 ? 'clue-zero' : ''} ${isColAnimating ? 'clue-animating' : ''}`}
               onClick={() => onLineClueClick('col', c)}
               title={`Column ${c + 1}: ${remaining} more building(s) needed (${current}/${clue} placed). Tap to mark remaining empty spots.`}
             >
@@ -183,12 +190,14 @@ export const GameBoard: React.FC<GameBoardProps> = ({
           const rowCurrent = validation.rowCounts[r];
           const rowClue = level.rowClues[r];
           const rowRemaining = rowClue - rowCurrent;
+          const isRowAnimating =
+            animatingLine?.axis === 'row' && animatingLine?.index === r;
 
           return (
             <React.Fragment key={`row-${r}`}>
               <button
                 type="button"
-                className={`clue-badge row-clue status-${rowStatus}`}
+                className={`clue-badge row-clue status-${rowStatus} ${rowRemaining === 0 ? 'clue-zero' : ''} ${isRowAnimating ? 'clue-animating' : ''}`}
                 onClick={() => onLineClueClick('row', r)}
                 title={`Row ${r + 1}: ${rowRemaining} more building(s) needed (${rowCurrent}/${rowClue} placed). Tap to mark remaining empty spots.`}
               >
@@ -213,6 +222,24 @@ export const GameBoard: React.FC<GameBoardProps> = ({
                   selectedCell?.r === r && selectedCell?.c === c;
                 const isGrassBase = tile === 'tree';
 
+                const isJustPlaced =
+                  justPlacedCell?.r === r && justPlacedCell?.c === c;
+                const isRowRipple =
+                  animatingLine?.axis === 'row' && animatingLine?.index === r;
+                const isColRipple =
+                  animatingLine?.axis === 'col' && animatingLine?.index === c;
+                const rippleIdx = isRowRipple ? c : isColRipple ? r : 0;
+                const isRippling = isRowRipple || isColRipple;
+
+                const tileStyle: React.CSSProperties = {
+                  ...(isRippling
+                    ? ({ '--ripple-idx': rippleIdx } as React.CSSProperties)
+                    : {}),
+                  ...(validation.isSolved
+                    ? ({ '--wave-idx': r + c } as React.CSSProperties)
+                    : {})
+                };
+
                 const roadConns =
                   tile === 'road'
                     ? computeRoadConnections(grid, r, c)
@@ -224,6 +251,7 @@ export const GameBoard: React.FC<GameBoardProps> = ({
                     type="button"
                     data-row={r}
                     data-col={c}
+                    style={tileStyle}
                     className={[
                       'board-tile',
                       isGrassBase ? 'tile-grass' : 'tile-sand',
@@ -232,6 +260,9 @@ export const GameBoard: React.FC<GameBoardProps> = ({
                       isSatisfied ? 'tile-satisfied' : '',
                       isHinted ? 'tile-hinted' : '',
                       isSelected ? 'tile-selected' : '',
+                      isJustPlaced ? 'tile-just-placed' : '',
+                      isRippling ? 'tile-line-ripple' : '',
+                      validation.isSolved ? 'tile-victory-wave' : '',
                       tile === 'empty' && isRuledOutForActive
                         ? 'tile-ruled-out-active'
                         : ''
