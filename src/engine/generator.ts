@@ -2,6 +2,7 @@ import { countSolutions, solveByDeduction } from './solver';
 import {
   BuildingType,
   Coord,
+  DifficultyMetrics,
   isBuilding,
   isFixedObstacle,
   LevelDefinition,
@@ -29,9 +30,99 @@ export interface GeneratorConfig {
   };
   extraTrees?: number;
   rocks?: number;
+  minDensity?: number;
   allowTurningRoads?: boolean;
-  difficulty: 'Easy' | 'Medium' | 'Hard' | 'Expert';
+  difficulty?: 'Easy' | 'Medium' | 'Hard' | 'Expert';
   tutorialTip?: string;
+}
+
+export function calculateDifficultyMetrics(
+  level: LevelDefinition
+): DifficultyMetrics {
+  const trace = solveByDeduction(level);
+  const stepCount = trace.steps.length;
+  const hasContradiction = trace.steps.some(
+    (s) => s.ruleName === 'Logical Elimination'
+  );
+
+  let maxRuleLevel = 1;
+  let maxRuleName = 'Line Clue Complete';
+
+  for (const step of trace.steps) {
+    if (step.ruleName === 'Logical Elimination') {
+      if (maxRuleLevel < 5) {
+        maxRuleLevel = 5;
+        maxRuleName = step.ruleName;
+      }
+    } else if (
+      step.ruleName.includes('Must Be Road') ||
+      step.ruleName === 'Road Entry Point'
+    ) {
+      if (maxRuleLevel < 4) {
+        maxRuleLevel = 4;
+        maxRuleName = step.ruleName;
+      }
+    } else if (
+      step.ruleName.includes('Must Be Filled') ||
+      step.ruleName === 'Only Remaining Spot'
+    ) {
+      if (maxRuleLevel < 3) {
+        maxRuleLevel = 3;
+        maxRuleName = step.ruleName;
+      }
+    } else if (
+      step.ruleName.includes('Needs') ||
+      step.ruleName.includes('Orthogonal') ||
+      step.ruleName.startsWith('Only ')
+    ) {
+      if (maxRuleLevel < 2) {
+        maxRuleLevel = 2;
+        maxRuleName = step.ruleName;
+      }
+    }
+  }
+
+  const filledTiles = level.solution
+    .flat()
+    .filter((t) => t !== 'empty').length;
+  const totalTiles = level.size * level.size;
+  const density = Math.round((filledTiles / totalTiles) * 100) / 100;
+
+  const hasRoads = (level.inventory.town_hall ?? 0) > 0 || (level.inventory.road ?? 0) > 0;
+
+  let rawScore = 20;
+  if (level.size === 4) {
+    rawScore = 15 + Math.round(stepCount * 0.9) + Math.round((density - 0.35) * 15);
+  } else if (level.size === 5) {
+    const base = hasRoads ? 52 : 36;
+    rawScore =
+      base +
+      Math.round(Math.max(0, stepCount - 12) * 0.9) +
+      Math.round(Math.max(0, density - 0.40) * 20) +
+      (hasContradiction ? 8 : 0);
+  } else {
+    // 6x6
+    rawScore =
+      70 +
+      Math.round(Math.max(0, stepCount - 20) * 0.8) +
+      Math.round(Math.max(0, density - 0.50) * 25) +
+      (hasContradiction ? 10 : 0);
+  }
+
+  const score = Math.min(99, Math.max(15, Math.round(rawScore)));
+
+  const tier: 'Easy' | 'Medium' | 'Hard' | 'Expert' =
+    score <= 35 ? 'Easy' : score <= 58 ? 'Medium' : score <= 78 ? 'Hard' : 'Expert';
+
+  return {
+    score,
+    tier,
+    maxRuleLevel,
+    maxRuleName,
+    stepCount,
+    density,
+    filledTiles
+  };
 }
 
 export function createRng(seed: number): () => number {
@@ -198,7 +289,7 @@ function buildLevelFromSolution(
     colClues,
     inventory,
     solution: solution.map((r) => [...r]),
-    difficulty: config.difficulty,
+    difficulty: config.difficulty ?? 'Medium',
     tutorialTip: config.tutorialTip
   };
 }
@@ -436,6 +527,22 @@ export function generateVerifiedLevel(
       if (spot) grid[spot.r][spot.c] = 'rock';
     }
 
+    const filledCount = grid.flat().filter((t) => t !== 'empty').length;
+    const currentDensity = filledCount / (size * size);
+
+    const defaultMinDensity =
+      config.minDensity ?? (size === 4 ? 0.44 : size === 5 ? 0.48 : 0.50);
+    let effectiveMinDensity = defaultMinDensity;
+    if (attempt > maxAttempts * 0.85) {
+      effectiveMinDensity = Math.max(0.28, defaultMinDensity - 0.20);
+    } else if (attempt > maxAttempts * 0.65) {
+      effectiveMinDensity = Math.max(0.32, defaultMinDensity - 0.14);
+    } else if (attempt > maxAttempts * 0.40) {
+      effectiveMinDensity = Math.max(0.38, defaultMinDensity - 0.08);
+    }
+
+    if (currentDensity < effectiveMinDensity) continue;
+
     let candidateLevel = buildLevelFromSolution(grid, config);
     if (!validateBoard(grid, candidateLevel).isSolved) continue;
 
@@ -470,6 +577,12 @@ export function generateVerifiedLevel(
 
     const deduction = solveByDeduction(candidateLevel);
     if (!deduction.solved) continue;
+
+    const metrics = calculateDifficultyMetrics(candidateLevel);
+    candidateLevel.difficultyMetrics = metrics;
+    candidateLevel.difficultyScore = metrics.score;
+    candidateLevel.difficulty = config.difficulty ?? metrics.tier;
+    candidateLevel.density = metrics.density;
 
     return candidateLevel;
   }

@@ -1,6 +1,6 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Sparkles, Star, X } from 'lucide-react';
-import { CAMPAIGN_CONFIGS } from '../engine/campaignLevels';
+import { CAMPAIGN_CONFIGS, getCampaignLevel } from '../engine/campaignLevels';
 
 interface LevelSelectModalProps {
   currentLevelId: number;
@@ -17,8 +17,11 @@ export const LevelSelectModal: React.FC<LevelSelectModalProps> = ({
   onGenerateBonus,
   onClose
 }) => {
+  const [selectedChapter, setSelectedChapter] = useState<number | 'all'>('all');
+
   const chapters = [1, 2, 3, 4, 5].map((ch) => {
-    const levels = CAMPAIGN_CONFIGS.filter((c) => c.chapter === ch);
+    const configs = CAMPAIGN_CONFIGS.filter((c) => c.chapter === ch);
+    const levels = configs.map((cfg) => getCampaignLevel(cfg.id));
     return {
       chapter: ch,
       name: levels[0]?.chapterName ?? `Chapter ${ch}`,
@@ -26,7 +29,13 @@ export const LevelSelectModal: React.FC<LevelSelectModalProps> = ({
     };
   });
 
+  const totalPossibleStars = CAMPAIGN_CONFIGS.length * 3;
   const totalStars = Object.values(starsByLevel).reduce((a, b) => a + b, 0);
+
+  const displayedChapters =
+    selectedChapter === 'all'
+      ? chapters
+      : chapters.filter((c) => c.chapter === selectedChapter);
 
   return (
     <div className="modal-backdrop" onClick={onClose}>
@@ -38,7 +47,7 @@ export const LevelSelectModal: React.FC<LevelSelectModalProps> = ({
           <div>
             <h2>Select Level</h2>
             <p className="modal-subtitle">
-              Total Stars Earned: <strong>{totalStars} / 90</strong> ★
+              Total Stars Earned: <strong>{totalStars} / {totalPossibleStars}</strong> ★
             </p>
           </div>
           <button
@@ -51,16 +60,43 @@ export const LevelSelectModal: React.FC<LevelSelectModalProps> = ({
           </button>
         </div>
 
-        <div className="modal-body">
+        {/* Chapter Quick Filter Tabs */}
+        <div className="chapter-filter-tabs">
+          <button
+            type="button"
+            className={`chapter-tab-btn ${selectedChapter === 'all' ? 'active' : ''}`}
+            onClick={() => setSelectedChapter('all')}
+          >
+            All (100)
+          </button>
           {chapters.map((ch) => (
+            <button
+              key={ch.chapter}
+              type="button"
+              className={`chapter-tab-btn ${selectedChapter === ch.chapter ? 'active' : ''}`}
+              onClick={() => setSelectedChapter(ch.chapter)}
+            >
+              Ch {ch.chapter} ({ch.levels.length})
+            </button>
+          ))}
+        </div>
+
+        <div className="modal-body">
+          {displayedChapters.map((ch) => (
             <div key={ch.chapter} className="chapter-section">
-              <h3 className="chapter-heading">
-                Chapter {ch.chapter}: {ch.name}
-              </h3>
+              <div className="chapter-section-header">
+                <h3 className="chapter-heading">
+                  Chapter {ch.chapter}: {ch.name}
+                </h3>
+                <span className="chapter-count-tag">{ch.levels.length} Levels</span>
+              </div>
               <div className="level-grid">
                 {ch.levels.map((lvl) => {
                   const stars = starsByLevel[lvl.id] ?? 0;
                   const isCurrent = lvl.id === currentLevelId;
+                  const diffClass = `diff-${lvl.difficulty.toLowerCase()}`;
+                  const densPct = Math.round((lvl.density ?? 0) * 100);
+
                   return (
                     <button
                       key={lvl.id}
@@ -83,12 +119,23 @@ export const LevelSelectModal: React.FC<LevelSelectModalProps> = ({
                           {lvl.size}×{lvl.size}
                         </span>
                       </div>
+
                       <div className="level-card-title">{lvl.title}</div>
+
+                      <div className="level-card-meta">
+                        <span className={`diff-pill ${diffClass}`}>
+                          {lvl.difficulty} ({lvl.difficultyScore ?? 50})
+                        </span>
+                        <span className="density-tag" title="Board Density">
+                          {densPct}%
+                        </span>
+                      </div>
+
                       <div className="level-card-stars">
                         {[1, 2, 3].map((s) => (
                           <Star
                             key={s}
-                            size={14}
+                            size={13}
                             className={
                               s <= stars ? 'star-icon filled' : 'star-icon empty'
                             }

@@ -52,11 +52,23 @@ export const HeaderBar: React.FC<HeaderBarProps> = ({
       </div>
 
       {/* Center Carved Wooden Plaque */}
-      <div className="center-plaque" onClick={onOpenLevels} role="button" tabIndex={0}>
+      <div
+        className="center-plaque"
+        onClick={onOpenLevels}
+        role="button"
+        tabIndex={0}
+        title="Click to select level"
+      >
         <div className="plaque-inner">
-          <div className="plaque-title">{level.chapterName}</div>
+          <div className="plaque-top-row">
+            <span className="plaque-title">{level.chapterName}</span>
+            <span className={`diff-pill diff-${level.difficulty.toLowerCase()}`}>
+              {level.difficulty} ({level.difficultyScore ?? 50})
+            </span>
+          </div>
           <div className="plaque-subtitle">
             Level {level.id}: {level.title}
+            {level.density ? ` • ${Math.round(level.density * 100)}% dense` : ''}
           </div>
         </div>
       </div>

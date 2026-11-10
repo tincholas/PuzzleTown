@@ -1,0 +1,12217 @@
+[
+  {
+    "id": 1,
+    "chapter": 1,
+    "chapterName": "Woodland Camp",
+    "title": "First Clearing",
+    "size": 4,
+    "initialGrid": [
+      [
+        "tree",
+        "empty",
+        "empty",
+        "empty"
+      ],
+      [
+        "empty",
+        "empty",
+        "empty",
+        "empty"
+      ],
+      [
+        "empty",
+        "empty",
+        "empty",
+        "empty"
+      ],
+      [
+        "empty",
+        "empty",
+        "tree",
+        "empty"
+      ]
+    ],
+    "rowClues": [
+      2,
+      0,
+      1,
+      1
+    ],
+    "colClues": [
+      0,
+      1,
+      1,
+      2
+    ],
+    "inventory": {
+      "house": 2,
+      "woodcutter": 2,
+      "road": 0,
+      "farm": 0,
+      "town_hall": 0
+    },
+    "solution": [
+      [
+        "tree",
+        "woodcutter",
+        "house",
+        "empty"
+      ],
+      [
+        "empty",
+        "empty",
+        "empty",
+        "empty"
+      ],
+      [
+        "empty",
+        "empty",
+        "empty",
+        "house"
+      ],
+      [
+        "empty",
+        "empty",
+        "tree",
+        "woodcutter"
+      ]
+    ],
+    "difficulty": "Easy",
+    "tutorialTip": "Welcome to PuzzleTown! Every Tree must have a Woodcutter orthogonally next to it, and every Woodcutter must have a House next to it. Numbers show how many more buildings are needed!",
+    "difficultyMetrics": {
+      "score": 28,
+      "tier": "Easy",
+      "maxRuleLevel": 2,
+      "maxRuleName": "Tree Needs Woodcutter",
+      "stepCount": 14,
+      "density": 0.38,
+      "filledTiles": 6
+    },
+    "difficultyScore": 28,
+    "density": 0.38
+  },
+  {
+    "id": 2,
+    "chapter": 1,
+    "chapterName": "Woodland Camp",
+    "title": "Timber Line",
+    "size": 4,
+    "initialGrid": [
+      [
+        "empty",
+        "tree",
+        "empty",
+        "empty"
+      ],
+      [
+        "empty",
+        "empty",
+        "empty",
+        "empty"
+      ],
+      [
+        "empty",
+        "empty",
+        "empty",
+        "empty"
+      ],
+      [
+        "empty",
+        "empty",
+        "tree",
+        "empty"
+      ]
+    ],
+    "rowClues": [
+      0,
+      2,
+      1,
+      1
+    ],
+    "colClues": [
+      1,
+      1,
+      0,
+      2
+    ],
+    "inventory": {
+      "house": 2,
+      "woodcutter": 2,
+      "road": 0,
+      "farm": 0,
+      "town_hall": 0
+    },
+    "solution": [
+      [
+        "empty",
+        "tree",
+        "empty",
+        "empty"
+      ],
+      [
+        "house",
+        "woodcutter",
+        "empty",
+        "empty"
+      ],
+      [
+        "empty",
+        "empty",
+        "empty",
+        "house"
+      ],
+      [
+        "empty",
+        "empty",
+        "tree",
+        "woodcutter"
+      ]
+    ],
+    "difficulty": "Easy",
+    "difficultyMetrics": {
+      "score": 28,
+      "tier": "Easy",
+      "maxRuleLevel": 3,
+      "maxRuleName": "Only Remaining Spot",
+      "stepCount": 14,
+      "density": 0.38,
+      "filledTiles": 6
+    },
+    "difficultyScore": 28,
+    "density": 0.38
+  },
+  {
+    "id": 3,
+    "chapter": 1,
+    "chapterName": "Woodland Camp",
+    "title": "Twin Cabins",
+    "size": 4,
+    "initialGrid": [
+      [
+        "tree",
+        "empty",
+        "empty",
+        "empty"
+      ],
+      [
+        "empty",
+        "empty",
+        "empty",
+        "empty"
+      ],
+      [
+        "empty",
+        "empty",
+        "tree",
+        "empty"
+      ],
+      [
+        "empty",
+        "empty",
+        "empty",
+        "empty"
+      ]
+    ],
+    "rowClues": [
+      0,
+      2,
+      0,
+      2
+    ],
+    "colClues": [
+      1,
+      1,
+      1,
+      1
+    ],
+    "inventory": {
+      "house": 2,
+      "woodcutter": 2,
+      "road": 0,
+      "farm": 0,
+      "town_hall": 0
+    },
+    "solution": [
+      [
+        "tree",
+        "empty",
+        "empty",
+        "empty"
+      ],
+      [
+        "woodcutter",
+        "house",
+        "empty",
+        "empty"
+      ],
+      [
+        "empty",
+        "empty",
+        "tree",
+        "empty"
+      ],
+      [
+        "empty",
+        "empty",
+        "woodcutter",
+        "house"
+      ]
+    ],
+    "difficulty": "Easy",
+    "difficultyMetrics": {
+      "score": 28,
+      "tier": "Easy",
+      "maxRuleLevel": 2,
+      "maxRuleName": "Tree Needs Woodcutter",
+      "stepCount": 14,
+      "density": 0.38,
+      "filledTiles": 6
+    },
+    "difficultyScore": 28,
+    "density": 0.38
+  },
+  {
+    "id": 4,
+    "chapter": 1,
+    "chapterName": "Woodland Camp",
+    "title": "Pine Grove",
+    "size": 4,
+    "initialGrid": [
+      [
+        "empty",
+        "empty",
+        "empty",
+        "empty"
+      ],
+      [
+        "empty",
+        "tree",
+        "empty",
+        "empty"
+      ],
+      [
+        "tree",
+        "empty",
+        "empty",
+        "empty"
+      ],
+      [
+        "rock",
+        "empty",
+        "empty",
+        "tree"
+      ]
+    ],
+    "rowClues": [
+      1,
+      1,
+      1,
+      1
+    ],
+    "colClues": [
+      2,
+      0,
+      2,
+      0
+    ],
+    "inventory": {
+      "house": 2,
+      "woodcutter": 2,
+      "road": 0,
+      "farm": 0,
+      "town_hall": 0
+    },
+    "solution": [
+      [
+        "house",
+        "empty",
+        "empty",
+        "empty"
+      ],
+      [
+        "woodcutter",
+        "tree",
+        "empty",
+        "empty"
+      ],
+      [
+        "tree",
+        "empty",
+        "house",
+        "empty"
+      ],
+      [
+        "rock",
+        "empty",
+        "woodcutter",
+        "tree"
+      ]
+    ],
+    "difficulty": "Easy",
+    "difficultyMetrics": {
+      "score": 28,
+      "tier": "Easy",
+      "maxRuleLevel": 2,
+      "maxRuleName": "Only House Fits",
+      "stepCount": 12,
+      "density": 0.5,
+      "filledTiles": 8
+    },
+    "difficultyScore": 28,
+    "density": 0.5
+  },
+  {
+    "id": 5,
+    "chapter": 1,
+    "chapterName": "Woodland Camp",
+    "title": "Cozy Copse",
+    "size": 4,
+    "initialGrid": [
+      [
+        "empty",
+        "tree",
+        "empty",
+        "empty"
+      ],
+      [
+        "empty",
+        "empty",
+        "tree",
+        "empty"
+      ],
+      [
+        "empty",
+        "empty",
+        "rock",
+        "tree"
+      ],
+      [
+        "empty",
+        "empty",
+        "empty",
+        "empty"
+      ]
+    ],
+    "rowClues": [
+      2,
+      2,
+      0,
+      0
+    ],
+    "colClues": [
+      2,
+      0,
+      0,
+      2
+    ],
+    "inventory": {
+      "house": 2,
+      "woodcutter": 2,
+      "road": 0,
+      "farm": 0,
+      "town_hall": 0
+    },
+    "solution": [
+      [
+        "woodcutter",
+        "tree",
+        "empty",
+        "house"
+      ],
+      [
+        "house",
+        "empty",
+        "tree",
+        "woodcutter"
+      ],
+      [
+        "empty",
+        "empty",
+        "rock",
+        "tree"
+      ],
+      [
+        "empty",
+        "empty",
+        "empty",
+        "empty"
+      ]
+    ],
+    "difficulty": "Easy",
+    "difficultyMetrics": {
+      "score": 28,
+      "tier": "Easy",
+      "maxRuleLevel": 2,
+      "maxRuleName": "Only House Fits",
+      "stepCount": 12,
+      "density": 0.5,
+      "filledTiles": 8
+    },
+    "difficultyScore": 28,
+    "density": 0.5
+  },
+  {
+    "id": 6,
+    "chapter": 1,
+    "chapterName": "Woodland Camp",
+    "title": "Woodsman Path",
+    "size": 4,
+    "initialGrid": [
+      [
+        "empty",
+        "empty",
+        "empty",
+        "empty"
+      ],
+      [
+        "rock",
+        "empty",
+        "empty",
+        "empty"
+      ],
+      [
+        "tree",
+        "empty",
+        "empty",
+        "tree"
+      ],
+      [
+        "empty",
+        "tree",
+        "empty",
+        "empty"
+      ]
+    ],
+    "rowClues": [
+      0,
+      1,
+      1,
+      2
+    ],
+    "colClues": [
+      0,
+      2,
+      1,
+      1
+    ],
+    "inventory": {
+      "house": 2,
+      "woodcutter": 2,
+      "road": 0,
+      "farm": 0,
+      "town_hall": 0
+    },
+    "solution": [
+      [
+        "empty",
+        "empty",
+        "empty",
+        "empty"
+      ],
+      [
+        "rock",
+        "house",
+        "empty",
+        "empty"
+      ],
+      [
+        "tree",
+        "woodcutter",
+        "empty",
+        "tree"
+      ],
+      [
+        "empty",
+        "tree",
+        "house",
+        "woodcutter"
+      ]
+    ],
+    "difficulty": "Easy",
+    "difficultyMetrics": {
+      "score": 28,
+      "tier": "Easy",
+      "maxRuleLevel": 2,
+      "maxRuleName": "Only House Fits",
+      "stepCount": 12,
+      "density": 0.5,
+      "filledTiles": 8
+    },
+    "difficultyScore": 28,
+    "density": 0.5
+  },
+  {
+    "id": 7,
+    "chapter": 1,
+    "chapterName": "Woodland Camp",
+    "title": "Birch Hollow",
+    "size": 4,
+    "initialGrid": [
+      [
+        "empty",
+        "empty",
+        "empty",
+        "empty"
+      ],
+      [
+        "tree",
+        "rock",
+        "empty",
+        "empty"
+      ],
+      [
+        "empty",
+        "tree",
+        "empty",
+        "empty"
+      ],
+      [
+        "tree",
+        "empty",
+        "empty",
+        "empty"
+      ]
+    ],
+    "rowClues": [
+      2,
+      0,
+      0,
+      2
+    ],
+    "colClues": [
+      1,
+      2,
+      1,
+      0
+    ],
+    "inventory": {
+      "house": 2,
+      "woodcutter": 2,
+      "road": 0,
+      "farm": 0,
+      "town_hall": 0
+    },
+    "solution": [
+      [
+        "woodcutter",
+        "house",
+        "empty",
+        "empty"
+      ],
+      [
+        "tree",
+        "rock",
+        "empty",
+        "empty"
+      ],
+      [
+        "empty",
+        "tree",
+        "empty",
+        "empty"
+      ],
+      [
+        "tree",
+        "woodcutter",
+        "house",
+        "empty"
+      ]
+    ],
+    "difficulty": "Easy",
+    "difficultyMetrics": {
+      "score": 28,
+      "tier": "Easy",
+      "maxRuleLevel": 2,
+      "maxRuleName": "Only House Fits",
+      "stepCount": 12,
+      "density": 0.5,
+      "filledTiles": 8
+    },
+    "difficultyScore": 28,
+    "density": 0.5
+  },
+  {
+    "id": 8,
+    "chapter": 1,
+    "chapterName": "Woodland Camp",
+    "title": "Forest Border",
+    "size": 5,
+    "initialGrid": [
+      [
+        "empty",
+        "empty",
+        "empty",
+        "rock",
+        "empty"
+      ],
+      [
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "empty"
+      ],
+      [
+        "empty",
+        "empty",
+        "empty",
+        "tree",
+        "empty"
+      ],
+      [
+        "tree",
+        "tree",
+        "empty",
+        "empty",
+        "tree"
+      ],
+      [
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "empty"
+      ]
+    ],
+    "rowClues": [
+      0,
+      1,
+      1,
+      2,
+      2
+    ],
+    "colClues": [
+      1,
+      1,
+      1,
+      1,
+      2
+    ],
+    "inventory": {
+      "house": 3,
+      "woodcutter": 3,
+      "road": 0,
+      "farm": 0,
+      "town_hall": 0
+    },
+    "solution": [
+      [
+        "empty",
+        "empty",
+        "empty",
+        "rock",
+        "empty"
+      ],
+      [
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "house"
+      ],
+      [
+        "empty",
+        "empty",
+        "empty",
+        "tree",
+        "woodcutter"
+      ],
+      [
+        "tree",
+        "tree",
+        "woodcutter",
+        "house",
+        "tree"
+      ],
+      [
+        "woodcutter",
+        "house",
+        "empty",
+        "empty",
+        "empty"
+      ]
+    ],
+    "difficulty": "Medium",
+    "difficultyMetrics": {
+      "score": 44,
+      "tier": "Medium",
+      "maxRuleLevel": 2,
+      "maxRuleName": "Woodcutter Needs House",
+      "stepCount": 20,
+      "density": 0.44,
+      "filledTiles": 11
+    },
+    "difficultyScore": 44,
+    "density": 0.44
+  },
+  {
+    "id": 9,
+    "chapter": 1,
+    "chapterName": "Woodland Camp",
+    "title": "Lumber Haven",
+    "size": 5,
+    "initialGrid": [
+      [
+        "empty",
+        "empty",
+        "empty",
+        "tree",
+        "empty"
+      ],
+      [
+        "empty",
+        "empty",
+        "tree",
+        "empty",
+        "empty"
+      ],
+      [
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "empty"
+      ],
+      [
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "rock"
+      ],
+      [
+        "tree",
+        "empty",
+        "empty",
+        "empty",
+        "tree"
+      ]
+    ],
+    "rowClues": [
+      2,
+      0,
+      1,
+      2,
+      1
+    ],
+    "colClues": [
+      2,
+      1,
+      1,
+      2,
+      0
+    ],
+    "inventory": {
+      "house": 3,
+      "woodcutter": 3,
+      "road": 0,
+      "farm": 0,
+      "town_hall": 0
+    },
+    "solution": [
+      [
+        "empty",
+        "house",
+        "woodcutter",
+        "tree",
+        "empty"
+      ],
+      [
+        "empty",
+        "empty",
+        "tree",
+        "empty",
+        "empty"
+      ],
+      [
+        "house",
+        "empty",
+        "empty",
+        "empty",
+        "empty"
+      ],
+      [
+        "woodcutter",
+        "empty",
+        "empty",
+        "house",
+        "rock"
+      ],
+      [
+        "tree",
+        "empty",
+        "empty",
+        "woodcutter",
+        "tree"
+      ]
+    ],
+    "difficulty": "Medium",
+    "difficultyMetrics": {
+      "score": 44,
+      "tier": "Medium",
+      "maxRuleLevel": 3,
+      "maxRuleName": "Only Remaining Spot",
+      "stepCount": 20,
+      "density": 0.44,
+      "filledTiles": 11
+    },
+    "difficultyScore": 44,
+    "density": 0.44
+  },
+  {
+    "id": 10,
+    "chapter": 1,
+    "chapterName": "Woodland Camp",
+    "title": "Cedar Glen",
+    "size": 5,
+    "initialGrid": [
+      [
+        "rock",
+        "empty",
+        "empty",
+        "empty",
+        "tree"
+      ],
+      [
+        "empty",
+        "tree",
+        "empty",
+        "tree",
+        "empty"
+      ],
+      [
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "empty"
+      ],
+      [
+        "empty",
+        "empty",
+        "tree",
+        "empty",
+        "empty"
+      ],
+      [
+        "empty",
+        "rock",
+        "empty",
+        "empty",
+        "empty"
+      ]
+    ],
+    "rowClues": [
+      0,
+      1,
+      2,
+      2,
+      1
+    ],
+    "colClues": [
+      0,
+      2,
+      0,
+      2,
+      2
+    ],
+    "inventory": {
+      "house": 3,
+      "woodcutter": 3,
+      "road": 0,
+      "farm": 0,
+      "town_hall": 0
+    },
+    "solution": [
+      [
+        "rock",
+        "empty",
+        "empty",
+        "empty",
+        "tree"
+      ],
+      [
+        "empty",
+        "tree",
+        "empty",
+        "tree",
+        "woodcutter"
+      ],
+      [
+        "empty",
+        "woodcutter",
+        "empty",
+        "empty",
+        "house"
+      ],
+      [
+        "empty",
+        "house",
+        "tree",
+        "woodcutter",
+        "empty"
+      ],
+      [
+        "empty",
+        "rock",
+        "empty",
+        "house",
+        "empty"
+      ]
+    ],
+    "difficulty": "Medium",
+    "difficultyMetrics": {
+      "score": 44,
+      "tier": "Medium",
+      "maxRuleLevel": 2,
+      "maxRuleName": "Tree Needs Woodcutter",
+      "stepCount": 19,
+      "density": 0.48,
+      "filledTiles": 12
+    },
+    "difficultyScore": 44,
+    "density": 0.48
+  },
+  {
+    "id": 11,
+    "chapter": 1,
+    "chapterName": "Woodland Camp",
+    "title": "Highland Lumber",
+    "size": 5,
+    "initialGrid": [
+      [
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "empty"
+      ],
+      [
+        "rock",
+        "empty",
+        "tree",
+        "empty",
+        "tree"
+      ],
+      [
+        "rock",
+        "empty",
+        "empty",
+        "empty",
+        "empty"
+      ],
+      [
+        "empty",
+        "tree",
+        "empty",
+        "empty",
+        "empty"
+      ],
+      [
+        "empty",
+        "tree",
+        "empty",
+        "empty",
+        "empty"
+      ]
+    ],
+    "rowClues": [
+      0,
+      2,
+      2,
+      1,
+      1
+    ],
+    "colClues": [
+      2,
+      2,
+      0,
+      2,
+      0
+    ],
+    "inventory": {
+      "house": 3,
+      "woodcutter": 3,
+      "road": 0,
+      "farm": 0,
+      "town_hall": 0
+    },
+    "solution": [
+      [
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "empty"
+      ],
+      [
+        "rock",
+        "house",
+        "tree",
+        "woodcutter",
+        "tree"
+      ],
+      [
+        "rock",
+        "woodcutter",
+        "empty",
+        "house",
+        "empty"
+      ],
+      [
+        "house",
+        "tree",
+        "empty",
+        "empty",
+        "empty"
+      ],
+      [
+        "woodcutter",
+        "tree",
+        "empty",
+        "empty",
+        "empty"
+      ]
+    ],
+    "difficulty": "Medium",
+    "difficultyMetrics": {
+      "score": 44,
+      "tier": "Medium",
+      "maxRuleLevel": 2,
+      "maxRuleName": "Only House Fits",
+      "stepCount": 19,
+      "density": 0.48,
+      "filledTiles": 12
+    },
+    "difficultyScore": 44,
+    "density": 0.48
+  },
+  {
+    "id": 12,
+    "chapter": 1,
+    "chapterName": "Woodland Camp",
+    "title": "Shadow Woods",
+    "size": 5,
+    "initialGrid": [
+      [
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "empty"
+      ],
+      [
+        "empty",
+        "empty",
+        "tree",
+        "tree",
+        "empty"
+      ],
+      [
+        "empty",
+        "tree",
+        "empty",
+        "empty",
+        "tree"
+      ],
+      [
+        "empty",
+        "rock",
+        "empty",
+        "rock",
+        "empty"
+      ],
+      [
+        "empty",
+        "tree",
+        "empty",
+        "empty",
+        "empty"
+      ]
+    ],
+    "rowClues": [
+      1,
+      1,
+      2,
+      1,
+      1
+    ],
+    "colClues": [
+      2,
+      0,
+      1,
+      1,
+      2
+    ],
+    "inventory": {
+      "house": 3,
+      "woodcutter": 3,
+      "road": 0,
+      "farm": 0,
+      "town_hall": 0
+    },
+    "solution": [
+      [
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "house"
+      ],
+      [
+        "empty",
+        "empty",
+        "tree",
+        "tree",
+        "woodcutter"
+      ],
+      [
+        "empty",
+        "tree",
+        "woodcutter",
+        "house",
+        "tree"
+      ],
+      [
+        "house",
+        "rock",
+        "empty",
+        "rock",
+        "empty"
+      ],
+      [
+        "woodcutter",
+        "tree",
+        "empty",
+        "empty",
+        "empty"
+      ]
+    ],
+    "difficulty": "Medium",
+    "difficultyMetrics": {
+      "score": 43,
+      "tier": "Medium",
+      "maxRuleLevel": 2,
+      "maxRuleName": "Tree Needs Woodcutter",
+      "stepCount": 18,
+      "density": 0.52,
+      "filledTiles": 13
+    },
+    "difficultyScore": 43,
+    "density": 0.52
+  },
+  {
+    "id": 13,
+    "chapter": 1,
+    "chapterName": "Woodland Camp",
+    "title": "Oakwood Rise",
+    "size": 5,
+    "initialGrid": [
+      [
+        "empty",
+        "tree",
+        "empty",
+        "empty",
+        "empty"
+      ],
+      [
+        "empty",
+        "empty",
+        "tree",
+        "empty",
+        "tree"
+      ],
+      [
+        "rock",
+        "empty",
+        "empty",
+        "tree",
+        "empty"
+      ],
+      [
+        "empty",
+        "empty",
+        "empty",
+        "rock",
+        "empty"
+      ],
+      [
+        "empty",
+        "empty",
+        "empty",
+        "tree",
+        "empty"
+      ]
+    ],
+    "rowClues": [
+      2,
+      2,
+      0,
+      1,
+      1
+    ],
+    "colClues": [
+      2,
+      0,
+      0,
+      2,
+      2
+    ],
+    "inventory": {
+      "house": 3,
+      "woodcutter": 3,
+      "road": 0,
+      "farm": 0,
+      "town_hall": 0
+    },
+    "solution": [
+      [
+        "woodcutter",
+        "tree",
+        "empty",
+        "house",
+        "empty"
+      ],
+      [
+        "house",
+        "empty",
+        "tree",
+        "woodcutter",
+        "tree"
+      ],
+      [
+        "rock",
+        "empty",
+        "empty",
+        "tree",
+        "empty"
+      ],
+      [
+        "empty",
+        "empty",
+        "empty",
+        "rock",
+        "house"
+      ],
+      [
+        "empty",
+        "empty",
+        "empty",
+        "tree",
+        "woodcutter"
+      ]
+    ],
+    "difficulty": "Medium",
+    "difficultyMetrics": {
+      "score": 43,
+      "tier": "Medium",
+      "maxRuleLevel": 3,
+      "maxRuleName": "Only Remaining Spot",
+      "stepCount": 18,
+      "density": 0.52,
+      "filledTiles": 13
+    },
+    "difficultyScore": 43,
+    "density": 0.52
+  },
+  {
+    "id": 14,
+    "chapter": 1,
+    "chapterName": "Woodland Camp",
+    "title": "Dense Thicket",
+    "size": 5,
+    "initialGrid": [
+      [
+        "rock",
+        "empty",
+        "empty",
+        "tree",
+        "empty"
+      ],
+      [
+        "empty",
+        "empty",
+        "tree",
+        "empty",
+        "empty"
+      ],
+      [
+        "empty",
+        "tree",
+        "empty",
+        "empty",
+        "empty"
+      ],
+      [
+        "empty",
+        "empty",
+        "empty",
+        "tree",
+        "empty"
+      ],
+      [
+        "empty",
+        "rock",
+        "tree",
+        "empty",
+        "empty"
+      ]
+    ],
+    "rowClues": [
+      2,
+      0,
+      1,
+      1,
+      2
+    ],
+    "colClues": [
+      2,
+      1,
+      1,
+      1,
+      1
+    ],
+    "inventory": {
+      "house": 3,
+      "woodcutter": 3,
+      "road": 0,
+      "farm": 0,
+      "town_hall": 0
+    },
+    "solution": [
+      [
+        "rock",
+        "house",
+        "woodcutter",
+        "tree",
+        "empty"
+      ],
+      [
+        "empty",
+        "empty",
+        "tree",
+        "empty",
+        "empty"
+      ],
+      [
+        "woodcutter",
+        "tree",
+        "empty",
+        "empty",
+        "empty"
+      ],
+      [
+        "house",
+        "empty",
+        "empty",
+        "tree",
+        "empty"
+      ],
+      [
+        "empty",
+        "rock",
+        "tree",
+        "woodcutter",
+        "house"
+      ]
+    ],
+    "difficulty": "Medium",
+    "difficultyMetrics": {
+      "score": 43,
+      "tier": "Medium",
+      "maxRuleLevel": 2,
+      "maxRuleName": "Tree Needs Woodcutter",
+      "stepCount": 18,
+      "density": 0.52,
+      "filledTiles": 13
+    },
+    "difficultyScore": 43,
+    "density": 0.52
+  },
+  {
+    "id": 15,
+    "chapter": 1,
+    "chapterName": "Woodland Camp",
+    "title": "Old Forest Hold",
+    "size": 5,
+    "initialGrid": [
+      [
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "tree"
+      ],
+      [
+        "empty",
+        "empty",
+        "empty",
+        "tree",
+        "empty"
+      ],
+      [
+        "empty",
+        "empty",
+        "rock",
+        "rock",
+        "tree"
+      ],
+      [
+        "tree",
+        "empty",
+        "empty",
+        "empty",
+        "empty"
+      ],
+      [
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "tree"
+      ]
+    ],
+    "rowClues": [
+      2,
+      0,
+      0,
+      2,
+      2
+    ],
+    "colClues": [
+      1,
+      1,
+      1,
+      2,
+      1
+    ],
+    "inventory": {
+      "house": 3,
+      "woodcutter": 3,
+      "road": 0,
+      "farm": 0,
+      "town_hall": 0
+    },
+    "solution": [
+      [
+        "empty",
+        "empty",
+        "house",
+        "woodcutter",
+        "tree"
+      ],
+      [
+        "empty",
+        "empty",
+        "empty",
+        "tree",
+        "empty"
+      ],
+      [
+        "empty",
+        "empty",
+        "rock",
+        "rock",
+        "tree"
+      ],
+      [
+        "tree",
+        "empty",
+        "empty",
+        "house",
+        "woodcutter"
+      ],
+      [
+        "woodcutter",
+        "house",
+        "empty",
+        "empty",
+        "tree"
+      ]
+    ],
+    "difficulty": "Medium",
+    "difficultyMetrics": {
+      "score": 43,
+      "tier": "Medium",
+      "maxRuleLevel": 3,
+      "maxRuleName": "Only Remaining Spot",
+      "stepCount": 18,
+      "density": 0.52,
+      "filledTiles": 13
+    },
+    "difficultyScore": 43,
+    "density": 0.52
+  },
+  {
+    "id": 16,
+    "chapter": 2,
+    "chapterName": "Harvest Fields",
+    "title": "Fertile Soil",
+    "size": 5,
+    "initialGrid": [
+      [
+        "rock",
+        "empty",
+        "empty",
+        "empty",
+        "empty"
+      ],
+      [
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "empty"
+      ],
+      [
+        "empty",
+        "tree",
+        "empty",
+        "empty",
+        "empty"
+      ],
+      [
+        "empty",
+        "empty",
+        "tree",
+        "empty",
+        "empty"
+      ],
+      [
+        "empty",
+        "empty",
+        "empty",
+        "tree",
+        "empty"
+      ]
+    ],
+    "rowClues": [
+      0,
+      1,
+      2,
+      2,
+      0
+    ],
+    "colClues": [
+      2,
+      0,
+      0,
+      1,
+      2
+    ],
+    "inventory": {
+      "house": 2,
+      "woodcutter": 2,
+      "road": 0,
+      "farm": 1,
+      "town_hall": 0
+    },
+    "solution": [
+      [
+        "rock",
+        "empty",
+        "empty",
+        "empty",
+        "empty"
+      ],
+      [
+        "house",
+        "empty",
+        "empty",
+        "empty",
+        "empty"
+      ],
+      [
+        "woodcutter",
+        "tree",
+        "empty",
+        "empty",
+        "farm"
+      ],
+      [
+        "empty",
+        "empty",
+        "tree",
+        "woodcutter",
+        "house"
+      ],
+      [
+        "empty",
+        "empty",
+        "empty",
+        "tree",
+        "empty"
+      ]
+    ],
+    "difficulty": "Medium",
+    "tutorialTip": "New Building — Farm: Every Woodcutter AND Farm must have a House orthogonally next to it. A House can sit between both to satisfy both!",
+    "difficultyMetrics": {
+      "score": 44,
+      "tier": "Medium",
+      "maxRuleLevel": 3,
+      "maxRuleName": "Only Remaining Spot",
+      "stepCount": 21,
+      "density": 0.36,
+      "filledTiles": 9
+    },
+    "difficultyScore": 44,
+    "density": 0.36
+  },
+  {
+    "id": 17,
+    "chapter": 2,
+    "chapterName": "Harvest Fields",
+    "title": "Golden Wheat",
+    "size": 5,
+    "initialGrid": [
+      [
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "empty"
+      ],
+      [
+        "tree",
+        "empty",
+        "empty",
+        "empty",
+        "empty"
+      ],
+      [
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "empty"
+      ],
+      [
+        "tree",
+        "empty",
+        "empty",
+        "empty",
+        "rock"
+      ],
+      [
+        "empty",
+        "tree",
+        "empty",
+        "empty",
+        "empty"
+      ]
+    ],
+    "rowClues": [
+      2,
+      0,
+      1,
+      2,
+      0
+    ],
+    "colClues": [
+      1,
+      2,
+      2,
+      0,
+      0
+    ],
+    "inventory": {
+      "house": 2,
+      "woodcutter": 2,
+      "road": 0,
+      "farm": 1,
+      "town_hall": 0
+    },
+    "solution": [
+      [
+        "woodcutter",
+        "house",
+        "empty",
+        "empty",
+        "empty"
+      ],
+      [
+        "tree",
+        "empty",
+        "empty",
+        "empty",
+        "empty"
+      ],
+      [
+        "empty",
+        "empty",
+        "farm",
+        "empty",
+        "empty"
+      ],
+      [
+        "tree",
+        "woodcutter",
+        "house",
+        "empty",
+        "rock"
+      ],
+      [
+        "empty",
+        "tree",
+        "empty",
+        "empty",
+        "empty"
+      ]
+    ],
+    "difficulty": "Medium",
+    "difficultyMetrics": {
+      "score": 44,
+      "tier": "Medium",
+      "maxRuleLevel": 3,
+      "maxRuleName": "Only Remaining Spot",
+      "stepCount": 21,
+      "density": 0.36,
+      "filledTiles": 9
+    },
+    "difficultyScore": 44,
+    "density": 0.36
+  },
+  {
+    "id": 18,
+    "chapter": 2,
+    "chapterName": "Harvest Fields",
+    "title": "Barley Field",
+    "size": 5,
+    "initialGrid": [
+      [
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "tree"
+      ],
+      [
+        "empty",
+        "tree",
+        "empty",
+        "tree",
+        "empty"
+      ],
+      [
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "empty"
+      ],
+      [
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "empty"
+      ],
+      [
+        "rock",
+        "empty",
+        "empty",
+        "empty",
+        "empty"
+      ]
+    ],
+    "rowClues": [
+      2,
+      1,
+      2,
+      0,
+      0
+    ],
+    "colClues": [
+      1,
+      1,
+      0,
+      1,
+      2
+    ],
+    "inventory": {
+      "house": 2,
+      "woodcutter": 2,
+      "road": 0,
+      "farm": 1,
+      "town_hall": 0
+    },
+    "solution": [
+      [
+        "house",
+        "woodcutter",
+        "empty",
+        "empty",
+        "tree"
+      ],
+      [
+        "empty",
+        "tree",
+        "empty",
+        "tree",
+        "woodcutter"
+      ],
+      [
+        "empty",
+        "empty",
+        "empty",
+        "farm",
+        "house"
+      ],
+      [
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "empty"
+      ],
+      [
+        "rock",
+        "empty",
+        "empty",
+        "empty",
+        "empty"
+      ]
+    ],
+    "difficulty": "Medium",
+    "difficultyMetrics": {
+      "score": 44,
+      "tier": "Medium",
+      "maxRuleLevel": 2,
+      "maxRuleName": "Tree Needs Woodcutter",
+      "stepCount": 21,
+      "density": 0.36,
+      "filledTiles": 9
+    },
+    "difficultyScore": 44,
+    "density": 0.36
+  },
+  {
+    "id": 19,
+    "chapter": 2,
+    "chapterName": "Harvest Fields",
+    "title": "Orchard Ridge",
+    "size": 5,
+    "initialGrid": [
+      [
+        "empty",
+        "empty",
+        "empty",
+        "tree",
+        "empty"
+      ],
+      [
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "tree"
+      ],
+      [
+        "empty",
+        "tree",
+        "empty",
+        "empty",
+        "empty"
+      ],
+      [
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "empty"
+      ],
+      [
+        "rock",
+        "empty",
+        "empty",
+        "empty",
+        "empty"
+      ]
+    ],
+    "rowClues": [
+      0,
+      3,
+      2,
+      0,
+      0
+    ],
+    "colClues": [
+      2,
+      1,
+      0,
+      2,
+      0
+    ],
+    "inventory": {
+      "house": 2,
+      "woodcutter": 2,
+      "road": 0,
+      "farm": 1,
+      "town_hall": 0
+    },
+    "solution": [
+      [
+        "empty",
+        "empty",
+        "empty",
+        "tree",
+        "empty"
+      ],
+      [
+        "house",
+        "farm",
+        "empty",
+        "woodcutter",
+        "tree"
+      ],
+      [
+        "woodcutter",
+        "tree",
+        "empty",
+        "house",
+        "empty"
+      ],
+      [
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "empty"
+      ],
+      [
+        "rock",
+        "empty",
+        "empty",
+        "empty",
+        "empty"
+      ]
+    ],
+    "difficulty": "Medium",
+    "difficultyMetrics": {
+      "score": 44,
+      "tier": "Medium",
+      "maxRuleLevel": 3,
+      "maxRuleName": "Only Remaining Spot",
+      "stepCount": 21,
+      "density": 0.36,
+      "filledTiles": 9
+    },
+    "difficultyScore": 44,
+    "density": 0.36
+  },
+  {
+    "id": 20,
+    "chapter": 2,
+    "chapterName": "Harvest Fields",
+    "title": "Homestead Valley",
+    "size": 5,
+    "initialGrid": [
+      [
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "empty"
+      ],
+      [
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "tree"
+      ],
+      [
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "empty"
+      ],
+      [
+        "rock",
+        "empty",
+        "empty",
+        "empty",
+        "tree"
+      ],
+      [
+        "empty",
+        "empty",
+        "empty",
+        "tree",
+        "empty"
+      ]
+    ],
+    "rowClues": [
+      0,
+      0,
+      2,
+      0,
+      3
+    ],
+    "colClues": [
+      1,
+      1,
+      1,
+      1,
+      1
+    ],
+    "inventory": {
+      "house": 2,
+      "woodcutter": 2,
+      "road": 0,
+      "farm": 1,
+      "town_hall": 0
+    },
+    "solution": [
+      [
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "empty"
+      ],
+      [
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "tree"
+      ],
+      [
+        "empty",
+        "empty",
+        "empty",
+        "house",
+        "woodcutter"
+      ],
+      [
+        "rock",
+        "empty",
+        "empty",
+        "empty",
+        "tree"
+      ],
+      [
+        "farm",
+        "house",
+        "woodcutter",
+        "tree",
+        "empty"
+      ]
+    ],
+    "difficulty": "Medium",
+    "difficultyMetrics": {
+      "score": 44,
+      "tier": "Medium",
+      "maxRuleLevel": 3,
+      "maxRuleName": "Only Remaining Spot",
+      "stepCount": 21,
+      "density": 0.36,
+      "filledTiles": 9
+    },
+    "difficultyScore": 44,
+    "density": 0.36
+  },
+  {
+    "id": 21,
+    "chapter": 2,
+    "chapterName": "Harvest Fields",
+    "title": "Bountiful Acres",
+    "size": 5,
+    "initialGrid": [
+      [
+        "empty",
+        "rock",
+        "empty",
+        "empty",
+        "tree"
+      ],
+      [
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "empty"
+      ],
+      [
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "tree"
+      ],
+      [
+        "empty",
+        "empty",
+        "empty",
+        "tree",
+        "empty"
+      ],
+      [
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "empty"
+      ]
+    ],
+    "rowClues": [
+      0,
+      3,
+      0,
+      1,
+      1
+    ],
+    "colClues": [
+      0,
+      0,
+      3,
+      1,
+      1
+    ],
+    "inventory": {
+      "house": 2,
+      "woodcutter": 2,
+      "road": 0,
+      "farm": 1,
+      "town_hall": 0
+    },
+    "solution": [
+      [
+        "empty",
+        "rock",
+        "empty",
+        "empty",
+        "tree"
+      ],
+      [
+        "empty",
+        "empty",
+        "farm",
+        "house",
+        "woodcutter"
+      ],
+      [
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "tree"
+      ],
+      [
+        "empty",
+        "empty",
+        "woodcutter",
+        "tree",
+        "empty"
+      ],
+      [
+        "empty",
+        "empty",
+        "house",
+        "empty",
+        "empty"
+      ]
+    ],
+    "difficulty": "Medium",
+    "difficultyMetrics": {
+      "score": 44,
+      "tier": "Medium",
+      "maxRuleLevel": 2,
+      "maxRuleName": "Tree Needs Woodcutter",
+      "stepCount": 21,
+      "density": 0.36,
+      "filledTiles": 9
+    },
+    "difficultyScore": 44,
+    "density": 0.36
+  },
+  {
+    "id": 22,
+    "chapter": 2,
+    "chapterName": "Harvest Fields",
+    "title": "Silo Corner",
+    "size": 5,
+    "initialGrid": [
+      [
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "empty"
+      ],
+      [
+        "empty",
+        "tree",
+        "empty",
+        "rock",
+        "empty"
+      ],
+      [
+        "tree",
+        "empty",
+        "empty",
+        "empty",
+        "empty"
+      ],
+      [
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "empty"
+      ],
+      [
+        "empty",
+        "empty",
+        "empty",
+        "tree",
+        "rock"
+      ]
+    ],
+    "rowClues": [
+      0,
+      0,
+      3,
+      2,
+      1
+    ],
+    "colClues": [
+      0,
+      3,
+      1,
+      2,
+      0
+    ],
+    "inventory": {
+      "house": 2,
+      "woodcutter": 2,
+      "road": 0,
+      "farm": 2,
+      "town_hall": 0
+    },
+    "solution": [
+      [
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "empty"
+      ],
+      [
+        "empty",
+        "tree",
+        "empty",
+        "rock",
+        "empty"
+      ],
+      [
+        "tree",
+        "woodcutter",
+        "farm",
+        "house",
+        "empty"
+      ],
+      [
+        "empty",
+        "house",
+        "empty",
+        "woodcutter",
+        "empty"
+      ],
+      [
+        "empty",
+        "farm",
+        "empty",
+        "tree",
+        "rock"
+      ]
+    ],
+    "difficulty": "Medium",
+    "difficultyMetrics": {
+      "score": 44,
+      "tier": "Medium",
+      "maxRuleLevel": 3,
+      "maxRuleName": "Only Remaining Spot",
+      "stepCount": 20,
+      "density": 0.44,
+      "filledTiles": 11
+    },
+    "difficultyScore": 44,
+    "density": 0.44
+  },
+  {
+    "id": 23,
+    "chapter": 2,
+    "chapterName": "Harvest Fields",
+    "title": "Rustic Grange",
+    "size": 5,
+    "initialGrid": [
+      [
+        "empty",
+        "empty",
+        "empty",
+        "rock",
+        "empty"
+      ],
+      [
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "empty"
+      ],
+      [
+        "empty",
+        "tree",
+        "empty",
+        "tree",
+        "empty"
+      ],
+      [
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "empty"
+      ],
+      [
+        "empty",
+        "empty",
+        "empty",
+        "rock",
+        "tree"
+      ]
+    ],
+    "rowClues": [
+      0,
+      2,
+      1,
+      3,
+      0
+    ],
+    "colClues": [
+      0,
+      1,
+      3,
+      1,
+      1
+    ],
+    "inventory": {
+      "house": 2,
+      "woodcutter": 2,
+      "road": 0,
+      "farm": 2,
+      "town_hall": 0
+    },
+    "solution": [
+      [
+        "empty",
+        "empty",
+        "empty",
+        "rock",
+        "empty"
+      ],
+      [
+        "empty",
+        "farm",
+        "house",
+        "empty",
+        "empty"
+      ],
+      [
+        "empty",
+        "tree",
+        "woodcutter",
+        "tree",
+        "empty"
+      ],
+      [
+        "empty",
+        "empty",
+        "farm",
+        "house",
+        "woodcutter"
+      ],
+      [
+        "empty",
+        "empty",
+        "empty",
+        "rock",
+        "tree"
+      ]
+    ],
+    "difficulty": "Medium",
+    "difficultyMetrics": {
+      "score": 44,
+      "tier": "Medium",
+      "maxRuleLevel": 2,
+      "maxRuleName": "Tree Needs Woodcutter",
+      "stepCount": 20,
+      "density": 0.44,
+      "filledTiles": 11
+    },
+    "difficultyScore": 44,
+    "density": 0.44
+  },
+  {
+    "id": 24,
+    "chapter": 2,
+    "chapterName": "Harvest Fields",
+    "title": "Pasture Edge",
+    "size": 5,
+    "initialGrid": [
+      [
+        "empty",
+        "empty",
+        "rock",
+        "empty",
+        "empty"
+      ],
+      [
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "empty"
+      ],
+      [
+        "empty",
+        "empty",
+        "empty",
+        "tree",
+        "empty"
+      ],
+      [
+        "rock",
+        "empty",
+        "empty",
+        "tree",
+        "tree"
+      ],
+      [
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "tree"
+      ]
+    ],
+    "rowClues": [
+      0,
+      2,
+      1,
+      0,
+      3
+    ],
+    "colClues": [
+      0,
+      1,
+      1,
+      2,
+      2
+    ],
+    "inventory": {
+      "house": 2,
+      "woodcutter": 2,
+      "road": 0,
+      "farm": 2,
+      "town_hall": 0
+    },
+    "solution": [
+      [
+        "empty",
+        "empty",
+        "rock",
+        "empty",
+        "empty"
+      ],
+      [
+        "empty",
+        "empty",
+        "empty",
+        "farm",
+        "house"
+      ],
+      [
+        "empty",
+        "empty",
+        "empty",
+        "tree",
+        "woodcutter"
+      ],
+      [
+        "rock",
+        "empty",
+        "empty",
+        "tree",
+        "tree"
+      ],
+      [
+        "empty",
+        "farm",
+        "house",
+        "woodcutter",
+        "tree"
+      ]
+    ],
+    "difficulty": "Medium",
+    "difficultyMetrics": {
+      "score": 44,
+      "tier": "Medium",
+      "maxRuleLevel": 2,
+      "maxRuleName": "Tree Needs Woodcutter",
+      "stepCount": 19,
+      "density": 0.48,
+      "filledTiles": 12
+    },
+    "difficultyScore": 44,
+    "density": 0.48
+  },
+  {
+    "id": 25,
+    "chapter": 2,
+    "chapterName": "Harvest Fields",
+    "title": "Sunlit Prairie",
+    "size": 5,
+    "initialGrid": [
+      [
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "empty"
+      ],
+      [
+        "empty",
+        "empty",
+        "tree",
+        "empty",
+        "tree"
+      ],
+      [
+        "empty",
+        "empty",
+        "tree",
+        "empty",
+        "empty"
+      ],
+      [
+        "empty",
+        "tree",
+        "empty",
+        "empty",
+        "rock"
+      ],
+      [
+        "empty",
+        "empty",
+        "rock",
+        "empty",
+        "empty"
+      ]
+    ],
+    "rowClues": [
+      2,
+      1,
+      2,
+      1,
+      0
+    ],
+    "colClues": [
+      2,
+      1,
+      0,
+      2,
+      1
+    ],
+    "inventory": {
+      "house": 2,
+      "woodcutter": 2,
+      "road": 0,
+      "farm": 2,
+      "town_hall": 0
+    },
+    "solution": [
+      [
+        "empty",
+        "empty",
+        "empty",
+        "house",
+        "farm"
+      ],
+      [
+        "empty",
+        "empty",
+        "tree",
+        "woodcutter",
+        "tree"
+      ],
+      [
+        "house",
+        "woodcutter",
+        "tree",
+        "empty",
+        "empty"
+      ],
+      [
+        "farm",
+        "tree",
+        "empty",
+        "empty",
+        "rock"
+      ],
+      [
+        "empty",
+        "empty",
+        "rock",
+        "empty",
+        "empty"
+      ]
+    ],
+    "difficulty": "Medium",
+    "difficultyMetrics": {
+      "score": 52,
+      "tier": "Medium",
+      "maxRuleLevel": 5,
+      "maxRuleName": "Logical Elimination",
+      "stepCount": 19,
+      "density": 0.48,
+      "filledTiles": 12
+    },
+    "difficultyScore": 52,
+    "density": 0.48
+  },
+  {
+    "id": 26,
+    "chapter": 2,
+    "chapterName": "Harvest Fields",
+    "title": "Clover Meadow",
+    "size": 5,
+    "initialGrid": [
+      [
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "empty"
+      ],
+      [
+        "empty",
+        "tree",
+        "empty",
+        "empty",
+        "rock"
+      ],
+      [
+        "tree",
+        "empty",
+        "empty",
+        "empty",
+        "rock"
+      ],
+      [
+        "empty",
+        "tree",
+        "empty",
+        "empty",
+        "empty"
+      ],
+      [
+        "empty",
+        "empty",
+        "empty",
+        "tree",
+        "empty"
+      ]
+    ],
+    "rowClues": [
+      2,
+      0,
+      3,
+      1,
+      1
+    ],
+    "colClues": [
+      0,
+      1,
+      2,
+      2,
+      2
+    ],
+    "inventory": {
+      "house": 3,
+      "woodcutter": 2,
+      "road": 0,
+      "farm": 2,
+      "town_hall": 0
+    },
+    "solution": [
+      [
+        "empty",
+        "empty",
+        "farm",
+        "house",
+        "empty"
+      ],
+      [
+        "empty",
+        "tree",
+        "empty",
+        "empty",
+        "rock"
+      ],
+      [
+        "tree",
+        "woodcutter",
+        "house",
+        "farm",
+        "rock"
+      ],
+      [
+        "empty",
+        "tree",
+        "empty",
+        "empty",
+        "house"
+      ],
+      [
+        "empty",
+        "empty",
+        "empty",
+        "tree",
+        "woodcutter"
+      ]
+    ],
+    "difficulty": "Medium",
+    "difficultyMetrics": {
+      "score": 44,
+      "tier": "Medium",
+      "maxRuleLevel": 3,
+      "maxRuleName": "Only Remaining Spot",
+      "stepCount": 19,
+      "density": 0.52,
+      "filledTiles": 13
+    },
+    "difficultyScore": 44,
+    "density": 0.52
+  },
+  {
+    "id": 27,
+    "chapter": 2,
+    "chapterName": "Harvest Fields",
+    "title": "Haystack Hill",
+    "size": 5,
+    "initialGrid": [
+      [
+        "empty",
+        "rock",
+        "empty",
+        "empty",
+        "empty"
+      ],
+      [
+        "empty",
+        "tree",
+        "empty",
+        "empty",
+        "empty"
+      ],
+      [
+        "empty",
+        "empty",
+        "tree",
+        "empty",
+        "empty"
+      ],
+      [
+        "empty",
+        "empty",
+        "empty",
+        "tree",
+        "empty"
+      ],
+      [
+        "empty",
+        "rock",
+        "empty",
+        "empty",
+        "tree"
+      ]
+    ],
+    "rowClues": [
+      0,
+      2,
+      3,
+      0,
+      2
+    ],
+    "colClues": [
+      2,
+      1,
+      1,
+      3,
+      0
+    ],
+    "inventory": {
+      "house": 3,
+      "woodcutter": 2,
+      "road": 0,
+      "farm": 2,
+      "town_hall": 0
+    },
+    "solution": [
+      [
+        "empty",
+        "rock",
+        "empty",
+        "empty",
+        "empty"
+      ],
+      [
+        "farm",
+        "tree",
+        "empty",
+        "house",
+        "empty"
+      ],
+      [
+        "house",
+        "woodcutter",
+        "tree",
+        "farm",
+        "empty"
+      ],
+      [
+        "empty",
+        "empty",
+        "empty",
+        "tree",
+        "empty"
+      ],
+      [
+        "empty",
+        "rock",
+        "house",
+        "woodcutter",
+        "tree"
+      ]
+    ],
+    "difficulty": "Medium",
+    "difficultyMetrics": {
+      "score": 44,
+      "tier": "Medium",
+      "maxRuleLevel": 2,
+      "maxRuleName": "Tree Needs Woodcutter",
+      "stepCount": 19,
+      "density": 0.52,
+      "filledTiles": 13
+    },
+    "difficultyScore": 44,
+    "density": 0.52
+  },
+  {
+    "id": 28,
+    "chapter": 2,
+    "chapterName": "Harvest Fields",
+    "title": "Autumn Wind",
+    "size": 5,
+    "initialGrid": [
+      [
+        "tree",
+        "empty",
+        "empty",
+        "empty",
+        "tree"
+      ],
+      [
+        "empty",
+        "tree",
+        "empty",
+        "tree",
+        "empty"
+      ],
+      [
+        "empty",
+        "empty",
+        "rock",
+        "empty",
+        "empty"
+      ],
+      [
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "empty"
+      ],
+      [
+        "empty",
+        "empty",
+        "empty",
+        "rock",
+        "empty"
+      ]
+    ],
+    "rowClues": [
+      2,
+      1,
+      2,
+      2,
+      0
+    ],
+    "colClues": [
+      3,
+      0,
+      1,
+      3,
+      0
+    ],
+    "inventory": {
+      "house": 3,
+      "woodcutter": 2,
+      "road": 0,
+      "farm": 2,
+      "town_hall": 0
+    },
+    "solution": [
+      [
+        "tree",
+        "empty",
+        "house",
+        "woodcutter",
+        "tree"
+      ],
+      [
+        "woodcutter",
+        "tree",
+        "empty",
+        "tree",
+        "empty"
+      ],
+      [
+        "house",
+        "empty",
+        "rock",
+        "farm",
+        "empty"
+      ],
+      [
+        "farm",
+        "empty",
+        "empty",
+        "house",
+        "empty"
+      ],
+      [
+        "empty",
+        "empty",
+        "empty",
+        "rock",
+        "empty"
+      ]
+    ],
+    "difficulty": "Medium",
+    "difficultyMetrics": {
+      "score": 44,
+      "tier": "Medium",
+      "maxRuleLevel": 2,
+      "maxRuleName": "Tree Needs Woodcutter",
+      "stepCount": 19,
+      "density": 0.52,
+      "filledTiles": 13
+    },
+    "difficultyScore": 44,
+    "density": 0.52
+  },
+  {
+    "id": 29,
+    "chapter": 2,
+    "chapterName": "Harvest Fields",
+    "title": "Farmer’s Rest",
+    "size": 5,
+    "initialGrid": [
+      [
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "empty"
+      ],
+      [
+        "empty",
+        "rock",
+        "empty",
+        "tree",
+        "empty"
+      ],
+      [
+        "empty",
+        "empty",
+        "empty",
+        "tree",
+        "empty"
+      ],
+      [
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "tree"
+      ],
+      [
+        "empty",
+        "empty",
+        "empty",
+        "tree",
+        "rock"
+      ]
+    ],
+    "rowClues": [
+      2,
+      1,
+      0,
+      2,
+      2
+    ],
+    "colClues": [
+      1,
+      1,
+      1,
+      2,
+      2
+    ],
+    "inventory": {
+      "house": 3,
+      "woodcutter": 2,
+      "road": 0,
+      "farm": 2,
+      "town_hall": 0
+    },
+    "solution": [
+      [
+        "empty",
+        "empty",
+        "empty",
+        "farm",
+        "house"
+      ],
+      [
+        "empty",
+        "rock",
+        "empty",
+        "tree",
+        "woodcutter"
+      ],
+      [
+        "empty",
+        "empty",
+        "empty",
+        "tree",
+        "empty"
+      ],
+      [
+        "empty",
+        "empty",
+        "house",
+        "woodcutter",
+        "tree"
+      ],
+      [
+        "house",
+        "farm",
+        "empty",
+        "tree",
+        "rock"
+      ]
+    ],
+    "difficulty": "Medium",
+    "difficultyMetrics": {
+      "score": 44,
+      "tier": "Medium",
+      "maxRuleLevel": 3,
+      "maxRuleName": "Only Remaining Spot",
+      "stepCount": 19,
+      "density": 0.52,
+      "filledTiles": 13
+    },
+    "difficultyScore": 44,
+    "density": 0.52
+  },
+  {
+    "id": 30,
+    "chapter": 2,
+    "chapterName": "Harvest Fields",
+    "title": "Tilled Terrace",
+    "size": 5,
+    "initialGrid": [
+      [
+        "empty",
+        "empty",
+        "empty",
+        "tree",
+        "empty"
+      ],
+      [
+        "empty",
+        "tree",
+        "tree",
+        "empty",
+        "tree"
+      ],
+      [
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "empty"
+      ],
+      [
+        "rock",
+        "rock",
+        "empty",
+        "empty",
+        "empty"
+      ],
+      [
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "empty"
+      ]
+    ],
+    "rowClues": [
+      2,
+      1,
+      2,
+      1,
+      1
+    ],
+    "colClues": [
+      1,
+      1,
+      2,
+      2,
+      1
+    ],
+    "inventory": {
+      "house": 3,
+      "woodcutter": 2,
+      "road": 0,
+      "farm": 2,
+      "town_hall": 0
+    },
+    "solution": [
+      [
+        "house",
+        "woodcutter",
+        "empty",
+        "tree",
+        "empty"
+      ],
+      [
+        "empty",
+        "tree",
+        "tree",
+        "woodcutter",
+        "tree"
+      ],
+      [
+        "empty",
+        "empty",
+        "empty",
+        "house",
+        "farm"
+      ],
+      [
+        "rock",
+        "rock",
+        "farm",
+        "empty",
+        "empty"
+      ],
+      [
+        "empty",
+        "empty",
+        "house",
+        "empty",
+        "empty"
+      ]
+    ],
+    "difficulty": "Medium",
+    "difficultyMetrics": {
+      "score": 52,
+      "tier": "Medium",
+      "maxRuleLevel": 5,
+      "maxRuleName": "Logical Elimination",
+      "stepCount": 19,
+      "density": 0.52,
+      "filledTiles": 13
+    },
+    "difficultyScore": 52,
+    "density": 0.52
+  },
+  {
+    "id": 31,
+    "chapter": 2,
+    "chapterName": "Harvest Fields",
+    "title": "Windmill Bluff",
+    "size": 5,
+    "initialGrid": [
+      [
+        "empty",
+        "empty",
+        "tree",
+        "empty",
+        "tree"
+      ],
+      [
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "empty"
+      ],
+      [
+        "tree",
+        "tree",
+        "rock",
+        "empty",
+        "empty"
+      ],
+      [
+        "tree",
+        "empty",
+        "empty",
+        "empty",
+        "rock"
+      ],
+      [
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "empty"
+      ]
+    ],
+    "rowClues": [
+      2,
+      3,
+      0,
+      1,
+      2
+    ],
+    "colClues": [
+      3,
+      2,
+      0,
+      2,
+      1
+    ],
+    "inventory": {
+      "house": 3,
+      "woodcutter": 3,
+      "road": 0,
+      "farm": 2,
+      "town_hall": 0
+    },
+    "solution": [
+      [
+        "house",
+        "empty",
+        "tree",
+        "woodcutter",
+        "tree"
+      ],
+      [
+        "woodcutter",
+        "empty",
+        "empty",
+        "house",
+        "farm"
+      ],
+      [
+        "tree",
+        "tree",
+        "rock",
+        "empty",
+        "empty"
+      ],
+      [
+        "tree",
+        "woodcutter",
+        "empty",
+        "empty",
+        "rock"
+      ],
+      [
+        "farm",
+        "house",
+        "empty",
+        "empty",
+        "empty"
+      ]
+    ],
+    "difficulty": "Medium",
+    "difficultyMetrics": {
+      "score": 45,
+      "tier": "Medium",
+      "maxRuleLevel": 3,
+      "maxRuleName": "Only Remaining Spot",
+      "stepCount": 18,
+      "density": 0.6,
+      "filledTiles": 15
+    },
+    "difficultyScore": 45,
+    "density": 0.6
+  },
+  {
+    "id": 32,
+    "chapter": 2,
+    "chapterName": "Harvest Fields",
+    "title": "Granary Plain",
+    "size": 5,
+    "initialGrid": [
+      [
+        "empty",
+        "empty",
+        "tree",
+        "empty",
+        "empty"
+      ],
+      [
+        "rock",
+        "tree",
+        "empty",
+        "empty",
+        "empty"
+      ],
+      [
+        "empty",
+        "empty",
+        "empty",
+        "tree",
+        "empty"
+      ],
+      [
+        "empty",
+        "empty",
+        "rock",
+        "empty",
+        "tree"
+      ],
+      [
+        "empty",
+        "tree",
+        "empty",
+        "empty",
+        "empty"
+      ]
+    ],
+    "rowClues": [
+      0,
+      3,
+      3,
+      1,
+      1
+    ],
+    "colClues": [
+      2,
+      1,
+      2,
+      1,
+      2
+    ],
+    "inventory": {
+      "house": 3,
+      "woodcutter": 3,
+      "road": 0,
+      "farm": 2,
+      "town_hall": 0
+    },
+    "solution": [
+      [
+        "empty",
+        "empty",
+        "tree",
+        "empty",
+        "empty"
+      ],
+      [
+        "rock",
+        "tree",
+        "woodcutter",
+        "farm",
+        "house"
+      ],
+      [
+        "empty",
+        "farm",
+        "house",
+        "tree",
+        "woodcutter"
+      ],
+      [
+        "house",
+        "empty",
+        "rock",
+        "empty",
+        "tree"
+      ],
+      [
+        "woodcutter",
+        "tree",
+        "empty",
+        "empty",
+        "empty"
+      ]
+    ],
+    "difficulty": "Medium",
+    "difficultyMetrics": {
+      "score": 53,
+      "tier": "Medium",
+      "maxRuleLevel": 5,
+      "maxRuleName": "Logical Elimination",
+      "stepCount": 18,
+      "density": 0.6,
+      "filledTiles": 15
+    },
+    "difficultyScore": 53,
+    "density": 0.6
+  },
+  {
+    "id": 33,
+    "chapter": 2,
+    "chapterName": "Harvest Fields",
+    "title": "Rye Crossing",
+    "size": 5,
+    "initialGrid": [
+      [
+        "empty",
+        "tree",
+        "empty",
+        "tree",
+        "empty"
+      ],
+      [
+        "empty",
+        "empty",
+        "empty",
+        "rock",
+        "rock"
+      ],
+      [
+        "tree",
+        "empty",
+        "empty",
+        "empty",
+        "empty"
+      ],
+      [
+        "empty",
+        "empty",
+        "empty",
+        "tree",
+        "empty"
+      ],
+      [
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "tree"
+      ]
+    ],
+    "rowClues": [
+      2,
+      3,
+      2,
+      1,
+      0
+    ],
+    "colClues": [
+      2,
+      1,
+      2,
+      1,
+      2
+    ],
+    "inventory": {
+      "house": 3,
+      "woodcutter": 3,
+      "road": 0,
+      "farm": 2,
+      "town_hall": 0
+    },
+    "solution": [
+      [
+        "house",
+        "tree",
+        "woodcutter",
+        "tree",
+        "empty"
+      ],
+      [
+        "woodcutter",
+        "farm",
+        "house",
+        "rock",
+        "rock"
+      ],
+      [
+        "tree",
+        "empty",
+        "empty",
+        "farm",
+        "house"
+      ],
+      [
+        "empty",
+        "empty",
+        "empty",
+        "tree",
+        "woodcutter"
+      ],
+      [
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "tree"
+      ]
+    ],
+    "difficulty": "Medium",
+    "difficultyMetrics": {
+      "score": 45,
+      "tier": "Medium",
+      "maxRuleLevel": 3,
+      "maxRuleName": "Only Remaining Spot",
+      "stepCount": 18,
+      "density": 0.6,
+      "filledTiles": 15
+    },
+    "difficultyScore": 45,
+    "density": 0.6
+  },
+  {
+    "id": 34,
+    "chapter": 2,
+    "chapterName": "Harvest Fields",
+    "title": "Cornflower Vale",
+    "size": 5,
+    "initialGrid": [
+      [
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "empty"
+      ],
+      [
+        "empty",
+        "rock",
+        "tree",
+        "empty",
+        "empty"
+      ],
+      [
+        "rock",
+        "empty",
+        "empty",
+        "tree",
+        "empty"
+      ],
+      [
+        "empty",
+        "tree",
+        "empty",
+        "empty",
+        "empty"
+      ],
+      [
+        "empty",
+        "empty",
+        "tree",
+        "tree",
+        "empty"
+      ]
+    ],
+    "rowClues": [
+      2,
+      1,
+      2,
+      2,
+      1
+    ],
+    "colClues": [
+      0,
+      1,
+      2,
+      2,
+      3
+    ],
+    "inventory": {
+      "house": 3,
+      "woodcutter": 3,
+      "road": 0,
+      "farm": 2,
+      "town_hall": 0
+    },
+    "solution": [
+      [
+        "empty",
+        "empty",
+        "empty",
+        "house",
+        "farm"
+      ],
+      [
+        "empty",
+        "rock",
+        "tree",
+        "woodcutter",
+        "empty"
+      ],
+      [
+        "rock",
+        "farm",
+        "house",
+        "tree",
+        "empty"
+      ],
+      [
+        "empty",
+        "tree",
+        "woodcutter",
+        "empty",
+        "house"
+      ],
+      [
+        "empty",
+        "empty",
+        "tree",
+        "tree",
+        "woodcutter"
+      ]
+    ],
+    "difficulty": "Medium",
+    "difficultyMetrics": {
+      "score": 45,
+      "tier": "Medium",
+      "maxRuleLevel": 2,
+      "maxRuleName": "Tree Needs Woodcutter",
+      "stepCount": 18,
+      "density": 0.6,
+      "filledTiles": 15
+    },
+    "difficultyScore": 45,
+    "density": 0.6
+  },
+  {
+    "id": 35,
+    "chapter": 2,
+    "chapterName": "Harvest Fields",
+    "title": "Grand Harvest",
+    "size": 5,
+    "initialGrid": [
+      [
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "empty"
+      ],
+      [
+        "empty",
+        "tree",
+        "empty",
+        "rock",
+        "empty"
+      ],
+      [
+        "tree",
+        "empty",
+        "tree",
+        "empty",
+        "empty"
+      ],
+      [
+        "empty",
+        "empty",
+        "tree",
+        "empty",
+        "empty"
+      ],
+      [
+        "empty",
+        "tree",
+        "empty",
+        "empty",
+        "rock"
+      ]
+    ],
+    "rowClues": [
+      2,
+      1,
+      2,
+      1,
+      2
+    ],
+    "colClues": [
+      2,
+      1,
+      1,
+      2,
+      2
+    ],
+    "inventory": {
+      "house": 3,
+      "woodcutter": 3,
+      "road": 0,
+      "farm": 2,
+      "town_hall": 0
+    },
+    "solution": [
+      [
+        "house",
+        "farm",
+        "empty",
+        "empty",
+        "empty"
+      ],
+      [
+        "woodcutter",
+        "tree",
+        "empty",
+        "rock",
+        "empty"
+      ],
+      [
+        "tree",
+        "empty",
+        "tree",
+        "woodcutter",
+        "house"
+      ],
+      [
+        "empty",
+        "empty",
+        "tree",
+        "empty",
+        "farm"
+      ],
+      [
+        "empty",
+        "tree",
+        "woodcutter",
+        "house",
+        "rock"
+      ]
+    ],
+    "difficulty": "Medium",
+    "difficultyMetrics": {
+      "score": 45,
+      "tier": "Medium",
+      "maxRuleLevel": 3,
+      "maxRuleName": "Only Remaining Spot",
+      "stepCount": 18,
+      "density": 0.6,
+      "filledTiles": 15
+    },
+    "difficultyScore": 45,
+    "density": 0.6
+  },
+  {
+    "id": 36,
+    "chapter": 3,
+    "chapterName": "Town Charter",
+    "title": "Founding the Hall",
+    "size": 5,
+    "initialGrid": [
+      [
+        "empty",
+        "rock",
+        "empty",
+        "empty",
+        "empty"
+      ],
+      [
+        "empty",
+        "empty",
+        "tree",
+        "empty",
+        "empty"
+      ],
+      [
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "empty"
+      ],
+      [
+        "empty",
+        "empty",
+        "tree",
+        "tree",
+        "empty"
+      ],
+      [
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "empty"
+      ]
+    ],
+    "rowClues": [
+      0,
+      1,
+      2,
+      1,
+      1
+    ],
+    "colClues": [
+      0,
+      1,
+      1,
+      0,
+      3
+    ],
+    "inventory": {
+      "house": 2,
+      "woodcutter": 2,
+      "road": 3,
+      "farm": 0,
+      "town_hall": 1
+    },
+    "solution": [
+      [
+        "empty",
+        "rock",
+        "empty",
+        "empty",
+        "empty"
+      ],
+      [
+        "empty",
+        "empty",
+        "tree",
+        "road",
+        "town_hall"
+      ],
+      [
+        "empty",
+        "house",
+        "woodcutter",
+        "road",
+        "road"
+      ],
+      [
+        "empty",
+        "empty",
+        "tree",
+        "tree",
+        "woodcutter"
+      ],
+      [
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "house"
+      ]
+    ],
+    "difficulty": "Hard",
+    "tutorialTip": "New Building — Town Hall & Roads: Town Hall requires its 8 surrounding squares to be clear of buildings, trees, and rocks! Woodcutters and Farms connect to it via Roads.",
+    "difficultyMetrics": {
+      "score": 62,
+      "tier": "Hard",
+      "maxRuleLevel": 4,
+      "maxRuleName": "Road Entry Point",
+      "stepCount": 21,
+      "density": 0.48,
+      "filledTiles": 12
+    },
+    "difficultyScore": 62,
+    "density": 0.48
+  },
+  {
+    "id": 37,
+    "chapter": 3,
+    "chapterName": "Town Charter",
+    "title": "Winding Plankway",
+    "size": 5,
+    "initialGrid": [
+      [
+        "tree",
+        "empty",
+        "empty",
+        "empty",
+        "empty"
+      ],
+      [
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "empty"
+      ],
+      [
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "empty"
+      ],
+      [
+        "rock",
+        "empty",
+        "empty",
+        "empty",
+        "empty"
+      ],
+      [
+        "empty",
+        "tree",
+        "empty",
+        "empty",
+        "empty"
+      ]
+    ],
+    "rowClues": [
+      1,
+      1,
+      1,
+      0,
+      2
+    ],
+    "colClues": [
+      0,
+      2,
+      1,
+      1,
+      1
+    ],
+    "inventory": {
+      "house": 2,
+      "woodcutter": 2,
+      "road": 5,
+      "farm": 0,
+      "town_hall": 1
+    },
+    "solution": [
+      [
+        "tree",
+        "woodcutter",
+        "road",
+        "empty",
+        "empty"
+      ],
+      [
+        "empty",
+        "house",
+        "road",
+        "empty",
+        "empty"
+      ],
+      [
+        "empty",
+        "empty",
+        "road",
+        "road",
+        "town_hall"
+      ],
+      [
+        "rock",
+        "empty",
+        "road",
+        "empty",
+        "empty"
+      ],
+      [
+        "empty",
+        "tree",
+        "woodcutter",
+        "house",
+        "empty"
+      ]
+    ],
+    "difficulty": "Hard",
+    "difficultyMetrics": {
+      "score": 63,
+      "tier": "Hard",
+      "maxRuleLevel": 4,
+      "maxRuleName": "Road Entry Point",
+      "stepCount": 22,
+      "density": 0.52,
+      "filledTiles": 13
+    },
+    "difficultyScore": 63,
+    "density": 0.52
+  },
+  {
+    "id": 38,
+    "chapter": 3,
+    "chapterName": "Town Charter",
+    "title": "Civic Square",
+    "size": 5,
+    "initialGrid": [
+      [
+        "tree",
+        "empty",
+        "empty",
+        "empty",
+        "empty"
+      ],
+      [
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "empty"
+      ],
+      [
+        "empty",
+        "tree",
+        "empty",
+        "tree",
+        "empty"
+      ],
+      [
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "empty"
+      ],
+      [
+        "empty",
+        "rock",
+        "empty",
+        "empty",
+        "empty"
+      ]
+    ],
+    "rowClues": [
+      1,
+      1,
+      1,
+      1,
+      1
+    ],
+    "colClues": [
+      0,
+      2,
+      2,
+      0,
+      1
+    ],
+    "inventory": {
+      "house": 2,
+      "woodcutter": 2,
+      "road": 6,
+      "farm": 0,
+      "town_hall": 1
+    },
+    "solution": [
+      [
+        "tree",
+        "woodcutter",
+        "road",
+        "empty",
+        "empty"
+      ],
+      [
+        "empty",
+        "house",
+        "road",
+        "road",
+        "road"
+      ],
+      [
+        "empty",
+        "tree",
+        "woodcutter",
+        "tree",
+        "road"
+      ],
+      [
+        "empty",
+        "empty",
+        "house",
+        "empty",
+        "road"
+      ],
+      [
+        "empty",
+        "rock",
+        "empty",
+        "empty",
+        "town_hall"
+      ]
+    ],
+    "difficulty": "Hard",
+    "difficultyMetrics": {
+      "score": 64,
+      "tier": "Hard",
+      "maxRuleLevel": 4,
+      "maxRuleName": "Road Entry Point",
+      "stepCount": 21,
+      "density": 0.6,
+      "filledTiles": 15
+    },
+    "difficultyScore": 64,
+    "density": 0.6
+  },
+  {
+    "id": 39,
+    "chapter": 3,
+    "chapterName": "Town Charter",
+    "title": "Mayor’s Boundary",
+    "size": 5,
+    "initialGrid": [
+      [
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "empty"
+      ],
+      [
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "rock"
+      ],
+      [
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "tree"
+      ],
+      [
+        "empty",
+        "empty",
+        "tree",
+        "empty",
+        "empty"
+      ],
+      [
+        "empty",
+        "tree",
+        "empty",
+        "empty",
+        "empty"
+      ]
+    ],
+    "rowClues": [
+      0,
+      2,
+      1,
+      2,
+      0
+    ],
+    "colClues": [
+      1,
+      2,
+      0,
+      2,
+      0
+    ],
+    "inventory": {
+      "house": 2,
+      "woodcutter": 2,
+      "road": 3,
+      "farm": 0,
+      "town_hall": 1
+    },
+    "solution": [
+      [
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "empty"
+      ],
+      [
+        "empty",
+        "town_hall",
+        "road",
+        "house",
+        "rock"
+      ],
+      [
+        "empty",
+        "road",
+        "road",
+        "woodcutter",
+        "tree"
+      ],
+      [
+        "house",
+        "woodcutter",
+        "tree",
+        "empty",
+        "empty"
+      ],
+      [
+        "empty",
+        "tree",
+        "empty",
+        "empty",
+        "empty"
+      ]
+    ],
+    "difficulty": "Hard",
+    "difficultyMetrics": {
+      "score": 62,
+      "tier": "Hard",
+      "maxRuleLevel": 4,
+      "maxRuleName": "Road Entry Point",
+      "stepCount": 21,
+      "density": 0.48,
+      "filledTiles": 12
+    },
+    "difficultyScore": 62,
+    "density": 0.48
+  },
+  {
+    "id": 40,
+    "chapter": 3,
+    "chapterName": "Town Charter",
+    "title": "Crossroad Commons",
+    "size": 5,
+    "initialGrid": [
+      [
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "empty"
+      ],
+      [
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "empty"
+      ],
+      [
+        "empty",
+        "empty",
+        "empty",
+        "tree",
+        "empty"
+      ],
+      [
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "empty"
+      ],
+      [
+        "empty",
+        "empty",
+        "tree",
+        "rock",
+        "empty"
+      ]
+    ],
+    "rowClues": [
+      0,
+      1,
+      1,
+      1,
+      2
+    ],
+    "colClues": [
+      2,
+      1,
+      0,
+      0,
+      2
+    ],
+    "inventory": {
+      "house": 2,
+      "woodcutter": 2,
+      "road": 6,
+      "farm": 0,
+      "town_hall": 1
+    },
+    "solution": [
+      [
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "empty"
+      ],
+      [
+        "town_hall",
+        "road",
+        "road",
+        "road",
+        "road"
+      ],
+      [
+        "empty",
+        "road",
+        "empty",
+        "tree",
+        "woodcutter"
+      ],
+      [
+        "empty",
+        "road",
+        "empty",
+        "empty",
+        "house"
+      ],
+      [
+        "house",
+        "woodcutter",
+        "tree",
+        "rock",
+        "empty"
+      ]
+    ],
+    "difficulty": "Hard",
+    "difficultyMetrics": {
+      "score": 64,
+      "tier": "Hard",
+      "maxRuleLevel": 4,
+      "maxRuleName": "Road Entry Point",
+      "stepCount": 22,
+      "density": 0.56,
+      "filledTiles": 14
+    },
+    "difficultyScore": 64,
+    "density": 0.56
+  },
+  {
+    "id": 41,
+    "chapter": 3,
+    "chapterName": "Town Charter",
+    "title": "Cobble Spur",
+    "size": 5,
+    "initialGrid": [
+      [
+        "empty",
+        "tree",
+        "tree",
+        "empty",
+        "empty"
+      ],
+      [
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "empty"
+      ],
+      [
+        "empty",
+        "tree",
+        "empty",
+        "empty",
+        "empty"
+      ],
+      [
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "empty"
+      ],
+      [
+        "empty",
+        "empty",
+        "rock",
+        "empty",
+        "empty"
+      ]
+    ],
+    "rowClues": [
+      2,
+      2,
+      1,
+      0,
+      0
+    ],
+    "colClues": [
+      1,
+      1,
+      0,
+      2,
+      1
+    ],
+    "inventory": {
+      "house": 2,
+      "woodcutter": 2,
+      "road": 2,
+      "farm": 0,
+      "town_hall": 1
+    },
+    "solution": [
+      [
+        "empty",
+        "tree",
+        "tree",
+        "woodcutter",
+        "house"
+      ],
+      [
+        "house",
+        "woodcutter",
+        "road",
+        "road",
+        "empty"
+      ],
+      [
+        "empty",
+        "tree",
+        "empty",
+        "town_hall",
+        "empty"
+      ],
+      [
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "empty"
+      ],
+      [
+        "empty",
+        "empty",
+        "rock",
+        "empty",
+        "empty"
+      ]
+    ],
+    "difficulty": "Hard",
+    "difficultyMetrics": {
+      "score": 61,
+      "tier": "Hard",
+      "maxRuleLevel": 4,
+      "maxRuleName": "Road Entry Point",
+      "stepCount": 21,
+      "density": 0.44,
+      "filledTiles": 11
+    },
+    "difficultyScore": 61,
+    "density": 0.44
+  },
+  {
+    "id": 42,
+    "chapter": 3,
+    "chapterName": "Town Charter",
+    "title": "Timberway Junction",
+    "size": 5,
+    "initialGrid": [
+      [
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "empty"
+      ],
+      [
+        "rock",
+        "empty",
+        "tree",
+        "empty",
+        "empty"
+      ],
+      [
+        "empty",
+        "empty",
+        "tree",
+        "empty",
+        "tree"
+      ],
+      [
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "empty"
+      ],
+      [
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "empty"
+      ]
+    ],
+    "rowClues": [
+      1,
+      2,
+      1,
+      1,
+      2
+    ],
+    "colClues": [
+      0,
+      2,
+      1,
+      2,
+      2
+    ],
+    "inventory": {
+      "house": 3,
+      "woodcutter": 2,
+      "road": 4,
+      "farm": 1,
+      "town_hall": 1
+    },
+    "solution": [
+      [
+        "empty",
+        "house",
+        "empty",
+        "empty",
+        "empty"
+      ],
+      [
+        "rock",
+        "woodcutter",
+        "tree",
+        "house",
+        "empty"
+      ],
+      [
+        "empty",
+        "road",
+        "tree",
+        "woodcutter",
+        "tree"
+      ],
+      [
+        "empty",
+        "road",
+        "road",
+        "road",
+        "farm"
+      ],
+      [
+        "empty",
+        "empty",
+        "town_hall",
+        "empty",
+        "house"
+      ]
+    ],
+    "difficulty": "Hard",
+    "difficultyMetrics": {
+      "score": 72,
+      "tier": "Hard",
+      "maxRuleLevel": 5,
+      "maxRuleName": "Logical Elimination",
+      "stepCount": 21,
+      "density": 0.6,
+      "filledTiles": 15
+    },
+    "difficultyScore": 72,
+    "density": 0.6
+  },
+  {
+    "id": 43,
+    "chapter": 3,
+    "chapterName": "Town Charter",
+    "title": "Borough Charter",
+    "size": 5,
+    "initialGrid": [
+      [
+        "empty",
+        "empty",
+        "tree",
+        "empty",
+        "empty"
+      ],
+      [
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "empty"
+      ],
+      [
+        "empty",
+        "empty",
+        "rock",
+        "empty",
+        "empty"
+      ],
+      [
+        "tree",
+        "empty",
+        "empty",
+        "empty",
+        "empty"
+      ],
+      [
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "empty"
+      ]
+    ],
+    "rowClues": [
+      2,
+      0,
+      2,
+      2,
+      1
+    ],
+    "colClues": [
+      1,
+      1,
+      2,
+      1,
+      2
+    ],
+    "inventory": {
+      "house": 3,
+      "woodcutter": 2,
+      "road": 6,
+      "farm": 1,
+      "town_hall": 1
+    },
+    "solution": [
+      [
+        "empty",
+        "empty",
+        "tree",
+        "woodcutter",
+        "house"
+      ],
+      [
+        "road",
+        "road",
+        "road",
+        "road",
+        "empty"
+      ],
+      [
+        "woodcutter",
+        "house",
+        "rock",
+        "road",
+        "empty"
+      ],
+      [
+        "tree",
+        "empty",
+        "farm",
+        "road",
+        "town_hall"
+      ],
+      [
+        "empty",
+        "empty",
+        "house",
+        "empty",
+        "empty"
+      ]
+    ],
+    "difficulty": "Hard",
+    "difficultyMetrics": {
+      "score": 66,
+      "tier": "Hard",
+      "maxRuleLevel": 4,
+      "maxRuleName": "Road Entry Point",
+      "stepCount": 22,
+      "density": 0.64,
+      "filledTiles": 16
+    },
+    "difficultyScore": 66,
+    "density": 0.64
+  },
+  {
+    "id": 44,
+    "chapter": 3,
+    "chapterName": "Town Charter",
+    "title": "Town Hall Commons",
+    "size": 5,
+    "initialGrid": [
+      [
+        "empty",
+        "empty",
+        "rock",
+        "empty",
+        "empty"
+      ],
+      [
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "empty"
+      ],
+      [
+        "tree",
+        "empty",
+        "empty",
+        "empty",
+        "empty"
+      ],
+      [
+        "rock",
+        "tree",
+        "empty",
+        "empty",
+        "empty"
+      ],
+      [
+        "empty",
+        "empty",
+        "tree",
+        "empty",
+        "empty"
+      ]
+    ],
+    "rowClues": [
+      1,
+      1,
+      2,
+      1,
+      2
+    ],
+    "colClues": [
+      2,
+      0,
+      2,
+      1,
+      2
+    ],
+    "inventory": {
+      "house": 3,
+      "woodcutter": 2,
+      "road": 5,
+      "farm": 1,
+      "town_hall": 1
+    },
+    "solution": [
+      [
+        "house",
+        "empty",
+        "rock",
+        "empty",
+        "empty"
+      ],
+      [
+        "woodcutter",
+        "road",
+        "road",
+        "road",
+        "empty"
+      ],
+      [
+        "tree",
+        "empty",
+        "house",
+        "road",
+        "town_hall"
+      ],
+      [
+        "rock",
+        "tree",
+        "woodcutter",
+        "road",
+        "empty"
+      ],
+      [
+        "empty",
+        "empty",
+        "tree",
+        "farm",
+        "house"
+      ]
+    ],
+    "difficulty": "Hard",
+    "difficultyMetrics": {
+      "score": 73,
+      "tier": "Hard",
+      "maxRuleLevel": 5,
+      "maxRuleName": "Logical Elimination",
+      "stepCount": 20,
+      "density": 0.68,
+      "filledTiles": 17
+    },
+    "difficultyScore": 73,
+    "density": 0.68
+  },
+  {
+    "id": 45,
+    "chapter": 3,
+    "chapterName": "Town Charter",
+    "title": "Guildhall Reach",
+    "size": 5,
+    "initialGrid": [
+      [
+        "empty",
+        "empty",
+        "empty",
+        "rock",
+        "empty"
+      ],
+      [
+        "tree",
+        "tree",
+        "empty",
+        "empty",
+        "empty"
+      ],
+      [
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "empty"
+      ],
+      [
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "empty"
+      ],
+      [
+        "rock",
+        "empty",
+        "empty",
+        "empty",
+        "empty"
+      ]
+    ],
+    "rowClues": [
+      2,
+      0,
+      3,
+      0,
+      2
+    ],
+    "colClues": [
+      2,
+      3,
+      1,
+      1,
+      0
+    ],
+    "inventory": {
+      "house": 3,
+      "woodcutter": 2,
+      "road": 6,
+      "farm": 1,
+      "town_hall": 1
+    },
+    "solution": [
+      [
+        "house",
+        "woodcutter",
+        "road",
+        "rock",
+        "empty"
+      ],
+      [
+        "tree",
+        "tree",
+        "road",
+        "empty",
+        "empty"
+      ],
+      [
+        "woodcutter",
+        "house",
+        "road",
+        "town_hall",
+        "empty"
+      ],
+      [
+        "road",
+        "road",
+        "road",
+        "empty",
+        "empty"
+      ],
+      [
+        "rock",
+        "farm",
+        "house",
+        "empty",
+        "empty"
+      ]
+    ],
+    "difficulty": "Hard",
+    "difficultyMetrics": {
+      "score": 66,
+      "tier": "Hard",
+      "maxRuleLevel": 4,
+      "maxRuleName": "Road Entry Point",
+      "stepCount": 21,
+      "density": 0.68,
+      "filledTiles": 17
+    },
+    "difficultyScore": 66,
+    "density": 0.68
+  },
+  {
+    "id": 46,
+    "chapter": 3,
+    "chapterName": "Town Charter",
+    "title": "Council Creek",
+    "size": 5,
+    "initialGrid": [
+      [
+        "rock",
+        "empty",
+        "empty",
+        "empty",
+        "empty"
+      ],
+      [
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "empty"
+      ],
+      [
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "empty"
+      ],
+      [
+        "tree",
+        "rock",
+        "empty",
+        "empty",
+        "empty"
+      ],
+      [
+        "empty",
+        "empty",
+        "empty",
+        "tree",
+        "empty"
+      ]
+    ],
+    "rowClues": [
+      2,
+      1,
+      2,
+      0,
+      2
+    ],
+    "colClues": [
+      2,
+      2,
+      2,
+      1,
+      0
+    ],
+    "inventory": {
+      "house": 3,
+      "woodcutter": 2,
+      "road": 4,
+      "farm": 1,
+      "town_hall": 1
+    },
+    "solution": [
+      [
+        "rock",
+        "farm",
+        "house",
+        "empty",
+        "empty"
+      ],
+      [
+        "house",
+        "road",
+        "empty",
+        "empty",
+        "empty"
+      ],
+      [
+        "woodcutter",
+        "road",
+        "road",
+        "town_hall",
+        "empty"
+      ],
+      [
+        "tree",
+        "rock",
+        "road",
+        "empty",
+        "empty"
+      ],
+      [
+        "empty",
+        "house",
+        "woodcutter",
+        "tree",
+        "empty"
+      ]
+    ],
+    "difficulty": "Hard",
+    "difficultyMetrics": {
+      "score": 64,
+      "tier": "Hard",
+      "maxRuleLevel": 4,
+      "maxRuleName": "Road Entry Point",
+      "stepCount": 21,
+      "density": 0.6,
+      "filledTiles": 15
+    },
+    "difficultyScore": 64,
+    "density": 0.6
+  },
+  {
+    "id": 47,
+    "chapter": 3,
+    "chapterName": "Town Charter",
+    "title": "Lantern Way",
+    "size": 5,
+    "initialGrid": [
+      [
+        "empty",
+        "tree",
+        "empty",
+        "empty",
+        "empty"
+      ],
+      [
+        "tree",
+        "empty",
+        "empty",
+        "empty",
+        "empty"
+      ],
+      [
+        "tree",
+        "empty",
+        "empty",
+        "empty",
+        "empty"
+      ],
+      [
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "rock"
+      ],
+      [
+        "empty",
+        "rock",
+        "empty",
+        "empty",
+        "empty"
+      ]
+    ],
+    "rowClues": [
+      0,
+      2,
+      1,
+      2,
+      2
+    ],
+    "colClues": [
+      2,
+      2,
+      0,
+      3,
+      0
+    ],
+    "inventory": {
+      "house": 3,
+      "woodcutter": 2,
+      "road": 5,
+      "farm": 1,
+      "town_hall": 1
+    },
+    "solution": [
+      [
+        "empty",
+        "tree",
+        "empty",
+        "empty",
+        "empty"
+      ],
+      [
+        "tree",
+        "woodcutter",
+        "road",
+        "town_hall",
+        "empty"
+      ],
+      [
+        "tree",
+        "house",
+        "road",
+        "empty",
+        "empty"
+      ],
+      [
+        "woodcutter",
+        "road",
+        "road",
+        "house",
+        "rock"
+      ],
+      [
+        "house",
+        "rock",
+        "road",
+        "farm",
+        "empty"
+      ]
+    ],
+    "difficulty": "Hard",
+    "difficultyMetrics": {
+      "score": 65,
+      "tier": "Hard",
+      "maxRuleLevel": 4,
+      "maxRuleName": "Road Entry Point",
+      "stepCount": 20,
+      "density": 0.68,
+      "filledTiles": 17
+    },
+    "difficultyScore": 65,
+    "density": 0.68
+  },
+  {
+    "id": 48,
+    "chapter": 3,
+    "chapterName": "Town Charter",
+    "title": "Charter Stone",
+    "size": 5,
+    "initialGrid": [
+      [
+        "tree",
+        "empty",
+        "empty",
+        "empty",
+        "empty"
+      ],
+      [
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "empty"
+      ],
+      [
+        "empty",
+        "empty",
+        "tree",
+        "empty",
+        "tree"
+      ],
+      [
+        "rock",
+        "empty",
+        "empty",
+        "empty",
+        "empty"
+      ],
+      [
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "rock"
+      ]
+    ],
+    "rowClues": [
+      1,
+      1,
+      2,
+      1,
+      2
+    ],
+    "colClues": [
+      2,
+      1,
+      1,
+      3,
+      0
+    ],
+    "inventory": {
+      "house": 3,
+      "woodcutter": 2,
+      "road": 6,
+      "farm": 1,
+      "town_hall": 1
+    },
+    "solution": [
+      [
+        "tree",
+        "empty",
+        "empty",
+        "town_hall",
+        "empty"
+      ],
+      [
+        "woodcutter",
+        "road",
+        "road",
+        "road",
+        "empty"
+      ],
+      [
+        "house",
+        "road",
+        "tree",
+        "woodcutter",
+        "tree"
+      ],
+      [
+        "rock",
+        "road",
+        "road",
+        "house",
+        "empty"
+      ],
+      [
+        "empty",
+        "house",
+        "farm",
+        "empty",
+        "rock"
+      ]
+    ],
+    "difficulty": "Hard",
+    "difficultyMetrics": {
+      "score": 65,
+      "tier": "Hard",
+      "maxRuleLevel": 4,
+      "maxRuleName": "Road Entry Point",
+      "stepCount": 20,
+      "density": 0.72,
+      "filledTiles": 18
+    },
+    "difficultyScore": 65,
+    "density": 0.72
+  },
+  {
+    "id": 49,
+    "chapter": 3,
+    "chapterName": "Town Charter",
+    "title": "Paved Causeway",
+    "size": 5,
+    "initialGrid": [
+      [
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "empty"
+      ],
+      [
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "empty"
+      ],
+      [
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "empty"
+      ],
+      [
+        "rock",
+        "empty",
+        "tree",
+        "empty",
+        "tree"
+      ],
+      [
+        "rock",
+        "empty",
+        "empty",
+        "empty",
+        "empty"
+      ]
+    ],
+    "rowClues": [
+      2,
+      2,
+      1,
+      0,
+      2
+    ],
+    "colClues": [
+      1,
+      1,
+      2,
+      1,
+      2
+    ],
+    "inventory": {
+      "house": 3,
+      "woodcutter": 2,
+      "road": 6,
+      "farm": 1,
+      "town_hall": 1
+    },
+    "solution": [
+      [
+        "empty",
+        "empty",
+        "house",
+        "farm",
+        "empty"
+      ],
+      [
+        "town_hall",
+        "road",
+        "road",
+        "road",
+        "house"
+      ],
+      [
+        "empty",
+        "empty",
+        "empty",
+        "road",
+        "woodcutter"
+      ],
+      [
+        "rock",
+        "empty",
+        "tree",
+        "road",
+        "tree"
+      ],
+      [
+        "rock",
+        "house",
+        "woodcutter",
+        "road",
+        "empty"
+      ]
+    ],
+    "difficulty": "Hard",
+    "difficultyMetrics": {
+      "score": 66,
+      "tier": "Hard",
+      "maxRuleLevel": 4,
+      "maxRuleName": "Road Entry Point",
+      "stepCount": 21,
+      "density": 0.68,
+      "filledTiles": 17
+    },
+    "difficultyScore": 66,
+    "density": 0.68
+  },
+  {
+    "id": 50,
+    "chapter": 3,
+    "chapterName": "Town Charter",
+    "title": "Old Tollgate",
+    "size": 5,
+    "initialGrid": [
+      [
+        "rock",
+        "tree",
+        "empty",
+        "empty",
+        "tree"
+      ],
+      [
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "rock"
+      ],
+      [
+        "empty",
+        "tree",
+        "empty",
+        "empty",
+        "empty"
+      ],
+      [
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "empty"
+      ],
+      [
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "empty"
+      ]
+    ],
+    "rowClues": [
+      2,
+      2,
+      0,
+      3,
+      0
+    ],
+    "colClues": [
+      1,
+      2,
+      2,
+      1,
+      1
+    ],
+    "inventory": {
+      "house": 3,
+      "woodcutter": 2,
+      "road": 4,
+      "farm": 1,
+      "town_hall": 1
+    },
+    "solution": [
+      [
+        "rock",
+        "tree",
+        "house",
+        "woodcutter",
+        "tree"
+      ],
+      [
+        "house",
+        "woodcutter",
+        "road",
+        "road",
+        "rock"
+      ],
+      [
+        "empty",
+        "tree",
+        "empty",
+        "road",
+        "empty"
+      ],
+      [
+        "empty",
+        "house",
+        "farm",
+        "road",
+        "town_hall"
+      ],
+      [
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "empty"
+      ]
+    ],
+    "difficulty": "Hard",
+    "difficultyMetrics": {
+      "score": 64,
+      "tier": "Hard",
+      "maxRuleLevel": 4,
+      "maxRuleName": "Road Entry Point",
+      "stepCount": 20,
+      "density": 0.64,
+      "filledTiles": 16
+    },
+    "difficultyScore": 64,
+    "density": 0.64
+  },
+  {
+    "id": 51,
+    "chapter": 3,
+    "chapterName": "Town Charter",
+    "title": "Watchman Turn",
+    "size": 5,
+    "initialGrid": [
+      [
+        "empty",
+        "rock",
+        "empty",
+        "empty",
+        "empty"
+      ],
+      [
+        "rock",
+        "tree",
+        "empty",
+        "empty",
+        "empty"
+      ],
+      [
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "empty"
+      ],
+      [
+        "empty",
+        "tree",
+        "empty",
+        "empty",
+        "empty"
+      ],
+      [
+        "empty",
+        "tree",
+        "empty",
+        "empty",
+        "empty"
+      ]
+    ],
+    "rowClues": [
+      0,
+      1,
+      2,
+      2,
+      2
+    ],
+    "colClues": [
+      1,
+      1,
+      2,
+      1,
+      2
+    ],
+    "inventory": {
+      "house": 3,
+      "woodcutter": 2,
+      "road": 4,
+      "farm": 1,
+      "town_hall": 1
+    },
+    "solution": [
+      [
+        "empty",
+        "rock",
+        "empty",
+        "empty",
+        "empty"
+      ],
+      [
+        "rock",
+        "tree",
+        "empty",
+        "town_hall",
+        "empty"
+      ],
+      [
+        "house",
+        "woodcutter",
+        "road",
+        "road",
+        "empty"
+      ],
+      [
+        "empty",
+        "tree",
+        "house",
+        "road",
+        "farm"
+      ],
+      [
+        "empty",
+        "tree",
+        "woodcutter",
+        "road",
+        "house"
+      ]
+    ],
+    "difficulty": "Hard",
+    "difficultyMetrics": {
+      "score": 64,
+      "tier": "Hard",
+      "maxRuleLevel": 4,
+      "maxRuleName": "Road Entry Point",
+      "stepCount": 20,
+      "density": 0.64,
+      "filledTiles": 16
+    },
+    "difficultyScore": 64,
+    "density": 0.64
+  },
+  {
+    "id": 52,
+    "chapter": 3,
+    "chapterName": "Town Charter",
+    "title": "Belfry Square",
+    "size": 5,
+    "initialGrid": [
+      [
+        "rock",
+        "rock",
+        "empty",
+        "empty",
+        "tree"
+      ],
+      [
+        "tree",
+        "empty",
+        "empty",
+        "empty",
+        "empty"
+      ],
+      [
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "empty"
+      ],
+      [
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "empty"
+      ],
+      [
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "empty"
+      ]
+    ],
+    "rowClues": [
+      0,
+      2,
+      1,
+      3,
+      1
+    ],
+    "colClues": [
+      2,
+      0,
+      1,
+      1,
+      3
+    ],
+    "inventory": {
+      "house": 3,
+      "woodcutter": 2,
+      "road": 4,
+      "farm": 1,
+      "town_hall": 1
+    },
+    "solution": [
+      [
+        "rock",
+        "rock",
+        "empty",
+        "empty",
+        "tree"
+      ],
+      [
+        "tree",
+        "empty",
+        "empty",
+        "house",
+        "woodcutter"
+      ],
+      [
+        "woodcutter",
+        "road",
+        "road",
+        "road",
+        "road"
+      ],
+      [
+        "house",
+        "empty",
+        "town_hall",
+        "empty",
+        "farm"
+      ],
+      [
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "house"
+      ]
+    ],
+    "difficulty": "Hard",
+    "difficultyMetrics": {
+      "score": 64,
+      "tier": "Hard",
+      "maxRuleLevel": 4,
+      "maxRuleName": "Road Entry Point",
+      "stepCount": 21,
+      "density": 0.6,
+      "filledTiles": 15
+    },
+    "difficultyScore": 64,
+    "density": 0.6
+  },
+  {
+    "id": 53,
+    "chapter": 3,
+    "chapterName": "Town Charter",
+    "title": "Market Approach",
+    "size": 5,
+    "initialGrid": [
+      [
+        "empty",
+        "tree",
+        "empty",
+        "empty",
+        "empty"
+      ],
+      [
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "empty"
+      ],
+      [
+        "empty",
+        "rock",
+        "empty",
+        "rock",
+        "empty"
+      ],
+      [
+        "empty",
+        "tree",
+        "empty",
+        "tree",
+        "empty"
+      ],
+      [
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "empty"
+      ]
+    ],
+    "rowClues": [
+      1,
+      2,
+      1,
+      2,
+      1
+    ],
+    "colClues": [
+      1,
+      1,
+      2,
+      1,
+      2
+    ],
+    "inventory": {
+      "house": 3,
+      "woodcutter": 2,
+      "road": 4,
+      "farm": 1,
+      "town_hall": 1
+    },
+    "solution": [
+      [
+        "empty",
+        "tree",
+        "empty",
+        "town_hall",
+        "empty"
+      ],
+      [
+        "house",
+        "woodcutter",
+        "road",
+        "road",
+        "road"
+      ],
+      [
+        "empty",
+        "rock",
+        "road",
+        "rock",
+        "farm"
+      ],
+      [
+        "empty",
+        "tree",
+        "woodcutter",
+        "tree",
+        "house"
+      ],
+      [
+        "empty",
+        "empty",
+        "house",
+        "empty",
+        "empty"
+      ]
+    ],
+    "difficulty": "Hard",
+    "difficultyMetrics": {
+      "score": 64,
+      "tier": "Hard",
+      "maxRuleLevel": 4,
+      "maxRuleName": "Road Entry Point",
+      "stepCount": 20,
+      "density": 0.64,
+      "filledTiles": 16
+    },
+    "difficultyScore": 64,
+    "density": 0.64
+  },
+  {
+    "id": 54,
+    "chapter": 3,
+    "chapterName": "Town Charter",
+    "title": "Alderman Gate",
+    "size": 5,
+    "initialGrid": [
+      [
+        "empty",
+        "tree",
+        "empty",
+        "rock",
+        "empty"
+      ],
+      [
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "rock"
+      ],
+      [
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "empty"
+      ],
+      [
+        "empty",
+        "empty",
+        "empty",
+        "tree",
+        "empty"
+      ],
+      [
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "empty"
+      ]
+    ],
+    "rowClues": [
+      1,
+      3,
+      0,
+      2,
+      1
+    ],
+    "colClues": [
+      2,
+      2,
+      1,
+      0,
+      2
+    ],
+    "inventory": {
+      "house": 3,
+      "woodcutter": 2,
+      "road": 5,
+      "farm": 1,
+      "town_hall": 1
+    },
+    "solution": [
+      [
+        "house",
+        "tree",
+        "empty",
+        "rock",
+        "empty"
+      ],
+      [
+        "farm",
+        "woodcutter",
+        "house",
+        "empty",
+        "rock"
+      ],
+      [
+        "road",
+        "road",
+        "road",
+        "road",
+        "road"
+      ],
+      [
+        "empty",
+        "town_hall",
+        "empty",
+        "tree",
+        "woodcutter"
+      ],
+      [
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "house"
+      ]
+    ],
+    "difficulty": "Hard",
+    "difficultyMetrics": {
+      "score": 65,
+      "tier": "Hard",
+      "maxRuleLevel": 4,
+      "maxRuleName": "Road Entry Point",
+      "stepCount": 21,
+      "density": 0.64,
+      "filledTiles": 16
+    },
+    "difficultyScore": 65,
+    "density": 0.64
+  },
+  {
+    "id": 55,
+    "chapter": 3,
+    "chapterName": "Town Charter",
+    "title": "Crown Charter",
+    "size": 5,
+    "initialGrid": [
+      [
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "empty"
+      ],
+      [
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "empty"
+      ],
+      [
+        "tree",
+        "tree",
+        "empty",
+        "empty",
+        "empty"
+      ],
+      [
+        "empty",
+        "empty",
+        "tree",
+        "empty",
+        "empty"
+      ],
+      [
+        "rock",
+        "empty",
+        "rock",
+        "empty",
+        "empty"
+      ]
+    ],
+    "rowClues": [
+      2,
+      1,
+      2,
+      1,
+      1
+    ],
+    "colClues": [
+      2,
+      0,
+      1,
+      2,
+      2
+    ],
+    "inventory": {
+      "house": 3,
+      "woodcutter": 2,
+      "road": 5,
+      "farm": 1,
+      "town_hall": 1
+    },
+    "solution": [
+      [
+        "house",
+        "empty",
+        "empty",
+        "town_hall",
+        "empty"
+      ],
+      [
+        "woodcutter",
+        "road",
+        "road",
+        "road",
+        "road"
+      ],
+      [
+        "tree",
+        "tree",
+        "woodcutter",
+        "house",
+        "road"
+      ],
+      [
+        "empty",
+        "empty",
+        "tree",
+        "empty",
+        "farm"
+      ],
+      [
+        "rock",
+        "empty",
+        "rock",
+        "empty",
+        "house"
+      ]
+    ],
+    "difficulty": "Hard",
+    "difficultyMetrics": {
+      "score": 65,
+      "tier": "Hard",
+      "maxRuleLevel": 4,
+      "maxRuleName": "Road Entry Point",
+      "stepCount": 20,
+      "density": 0.68,
+      "filledTiles": 17
+    },
+    "difficultyScore": 65,
+    "density": 0.68
+  },
+  {
+    "id": 56,
+    "chapter": 4,
+    "chapterName": "Bustling Village",
+    "title": "Market Day",
+    "size": 5,
+    "initialGrid": [
+      [
+        "rock",
+        "empty",
+        "empty",
+        "empty",
+        "empty"
+      ],
+      [
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "tree"
+      ],
+      [
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "empty"
+      ],
+      [
+        "empty",
+        "empty",
+        "tree",
+        "empty",
+        "empty"
+      ],
+      [
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "empty"
+      ]
+    ],
+    "rowClues": [
+      0,
+      1,
+      1,
+      2,
+      2
+    ],
+    "colClues": [
+      1,
+      2,
+      1,
+      0,
+      2
+    ],
+    "inventory": {
+      "house": 2,
+      "woodcutter": 2,
+      "road": 5,
+      "farm": 1,
+      "town_hall": 1
+    },
+    "solution": [
+      [
+        "rock",
+        "empty",
+        "empty",
+        "empty",
+        "empty"
+      ],
+      [
+        "empty",
+        "empty",
+        "town_hall",
+        "empty",
+        "tree"
+      ],
+      [
+        "road",
+        "road",
+        "road",
+        "road",
+        "woodcutter"
+      ],
+      [
+        "road",
+        "woodcutter",
+        "tree",
+        "empty",
+        "house"
+      ],
+      [
+        "farm",
+        "house",
+        "empty",
+        "empty",
+        "empty"
+      ]
+    ],
+    "difficulty": "Hard",
+    "difficultyMetrics": {
+      "score": 64,
+      "tier": "Hard",
+      "maxRuleLevel": 4,
+      "maxRuleName": "Road Entry Point",
+      "stepCount": 22,
+      "density": 0.56,
+      "filledTiles": 14
+    },
+    "difficultyScore": 64,
+    "density": 0.56
+  },
+  {
+    "id": 57,
+    "chapter": 4,
+    "chapterName": "Bustling Village",
+    "title": "Miller’s Bend",
+    "size": 5,
+    "initialGrid": [
+      [
+        "empty",
+        "empty",
+        "empty",
+        "tree",
+        "empty"
+      ],
+      [
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "empty"
+      ],
+      [
+        "empty",
+        "empty",
+        "empty",
+        "tree",
+        "empty"
+      ],
+      [
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "empty"
+      ],
+      [
+        "empty",
+        "empty",
+        "empty",
+        "tree",
+        "rock"
+      ]
+    ],
+    "rowClues": [
+      0,
+      3,
+      0,
+      1,
+      2
+    ],
+    "colClues": [
+      0,
+      3,
+      1,
+      1,
+      1
+    ],
+    "inventory": {
+      "house": 2,
+      "woodcutter": 2,
+      "road": 4,
+      "farm": 1,
+      "town_hall": 1
+    },
+    "solution": [
+      [
+        "empty",
+        "empty",
+        "empty",
+        "tree",
+        "empty"
+      ],
+      [
+        "empty",
+        "town_hall",
+        "road",
+        "woodcutter",
+        "house"
+      ],
+      [
+        "empty",
+        "road",
+        "road",
+        "tree",
+        "empty"
+      ],
+      [
+        "empty",
+        "farm",
+        "road",
+        "empty",
+        "empty"
+      ],
+      [
+        "empty",
+        "house",
+        "woodcutter",
+        "tree",
+        "rock"
+      ]
+    ],
+    "difficulty": "Hard",
+    "difficultyMetrics": {
+      "score": 63,
+      "tier": "Hard",
+      "maxRuleLevel": 4,
+      "maxRuleName": "Road Entry Point",
+      "stepCount": 21,
+      "density": 0.56,
+      "filledTiles": 14
+    },
+    "difficultyScore": 63,
+    "density": 0.56
+  },
+  {
+    "id": 58,
+    "chapter": 4,
+    "chapterName": "Bustling Village",
+    "title": "Stonemason Way",
+    "size": 5,
+    "initialGrid": [
+      [
+        "rock",
+        "empty",
+        "empty",
+        "empty",
+        "tree"
+      ],
+      [
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "empty"
+      ],
+      [
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "empty"
+      ],
+      [
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "empty"
+      ],
+      [
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "tree"
+      ]
+    ],
+    "rowClues": [
+      0,
+      2,
+      1,
+      1,
+      2
+    ],
+    "colClues": [
+      0,
+      0,
+      3,
+      1,
+      2
+    ],
+    "inventory": {
+      "house": 2,
+      "woodcutter": 2,
+      "road": 4,
+      "farm": 1,
+      "town_hall": 1
+    },
+    "solution": [
+      [
+        "rock",
+        "empty",
+        "empty",
+        "empty",
+        "tree"
+      ],
+      [
+        "empty",
+        "empty",
+        "town_hall",
+        "road",
+        "woodcutter"
+      ],
+      [
+        "empty",
+        "empty",
+        "road",
+        "road",
+        "house"
+      ],
+      [
+        "empty",
+        "empty",
+        "farm",
+        "road",
+        "empty"
+      ],
+      [
+        "empty",
+        "empty",
+        "house",
+        "woodcutter",
+        "tree"
+      ]
+    ],
+    "difficulty": "Hard",
+    "difficultyMetrics": {
+      "score": 63,
+      "tier": "Hard",
+      "maxRuleLevel": 4,
+      "maxRuleName": "Road Entry Point",
+      "stepCount": 22,
+      "density": 0.52,
+      "filledTiles": 13
+    },
+    "difficultyScore": 63,
+    "density": 0.52
+  },
+  {
+    "id": 59,
+    "chapter": 4,
+    "chapterName": "Bustling Village",
+    "title": "Cobble Basin",
+    "size": 5,
+    "initialGrid": [
+      [
+        "empty",
+        "empty",
+        "rock",
+        "empty",
+        "empty"
+      ],
+      [
+        "empty",
+        "tree",
+        "empty",
+        "empty",
+        "empty"
+      ],
+      [
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "empty"
+      ],
+      [
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "empty"
+      ],
+      [
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "tree"
+      ]
+    ],
+    "rowClues": [
+      0,
+      0,
+      3,
+      0,
+      3
+    ],
+    "colClues": [
+      1,
+      2,
+      1,
+      2,
+      0
+    ],
+    "inventory": {
+      "house": 2,
+      "woodcutter": 2,
+      "road": 4,
+      "farm": 1,
+      "town_hall": 1
+    },
+    "solution": [
+      [
+        "empty",
+        "empty",
+        "rock",
+        "empty",
+        "empty"
+      ],
+      [
+        "empty",
+        "tree",
+        "empty",
+        "empty",
+        "empty"
+      ],
+      [
+        "house",
+        "woodcutter",
+        "road",
+        "town_hall",
+        "empty"
+      ],
+      [
+        "empty",
+        "road",
+        "road",
+        "road",
+        "empty"
+      ],
+      [
+        "empty",
+        "farm",
+        "house",
+        "woodcutter",
+        "tree"
+      ]
+    ],
+    "difficulty": "Hard",
+    "difficultyMetrics": {
+      "score": 63,
+      "tier": "Hard",
+      "maxRuleLevel": 4,
+      "maxRuleName": "Road Entry Point",
+      "stepCount": 22,
+      "density": 0.52,
+      "filledTiles": 13
+    },
+    "difficultyScore": 63,
+    "density": 0.52
+  },
+  {
+    "id": 60,
+    "chapter": 4,
+    "chapterName": "Bustling Village",
+    "title": "Briarwood Trade",
+    "size": 5,
+    "initialGrid": [
+      [
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "tree"
+      ],
+      [
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "empty"
+      ],
+      [
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "tree"
+      ],
+      [
+        "empty",
+        "rock",
+        "rock",
+        "empty",
+        "empty"
+      ],
+      [
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "empty"
+      ]
+    ],
+    "rowClues": [
+      1,
+      2,
+      0,
+      1,
+      2
+    ],
+    "colClues": [
+      0,
+      1,
+      0,
+      3,
+      2
+    ],
+    "inventory": {
+      "house": 2,
+      "woodcutter": 2,
+      "road": 5,
+      "farm": 1,
+      "town_hall": 1
+    },
+    "solution": [
+      [
+        "empty",
+        "empty",
+        "road",
+        "woodcutter",
+        "tree"
+      ],
+      [
+        "empty",
+        "town_hall",
+        "road",
+        "house",
+        "empty"
+      ],
+      [
+        "empty",
+        "empty",
+        "road",
+        "road",
+        "tree"
+      ],
+      [
+        "empty",
+        "rock",
+        "rock",
+        "road",
+        "woodcutter"
+      ],
+      [
+        "empty",
+        "empty",
+        "empty",
+        "farm",
+        "house"
+      ]
+    ],
+    "difficulty": "Hard",
+    "difficultyMetrics": {
+      "score": 64,
+      "tier": "Hard",
+      "maxRuleLevel": 4,
+      "maxRuleName": "Road Entry Point",
+      "stepCount": 21,
+      "density": 0.6,
+      "filledTiles": 15
+    },
+    "difficultyScore": 64,
+    "density": 0.6
+  },
+  {
+    "id": 61,
+    "chapter": 4,
+    "chapterName": "Bustling Village",
+    "title": "Riverbridge Reach",
+    "size": 5,
+    "initialGrid": [
+      [
+        "empty",
+        "tree",
+        "empty",
+        "empty",
+        "empty"
+      ],
+      [
+        "rock",
+        "empty",
+        "empty",
+        "empty",
+        "empty"
+      ],
+      [
+        "tree",
+        "empty",
+        "empty",
+        "empty",
+        "empty"
+      ],
+      [
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "empty"
+      ],
+      [
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "empty"
+      ]
+    ],
+    "rowClues": [
+      2,
+      1,
+      0,
+      2,
+      1
+    ],
+    "colClues": [
+      2,
+      0,
+      2,
+      2,
+      0
+    ],
+    "inventory": {
+      "house": 2,
+      "woodcutter": 2,
+      "road": 3,
+      "farm": 1,
+      "town_hall": 1
+    },
+    "solution": [
+      [
+        "empty",
+        "tree",
+        "woodcutter",
+        "house",
+        "empty"
+      ],
+      [
+        "rock",
+        "empty",
+        "road",
+        "farm",
+        "empty"
+      ],
+      [
+        "tree",
+        "empty",
+        "road",
+        "empty",
+        "empty"
+      ],
+      [
+        "woodcutter",
+        "road",
+        "town_hall",
+        "empty",
+        "empty"
+      ],
+      [
+        "house",
+        "empty",
+        "empty",
+        "empty",
+        "empty"
+      ]
+    ],
+    "difficulty": "Hard",
+    "difficultyMetrics": {
+      "score": 63,
+      "tier": "Hard",
+      "maxRuleLevel": 4,
+      "maxRuleName": "Road Entry Point",
+      "stepCount": 22,
+      "density": 0.48,
+      "filledTiles": 12
+    },
+    "difficultyScore": 63,
+    "density": 0.48
+  },
+  {
+    "id": 62,
+    "chapter": 4,
+    "chapterName": "Bustling Village",
+    "title": "Granary Junction",
+    "size": 5,
+    "initialGrid": [
+      [
+        "tree",
+        "empty",
+        "empty",
+        "rock",
+        "empty"
+      ],
+      [
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "empty"
+      ],
+      [
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "empty"
+      ],
+      [
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "empty"
+      ],
+      [
+        "empty",
+        "empty",
+        "empty",
+        "tree",
+        "empty"
+      ]
+    ],
+    "rowClues": [
+      2,
+      0,
+      1,
+      0,
+      3
+    ],
+    "colClues": [
+      1,
+      3,
+      2,
+      0,
+      0
+    ],
+    "inventory": {
+      "house": 2,
+      "woodcutter": 2,
+      "road": 4,
+      "farm": 1,
+      "town_hall": 1
+    },
+    "solution": [
+      [
+        "tree",
+        "woodcutter",
+        "house",
+        "rock",
+        "empty"
+      ],
+      [
+        "empty",
+        "road",
+        "empty",
+        "empty",
+        "empty"
+      ],
+      [
+        "empty",
+        "town_hall",
+        "empty",
+        "empty",
+        "empty"
+      ],
+      [
+        "road",
+        "road",
+        "road",
+        "empty",
+        "empty"
+      ],
+      [
+        "farm",
+        "house",
+        "woodcutter",
+        "tree",
+        "empty"
+      ]
+    ],
+    "difficulty": "Hard",
+    "difficultyMetrics": {
+      "score": 63,
+      "tier": "Hard",
+      "maxRuleLevel": 4,
+      "maxRuleName": "Road Entry Point",
+      "stepCount": 22,
+      "density": 0.52,
+      "filledTiles": 13
+    },
+    "difficultyScore": 63,
+    "density": 0.52
+  },
+  {
+    "id": 63,
+    "chapter": 4,
+    "chapterName": "Bustling Village",
+    "title": "Copperleaf Row",
+    "size": 5,
+    "initialGrid": [
+      [
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "tree"
+      ],
+      [
+        "empty",
+        "rock",
+        "empty",
+        "empty",
+        "empty"
+      ],
+      [
+        "tree",
+        "empty",
+        "rock",
+        "empty",
+        "empty"
+      ],
+      [
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "empty"
+      ],
+      [
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "empty"
+      ]
+    ],
+    "rowClues": [
+      0,
+      1,
+      1,
+      1,
+      3
+    ],
+    "colClues": [
+      2,
+      1,
+      0,
+      1,
+      2
+    ],
+    "inventory": {
+      "house": 2,
+      "woodcutter": 2,
+      "road": 6,
+      "farm": 1,
+      "town_hall": 1
+    },
+    "solution": [
+      [
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "tree"
+      ],
+      [
+        "empty",
+        "rock",
+        "empty",
+        "road",
+        "woodcutter"
+      ],
+      [
+        "tree",
+        "empty",
+        "rock",
+        "road",
+        "house"
+      ],
+      [
+        "woodcutter",
+        "road",
+        "road",
+        "road",
+        "empty"
+      ],
+      [
+        "house",
+        "farm",
+        "road",
+        "town_hall",
+        "empty"
+      ]
+    ],
+    "difficulty": "Hard",
+    "difficultyMetrics": {
+      "score": 65,
+      "tier": "Hard",
+      "maxRuleLevel": 4,
+      "maxRuleName": "Road Entry Point",
+      "stepCount": 21,
+      "density": 0.64,
+      "filledTiles": 16
+    },
+    "difficultyScore": 65,
+    "density": 0.64
+  },
+  {
+    "id": 64,
+    "chapter": 4,
+    "chapterName": "Bustling Village",
+    "title": "Tavern Yard",
+    "size": 5,
+    "initialGrid": [
+      [
+        "empty",
+        "empty",
+        "rock",
+        "empty",
+        "empty"
+      ],
+      [
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "tree"
+      ],
+      [
+        "empty",
+        "empty",
+        "rock",
+        "empty",
+        "empty"
+      ],
+      [
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "empty"
+      ],
+      [
+        "tree",
+        "empty",
+        "empty",
+        "empty",
+        "empty"
+      ]
+    ],
+    "rowClues": [
+      0,
+      1,
+      1,
+      2,
+      2
+    ],
+    "colClues": [
+      1,
+      1,
+      1,
+      1,
+      2
+    ],
+    "inventory": {
+      "house": 2,
+      "woodcutter": 2,
+      "road": 6,
+      "farm": 1,
+      "town_hall": 1
+    },
+    "solution": [
+      [
+        "empty",
+        "empty",
+        "rock",
+        "empty",
+        "empty"
+      ],
+      [
+        "town_hall",
+        "road",
+        "road",
+        "road",
+        "tree"
+      ],
+      [
+        "empty",
+        "road",
+        "rock",
+        "road",
+        "woodcutter"
+      ],
+      [
+        "empty",
+        "road",
+        "empty",
+        "farm",
+        "house"
+      ],
+      [
+        "tree",
+        "woodcutter",
+        "house",
+        "empty",
+        "empty"
+      ]
+    ],
+    "difficulty": "Hard",
+    "difficultyMetrics": {
+      "score": 65,
+      "tier": "Hard",
+      "maxRuleLevel": 4,
+      "maxRuleName": "Road Entry Point",
+      "stepCount": 21,
+      "density": 0.64,
+      "filledTiles": 16
+    },
+    "difficultyScore": 65,
+    "density": 0.64
+  },
+  {
+    "id": 65,
+    "chapter": 4,
+    "chapterName": "Bustling Village",
+    "title": "Merchant Run",
+    "size": 5,
+    "initialGrid": [
+      [
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "empty"
+      ],
+      [
+        "empty",
+        "rock",
+        "empty",
+        "empty",
+        "empty"
+      ],
+      [
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "empty"
+      ],
+      [
+        "tree",
+        "empty",
+        "empty",
+        "empty",
+        "empty"
+      ],
+      [
+        "tree",
+        "empty",
+        "empty",
+        "empty",
+        "empty"
+      ]
+    ],
+    "rowClues": [
+      0,
+      2,
+      1,
+      2,
+      1
+    ],
+    "colClues": [
+      2,
+      2,
+      1,
+      1,
+      0
+    ],
+    "inventory": {
+      "house": 2,
+      "woodcutter": 2,
+      "road": 6,
+      "farm": 1,
+      "town_hall": 1
+    },
+    "solution": [
+      [
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "empty"
+      ],
+      [
+        "house",
+        "rock",
+        "empty",
+        "town_hall",
+        "empty"
+      ],
+      [
+        "woodcutter",
+        "road",
+        "road",
+        "road",
+        "empty"
+      ],
+      [
+        "tree",
+        "house",
+        "farm",
+        "road",
+        "empty"
+      ],
+      [
+        "tree",
+        "woodcutter",
+        "road",
+        "road",
+        "empty"
+      ]
+    ],
+    "difficulty": "Hard",
+    "difficultyMetrics": {
+      "score": 65,
+      "tier": "Hard",
+      "maxRuleLevel": 4,
+      "maxRuleName": "Road Entry Point",
+      "stepCount": 22,
+      "density": 0.6,
+      "filledTiles": 15
+    },
+    "difficultyScore": 65,
+    "density": 0.6
+  },
+  {
+    "id": 66,
+    "chapter": 4,
+    "chapterName": "Bustling Village",
+    "title": "Six-Shire Crossing",
+    "size": 6,
+    "initialGrid": [
+      [
+        "rock",
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "empty"
+      ],
+      [
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "empty"
+      ],
+      [
+        "empty",
+        "tree",
+        "empty",
+        "empty",
+        "empty",
+        "empty"
+      ],
+      [
+        "tree",
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "empty"
+      ],
+      [
+        "rock",
+        "empty",
+        "empty",
+        "tree",
+        "empty",
+        "empty"
+      ],
+      [
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "empty"
+      ]
+    ],
+    "rowClues": [
+      2,
+      0,
+      0,
+      2,
+      1,
+      3
+    ],
+    "colClues": [
+      0,
+      3,
+      0,
+      2,
+      2,
+      1
+    ],
+    "inventory": {
+      "house": 3,
+      "woodcutter": 2,
+      "road": 7,
+      "farm": 2,
+      "town_hall": 1
+    },
+    "solution": [
+      [
+        "rock",
+        "empty",
+        "empty",
+        "house",
+        "farm",
+        "empty"
+      ],
+      [
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "road",
+        "empty"
+      ],
+      [
+        "empty",
+        "tree",
+        "empty",
+        "empty",
+        "road",
+        "empty"
+      ],
+      [
+        "tree",
+        "woodcutter",
+        "road",
+        "road",
+        "road",
+        "town_hall"
+      ],
+      [
+        "rock",
+        "house",
+        "road",
+        "tree",
+        "empty",
+        "empty"
+      ],
+      [
+        "empty",
+        "farm",
+        "road",
+        "woodcutter",
+        "house",
+        "empty"
+      ]
+    ],
+    "difficulty": "Expert",
+    "difficultyMetrics": {
+      "score": 81,
+      "tier": "Expert",
+      "maxRuleLevel": 4,
+      "maxRuleName": "Road Entry Point",
+      "stepCount": 31,
+      "density": 0.56,
+      "filledTiles": 20
+    },
+    "difficultyScore": 81,
+    "density": 0.56
+  },
+  {
+    "id": 67,
+    "chapter": 4,
+    "chapterName": "Bustling Village",
+    "title": "Cobblestone Reach",
+    "size": 6,
+    "initialGrid": [
+      [
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "tree"
+      ],
+      [
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "empty"
+      ],
+      [
+        "rock",
+        "empty",
+        "tree",
+        "empty",
+        "empty",
+        "empty"
+      ],
+      [
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "empty"
+      ],
+      [
+        "empty",
+        "empty",
+        "tree",
+        "empty",
+        "empty",
+        "empty"
+      ],
+      [
+        "empty",
+        "empty",
+        "rock",
+        "empty",
+        "empty",
+        "empty"
+      ]
+    ],
+    "rowClues": [
+      0,
+      3,
+      0,
+      3,
+      0,
+      2
+    ],
+    "colClues": [
+      0,
+      1,
+      1,
+      1,
+      2,
+      3
+    ],
+    "inventory": {
+      "house": 3,
+      "woodcutter": 2,
+      "road": 5,
+      "farm": 2,
+      "town_hall": 1
+    },
+    "solution": [
+      [
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "tree"
+      ],
+      [
+        "empty",
+        "empty",
+        "empty",
+        "farm",
+        "house",
+        "woodcutter"
+      ],
+      [
+        "rock",
+        "empty",
+        "tree",
+        "road",
+        "empty",
+        "road"
+      ],
+      [
+        "empty",
+        "house",
+        "woodcutter",
+        "road",
+        "road",
+        "town_hall"
+      ],
+      [
+        "empty",
+        "empty",
+        "tree",
+        "empty",
+        "road",
+        "empty"
+      ],
+      [
+        "empty",
+        "empty",
+        "rock",
+        "empty",
+        "farm",
+        "house"
+      ]
+    ],
+    "difficulty": "Expert",
+    "difficultyMetrics": {
+      "score": 79,
+      "tier": "Expert",
+      "maxRuleLevel": 4,
+      "maxRuleName": "Road Entry Point",
+      "stepCount": 31,
+      "density": 0.5,
+      "filledTiles": 18
+    },
+    "difficultyScore": 79,
+    "density": 0.5
+  },
+  {
+    "id": 68,
+    "chapter": 4,
+    "chapterName": "Bustling Village",
+    "title": "High Borough",
+    "size": 6,
+    "initialGrid": [
+      [
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "empty"
+      ],
+      [
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "empty"
+      ],
+      [
+        "empty",
+        "empty",
+        "rock",
+        "tree",
+        "empty",
+        "empty"
+      ],
+      [
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "empty"
+      ],
+      [
+        "tree",
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "empty"
+      ],
+      [
+        "empty",
+        "tree",
+        "empty",
+        "rock",
+        "empty",
+        "empty"
+      ]
+    ],
+    "rowClues": [
+      0,
+      2,
+      2,
+      0,
+      2,
+      2
+    ],
+    "colClues": [
+      1,
+      1,
+      1,
+      1,
+      3,
+      1
+    ],
+    "inventory": {
+      "house": 3,
+      "woodcutter": 2,
+      "road": 8,
+      "farm": 2,
+      "town_hall": 1
+    },
+    "solution": [
+      [
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "empty"
+      ],
+      [
+        "empty",
+        "road",
+        "road",
+        "farm",
+        "house",
+        "empty"
+      ],
+      [
+        "town_hall",
+        "road",
+        "rock",
+        "tree",
+        "woodcutter",
+        "empty"
+      ],
+      [
+        "empty",
+        "road",
+        "road",
+        "road",
+        "road",
+        "empty"
+      ],
+      [
+        "tree",
+        "woodcutter",
+        "house",
+        "empty",
+        "road",
+        "empty"
+      ],
+      [
+        "empty",
+        "tree",
+        "empty",
+        "rock",
+        "farm",
+        "house"
+      ]
+    ],
+    "difficulty": "Expert",
+    "difficultyMetrics": {
+      "score": 81,
+      "tier": "Expert",
+      "maxRuleLevel": 4,
+      "maxRuleName": "Road Entry Point",
+      "stepCount": 31,
+      "density": 0.58,
+      "filledTiles": 21
+    },
+    "difficultyScore": 81,
+    "density": 0.58
+  },
+  {
+    "id": 69,
+    "chapter": 4,
+    "chapterName": "Bustling Village",
+    "title": "Falconer Crest",
+    "size": 6,
+    "initialGrid": [
+      [
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "empty"
+      ],
+      [
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "empty"
+      ],
+      [
+        "empty",
+        "empty",
+        "empty",
+        "rock",
+        "empty",
+        "empty"
+      ],
+      [
+        "empty",
+        "empty",
+        "empty",
+        "rock",
+        "empty",
+        "empty"
+      ],
+      [
+        "tree",
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "tree"
+      ],
+      [
+        "empty",
+        "tree",
+        "empty",
+        "empty",
+        "rock",
+        "rock"
+      ]
+    ],
+    "rowClues": [
+      2,
+      1,
+      2,
+      1,
+      2,
+      0
+    ],
+    "colClues": [
+      1,
+      3,
+      1,
+      0,
+      0,
+      3
+    ],
+    "inventory": {
+      "house": 3,
+      "woodcutter": 2,
+      "road": 7,
+      "farm": 2,
+      "town_hall": 1
+    },
+    "solution": [
+      [
+        "house",
+        "farm",
+        "empty",
+        "empty",
+        "empty",
+        "empty"
+      ],
+      [
+        "empty",
+        "road",
+        "road",
+        "road",
+        "road",
+        "farm"
+      ],
+      [
+        "empty",
+        "town_hall",
+        "empty",
+        "rock",
+        "road",
+        "house"
+      ],
+      [
+        "empty",
+        "road",
+        "empty",
+        "rock",
+        "road",
+        "woodcutter"
+      ],
+      [
+        "tree",
+        "woodcutter",
+        "house",
+        "empty",
+        "empty",
+        "tree"
+      ],
+      [
+        "empty",
+        "tree",
+        "empty",
+        "empty",
+        "rock",
+        "rock"
+      ]
+    ],
+    "difficulty": "Expert",
+    "difficultyMetrics": {
+      "score": 90,
+      "tier": "Expert",
+      "maxRuleLevel": 5,
+      "maxRuleName": "Logical Elimination",
+      "stepCount": 29,
+      "density": 0.61,
+      "filledTiles": 22
+    },
+    "difficultyScore": 90,
+    "density": 0.61
+  },
+  {
+    "id": 70,
+    "chapter": 4,
+    "chapterName": "Bustling Village",
+    "title": "Old Mill Quarter",
+    "size": 6,
+    "initialGrid": [
+      [
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "tree",
+        "empty"
+      ],
+      [
+        "empty",
+        "rock",
+        "empty",
+        "empty",
+        "empty",
+        "empty"
+      ],
+      [
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "empty"
+      ],
+      [
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "empty"
+      ],
+      [
+        "empty",
+        "empty",
+        "empty",
+        "tree",
+        "empty",
+        "empty"
+      ],
+      [
+        "empty",
+        "empty",
+        "tree",
+        "empty",
+        "rock",
+        "empty"
+      ]
+    ],
+    "rowClues": [
+      2,
+      0,
+      2,
+      1,
+      3,
+      0
+    ],
+    "colClues": [
+      2,
+      2,
+      2,
+      1,
+      0,
+      1
+    ],
+    "inventory": {
+      "house": 3,
+      "woodcutter": 2,
+      "road": 7,
+      "farm": 2,
+      "town_hall": 1
+    },
+    "solution": [
+      [
+        "empty",
+        "empty",
+        "house",
+        "woodcutter",
+        "tree",
+        "empty"
+      ],
+      [
+        "empty",
+        "rock",
+        "empty",
+        "road",
+        "empty",
+        "empty"
+      ],
+      [
+        "house",
+        "farm",
+        "empty",
+        "road",
+        "empty",
+        "empty"
+      ],
+      [
+        "road",
+        "road",
+        "road",
+        "road",
+        "road",
+        "town_hall"
+      ],
+      [
+        "farm",
+        "house",
+        "woodcutter",
+        "tree",
+        "empty",
+        "empty"
+      ],
+      [
+        "empty",
+        "empty",
+        "tree",
+        "empty",
+        "rock",
+        "empty"
+      ]
+    ],
+    "difficulty": "Expert",
+    "difficultyMetrics": {
+      "score": 81,
+      "tier": "Expert",
+      "maxRuleLevel": 4,
+      "maxRuleName": "Road Entry Point",
+      "stepCount": 31,
+      "density": 0.56,
+      "filledTiles": 20
+    },
+    "difficultyScore": 81,
+    "density": 0.56
+  },
+  {
+    "id": 71,
+    "chapter": 4,
+    "chapterName": "Bustling Village",
+    "title": "Weaver’s Crossing",
+    "size": 6,
+    "initialGrid": [
+      [
+        "empty",
+        "empty",
+        "tree",
+        "empty",
+        "empty",
+        "empty"
+      ],
+      [
+        "tree",
+        "tree",
+        "empty",
+        "empty",
+        "empty",
+        "empty"
+      ],
+      [
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "empty"
+      ],
+      [
+        "empty",
+        "rock",
+        "empty",
+        "empty",
+        "empty",
+        "empty"
+      ],
+      [
+        "empty",
+        "empty",
+        "empty",
+        "rock",
+        "empty",
+        "empty"
+      ],
+      [
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "rock"
+      ]
+    ],
+    "rowClues": [
+      2,
+      2,
+      2,
+      1,
+      1,
+      0
+    ],
+    "colClues": [
+      3,
+      0,
+      1,
+      1,
+      1,
+      2
+    ],
+    "inventory": {
+      "house": 3,
+      "woodcutter": 2,
+      "road": 8,
+      "farm": 2,
+      "town_hall": 1
+    },
+    "solution": [
+      [
+        "empty",
+        "empty",
+        "tree",
+        "empty",
+        "farm",
+        "house"
+      ],
+      [
+        "tree",
+        "tree",
+        "woodcutter",
+        "house",
+        "road",
+        "empty"
+      ],
+      [
+        "woodcutter",
+        "road",
+        "road",
+        "road",
+        "road",
+        "town_hall"
+      ],
+      [
+        "house",
+        "rock",
+        "road",
+        "empty",
+        "empty",
+        "empty"
+      ],
+      [
+        "farm",
+        "road",
+        "road",
+        "rock",
+        "empty",
+        "empty"
+      ],
+      [
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "rock"
+      ]
+    ],
+    "difficulty": "Expert",
+    "difficultyMetrics": {
+      "score": 81,
+      "tier": "Expert",
+      "maxRuleLevel": 4,
+      "maxRuleName": "Road Entry Point",
+      "stepCount": 30,
+      "density": 0.61,
+      "filledTiles": 22
+    },
+    "difficultyScore": 81,
+    "density": 0.61
+  },
+  {
+    "id": 72,
+    "chapter": 4,
+    "chapterName": "Bustling Village",
+    "title": "Timberline Ward",
+    "size": 6,
+    "initialGrid": [
+      [
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "rock"
+      ],
+      [
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "empty"
+      ],
+      [
+        "tree",
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "empty"
+      ],
+      [
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "empty"
+      ],
+      [
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "tree",
+        "empty"
+      ],
+      [
+        "empty",
+        "empty",
+        "empty",
+        "tree",
+        "rock",
+        "empty"
+      ]
+    ],
+    "rowClues": [
+      0,
+      2,
+      1,
+      2,
+      3,
+      0
+    ],
+    "colClues": [
+      2,
+      1,
+      1,
+      3,
+      0,
+      1
+    ],
+    "inventory": {
+      "house": 3,
+      "woodcutter": 2,
+      "road": 6,
+      "farm": 2,
+      "town_hall": 1
+    },
+    "solution": [
+      [
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "rock"
+      ],
+      [
+        "empty",
+        "empty",
+        "house",
+        "farm",
+        "empty",
+        "empty"
+      ],
+      [
+        "tree",
+        "empty",
+        "road",
+        "road",
+        "road",
+        "town_hall"
+      ],
+      [
+        "woodcutter",
+        "road",
+        "road",
+        "house",
+        "empty",
+        "empty"
+      ],
+      [
+        "house",
+        "farm",
+        "road",
+        "woodcutter",
+        "tree",
+        "empty"
+      ],
+      [
+        "empty",
+        "empty",
+        "empty",
+        "tree",
+        "rock",
+        "empty"
+      ]
+    ],
+    "difficulty": "Expert",
+    "difficultyMetrics": {
+      "score": 80,
+      "tier": "Expert",
+      "maxRuleLevel": 4,
+      "maxRuleName": "Road Entry Point",
+      "stepCount": 31,
+      "density": 0.53,
+      "filledTiles": 19
+    },
+    "difficultyScore": 80,
+    "density": 0.53
+  },
+  {
+    "id": 73,
+    "chapter": 4,
+    "chapterName": "Bustling Village",
+    "title": "Cartwright Plaza",
+    "size": 6,
+    "initialGrid": [
+      [
+        "empty",
+        "rock",
+        "rock",
+        "empty",
+        "empty",
+        "empty"
+      ],
+      [
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "empty"
+      ],
+      [
+        "empty",
+        "empty",
+        "empty",
+        "tree",
+        "empty",
+        "empty"
+      ],
+      [
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "empty"
+      ],
+      [
+        "tree",
+        "empty",
+        "tree",
+        "empty",
+        "empty",
+        "empty"
+      ],
+      [
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "empty"
+      ]
+    ],
+    "rowClues": [
+      0,
+      2,
+      2,
+      1,
+      2,
+      1
+    ],
+    "colClues": [
+      2,
+      2,
+      0,
+      0,
+      3,
+      1
+    ],
+    "inventory": {
+      "house": 3,
+      "woodcutter": 2,
+      "road": 6,
+      "farm": 2,
+      "town_hall": 1
+    },
+    "solution": [
+      [
+        "empty",
+        "rock",
+        "rock",
+        "empty",
+        "empty",
+        "empty"
+      ],
+      [
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "house",
+        "farm"
+      ],
+      [
+        "house",
+        "empty",
+        "empty",
+        "tree",
+        "woodcutter",
+        "road"
+      ],
+      [
+        "farm",
+        "road",
+        "road",
+        "road",
+        "road",
+        "road"
+      ],
+      [
+        "tree",
+        "woodcutter",
+        "tree",
+        "empty",
+        "town_hall",
+        "empty"
+      ],
+      [
+        "empty",
+        "house",
+        "empty",
+        "empty",
+        "empty",
+        "empty"
+      ]
+    ],
+    "difficulty": "Expert",
+    "difficultyMetrics": {
+      "score": 90,
+      "tier": "Expert",
+      "maxRuleLevel": 5,
+      "maxRuleName": "Logical Elimination",
+      "stepCount": 31,
+      "density": 0.53,
+      "filledTiles": 19
+    },
+    "difficultyScore": 90,
+    "density": 0.53
+  },
+  {
+    "id": 74,
+    "chapter": 4,
+    "chapterName": "Bustling Village",
+    "title": "Baron’s Gate",
+    "size": 6,
+    "initialGrid": [
+      [
+        "empty",
+        "empty",
+        "empty",
+        "rock",
+        "empty",
+        "empty"
+      ],
+      [
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "empty"
+      ],
+      [
+        "empty",
+        "rock",
+        "tree",
+        "empty",
+        "rock",
+        "empty"
+      ],
+      [
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "empty"
+      ],
+      [
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "empty"
+      ],
+      [
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "tree",
+        "empty"
+      ]
+    ],
+    "rowClues": [
+      1,
+      1,
+      0,
+      3,
+      2,
+      1
+    ],
+    "colClues": [
+      0,
+      1,
+      4,
+      0,
+      1,
+      2
+    ],
+    "inventory": {
+      "house": 3,
+      "woodcutter": 2,
+      "road": 7,
+      "farm": 2,
+      "town_hall": 1
+    },
+    "solution": [
+      [
+        "empty",
+        "empty",
+        "house",
+        "rock",
+        "empty",
+        "empty"
+      ],
+      [
+        "empty",
+        "empty",
+        "farm",
+        "road",
+        "empty",
+        "empty"
+      ],
+      [
+        "empty",
+        "rock",
+        "tree",
+        "road",
+        "rock",
+        "empty"
+      ],
+      [
+        "empty",
+        "house",
+        "woodcutter",
+        "road",
+        "road",
+        "farm"
+      ],
+      [
+        "empty",
+        "empty",
+        "road",
+        "road",
+        "woodcutter",
+        "house"
+      ],
+      [
+        "empty",
+        "empty",
+        "town_hall",
+        "road",
+        "tree",
+        "empty"
+      ]
+    ],
+    "difficulty": "Expert",
+    "difficultyMetrics": {
+      "score": 81,
+      "tier": "Expert",
+      "maxRuleLevel": 3,
+      "maxRuleName": "Only Remaining Spot",
+      "stepCount": 31,
+      "density": 0.56,
+      "filledTiles": 20
+    },
+    "difficultyScore": 81,
+    "density": 0.56
+  },
+  {
+    "id": 75,
+    "chapter": 4,
+    "chapterName": "Bustling Village",
+    "title": "The Great Commons",
+    "size": 6,
+    "initialGrid": [
+      [
+        "empty",
+        "empty",
+        "tree",
+        "empty",
+        "empty",
+        "rock"
+      ],
+      [
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "empty"
+      ],
+      [
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "empty"
+      ],
+      [
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "empty"
+      ],
+      [
+        "empty",
+        "empty",
+        "empty",
+        "rock",
+        "empty",
+        "empty"
+      ],
+      [
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "rock",
+        "tree"
+      ]
+    ],
+    "rowClues": [
+      2,
+      1,
+      0,
+      2,
+      1,
+      2
+    ],
+    "colClues": [
+      0,
+      1,
+      1,
+      2,
+      2,
+      2
+    ],
+    "inventory": {
+      "house": 3,
+      "woodcutter": 2,
+      "road": 7,
+      "farm": 2,
+      "town_hall": 1
+    },
+    "solution": [
+      [
+        "empty",
+        "empty",
+        "tree",
+        "woodcutter",
+        "house",
+        "rock"
+      ],
+      [
+        "empty",
+        "empty",
+        "empty",
+        "road",
+        "farm",
+        "empty"
+      ],
+      [
+        "empty",
+        "empty",
+        "empty",
+        "road",
+        "empty",
+        "empty"
+      ],
+      [
+        "empty",
+        "town_hall",
+        "road",
+        "road",
+        "road",
+        "house"
+      ],
+      [
+        "empty",
+        "empty",
+        "road",
+        "rock",
+        "road",
+        "woodcutter"
+      ],
+      [
+        "empty",
+        "empty",
+        "farm",
+        "house",
+        "rock",
+        "tree"
+      ]
+    ],
+    "difficulty": "Expert",
+    "difficultyMetrics": {
+      "score": 81,
+      "tier": "Expert",
+      "maxRuleLevel": 4,
+      "maxRuleName": "Road Entry Point",
+      "stepCount": 31,
+      "density": 0.56,
+      "filledTiles": 20
+    },
+    "difficultyScore": 81,
+    "density": 0.56
+  },
+  {
+    "id": 76,
+    "chapter": 5,
+    "chapterName": "Master Architect",
+    "title": "Highland Borough",
+    "size": 6,
+    "initialGrid": [
+      [
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "empty"
+      ],
+      [
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "empty"
+      ],
+      [
+        "empty",
+        "tree",
+        "empty",
+        "rock",
+        "empty",
+        "empty"
+      ],
+      [
+        "tree",
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "empty"
+      ],
+      [
+        "rock",
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "empty"
+      ],
+      [
+        "empty",
+        "rock",
+        "empty",
+        "empty",
+        "empty",
+        "tree"
+      ]
+    ],
+    "rowClues": [
+      1,
+      0,
+      0,
+      2,
+      3,
+      2
+    ],
+    "colClues": [
+      0,
+      2,
+      1,
+      1,
+      2,
+      2
+    ],
+    "inventory": {
+      "house": 3,
+      "woodcutter": 2,
+      "road": 7,
+      "farm": 2,
+      "town_hall": 1
+    },
+    "solution": [
+      [
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "town_hall",
+        "empty"
+      ],
+      [
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "road",
+        "empty"
+      ],
+      [
+        "empty",
+        "tree",
+        "empty",
+        "rock",
+        "road",
+        "empty"
+      ],
+      [
+        "tree",
+        "woodcutter",
+        "road",
+        "road",
+        "road",
+        "house"
+      ],
+      [
+        "rock",
+        "house",
+        "farm",
+        "road",
+        "road",
+        "woodcutter"
+      ],
+      [
+        "empty",
+        "rock",
+        "empty",
+        "house",
+        "farm",
+        "tree"
+      ]
+    ],
+    "difficulty": "Expert",
+    "difficultyMetrics": {
+      "score": 80,
+      "tier": "Expert",
+      "maxRuleLevel": 4,
+      "maxRuleName": "Road Entry Point",
+      "stepCount": 30,
+      "density": 0.58,
+      "filledTiles": 21
+    },
+    "difficultyScore": 80,
+    "density": 0.58
+  },
+  {
+    "id": 77,
+    "chapter": 5,
+    "chapterName": "Master Architect",
+    "title": "King’s Highway",
+    "size": 6,
+    "initialGrid": [
+      [
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "empty"
+      ],
+      [
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "rock",
+        "empty"
+      ],
+      [
+        "empty",
+        "tree",
+        "empty",
+        "empty",
+        "empty",
+        "empty"
+      ],
+      [
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "empty"
+      ],
+      [
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "rock"
+      ],
+      [
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "tree",
+        "empty"
+      ]
+    ],
+    "rowClues": [
+      2,
+      0,
+      0,
+      3,
+      1,
+      2
+    ],
+    "colClues": [
+      2,
+      3,
+      0,
+      3,
+      0,
+      0
+    ],
+    "inventory": {
+      "house": 3,
+      "woodcutter": 2,
+      "road": 7,
+      "farm": 2,
+      "town_hall": 1
+    },
+    "solution": [
+      [
+        "farm",
+        "house",
+        "empty",
+        "empty",
+        "empty",
+        "empty"
+      ],
+      [
+        "road",
+        "road",
+        "road",
+        "empty",
+        "rock",
+        "empty"
+      ],
+      [
+        "empty",
+        "tree",
+        "road",
+        "empty",
+        "empty",
+        "empty"
+      ],
+      [
+        "house",
+        "woodcutter",
+        "road",
+        "farm",
+        "empty",
+        "empty"
+      ],
+      [
+        "empty",
+        "empty",
+        "road",
+        "house",
+        "empty",
+        "rock"
+      ],
+      [
+        "empty",
+        "town_hall",
+        "road",
+        "woodcutter",
+        "tree",
+        "empty"
+      ]
+    ],
+    "difficulty": "Expert",
+    "difficultyMetrics": {
+      "score": 81,
+      "tier": "Expert",
+      "maxRuleLevel": 4,
+      "maxRuleName": "Road Entry Point",
+      "stepCount": 32,
+      "density": 0.53,
+      "filledTiles": 19
+    },
+    "difficultyScore": 81,
+    "density": 0.53
+  },
+  {
+    "id": 78,
+    "chapter": 5,
+    "chapterName": "Master Architect",
+    "title": "Emerald Basin",
+    "size": 6,
+    "initialGrid": [
+      [
+        "tree",
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "empty"
+      ],
+      [
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "rock"
+      ],
+      [
+        "empty",
+        "rock",
+        "empty",
+        "empty",
+        "empty",
+        "empty"
+      ],
+      [
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "empty"
+      ],
+      [
+        "rock",
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "empty"
+      ],
+      [
+        "tree",
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "empty"
+      ]
+    ],
+    "rowClues": [
+      1,
+      1,
+      1,
+      1,
+      2,
+      2
+    ],
+    "colClues": [
+      3,
+      2,
+      1,
+      2,
+      0,
+      0
+    ],
+    "inventory": {
+      "house": 3,
+      "woodcutter": 2,
+      "road": 7,
+      "farm": 2,
+      "town_hall": 1
+    },
+    "solution": [
+      [
+        "tree",
+        "empty",
+        "town_hall",
+        "empty",
+        "empty",
+        "empty"
+      ],
+      [
+        "woodcutter",
+        "road",
+        "road",
+        "empty",
+        "empty",
+        "rock"
+      ],
+      [
+        "house",
+        "rock",
+        "road",
+        "empty",
+        "empty",
+        "empty"
+      ],
+      [
+        "farm",
+        "road",
+        "road",
+        "empty",
+        "empty",
+        "empty"
+      ],
+      [
+        "rock",
+        "house",
+        "road",
+        "farm",
+        "empty",
+        "empty"
+      ],
+      [
+        "tree",
+        "woodcutter",
+        "road",
+        "house",
+        "empty",
+        "empty"
+      ]
+    ],
+    "difficulty": "Expert",
+    "difficultyMetrics": {
+      "score": 81,
+      "tier": "Expert",
+      "maxRuleLevel": 4,
+      "maxRuleName": "Road Entry Point",
+      "stepCount": 31,
+      "density": 0.56,
+      "filledTiles": 20
+    },
+    "difficultyScore": 81,
+    "density": 0.56
+  },
+  {
+    "id": 79,
+    "chapter": 5,
+    "chapterName": "Master Architect",
+    "title": "Old Oak Stronghold",
+    "size": 6,
+    "initialGrid": [
+      [
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "empty"
+      ],
+      [
+        "tree",
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "empty"
+      ],
+      [
+        "rock",
+        "tree",
+        "empty",
+        "tree",
+        "empty",
+        "empty"
+      ],
+      [
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "rock"
+      ],
+      [
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "empty"
+      ],
+      [
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "empty"
+      ]
+    ],
+    "rowClues": [
+      2,
+      1,
+      0,
+      2,
+      1,
+      2
+    ],
+    "colClues": [
+      1,
+      2,
+      2,
+      2,
+      1,
+      0
+    ],
+    "inventory": {
+      "house": 3,
+      "woodcutter": 2,
+      "road": 6,
+      "farm": 2,
+      "town_hall": 1
+    },
+    "solution": [
+      [
+        "empty",
+        "house",
+        "farm",
+        "empty",
+        "empty",
+        "empty"
+      ],
+      [
+        "tree",
+        "woodcutter",
+        "road",
+        "empty",
+        "empty",
+        "empty"
+      ],
+      [
+        "rock",
+        "tree",
+        "road",
+        "tree",
+        "empty",
+        "empty"
+      ],
+      [
+        "empty",
+        "empty",
+        "road",
+        "woodcutter",
+        "house",
+        "rock"
+      ],
+      [
+        "town_hall",
+        "road",
+        "road",
+        "road",
+        "empty",
+        "empty"
+      ],
+      [
+        "empty",
+        "empty",
+        "house",
+        "farm",
+        "empty",
+        "empty"
+      ]
+    ],
+    "difficulty": "Expert",
+    "difficultyMetrics": {
+      "score": 80,
+      "tier": "Expert",
+      "maxRuleLevel": 4,
+      "maxRuleName": "Road Entry Point",
+      "stepCount": 31,
+      "density": 0.53,
+      "filledTiles": 19
+    },
+    "difficultyScore": 80,
+    "density": 0.53
+  },
+  {
+    "id": 80,
+    "chapter": 5,
+    "chapterName": "Master Architect",
+    "title": "Merchant’s Guild",
+    "size": 6,
+    "initialGrid": [
+      [
+        "empty",
+        "rock",
+        "empty",
+        "empty",
+        "empty",
+        "empty"
+      ],
+      [
+        "empty",
+        "tree",
+        "empty",
+        "empty",
+        "empty",
+        "empty"
+      ],
+      [
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "tree"
+      ],
+      [
+        "empty",
+        "tree",
+        "empty",
+        "empty",
+        "empty",
+        "empty"
+      ],
+      [
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "empty"
+      ],
+      [
+        "empty",
+        "empty",
+        "empty",
+        "rock",
+        "empty",
+        "empty"
+      ]
+    ],
+    "rowClues": [
+      1,
+      0,
+      3,
+      2,
+      1,
+      1
+    ],
+    "colClues": [
+      1,
+      1,
+      2,
+      1,
+      2,
+      1
+    ],
+    "inventory": {
+      "house": 3,
+      "woodcutter": 2,
+      "road": 7,
+      "farm": 2,
+      "town_hall": 1
+    },
+    "solution": [
+      [
+        "empty",
+        "rock",
+        "empty",
+        "town_hall",
+        "empty",
+        "empty"
+      ],
+      [
+        "empty",
+        "tree",
+        "empty",
+        "road",
+        "empty",
+        "empty"
+      ],
+      [
+        "house",
+        "woodcutter",
+        "road",
+        "road",
+        "farm",
+        "tree"
+      ],
+      [
+        "empty",
+        "tree",
+        "empty",
+        "road",
+        "house",
+        "woodcutter"
+      ],
+      [
+        "empty",
+        "empty",
+        "farm",
+        "road",
+        "road",
+        "road"
+      ],
+      [
+        "empty",
+        "empty",
+        "house",
+        "rock",
+        "empty",
+        "empty"
+      ]
+    ],
+    "difficulty": "Expert",
+    "difficultyMetrics": {
+      "score": 81,
+      "tier": "Expert",
+      "maxRuleLevel": 4,
+      "maxRuleName": "Road Entry Point",
+      "stepCount": 31,
+      "density": 0.56,
+      "filledTiles": 20
+    },
+    "difficultyScore": 81,
+    "density": 0.56
+  },
+  {
+    "id": 81,
+    "chapter": 5,
+    "chapterName": "Master Architect",
+    "title": "Crown Province",
+    "size": 6,
+    "initialGrid": [
+      [
+        "tree",
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "empty"
+      ],
+      [
+        "empty",
+        "empty",
+        "rock",
+        "empty",
+        "empty",
+        "empty"
+      ],
+      [
+        "empty",
+        "rock",
+        "empty",
+        "empty",
+        "empty",
+        "empty"
+      ],
+      [
+        "empty",
+        "rock",
+        "empty",
+        "empty",
+        "empty",
+        "empty"
+      ],
+      [
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "empty"
+      ],
+      [
+        "empty",
+        "tree",
+        "empty",
+        "empty",
+        "empty",
+        "empty"
+      ]
+    ],
+    "rowClues": [
+      1,
+      1,
+      0,
+      2,
+      1,
+      3
+    ],
+    "colClues": [
+      2,
+      2,
+      1,
+      2,
+      1,
+      0
+    ],
+    "inventory": {
+      "house": 3,
+      "woodcutter": 2,
+      "road": 8,
+      "farm": 2,
+      "town_hall": 1
+    },
+    "solution": [
+      [
+        "tree",
+        "woodcutter",
+        "road",
+        "road",
+        "empty",
+        "empty"
+      ],
+      [
+        "empty",
+        "house",
+        "rock",
+        "road",
+        "empty",
+        "empty"
+      ],
+      [
+        "empty",
+        "rock",
+        "empty",
+        "road",
+        "empty",
+        "empty"
+      ],
+      [
+        "house",
+        "rock",
+        "empty",
+        "town_hall",
+        "empty",
+        "empty"
+      ],
+      [
+        "farm",
+        "road",
+        "road",
+        "road",
+        "road",
+        "empty"
+      ],
+      [
+        "empty",
+        "tree",
+        "woodcutter",
+        "house",
+        "farm",
+        "empty"
+      ]
+    ],
+    "difficulty": "Expert",
+    "difficultyMetrics": {
+      "score": 81,
+      "tier": "Expert",
+      "maxRuleLevel": 4,
+      "maxRuleName": "Road Entry Point",
+      "stepCount": 31,
+      "density": 0.58,
+      "filledTiles": 21
+    },
+    "difficultyScore": 81,
+    "density": 0.58
+  },
+  {
+    "id": 82,
+    "chapter": 5,
+    "chapterName": "Master Architect",
+    "title": "Grand Capital",
+    "size": 6,
+    "initialGrid": [
+      [
+        "rock",
+        "tree",
+        "empty",
+        "empty",
+        "empty",
+        "empty"
+      ],
+      [
+        "tree",
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "rock"
+      ],
+      [
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "empty"
+      ],
+      [
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "empty"
+      ],
+      [
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "empty"
+      ],
+      [
+        "empty",
+        "tree",
+        "empty",
+        "empty",
+        "empty",
+        "empty"
+      ]
+    ],
+    "rowClues": [
+      0,
+      3,
+      0,
+      2,
+      1,
+      2
+    ],
+    "colClues": [
+      0,
+      2,
+      3,
+      2,
+      0,
+      1
+    ],
+    "inventory": {
+      "house": 3,
+      "woodcutter": 2,
+      "road": 7,
+      "farm": 2,
+      "town_hall": 1
+    },
+    "solution": [
+      [
+        "rock",
+        "tree",
+        "empty",
+        "empty",
+        "empty",
+        "empty"
+      ],
+      [
+        "tree",
+        "woodcutter",
+        "house",
+        "farm",
+        "empty",
+        "rock"
+      ],
+      [
+        "empty",
+        "road",
+        "road",
+        "road",
+        "empty",
+        "empty"
+      ],
+      [
+        "empty",
+        "house",
+        "farm",
+        "road",
+        "empty",
+        "empty"
+      ],
+      [
+        "empty",
+        "empty",
+        "road",
+        "road",
+        "road",
+        "town_hall"
+      ],
+      [
+        "empty",
+        "tree",
+        "woodcutter",
+        "house",
+        "empty",
+        "empty"
+      ]
+    ],
+    "difficulty": "Expert",
+    "difficultyMetrics": {
+      "score": 81,
+      "tier": "Expert",
+      "maxRuleLevel": 4,
+      "maxRuleName": "Road Entry Point",
+      "stepCount": 31,
+      "density": 0.56,
+      "filledTiles": 20
+    },
+    "difficultyScore": 81,
+    "density": 0.56
+  },
+  {
+    "id": 83,
+    "chapter": 5,
+    "chapterName": "Master Architect",
+    "title": "Castle Hill",
+    "size": 6,
+    "initialGrid": [
+      [
+        "empty",
+        "rock",
+        "empty",
+        "empty",
+        "empty",
+        "empty"
+      ],
+      [
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "empty"
+      ],
+      [
+        "tree",
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "empty"
+      ],
+      [
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "empty"
+      ],
+      [
+        "empty",
+        "empty",
+        "empty",
+        "tree",
+        "empty",
+        "empty"
+      ],
+      [
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "rock",
+        "empty"
+      ]
+    ],
+    "rowClues": [
+      1,
+      1,
+      0,
+      2,
+      2,
+      2
+    ],
+    "colClues": [
+      3,
+      0,
+      3,
+      2,
+      0,
+      0
+    ],
+    "inventory": {
+      "house": 3,
+      "woodcutter": 2,
+      "road": 7,
+      "farm": 2,
+      "town_hall": 1
+    },
+    "solution": [
+      [
+        "house",
+        "rock",
+        "empty",
+        "empty",
+        "empty",
+        "empty"
+      ],
+      [
+        "woodcutter",
+        "road",
+        "empty",
+        "empty",
+        "empty",
+        "empty"
+      ],
+      [
+        "tree",
+        "road",
+        "road",
+        "road",
+        "empty",
+        "empty"
+      ],
+      [
+        "empty",
+        "road",
+        "house",
+        "farm",
+        "empty",
+        "empty"
+      ],
+      [
+        "town_hall",
+        "road",
+        "woodcutter",
+        "tree",
+        "empty",
+        "empty"
+      ],
+      [
+        "empty",
+        "road",
+        "farm",
+        "house",
+        "rock",
+        "empty"
+      ]
+    ],
+    "difficulty": "Expert",
+    "difficultyMetrics": {
+      "score": 81,
+      "tier": "Expert",
+      "maxRuleLevel": 4,
+      "maxRuleName": "Road Entry Point",
+      "stepCount": 32,
+      "density": 0.53,
+      "filledTiles": 19
+    },
+    "difficultyScore": 81,
+    "density": 0.53
+  },
+  {
+    "id": 84,
+    "chapter": 5,
+    "chapterName": "Master Architect",
+    "title": "Sovereign Spire",
+    "size": 6,
+    "initialGrid": [
+      [
+        "empty",
+        "empty",
+        "empty",
+        "rock",
+        "empty",
+        "empty"
+      ],
+      [
+        "rock",
+        "empty",
+        "tree",
+        "empty",
+        "empty",
+        "empty"
+      ],
+      [
+        "empty",
+        "empty",
+        "empty",
+        "tree",
+        "empty",
+        "tree"
+      ],
+      [
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "empty"
+      ],
+      [
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "empty"
+      ],
+      [
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "empty"
+      ]
+    ],
+    "rowClues": [
+      0,
+      1,
+      2,
+      2,
+      2,
+      1
+    ],
+    "colClues": [
+      1,
+      0,
+      2,
+      0,
+      2,
+      3
+    ],
+    "inventory": {
+      "house": 3,
+      "woodcutter": 2,
+      "road": 8,
+      "farm": 2,
+      "town_hall": 1
+    },
+    "solution": [
+      [
+        "empty",
+        "empty",
+        "empty",
+        "rock",
+        "empty",
+        "empty"
+      ],
+      [
+        "rock",
+        "empty",
+        "tree",
+        "empty",
+        "house",
+        "empty"
+      ],
+      [
+        "empty",
+        "road",
+        "woodcutter",
+        "tree",
+        "farm",
+        "tree"
+      ],
+      [
+        "empty",
+        "road",
+        "house",
+        "empty",
+        "road",
+        "woodcutter"
+      ],
+      [
+        "town_hall",
+        "road",
+        "road",
+        "road",
+        "road",
+        "house"
+      ],
+      [
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "road",
+        "farm"
+      ]
+    ],
+    "difficulty": "Expert",
+    "difficultyMetrics": {
+      "score": 81,
+      "tier": "Expert",
+      "maxRuleLevel": 4,
+      "maxRuleName": "Road Entry Point",
+      "stepCount": 31,
+      "density": 0.58,
+      "filledTiles": 21
+    },
+    "difficultyScore": 81,
+    "density": 0.58
+  },
+  {
+    "id": 85,
+    "chapter": 5,
+    "chapterName": "Master Architect",
+    "title": "Archon’s Reach",
+    "size": 6,
+    "initialGrid": [
+      [
+        "empty",
+        "empty",
+        "tree",
+        "empty",
+        "empty",
+        "empty"
+      ],
+      [
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "rock",
+        "empty"
+      ],
+      [
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "empty"
+      ],
+      [
+        "empty",
+        "rock",
+        "empty",
+        "empty",
+        "empty",
+        "empty"
+      ],
+      [
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "tree"
+      ],
+      [
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "tree",
+        "empty"
+      ]
+    ],
+    "rowClues": [
+      1,
+      1,
+      2,
+      1,
+      1,
+      2
+    ],
+    "colClues": [
+      2,
+      2,
+      2,
+      0,
+      2,
+      0
+    ],
+    "inventory": {
+      "house": 3,
+      "woodcutter": 2,
+      "road": 8,
+      "farm": 2,
+      "town_hall": 1
+    },
+    "solution": [
+      [
+        "town_hall",
+        "empty",
+        "tree",
+        "empty",
+        "empty",
+        "empty"
+      ],
+      [
+        "road",
+        "road",
+        "woodcutter",
+        "empty",
+        "rock",
+        "empty"
+      ],
+      [
+        "road",
+        "farm",
+        "house",
+        "empty",
+        "empty",
+        "empty"
+      ],
+      [
+        "road",
+        "rock",
+        "empty",
+        "empty",
+        "house",
+        "empty"
+      ],
+      [
+        "road",
+        "road",
+        "road",
+        "road",
+        "woodcutter",
+        "tree"
+      ],
+      [
+        "farm",
+        "house",
+        "empty",
+        "empty",
+        "tree",
+        "empty"
+      ]
+    ],
+    "difficulty": "Expert",
+    "difficultyMetrics": {
+      "score": 81,
+      "tier": "Expert",
+      "maxRuleLevel": 4,
+      "maxRuleName": "Road Entry Point",
+      "stepCount": 31,
+      "density": 0.58,
+      "filledTiles": 21
+    },
+    "difficultyScore": 81,
+    "density": 0.58
+  },
+  {
+    "id": 86,
+    "chapter": 5,
+    "chapterName": "Master Architect",
+    "title": "Royal Citadel",
+    "size": 6,
+    "initialGrid": [
+      [
+        "empty",
+        "empty",
+        "empty",
+        "tree",
+        "empty",
+        "empty"
+      ],
+      [
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "empty"
+      ],
+      [
+        "tree",
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "empty"
+      ],
+      [
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "empty"
+      ],
+      [
+        "empty",
+        "empty",
+        "empty",
+        "rock",
+        "rock",
+        "empty"
+      ],
+      [
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "empty"
+      ]
+    ],
+    "rowClues": [
+      2,
+      3,
+      2,
+      0,
+      1,
+      0
+    ],
+    "colClues": [
+      2,
+      1,
+      3,
+      0,
+      2,
+      0
+    ],
+    "inventory": {
+      "house": 3,
+      "woodcutter": 2,
+      "road": 8,
+      "farm": 2,
+      "town_hall": 1
+    },
+    "solution": [
+      [
+        "house",
+        "road",
+        "woodcutter",
+        "tree",
+        "empty",
+        "empty"
+      ],
+      [
+        "woodcutter",
+        "road",
+        "house",
+        "road",
+        "farm",
+        "empty"
+      ],
+      [
+        "tree",
+        "road",
+        "farm",
+        "road",
+        "house",
+        "empty"
+      ],
+      [
+        "empty",
+        "road",
+        "road",
+        "road",
+        "empty",
+        "empty"
+      ],
+      [
+        "empty",
+        "town_hall",
+        "empty",
+        "rock",
+        "rock",
+        "empty"
+      ],
+      [
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "empty"
+      ]
+    ],
+    "difficulty": "Expert",
+    "difficultyMetrics": {
+      "score": 82,
+      "tier": "Expert",
+      "maxRuleLevel": 4,
+      "maxRuleName": "Road Entry Point",
+      "stepCount": 32,
+      "density": 0.56,
+      "filledTiles": 20
+    },
+    "difficultyScore": 82,
+    "density": 0.56
+  },
+  {
+    "id": 87,
+    "chapter": 5,
+    "chapterName": "Master Architect",
+    "title": "Cathedral Ward",
+    "size": 6,
+    "initialGrid": [
+      [
+        "empty",
+        "rock",
+        "empty",
+        "empty",
+        "empty",
+        "empty"
+      ],
+      [
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "empty"
+      ],
+      [
+        "tree",
+        "empty",
+        "rock",
+        "empty",
+        "empty",
+        "empty"
+      ],
+      [
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "tree",
+        "empty"
+      ],
+      [
+        "empty",
+        "empty",
+        "empty",
+        "tree",
+        "empty",
+        "empty"
+      ],
+      [
+        "empty",
+        "empty",
+        "rock",
+        "empty",
+        "empty",
+        "empty"
+      ]
+    ],
+    "rowClues": [
+      3,
+      2,
+      0,
+      2,
+      1,
+      0
+    ],
+    "colClues": [
+      2,
+      0,
+      2,
+      2,
+      0,
+      2
+    ],
+    "inventory": {
+      "house": 3,
+      "woodcutter": 2,
+      "road": 8,
+      "farm": 2,
+      "town_hall": 1
+    },
+    "solution": [
+      [
+        "house",
+        "rock",
+        "empty",
+        "town_hall",
+        "road",
+        "farm"
+      ],
+      [
+        "woodcutter",
+        "road",
+        "road",
+        "road",
+        "empty",
+        "house"
+      ],
+      [
+        "tree",
+        "road",
+        "rock",
+        "road",
+        "empty",
+        "empty"
+      ],
+      [
+        "empty",
+        "road",
+        "house",
+        "woodcutter",
+        "tree",
+        "empty"
+      ],
+      [
+        "empty",
+        "road",
+        "farm",
+        "tree",
+        "empty",
+        "empty"
+      ],
+      [
+        "empty",
+        "empty",
+        "rock",
+        "empty",
+        "empty",
+        "empty"
+      ]
+    ],
+    "difficulty": "Expert",
+    "difficultyMetrics": {
+      "score": 81,
+      "tier": "Expert",
+      "maxRuleLevel": 4,
+      "maxRuleName": "Road Entry Point",
+      "stepCount": 30,
+      "density": 0.61,
+      "filledTiles": 22
+    },
+    "difficultyScore": 81,
+    "density": 0.61
+  },
+  {
+    "id": 88,
+    "chapter": 5,
+    "chapterName": "Master Architect",
+    "title": "Imperial Crossing",
+    "size": 6,
+    "initialGrid": [
+      [
+        "tree",
+        "empty",
+        "empty",
+        "empty",
+        "rock",
+        "tree"
+      ],
+      [
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "empty"
+      ],
+      [
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "empty"
+      ],
+      [
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "empty"
+      ],
+      [
+        "empty",
+        "empty",
+        "tree",
+        "empty",
+        "empty",
+        "empty"
+      ],
+      [
+        "empty",
+        "empty",
+        "empty",
+        "rock",
+        "empty",
+        "empty"
+      ]
+    ],
+    "rowClues": [
+      2,
+      3,
+      1,
+      3,
+      0,
+      0
+    ],
+    "colClues": [
+      0,
+      3,
+      2,
+      1,
+      2,
+      1
+    ],
+    "inventory": {
+      "house": 3,
+      "woodcutter": 3,
+      "road": 6,
+      "farm": 2,
+      "town_hall": 1
+    },
+    "solution": [
+      [
+        "tree",
+        "woodcutter",
+        "house",
+        "empty",
+        "rock",
+        "tree"
+      ],
+      [
+        "empty",
+        "road",
+        "road",
+        "farm",
+        "house",
+        "woodcutter"
+      ],
+      [
+        "empty",
+        "farm",
+        "road",
+        "road",
+        "road",
+        "road"
+      ],
+      [
+        "empty",
+        "house",
+        "woodcutter",
+        "empty",
+        "town_hall",
+        "empty"
+      ],
+      [
+        "empty",
+        "empty",
+        "tree",
+        "empty",
+        "empty",
+        "empty"
+      ],
+      [
+        "empty",
+        "empty",
+        "empty",
+        "rock",
+        "empty",
+        "empty"
+      ]
+    ],
+    "difficulty": "Expert",
+    "difficultyMetrics": {
+      "score": 81,
+      "tier": "Expert",
+      "maxRuleLevel": 4,
+      "maxRuleName": "Road Entry Point",
+      "stepCount": 31,
+      "density": 0.56,
+      "filledTiles": 20
+    },
+    "difficultyScore": 81,
+    "density": 0.56
+  },
+  {
+    "id": 89,
+    "chapter": 5,
+    "chapterName": "Master Architect",
+    "title": "Duchy Stronghold",
+    "size": 6,
+    "initialGrid": [
+      [
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "empty"
+      ],
+      [
+        "tree",
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "empty"
+      ],
+      [
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "empty"
+      ],
+      [
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "tree"
+      ],
+      [
+        "empty",
+        "tree",
+        "empty",
+        "empty",
+        "tree",
+        "empty"
+      ],
+      [
+        "empty",
+        "empty",
+        "empty",
+        "rock",
+        "empty",
+        "rock"
+      ]
+    ],
+    "rowClues": [
+      3,
+      1,
+      1,
+      3,
+      1,
+      0
+    ],
+    "colClues": [
+      0,
+      3,
+      3,
+      0,
+      3,
+      0
+    ],
+    "inventory": {
+      "house": 3,
+      "woodcutter": 3,
+      "road": 7,
+      "farm": 2,
+      "town_hall": 1
+    },
+    "solution": [
+      [
+        "empty",
+        "house",
+        "farm",
+        "road",
+        "town_hall",
+        "empty"
+      ],
+      [
+        "tree",
+        "woodcutter",
+        "empty",
+        "road",
+        "empty",
+        "empty"
+      ],
+      [
+        "empty",
+        "road",
+        "road",
+        "road",
+        "house",
+        "empty"
+      ],
+      [
+        "empty",
+        "farm",
+        "house",
+        "road",
+        "woodcutter",
+        "tree"
+      ],
+      [
+        "empty",
+        "tree",
+        "woodcutter",
+        "road",
+        "tree",
+        "empty"
+      ],
+      [
+        "empty",
+        "empty",
+        "empty",
+        "rock",
+        "empty",
+        "rock"
+      ]
+    ],
+    "difficulty": "Expert",
+    "difficultyMetrics": {
+      "score": 81,
+      "tier": "Expert",
+      "maxRuleLevel": 4,
+      "maxRuleName": "Road Entry Point",
+      "stepCount": 30,
+      "density": 0.61,
+      "filledTiles": 22
+    },
+    "difficultyScore": 81,
+    "density": 0.61
+  },
+  {
+    "id": 90,
+    "chapter": 5,
+    "chapterName": "Master Architect",
+    "title": "Prince’s Bastion",
+    "size": 6,
+    "initialGrid": [
+      [
+        "empty",
+        "empty",
+        "tree",
+        "rock",
+        "empty",
+        "empty"
+      ],
+      [
+        "empty",
+        "empty",
+        "empty",
+        "tree",
+        "empty",
+        "empty"
+      ],
+      [
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "rock"
+      ],
+      [
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "empty"
+      ],
+      [
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "empty"
+      ],
+      [
+        "tree",
+        "empty",
+        "empty",
+        "tree",
+        "empty",
+        "empty"
+      ]
+    ],
+    "rowClues": [
+      0,
+      2,
+      1,
+      1,
+      3,
+      2
+    ],
+    "colClues": [
+      0,
+      3,
+      3,
+      2,
+      0,
+      1
+    ],
+    "inventory": {
+      "house": 3,
+      "woodcutter": 3,
+      "road": 8,
+      "farm": 2,
+      "town_hall": 1
+    },
+    "solution": [
+      [
+        "empty",
+        "empty",
+        "tree",
+        "rock",
+        "empty",
+        "empty"
+      ],
+      [
+        "empty",
+        "house",
+        "woodcutter",
+        "tree",
+        "empty",
+        "empty"
+      ],
+      [
+        "empty",
+        "farm",
+        "road",
+        "road",
+        "road",
+        "rock"
+      ],
+      [
+        "empty",
+        "road",
+        "road",
+        "house",
+        "road",
+        "empty"
+      ],
+      [
+        "empty",
+        "road",
+        "farm",
+        "woodcutter",
+        "road",
+        "town_hall"
+      ],
+      [
+        "tree",
+        "woodcutter",
+        "house",
+        "tree",
+        "empty",
+        "empty"
+      ]
+    ],
+    "difficulty": "Expert",
+    "difficultyMetrics": {
+      "score": 82,
+      "tier": "Expert",
+      "maxRuleLevel": 4,
+      "maxRuleName": "Road Entry Point",
+      "stepCount": 30,
+      "density": 0.64,
+      "filledTiles": 23
+    },
+    "difficultyScore": 82,
+    "density": 0.64
+  },
+  {
+    "id": 91,
+    "chapter": 5,
+    "chapterName": "Master Architect",
+    "title": "Chamberlain Way",
+    "size": 6,
+    "initialGrid": [
+      [
+        "empty",
+        "empty",
+        "rock",
+        "empty",
+        "empty",
+        "empty"
+      ],
+      [
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "tree",
+        "rock"
+      ],
+      [
+        "empty",
+        "empty",
+        "tree",
+        "tree",
+        "empty",
+        "empty"
+      ],
+      [
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "empty"
+      ],
+      [
+        "empty",
+        "empty",
+        "rock",
+        "empty",
+        "empty",
+        "empty"
+      ],
+      [
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "tree",
+        "empty"
+      ]
+    ],
+    "rowClues": [
+      0,
+      2,
+      2,
+      2,
+      0,
+      3
+    ],
+    "colClues": [
+      1,
+      1,
+      2,
+      2,
+      1,
+      2
+    ],
+    "inventory": {
+      "house": 3,
+      "woodcutter": 3,
+      "road": 8,
+      "farm": 2,
+      "town_hall": 1
+    },
+    "solution": [
+      [
+        "empty",
+        "empty",
+        "rock",
+        "empty",
+        "empty",
+        "empty"
+      ],
+      [
+        "empty",
+        "road",
+        "woodcutter",
+        "house",
+        "tree",
+        "rock"
+      ],
+      [
+        "empty",
+        "road",
+        "tree",
+        "tree",
+        "woodcutter",
+        "house"
+      ],
+      [
+        "town_hall",
+        "road",
+        "road",
+        "road",
+        "road",
+        "farm"
+      ],
+      [
+        "empty",
+        "road",
+        "rock",
+        "road",
+        "empty",
+        "empty"
+      ],
+      [
+        "empty",
+        "farm",
+        "house",
+        "woodcutter",
+        "tree",
+        "empty"
+      ]
+    ],
+    "difficulty": "Expert",
+    "difficultyMetrics": {
+      "score": 81,
+      "tier": "Expert",
+      "maxRuleLevel": 4,
+      "maxRuleName": "Road Entry Point",
+      "stepCount": 29,
+      "density": 0.67,
+      "filledTiles": 24
+    },
+    "difficultyScore": 81,
+    "density": 0.67
+  },
+  {
+    "id": 92,
+    "chapter": 5,
+    "chapterName": "Master Architect",
+    "title": "Palace Gardens",
+    "size": 6,
+    "initialGrid": [
+      [
+        "empty",
+        "empty",
+        "empty",
+        "tree",
+        "tree",
+        "empty"
+      ],
+      [
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "tree"
+      ],
+      [
+        "rock",
+        "rock",
+        "empty",
+        "rock",
+        "empty",
+        "empty"
+      ],
+      [
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "tree"
+      ],
+      [
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "empty"
+      ],
+      [
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "empty"
+      ]
+    ],
+    "rowClues": [
+      2,
+      2,
+      1,
+      1,
+      2,
+      1
+    ],
+    "colClues": [
+      0,
+      2,
+      2,
+      0,
+      3,
+      2
+    ],
+    "inventory": {
+      "house": 3,
+      "woodcutter": 3,
+      "road": 7,
+      "farm": 2,
+      "town_hall": 1
+    },
+    "solution": [
+      [
+        "empty",
+        "house",
+        "woodcutter",
+        "tree",
+        "tree",
+        "empty"
+      ],
+      [
+        "empty",
+        "farm",
+        "road",
+        "road",
+        "woodcutter",
+        "tree"
+      ],
+      [
+        "rock",
+        "rock",
+        "road",
+        "rock",
+        "house",
+        "empty"
+      ],
+      [
+        "empty",
+        "empty",
+        "road",
+        "road",
+        "farm",
+        "tree"
+      ],
+      [
+        "empty",
+        "empty",
+        "town_hall",
+        "road",
+        "road",
+        "woodcutter"
+      ],
+      [
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "house"
+      ]
+    ],
+    "difficulty": "Expert",
+    "difficultyMetrics": {
+      "score": 81,
+      "tier": "Expert",
+      "maxRuleLevel": 4,
+      "maxRuleName": "Road Entry Point",
+      "stepCount": 29,
+      "density": 0.64,
+      "filledTiles": 23
+    },
+    "difficultyScore": 81,
+    "density": 0.64
+  },
+  {
+    "id": 93,
+    "chapter": 5,
+    "chapterName": "Master Architect",
+    "title": "Monument Terrace",
+    "size": 6,
+    "initialGrid": [
+      [
+        "empty",
+        "empty",
+        "rock",
+        "empty",
+        "tree",
+        "empty"
+      ],
+      [
+        "tree",
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "empty"
+      ],
+      [
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "tree",
+        "empty"
+      ],
+      [
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "empty"
+      ],
+      [
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "tree",
+        "empty"
+      ],
+      [
+        "empty",
+        "empty",
+        "empty",
+        "rock",
+        "empty",
+        "empty"
+      ]
+    ],
+    "rowClues": [
+      0,
+      2,
+      3,
+      2,
+      1,
+      1
+    ],
+    "colClues": [
+      1,
+      3,
+      0,
+      3,
+      1,
+      1
+    ],
+    "inventory": {
+      "house": 3,
+      "woodcutter": 3,
+      "road": 8,
+      "farm": 2,
+      "town_hall": 1
+    },
+    "solution": [
+      [
+        "empty",
+        "empty",
+        "rock",
+        "empty",
+        "tree",
+        "empty"
+      ],
+      [
+        "tree",
+        "empty",
+        "road",
+        "road",
+        "woodcutter",
+        "house"
+      ],
+      [
+        "woodcutter",
+        "house",
+        "road",
+        "farm",
+        "tree",
+        "empty"
+      ],
+      [
+        "road",
+        "farm",
+        "road",
+        "house",
+        "empty",
+        "empty"
+      ],
+      [
+        "road",
+        "road",
+        "road",
+        "woodcutter",
+        "tree",
+        "empty"
+      ],
+      [
+        "empty",
+        "town_hall",
+        "empty",
+        "rock",
+        "empty",
+        "empty"
+      ]
+    ],
+    "difficulty": "Expert",
+    "difficultyMetrics": {
+      "score": 92,
+      "tier": "Expert",
+      "maxRuleLevel": 5,
+      "maxRuleName": "Logical Elimination",
+      "stepCount": 30,
+      "density": 0.64,
+      "filledTiles": 23
+    },
+    "difficultyScore": 92,
+    "density": 0.64
+  },
+  {
+    "id": 94,
+    "chapter": 5,
+    "chapterName": "Master Architect",
+    "title": "St. Jude’s Quarter",
+    "size": 6,
+    "initialGrid": [
+      [
+        "empty",
+        "empty",
+        "tree",
+        "empty",
+        "empty",
+        "empty"
+      ],
+      [
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "empty"
+      ],
+      [
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "empty"
+      ],
+      [
+        "empty",
+        "empty",
+        "tree",
+        "rock",
+        "tree",
+        "empty"
+      ],
+      [
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "rock"
+      ],
+      [
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "rock"
+      ]
+    ],
+    "rowClues": [
+      2,
+      1,
+      2,
+      1,
+      2,
+      1
+    ],
+    "colClues": [
+      1,
+      0,
+      1,
+      3,
+      3,
+      1
+    ],
+    "inventory": {
+      "house": 3,
+      "woodcutter": 3,
+      "road": 8,
+      "farm": 2,
+      "town_hall": 1
+    },
+    "solution": [
+      [
+        "empty",
+        "empty",
+        "tree",
+        "woodcutter",
+        "house",
+        "empty"
+      ],
+      [
+        "empty",
+        "empty",
+        "empty",
+        "road",
+        "farm",
+        "empty"
+      ],
+      [
+        "empty",
+        "road",
+        "road",
+        "road",
+        "woodcutter",
+        "house"
+      ],
+      [
+        "town_hall",
+        "road",
+        "tree",
+        "rock",
+        "tree",
+        "empty"
+      ],
+      [
+        "empty",
+        "road",
+        "woodcutter",
+        "house",
+        "empty",
+        "rock"
+      ],
+      [
+        "empty",
+        "road",
+        "road",
+        "farm",
+        "empty",
+        "rock"
+      ]
+    ],
+    "difficulty": "Expert",
+    "difficultyMetrics": {
+      "score": 82,
+      "tier": "Expert",
+      "maxRuleLevel": 4,
+      "maxRuleName": "Road Entry Point",
+      "stepCount": 30,
+      "density": 0.64,
+      "filledTiles": 23
+    },
+    "difficultyScore": 82,
+    "density": 0.64
+  },
+  {
+    "id": 95,
+    "chapter": 5,
+    "chapterName": "Master Architect",
+    "title": "High Chancellor",
+    "size": 6,
+    "initialGrid": [
+      [
+        "rock",
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "tree"
+      ],
+      [
+        "tree",
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "rock"
+      ],
+      [
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "tree"
+      ],
+      [
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "empty"
+      ],
+      [
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "empty"
+      ],
+      [
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "empty"
+      ]
+    ],
+    "rowClues": [
+      2,
+      0,
+      2,
+      3,
+      1,
+      1
+    ],
+    "colClues": [
+      2,
+      1,
+      0,
+      2,
+      1,
+      3
+    ],
+    "inventory": {
+      "house": 3,
+      "woodcutter": 3,
+      "road": 7,
+      "farm": 2,
+      "town_hall": 1
+    },
+    "solution": [
+      [
+        "rock",
+        "empty",
+        "empty",
+        "house",
+        "woodcutter",
+        "tree"
+      ],
+      [
+        "tree",
+        "empty",
+        "empty",
+        "empty",
+        "road",
+        "rock"
+      ],
+      [
+        "woodcutter",
+        "road",
+        "road",
+        "town_hall",
+        "road",
+        "tree"
+      ],
+      [
+        "house",
+        "farm",
+        "empty",
+        "empty",
+        "road",
+        "woodcutter"
+      ],
+      [
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "road",
+        "house"
+      ],
+      [
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "road",
+        "farm"
+      ]
+    ],
+    "difficulty": "Expert",
+    "difficultyMetrics": {
+      "score": 81,
+      "tier": "Expert",
+      "maxRuleLevel": 4,
+      "maxRuleName": "Road Entry Point",
+      "stepCount": 31,
+      "density": 0.58,
+      "filledTiles": 21
+    },
+    "difficultyScore": 81,
+    "density": 0.58
+  },
+  {
+    "id": 96,
+    "chapter": 5,
+    "chapterName": "Master Architect",
+    "title": "King’s Fortress",
+    "size": 6,
+    "initialGrid": [
+      [
+        "rock",
+        "empty",
+        "tree",
+        "empty",
+        "empty",
+        "empty"
+      ],
+      [
+        "empty",
+        "tree",
+        "empty",
+        "empty",
+        "empty",
+        "empty"
+      ],
+      [
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "empty"
+      ],
+      [
+        "tree",
+        "rock",
+        "empty",
+        "empty",
+        "empty",
+        "tree"
+      ],
+      [
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "rock"
+      ],
+      [
+        "empty",
+        "empty",
+        "rock",
+        "empty",
+        "empty",
+        "empty"
+      ]
+    ],
+    "rowClues": [
+      0,
+      2,
+      1,
+      2,
+      2,
+      2
+    ],
+    "colClues": [
+      2,
+      0,
+      3,
+      0,
+      4,
+      0
+    ],
+    "inventory": {
+      "house": 3,
+      "woodcutter": 3,
+      "road": 8,
+      "farm": 2,
+      "town_hall": 1
+    },
+    "solution": [
+      [
+        "rock",
+        "empty",
+        "tree",
+        "empty",
+        "empty",
+        "empty"
+      ],
+      [
+        "empty",
+        "tree",
+        "woodcutter",
+        "road",
+        "town_hall",
+        "empty"
+      ],
+      [
+        "empty",
+        "empty",
+        "house",
+        "road",
+        "road",
+        "empty"
+      ],
+      [
+        "tree",
+        "rock",
+        "farm",
+        "road",
+        "woodcutter",
+        "tree"
+      ],
+      [
+        "woodcutter",
+        "road",
+        "road",
+        "road",
+        "house",
+        "rock"
+      ],
+      [
+        "house",
+        "empty",
+        "rock",
+        "road",
+        "farm",
+        "empty"
+      ]
+    ],
+    "difficulty": "Expert",
+    "difficultyMetrics": {
+      "score": 81,
+      "tier": "Expert",
+      "maxRuleLevel": 4,
+      "maxRuleName": "Road Entry Point",
+      "stepCount": 28,
+      "density": 0.69,
+      "filledTiles": 25
+    },
+    "difficultyScore": 81,
+    "density": 0.69
+  },
+  {
+    "id": 97,
+    "chapter": 5,
+    "chapterName": "Master Architect",
+    "title": "Imperial Court",
+    "size": 6,
+    "initialGrid": [
+      [
+        "empty",
+        "empty",
+        "empty",
+        "tree",
+        "empty",
+        "empty"
+      ],
+      [
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "empty"
+      ],
+      [
+        "empty",
+        "empty",
+        "tree",
+        "empty",
+        "empty",
+        "empty"
+      ],
+      [
+        "tree",
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "empty"
+      ],
+      [
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "empty"
+      ],
+      [
+        "empty",
+        "empty",
+        "empty",
+        "rock",
+        "empty",
+        "rock"
+      ]
+    ],
+    "rowClues": [
+      3,
+      1,
+      2,
+      1,
+      2,
+      0
+    ],
+    "colClues": [
+      3,
+      1,
+      2,
+      0,
+      2,
+      1
+    ],
+    "inventory": {
+      "house": 3,
+      "woodcutter": 3,
+      "road": 7,
+      "farm": 2,
+      "town_hall": 1
+    },
+    "solution": [
+      [
+        "farm",
+        "road",
+        "empty",
+        "tree",
+        "woodcutter",
+        "house"
+      ],
+      [
+        "house",
+        "road",
+        "road",
+        "road",
+        "road",
+        "empty"
+      ],
+      [
+        "woodcutter",
+        "road",
+        "tree",
+        "empty",
+        "town_hall",
+        "empty"
+      ],
+      [
+        "tree",
+        "road",
+        "woodcutter",
+        "empty",
+        "empty",
+        "empty"
+      ],
+      [
+        "empty",
+        "farm",
+        "house",
+        "empty",
+        "empty",
+        "empty"
+      ],
+      [
+        "empty",
+        "empty",
+        "empty",
+        "rock",
+        "empty",
+        "rock"
+      ]
+    ],
+    "difficulty": "Expert",
+    "difficultyMetrics": {
+      "score": 81,
+      "tier": "Expert",
+      "maxRuleLevel": 4,
+      "maxRuleName": "Road Entry Point",
+      "stepCount": 31,
+      "density": 0.58,
+      "filledTiles": 21
+    },
+    "difficultyScore": 81,
+    "density": 0.58
+  },
+  {
+    "id": 98,
+    "chapter": 5,
+    "chapterName": "Master Architect",
+    "title": "Crown Zenith",
+    "size": 6,
+    "initialGrid": [
+      [
+        "empty",
+        "tree",
+        "empty",
+        "empty",
+        "empty",
+        "empty"
+      ],
+      [
+        "tree",
+        "empty",
+        "empty",
+        "empty",
+        "rock",
+        "empty"
+      ],
+      [
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "empty"
+      ],
+      [
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "rock",
+        "empty"
+      ],
+      [
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "empty"
+      ],
+      [
+        "tree",
+        "tree",
+        "empty",
+        "empty",
+        "empty",
+        "empty"
+      ]
+    ],
+    "rowClues": [
+      1,
+      2,
+      1,
+      2,
+      1,
+      2
+    ],
+    "colClues": [
+      3,
+      1,
+      4,
+      1,
+      0,
+      0
+    ],
+    "inventory": {
+      "house": 3,
+      "woodcutter": 3,
+      "road": 7,
+      "farm": 2,
+      "town_hall": 1
+    },
+    "solution": [
+      [
+        "empty",
+        "tree",
+        "farm",
+        "road",
+        "empty",
+        "empty"
+      ],
+      [
+        "tree",
+        "woodcutter",
+        "house",
+        "road",
+        "rock",
+        "empty"
+      ],
+      [
+        "farm",
+        "road",
+        "road",
+        "road",
+        "empty",
+        "empty"
+      ],
+      [
+        "house",
+        "empty",
+        "town_hall",
+        "empty",
+        "rock",
+        "empty"
+      ],
+      [
+        "woodcutter",
+        "road",
+        "road",
+        "empty",
+        "empty",
+        "empty"
+      ],
+      [
+        "tree",
+        "tree",
+        "woodcutter",
+        "house",
+        "empty",
+        "empty"
+      ]
+    ],
+    "difficulty": "Expert",
+    "difficultyMetrics": {
+      "score": 81,
+      "tier": "Expert",
+      "maxRuleLevel": 4,
+      "maxRuleName": "Road Entry Point",
+      "stepCount": 30,
+      "density": 0.61,
+      "filledTiles": 22
+    },
+    "difficultyScore": 81,
+    "density": 0.61
+  },
+  {
+    "id": 99,
+    "chapter": 5,
+    "chapterName": "Master Architect",
+    "title": "Grand Metropolis",
+    "size": 6,
+    "initialGrid": [
+      [
+        "tree",
+        "empty",
+        "rock",
+        "empty",
+        "empty",
+        "empty"
+      ],
+      [
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "empty"
+      ],
+      [
+        "empty",
+        "empty",
+        "rock",
+        "empty",
+        "empty",
+        "empty"
+      ],
+      [
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "empty"
+      ],
+      [
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "empty"
+      ],
+      [
+        "empty",
+        "empty",
+        "tree",
+        "empty",
+        "empty",
+        "tree"
+      ]
+    ],
+    "rowClues": [
+      0,
+      2,
+      1,
+      2,
+      1,
+      3
+    ],
+    "colClues": [
+      2,
+      2,
+      0,
+      1,
+      2,
+      2
+    ],
+    "inventory": {
+      "house": 3,
+      "woodcutter": 3,
+      "road": 7,
+      "farm": 2,
+      "town_hall": 1
+    },
+    "solution": [
+      [
+        "tree",
+        "empty",
+        "rock",
+        "empty",
+        "empty",
+        "empty"
+      ],
+      [
+        "woodcutter",
+        "house",
+        "empty",
+        "empty",
+        "empty",
+        "empty"
+      ],
+      [
+        "road",
+        "farm",
+        "rock",
+        "empty",
+        "empty",
+        "empty"
+      ],
+      [
+        "road",
+        "empty",
+        "empty",
+        "empty",
+        "farm",
+        "house"
+      ],
+      [
+        "road",
+        "road",
+        "road",
+        "road",
+        "road",
+        "woodcutter"
+      ],
+      [
+        "town_hall",
+        "empty",
+        "tree",
+        "woodcutter",
+        "house",
+        "tree"
+      ]
+    ],
+    "difficulty": "Expert",
+    "difficultyMetrics": {
+      "score": 81,
+      "tier": "Expert",
+      "maxRuleLevel": 4,
+      "maxRuleName": "Road Entry Point",
+      "stepCount": 31,
+      "density": 0.58,
+      "filledTiles": 21
+    },
+    "difficultyScore": 81,
+    "density": 0.58
+  },
+  {
+    "id": 100,
+    "chapter": 5,
+    "chapterName": "Master Architect",
+    "title": "The Eternal City",
+    "size": 6,
+    "initialGrid": [
+      [
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "empty"
+      ],
+      [
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "empty"
+      ],
+      [
+        "tree",
+        "rock",
+        "empty",
+        "rock",
+        "empty",
+        "empty"
+      ],
+      [
+        "empty",
+        "empty",
+        "empty",
+        "tree",
+        "empty",
+        "empty"
+      ],
+      [
+        "empty",
+        "empty",
+        "tree",
+        "tree",
+        "empty",
+        "empty"
+      ],
+      [
+        "empty",
+        "empty",
+        "empty",
+        "rock",
+        "tree",
+        "empty"
+      ]
+    ],
+    "rowClues": [
+      3,
+      1,
+      0,
+      3,
+      2,
+      0
+    ],
+    "colClues": [
+      2,
+      2,
+      1,
+      0,
+      2,
+      2
+    ],
+    "inventory": {
+      "house": 3,
+      "woodcutter": 3,
+      "road": 7,
+      "farm": 2,
+      "town_hall": 1
+    },
+    "solution": [
+      [
+        "house",
+        "farm",
+        "empty",
+        "empty",
+        "town_hall",
+        "empty"
+      ],
+      [
+        "woodcutter",
+        "road",
+        "road",
+        "road",
+        "road",
+        "empty"
+      ],
+      [
+        "tree",
+        "rock",
+        "road",
+        "rock",
+        "road",
+        "empty"
+      ],
+      [
+        "empty",
+        "house",
+        "woodcutter",
+        "tree",
+        "road",
+        "farm"
+      ],
+      [
+        "empty",
+        "empty",
+        "tree",
+        "tree",
+        "woodcutter",
+        "house"
+      ],
+      [
+        "empty",
+        "empty",
+        "empty",
+        "rock",
+        "tree",
+        "empty"
+      ]
+    ],
+    "difficulty": "Expert",
+    "difficultyMetrics": {
+      "score": 80,
+      "tier": "Expert",
+      "maxRuleLevel": 4,
+      "maxRuleName": "Road Entry Point",
+      "stepCount": 28,
+      "density": 0.67,
+      "filledTiles": 24
+    },
+    "difficultyScore": 80,
+    "density": 0.67
+  }
+]

@@ -49,6 +49,16 @@ export interface Coord {
   c: number;
 }
 
+export interface DifficultyMetrics {
+  score: number;
+  tier: 'Easy' | 'Medium' | 'Hard' | 'Expert';
+  maxRuleLevel: number;
+  maxRuleName: string;
+  stepCount: number;
+  density: number;
+  filledTiles: number;
+}
+
 export interface LevelDefinition {
   id: number;
   chapter: number;
@@ -61,6 +71,9 @@ export interface LevelDefinition {
   inventory: Record<PlaceableType, number>;
   solution: TileType[][];
   difficulty: 'Easy' | 'Medium' | 'Hard' | 'Expert';
+  difficultyScore?: number;
+  difficultyMetrics?: DifficultyMetrics;
+  density?: number;
   tutorialTip?: string;
 }
 

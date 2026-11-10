@@ -138,23 +138,68 @@ body,
   background: var(--plaque-cream);
   border: 2.5px solid #59351c;
   border-radius: 9px;
-  padding: 6px 24px;
+  padding: 6px 20px;
   text-align: center;
   min-width: 210px;
 }
 
+.plaque-top-row {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+}
+
 .plaque-title {
   font-family: var(--font-display);
-  font-size: clamp(1.1rem, 2.5vw, 1.45rem);
+  font-size: clamp(1rem, 2.3vw, 1.35rem);
   font-weight: 700;
   color: #4a3322;
   line-height: 1.15;
 }
 
 .plaque-subtitle {
-  font-size: clamp(0.82rem, 1.8vw, 0.96rem);
+  font-size: clamp(0.78rem, 1.6vw, 0.92rem);
   font-weight: 700;
   color: #7c5c43;
+}
+
+.diff-pill {
+  display: inline-flex;
+  align-items: center;
+  font-family: var(--font-body);
+  font-size: 0.68rem;
+  font-weight: 800;
+  padding: 1px 6px;
+  border-radius: 999px;
+  border: 1.5px solid currentColor;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+  white-space: nowrap;
+}
+
+.diff-easy {
+  background: #dcfce7;
+  color: #15803d;
+  border-color: #86efac;
+}
+
+.diff-medium {
+  background: #fef3c7;
+  color: #b45309;
+  border-color: #fcd34d;
+}
+
+.diff-hard {
+  background: #ffedd5;
+  color: #c2410c;
+  border-color: #fdba74;
+}
+
+.diff-expert {
+  background: #f3e8ff;
+  color: #7e22ce;
+  border-color: #d8b4fe;
 }
 
 /* Top-Right Circular Action Buttons */
@@ -821,6 +866,77 @@ body,
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
+}
+
+.chapter-filter-tabs {
+  display: flex;
+  gap: 6px;
+  padding: 0 16px 12px;
+  overflow-x: auto;
+  border-bottom: 2px solid #ecd5b6;
+  scrollbar-width: none;
+}
+
+.chapter-filter-tabs::-webkit-scrollbar {
+  display: none;
+}
+
+.chapter-tab-btn {
+  white-space: nowrap;
+  background: #f6eedf;
+  border: 2px solid var(--ink);
+  border-radius: 20px;
+  padding: 4px 12px;
+  font-size: 0.78rem;
+  font-weight: 800;
+  font-family: var(--font-display);
+  color: #553c29;
+  cursor: pointer;
+  transition: all 0.12s ease;
+}
+
+.chapter-tab-btn:hover {
+  background: #fff;
+  transform: translateY(-1px);
+}
+
+.chapter-tab-btn.active {
+  background: #553c29;
+  color: #fff;
+  border-color: #553c29;
+}
+
+.chapter-section-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 8px;
+}
+
+.chapter-count-tag {
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: #8a643b;
+  background: #f0e2cc;
+  padding: 2px 8px;
+  border-radius: 10px;
+}
+
+.level-card-meta {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 4px;
+  margin: 1px 0;
+}
+
+.density-tag {
+  font-size: 0.68rem;
+  font-weight: 700;
+  color: #553c29;
+  background: #e9dac0;
+  padding: 1px 5px;
+  border-radius: 4px;
 }
 
 .level-card-stars {
