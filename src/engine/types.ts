@@ -20,11 +20,11 @@ export const BUILDING_TYPES: BuildingType[] = [
 ];
 
 export const PLACEABLE_TYPES: PlaceableType[] = [
-  'house',
   'woodcutter',
-  'road',
+  'house',
   'farm',
-  'town_hall'
+  'town_hall',
+  'road'
 ];
 
 export function isBuilding(tile: TileType): tile is BuildingType {
@@ -57,6 +57,7 @@ export interface DifficultyMetrics {
   stepCount: number;
   density: number;
   filledTiles: number;
+  lookaheadCount?: number;
 }
 
 export interface LevelDefinition {
@@ -91,13 +92,25 @@ export interface BoardValidationResult {
   remainingInventory: Record<PlaceableType, number>;
 }
 
+export interface HintStep {
+  title?: string;
+  message: string;
+  focusCells?: Coord[];
+  candidateCells?: Coord[];
+  discardedCells?: Coord[];
+  targetCell?: Coord;
+  highlightLine?: { axis: 'row' | 'col'; index: number };
+}
+
 export interface DeductionHint {
   r: number;
   c: number;
   action: 'place' | 'mark_empty';
+  lineAction?: { axis: 'row' | 'col'; index: number };
   tileType?: PlaceableType;
   ruleName: string;
   explanation: string;
+  steps?: HintStep[];
 }
 
 export const BUILDING_METADATA: Record<

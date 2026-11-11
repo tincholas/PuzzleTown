@@ -3,6 +3,7 @@ import {
   BoardValidationResult,
   Coord,
   DeductionHint,
+  HintStep,
   isFixedObstacle,
   LevelDefinition,
   PlaceableType,
@@ -20,6 +21,7 @@ interface GameBoardProps {
   actionMode: TouchActionMode;
   validation: BoardValidationResult;
   activeHint: DeductionHint | null;
+  activeHintStep?: HintStep | null;
   selectedCell: Coord | null;
   justPlacedCell?: Coord | null;
   newlyBuiltCells?: Record<string, number>;
@@ -68,6 +70,7 @@ export const GameBoard: React.FC<GameBoardProps> = ({
   actionMode,
   validation,
   activeHint,
+  activeHintStep,
   selectedCell,
   justPlacedCell,
   newlyBuiltCells,
@@ -174,12 +177,16 @@ export const GameBoard: React.FC<GameBoardProps> = ({
           const remaining = clue - current;
           const isColAnimating =
             animatingLine?.axis === 'col' && animatingLine?.index === c;
+          const isColHinted = Boolean(
+            activeHintStep?.highlightLine?.axis === 'col' &&
+              activeHintStep.highlightLine.index === c
+          );
 
           return (
             <button
               key={`col-${c}`}
               type="button"
-              className={`clue-badge col-clue status-${status} ${remaining === 0 ? 'clue-zero' : ''} ${isColAnimating ? 'clue-animating' : ''}`}
+              className={`clue-badge col-clue status-${status} ${remaining === 0 ? 'clue-zero' : ''} ${isColAnimating ? 'clue-animating' : ''} ${isColHinted ? 'clue-hint-highlight' : ''}`}
               onClick={() => onLineClueClick('col', c)}
               title={`Column ${c + 1}: ${remaining} more building(s) needed (${current}/${clue} placed). Tap to mark remaining empty spots.`}
             >
@@ -196,12 +203,16 @@ export const GameBoard: React.FC<GameBoardProps> = ({
           const rowRemaining = rowClue - rowCurrent;
           const isRowAnimating =
             animatingLine?.axis === 'row' && animatingLine?.index === r;
+          const isRowHinted = Boolean(
+            activeHintStep?.highlightLine?.axis === 'row' &&
+              activeHintStep.highlightLine.index === r
+          );
 
           return (
             <React.Fragment key={`row-${r}`}>
               <button
                 type="button"
-                className={`clue-badge row-clue status-${rowStatus} ${rowRemaining === 0 ? 'clue-zero' : ''} ${isRowAnimating ? 'clue-animating' : ''}`}
+                className={`clue-badge row-clue status-${rowStatus} ${rowRemaining === 0 ? 'clue-zero' : ''} ${isRowAnimating ? 'clue-animating' : ''} ${isRowHinted ? 'clue-hint-highlight' : ''}`}
                 onClick={() => onLineClueClick('row', r)}
                 title={`Row ${r + 1}: ${rowRemaining} more building(s) needed (${rowCurrent}/${rowClue} placed). Tap to mark remaining empty spots.`}
               >
@@ -215,14 +226,35 @@ export const GameBoard: React.FC<GameBoardProps> = ({
                 const isRuledOutForActive =
                   !isMarkedAllEmpty &&
                   activeTool !== 'mark_empty' &&
+                  activeTool !== 'road' &&
                   cellExcludedSet.has(activeTool);
 
                 const key = `${r},${c}`;
                 const errors = validation.cellErrors[key];
                 const hasError = Boolean(errors && errors.length > 0);
                 const isSatisfied = Boolean(validation.cellSatisfied[key]);
-                const isHinted =
-                  activeHint?.r === r && activeHint?.c === c;
+                const isHintFocus = Boolean(
+                  activeHintStep?.focusCells?.some((cell) => cell.r === r && cell.c === c)
+                );
+                const isHintCandidate = Boolean(
+                  activeHintStep?.candidateCells?.some((cell) => cell.r === r && cell.c === c)
+                );
+                const isHintDiscarded = Boolean(
+                  activeHintStep?.discardedCells?.some((cell) => cell.r === r && cell.c === c)
+                );
+                const isHintTarget = Boolean(
+                  activeHintStep?.targetCell
+                    ? activeHintStep.targetCell.r === r && activeHintStep.targetCell.c === c
+                    : activeHint?.r === r && activeHint?.c === c
+                );
+                const isHintLine = Boolean(
+                  activeHintStep?.highlightLine &&
+                    ((activeHintStep.highlightLine.axis === 'row' &&
+                      activeHintStep.highlightLine.index === r) ||
+                      (activeHintStep.highlightLine.axis === 'col' &&
+                        activeHintStep.highlightLine.index === c))
+                );
+                const isHinted = isHintTarget;
                 const isSelected =
                   selectedCell?.r === r && selectedCell?.c === c;
 
@@ -278,7 +310,11 @@ export const GameBoard: React.FC<GameBoardProps> = ({
                       isFixedObstacle(tile) ? 'tile-fixed' : 'tile-interactive',
                       hasError ? 'tile-error' : '',
                       isSatisfied ? 'tile-satisfied' : '',
-                      isHinted ? 'tile-hinted' : '',
+                      isHintFocus ? 'tile-hint-focus' : '',
+                      isHintCandidate ? 'tile-hint-candidate' : '',
+                      isHintDiscarded ? 'tile-hint-discarded' : '',
+                      isHintTarget ? 'tile-hint-target tile-hinted' : '',
+                      isHintLine ? 'tile-hint-line' : '',
                       isSelected ? 'tile-selected' : '',
                       isJustPlacedRoad ? 'tile-just-placed' : '',
                       isNewlyBuilt ? 'tile-building-active' : '',
@@ -309,6 +345,7 @@ export const GameBoard: React.FC<GameBoardProps> = ({
                           : null
                       }
                       excludedCount={cellExcludedSet.size}
+                      excludedTypes={cellExcludedSet}
                       roadConnections={roadConns}
                       variantSeed={r * 7 + c * 13}
                       isNewlyBuilt={isNewlyBuilt}
@@ -319,6 +356,14 @@ export const GameBoard: React.FC<GameBoardProps> = ({
                         aria-label="Rule violation"
                       >
                         !
+                      </span>
+                    )}
+                    {isHintDiscarded && (
+                      <span
+                        className="tile-hint-discard-badge"
+                        aria-label="Discarded candidate"
+                      >
+                        ✕
                       </span>
                     )}
                   </button>

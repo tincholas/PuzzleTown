@@ -120,6 +120,7 @@ interface TileGraphicProps {
   markedEmpty?: boolean;
   ruledOutForActiveType?: PlaceableType | null;
   excludedCount?: number;
+  excludedTypes?: Set<PlaceableType>;
   roadConnections?: RoadConnections;
   variantSeed?: number;
   isNewlyBuilt?: boolean;
@@ -130,6 +131,7 @@ export const TileGraphic: React.FC<TileGraphicProps> = ({
   markedEmpty = false,
   ruledOutForActiveType = null,
   excludedCount = 0,
+  excludedTypes,
   roadConnections,
   variantSeed = 0,
   isNewlyBuilt = false
@@ -151,41 +153,131 @@ export const TileGraphic: React.FC<TileGraphicProps> = ({
       if (markedEmpty) {
         return null;
       }
-      if (ruledOutForActiveType) {
-        return <RuledOutBuildingSvg excludedType={ruledOutForActiveType} />;
-      }
       return (
-        <EmptyGroundSvg
-          seed={variantSeed}
-          excludedCount={excludedCount}
+        <CornerRuledOutIconsSvg
+          excludedTypes={
+            excludedTypes ??
+            (ruledOutForActiveType ? new Set([ruledOutForActiveType]) : undefined)
+          }
+          activeType={ruledOutForActiveType}
         />
       );
   }
+};
+
+const QUADRANT_BUILDINGS: Array<{
+  type: BuildingType;
+  cx: number;
+  cy: number;
+  label: string;
+}> = [
+  { type: 'woodcutter', cx: 25, cy: 25, label: 'No Woodcutter' },
+  { type: 'farm', cx: 75, cy: 25, label: 'No Farm' },
+  { type: 'house', cx: 25, cy: 75, label: 'No House' },
+  { type: 'town_hall', cx: 75, cy: 75, label: 'No Town Hall' }
+];
+
+function renderCornerBadge(
+  type: BuildingType,
+  cx: number,
+  cy: number,
+  isActive: boolean
+) {
+  const scale = 0.50;
+  return (
+    <g
+      key={type}
+      transform={`translate(${cx - 50 * scale}, ${cy - 50 * scale}) scale(${scale})`}
+      className={isActive ? 'ruled-out-corner-active' : undefined}
+      aria-label={`No ${type}`}
+    >
+      {/* Warm ivory / parchment token backing */}
+      <circle
+        cx="50"
+        cy="50"
+        r="46"
+        fill="#fffbf2"
+        stroke="#2c1a0e"
+        strokeWidth="4.5"
+        opacity="0.97"
+      />
+
+      {/* Miniature silhouette of the ruled-out building */}
+      <g opacity="0.75" transform="translate(8, 8) scale(0.84)">
+        {type === 'woodcutter' && <WoodcutterSvg />}
+        {type === 'farm' && <FarmSvg />}
+        {type === 'house' && <HouseSvg />}
+        {type === 'town_hall' && <TownHallSvg />}
+      </g>
+
+      {/* Crisp red ban circle & diagonal slash (crossed out icon) */}
+      <circle
+        cx="50"
+        cy="50"
+        r="39"
+        fill="rgba(224, 79, 68, 0.16)"
+        stroke="#c93b2b"
+        strokeWidth="7"
+      />
+      <line
+        x1="23"
+        y1="23"
+        x2="77"
+        y2="77"
+        stroke="#c93b2b"
+        strokeWidth="8"
+        strokeLinecap="round"
+      />
+
+      {/* Active highlight ring if this corner matches the player's active tool */}
+      {isActive && (
+        <circle
+          cx="50"
+          cy="50"
+          r="46"
+          fill="none"
+          stroke="#f59f00"
+          strokeWidth="5.5"
+          strokeDasharray="9 6"
+        />
+      )}
+    </g>
+  );
+}
+
+/**
+ * 4 Quadrant crossed-out icons for ruled-out buildings on an empty tile:
+ * - Top-Left: NO WOODCUTTER
+ * - Top-Right: NO FARM
+ * - Bottom-Left: NO HOUSE
+ * - Bottom-Right: NO TOWN HALL
+ */
+export const CornerRuledOutIconsSvg: React.FC<{
+  excludedTypes?: Set<PlaceableType>;
+  activeType?: PlaceableType | null;
+}> = ({ excludedTypes, activeType }) => {
+  if (!excludedTypes || excludedTypes.size === 0) return null;
+
+  const activeBuildings = QUADRANT_BUILDINGS.filter((q) =>
+    excludedTypes.has(q.type)
+  );
+
+  if (activeBuildings.length === 0) return null;
+
+  return (
+    <svg viewBox="0 0 100 100" className="tile-svg" aria-label="Ruled out building marks">
+      {activeBuildings.map((q) =>
+        renderCornerBadge(q.type, q.cx, q.cy, activeType === q.type)
+      )}
+    </svg>
+  );
 };
 
 const EmptyGroundSvg: React.FC<{ seed: number; excludedCount?: number }> = ({
   excludedCount = 0
 }) => {
   if (excludedCount <= 0) return null;
-  return (
-    <svg viewBox="0 0 100 100" className="tile-svg">
-      {/* Subtle bottom-left pips indicating how many other building types were ruled out here */}
-      <g>
-        {Array.from({ length: Math.min(excludedCount, 4) }, (_, idx) => (
-          <circle
-            key={idx}
-            cx={16 + idx * 12}
-            cy={86}
-            r="4"
-            fill="#b84a39"
-            stroke="#2b1e16"
-            strokeWidth="2"
-            opacity="0.85"
-          />
-        ))}
-      </g>
-    </svg>
-  );
+  return null;
 };
 
 /**

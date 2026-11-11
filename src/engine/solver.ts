@@ -3,6 +3,7 @@ import {
   BUILDING_TYPES,
   Coord,
   DeductionHint,
+  HintStep,
   isBuilding,
   isFixedObstacle,
   LevelDefinition,
@@ -22,6 +23,7 @@ export interface DeductionResult {
   solved: boolean;
   steps: DeductionHint[];
   finalDomains: Set<TileType>[][];
+  lookaheadCount: number;
 }
 
 /**
@@ -91,6 +93,103 @@ function canBeRoadEndpointOrRoad(domain: Set<TileType>): boolean {
     domain.has('woodcutter') ||
     domain.has('farm')
   );
+}
+
+function formatDisqualifiedCellReason(
+  r: number,
+  c: number,
+  reasons: Partial<Record<TileType, string>>,
+  level: LevelDefinition
+): string {
+  if (level.rowClues[r] === 0) return `Row ${r + 1} clue is 0`;
+  if (level.colClues[c] === 0) return `Column ${c + 1} clue is 0`;
+
+  const activeBuildings = BUILDING_TYPES.filter((b) => level.inventory[b] > 0);
+  const activeReasons = activeBuildings
+    .map((b) => reasons[b])
+    .filter((r): r is string => Boolean(r));
+  const uniqueActiveReasons = Array.from(new Set(activeReasons));
+
+  // If all active buildings share the exact same reason (e.g. line clue is complete)
+  if (uniqueActiveReasons.length === 1) {
+    return uniqueActiveReasons[0];
+  }
+
+  // If any single line quota eliminated all buildings in this line
+  for (const u of uniqueActiveReasons) {
+    if (
+      u.includes('already has all') ||
+      u.includes('quota of') ||
+      u.includes('needs 0')
+    ) {
+      return u;
+    }
+  }
+
+  const items: string[] = [];
+  for (const b of activeBuildings) {
+    const rText = reasons[b];
+    if (rText) {
+      items.push(`not ${formatTileName(b)}: ${rText}`);
+    }
+  }
+
+  if (items.length > 0) return items.join(', ');
+
+  const allRecorded = Object.entries(reasons)
+    .filter(([t]) => isBuilding(t as TileType))
+    .map(([t, text]) => `not ${formatTileName(t as TileType)}: ${text}`);
+
+  return allRecorded.length > 0 ? allRecorded.join(', ') : 'no building type can fit here';
+}
+
+function summarizeCellNonBuildingReason(
+  r: number,
+  c: number,
+  reasons: Partial<Record<TileType, string>>,
+  level: LevelDefinition
+): string {
+  if (level.rowClues[r] === 0) return `Row ${r + 1} clue is 0`;
+  if (level.colClues[c] === 0) return `Column ${c + 1} clue is 0`;
+
+  const parts: string[] = [];
+  if (reasons['woodcutter']) {
+    parts.push(reasons['woodcutter'].replace('not next to a Tree', 'no adjacent Tree'));
+  }
+
+  const quotaReason =
+    reasons['farm']?.match(/adjacent House would also be in (?:Row \d+|Column \d+), exceeding .*'s limit of \d+ building/)?.[0] ??
+    reasons['woodcutter']?.match(/adjacent House would also be in (?:Row \d+|Column \d+), exceeding .*'s limit of \d+ building/)?.[0] ??
+    reasons['house']?.match(/adjacent .* would also be in (?:Row \d+|Column \d+), exceeding .*'s limit of \d+ building/)?.[0];
+
+  if (quotaReason) {
+    parts.push(quotaReason);
+  } else if (reasons['house'] || reasons['farm']) {
+    parts.push('no partner for House/Farm');
+  }
+
+  if (reasons['town_hall']) {
+    if (reasons['town_hall'].includes('too close to')) {
+      parts.push(reasons['town_hall'].replace('too close to', 'blocks Town Hall near'));
+    } else if (reasons['town_hall'].includes('filling Column') || reasons['town_hall'].includes('filling Row')) {
+      parts.push(`Town Hall at ${xy(r, c)} would ${reasons['town_hall']}`);
+    } else if (reasons['town_hall'].includes('exceed its limit')) {
+      const match = reasons['town_hall'].match(/Row \d+|Column \d+/);
+      parts.push(`Town Hall would overfill ${match ? match[0] : 'line'}`);
+    } else {
+      parts.push(`not Town Hall: ${reasons['town_hall']}`);
+    }
+  }
+
+  if (parts.length > 0) {
+    return parts.join(', ');
+  }
+
+  const allRecorded = Object.entries(reasons)
+    .filter(([t]) => isBuilding(t as TileType))
+    .map(([t, text]) => `${formatTileName(t as TileType)} (${text})`);
+
+  return allRecorded.length > 0 ? allRecorded.join(', ') : 'no building can fit here';
 }
 
 function shortestPossibleRoadDistance(
@@ -258,16 +357,20 @@ export function findValidRoadNetworksForBuildings(
  */
 export function solveByDeduction(
   level: LevelDefinition,
-  startingGrid?: TileType[][]
+  startingGrid?: TileType[][],
+  playerMarks?: boolean[][]
 ): DeductionResult {
   const size = level.size;
   const domains = createInitialDomains(level, startingGrid);
   const steps: DeductionHint[] = [];
+  let lookaheadCount = 0;
   const hasTownHall = level.inventory.town_hall > 0;
   const maxRoads = level.inventory.road;
 
   // Store concise reasons why specific candidates were eliminated at each cell (r, c)
   const cellElimReasons: Record<string, Partial<Record<TileType, string>>> = {};
+  const recordedDisqualifiedCells = new Set<string>();
+  const lookaheadEliminatedCells = new Set<string>();
   const recordElimReason = (
     r: number,
     c: number,
@@ -321,21 +424,50 @@ export function solveByDeduction(
     prevSize: number,
     ruleName: string,
     explanation: string,
-    isDirectForce = false
+    isDirectForce = false,
+    customSteps?: HintStep[]
   ) => {
     if (prevSize > 1 && domains[r][c].size === 1) {
       const locked = getLockedTile(domains[r][c])!;
       if (locked === 'empty') {
+        let finalSteps = customSteps;
+        if (!finalSteps) {
+          const rowMatch = explanation.match(/Row (\d+)/i);
+          const colMatch = explanation.match(/Column (\d+)/i);
+          const highlightLine = rowMatch
+            ? { axis: 'row' as const, index: parseInt(rowMatch[1], 10) - 1 }
+            : colMatch
+              ? { axis: 'col' as const, index: parseInt(colMatch[1], 10) - 1 }
+              : undefined;
+
+          finalSteps = [
+            {
+              title: ruleName,
+              message: explanation,
+              highlightLine,
+              candidateCells: [{ r, c }]
+            },
+            {
+              title: ruleName,
+              message: `So ${xy(r, c)} cannot contain a building and must be empty.`,
+              highlightLine,
+              targetCell: { r, c }
+            }
+          ];
+        }
+
         steps.push({
           r,
           c,
           action: 'mark_empty',
           ruleName,
-          explanation
+          explanation,
+          steps: finalSteps
         });
       } else if (locked !== 'tree' && locked !== 'rock') {
         let finalRuleName = ruleName;
         let finalExplanation = explanation;
+        let finalSteps = customSteps;
 
         if (!isDirectForce) {
           // Locked by eliminating the last alternative! Build a crystal-clear summary of why `locked` is the only option left.
@@ -358,10 +490,161 @@ export function solveByDeduction(
           if (isBuilding(locked)) {
             finalRuleName = `Only ${formatTileName(locked)} Fits`;
             finalExplanation = `${xy(r, c)} must be a ${formatTileName(locked)}: ${mustBeBuildingReason}, and it is ${ruledOutNotes}.`;
+
+            if (!finalSteps) {
+              const rowMatch = mustBeBuildingReason.match(/Row (\d+)/i);
+              const colMatch = mustBeBuildingReason.match(/Column (\d+)/i);
+              const highlightLine = rowMatch
+                ? { axis: 'row' as const, index: parseInt(rowMatch[1], 10) - 1 }
+                : colMatch
+                  ? { axis: 'col' as const, index: parseInt(colMatch[1], 10) - 1 }
+                  : undefined;
+
+              const allOpenInLine: Coord[] = [];
+              const openDisqualifiedInLine: Coord[] = [];
+              if (highlightLine) {
+                if (highlightLine.axis === 'row') {
+                  const lr = highlightLine.index;
+                  for (let cc = 0; cc < size; cc++) {
+                    const isObstacle = isFixedObstacle(level.initialGrid[lr][cc]);
+                    const isPlaced = startingGrid && startingGrid[lr][cc] !== 'empty';
+                    const isMarked = playerMarks && playerMarks[lr][cc];
+                    if (!isObstacle && !isPlaced && !isMarked) {
+                      allOpenInLine.push({ r: lr, c: cc });
+                      if (!canBeAnyBuilding(domains[lr][cc])) {
+                        openDisqualifiedInLine.push({ r: lr, c: cc });
+                      }
+                    }
+                  }
+                } else {
+                  const lc = highlightLine.index;
+                  for (let rr = 0; rr < size; rr++) {
+                    const isObstacle = isFixedObstacle(level.initialGrid[rr][lc]);
+                    const isPlaced = startingGrid && startingGrid[rr][lc] !== 'empty';
+                    const isMarked = playerMarks && playerMarks[rr][lc];
+                    if (!isObstacle && !isPlaced && !isMarked) {
+                      allOpenInLine.push({ r: rr, c: lc });
+                      if (!canBeAnyBuilding(domains[rr][lc])) {
+                        openDisqualifiedInLine.push({ r: rr, c: lc });
+                      }
+                    }
+                  }
+                }
+              }
+
+              if (openDisqualifiedInLine.length > 0) {
+                openDisqualifiedInLine.sort((a, b) => (a.r === b.r ? a.c - b.c : a.r - b.r));
+                allOpenInLine.sort((a, b) => (a.r === b.r ? a.c - b.c : a.r - b.r));
+                const linePremise = mustBeBuildingReason.replace(/, and .*/i, '');
+
+                finalSteps = [
+                  {
+                    title: finalRuleName,
+                    message: `${linePremise}.`,
+                    highlightLine,
+                    candidateCells: allOpenInLine
+                  }
+                ];
+
+                for (const disc of openDisqualifiedInLine) {
+                  const discReasons = cellElimReasons[`${disc.r},${disc.c}`] ?? {};
+                  const discReasonText = formatDisqualifiedCellReason(
+                    disc.r,
+                    disc.c,
+                    discReasons,
+                    level
+                  );
+                  finalSteps.push({
+                    title: finalRuleName,
+                    message: `${xy(disc.r, disc.c)} cannot hold a building (${discReasonText}).`,
+                    highlightLine,
+                    focusCells: [disc],
+                    discardedCells: [disc]
+                  });
+                }
+
+                const lineAxisName = highlightLine!.axis === 'row' ? 'Row' : 'Column';
+                const lineNum = highlightLine!.index + 1;
+                const remainingBuildingSpots = allOpenInLine.filter((coord) =>
+                  canBeAnyBuilding(domains[coord.r][coord.c])
+                );
+
+                const transitionMsg =
+                  remainingBuildingSpots.length <= 1
+                    ? `So ${xy(r, c)} is the only remaining open spot in ${lineAxisName} ${lineNum} that can hold a building!`
+                    : `${lineAxisName} ${lineNum} needs ${remainingBuildingSpots.length} building(s) and only ${remainingBuildingSpots.map((s) => xy(s.r, s.c)).join(' and ')} remain, so ${xy(r, c)} must contain a building!`;
+
+                finalSteps.push({
+                  title: finalRuleName,
+                  message: transitionMsg,
+                  highlightLine,
+                  focusCells: [{ r, c }],
+                  candidateCells: remainingBuildingSpots
+                });
+              } else {
+                finalSteps = [
+                  {
+                    title: finalRuleName,
+                    message: `${xy(r, c)} must contain a building (${mustBeBuildingReason}).`,
+                    highlightLine,
+                    focusCells: [{ r, c }],
+                    candidateCells: [{ r, c }]
+                  }
+                ];
+              }
+
+              for (const b of otherBuildings) {
+                const rText = reasons[b];
+                finalSteps.push({
+                  title: finalRuleName,
+                  message: `${xy(r, c)} cannot be a ${formatTileName(b)}${rText ? ` (${rText})` : ''}.`,
+                  focusCells: [{ r, c }],
+                  discardedCells: [{ r, c }]
+                });
+              }
+
+              finalSteps.push({
+                title: finalRuleName,
+                message: `Therefore, ${xy(r, c)} must be a ${formatTileName(locked)}!`,
+                focusCells: [{ r, c }],
+                targetCell: { r, c }
+              });
+            }
           } else {
             finalRuleName = `Must Be Road`;
             finalExplanation = `${xy(r, c)} cannot be a building or empty (${explanation}), so it must be a Road.`;
+            if (!finalSteps) {
+              finalSteps = [
+                {
+                  title: finalRuleName,
+                  message: explanation,
+                  focusCells: [{ r, c }],
+                  candidateCells: [{ r, c }]
+                },
+                {
+                  title: finalRuleName,
+                  message: `So ${xy(r, c)} must be a Road to connect the town.`,
+                  focusCells: [{ r, c }],
+                  targetCell: { r, c }
+                }
+              ];
+            }
           }
+        }
+
+        if (!finalSteps) {
+          finalSteps = [
+            {
+              title: finalRuleName,
+              message: finalExplanation,
+              candidateCells: [{ r, c }]
+            },
+            {
+              title: finalRuleName,
+              message: `Place a ${formatTileName(locked)} at ${xy(r, c)}.`,
+              targetCell: { r, c }
+            }
+          ];
         }
 
         steps.push({
@@ -370,7 +653,8 @@ export function solveByDeduction(
           action: 'place',
           tileType: locked,
           ruleName: finalRuleName,
-          explanation: finalExplanation
+          explanation: finalExplanation,
+          steps: finalSteps
         });
       }
     }
@@ -390,10 +674,17 @@ export function solveByDeduction(
         for (let c = 0; c < size; c++) {
           if (!mustBeBuilding(domains[r][c]) && canBeAnyBuilding(domains[r][c])) {
             const prev = domains[r][c].size;
+            let placedInRow = 0;
+            for (let cc = 0; cc < size; cc++) {
+              if (startingGrid && isBuilding(startingGrid[r][cc])) placedInRow++;
+            }
+            const isFullyPlaced = placedInRow === level.rowClues[r];
             const reason =
               level.rowClues[r] === 0
                 ? `Row ${r + 1} needs 0 buildings`
-                : `Row ${r + 1} already has all ${level.rowClues[r]} building(s)`;
+                : isFullyPlaced
+                  ? `Row ${r + 1} already has all ${level.rowClues[r]} building(s) placed`
+                  : `Row ${r + 1}'s quota of ${level.rowClues[r]} building(s) is already claimed`;
             for (const b of BUILDING_TYPES) {
               recordElimReason(r, c, b, reason);
             }
@@ -406,7 +697,9 @@ export function solveByDeduction(
                 'Row Clue Complete',
                 level.rowClues[r] === 0
                   ? `Row ${r + 1} has a clue of 0, so no buildings can be placed in Row ${r + 1}.`
-                  : `Row ${r + 1} already has all ${level.rowClues[r]} of its buildings, so ${xy(r, c)} cannot be a building.`,
+                  : isFullyPlaced
+                    ? `Row ${r + 1} already has all ${level.rowClues[r]} of its placed buildings, so ${xy(r, c)} cannot be a building.`
+                    : `Row ${r + 1}'s quota of ${level.rowClues[r]} building(s) is already claimed, so ${xy(r, c)} cannot be a building.`,
                 true
               );
             }
@@ -424,10 +717,17 @@ export function solveByDeduction(
         for (let r = 0; r < size; r++) {
           if (!mustBeBuilding(domains[r][c]) && canBeAnyBuilding(domains[r][c])) {
             const prev = domains[r][c].size;
+            let placedInCol = 0;
+            for (let rr = 0; rr < size; rr++) {
+              if (startingGrid && isBuilding(startingGrid[rr][c])) placedInCol++;
+            }
+            const isFullyPlaced = placedInCol === level.colClues[c];
             const reason =
               level.colClues[c] === 0
                 ? `Column ${c + 1} needs 0 buildings`
-                : `Column ${c + 1} already has all ${level.colClues[c]} building(s)`;
+                : isFullyPlaced
+                  ? `Column ${c + 1} already has all ${level.colClues[c]} building(s) placed`
+                  : `Column ${c + 1}'s quota of ${level.colClues[c]} building(s) is already claimed`;
             for (const b of BUILDING_TYPES) {
               recordElimReason(r, c, b, reason);
             }
@@ -440,7 +740,9 @@ export function solveByDeduction(
                 'Column Clue Complete',
                 level.colClues[c] === 0
                   ? `Column ${c + 1} has a clue of 0, so no buildings can be placed in Column ${c + 1}.`
-                  : `Column ${c + 1} already has all ${level.colClues[c]} of its buildings, so ${xy(r, c)} cannot be a building.`,
+                  : isFullyPlaced
+                    ? `Column ${c + 1} already has all ${level.colClues[c]} of its placed buildings, so ${xy(r, c)} cannot be a building.`
+                    : `Column ${c + 1}'s quota of ${level.colClues[c]} building(s) is already claimed, so ${xy(r, c)} cannot be a building.`,
                 true
               );
             }
@@ -455,20 +757,174 @@ export function solveByDeduction(
       for (let c = 0; c < size; c++) {
         if (canBeAnyBuilding(domains[r][c])) buildingCandidates.push(c);
       }
-      if (
-        buildingCandidates.length === level.rowClues[r] &&
-        level.rowClues[r] > 0
-      ) {
-        for (const c of buildingCandidates) {
-          const prev = domains[r][c].size;
-          const removedEmpty = domains[r][c].delete('empty');
-          const removedRoad = domains[r][c].delete('road');
-          if (removedEmpty || removedRoad) {
-            const reason = `Row ${r + 1} needs ${level.rowClues[r]} building(s) and only ${buildingCandidates.length} valid building spot(s) exist in this row`;
-            recordElimReason(r, c, 'empty', reason);
-            recordElimReason(r, c, 'road', reason);
-            progress = true;
-            recordLockIfNew(r, c, prev, 'Row Must Be Filled', reason, false);
+      let placedInRow = 0;
+      const placedDesc: string[] = [];
+      for (let c = 0; c < size; c++) {
+        if (startingGrid && isBuilding(startingGrid[r][c])) {
+          placedInRow++;
+          placedDesc.push(`${formatTileName(startingGrid[r][c])} at ${xy(r, c)}`);
+        }
+      }
+      const quota = level.rowClues[r];
+      const remainingNeeded = quota - placedInRow;
+
+      if (remainingNeeded > 0) {
+        const openCandidates = buildingCandidates.filter(
+          (c) => !(startingGrid && isBuilding(startingGrid[r][c]))
+        );
+        if (openCandidates.length === remainingNeeded) {
+          // Find any unplaced, unmarked cells in this row that were disqualified from being buildings:
+          const disqualifiedCols: number[] = [];
+          for (let c = 0; c < size; c++) {
+            const isObstacle = isFixedObstacle(level.initialGrid[r][c]);
+            const isPlaced = startingGrid && startingGrid[r][c] !== 'empty';
+            const isMarked = playerMarks && playerMarks[r][c];
+            if (!isObstacle && !isPlaced && !isMarked && !openCandidates.includes(c)) {
+              disqualifiedCols.push(c);
+            }
+          }
+
+          const needText =
+            placedInRow > 0
+              ? remainingNeeded === 1
+                ? `Row ${r + 1} needs 1 more building`
+                : `Row ${r + 1} needs ${remainingNeeded} more buildings`
+              : quota === 1
+                ? `Row ${r + 1} needs 1 building`
+                : `Row ${r + 1} needs ${quota} buildings`;
+
+          const discParts = disqualifiedCols
+            .filter((cc) => !lookaheadEliminatedCells.has(`${r},${cc}`))
+            .map(
+              (cc) =>
+                `${xy(r, cc)} cannot hold a building: ${summarizeCellNonBuildingReason(
+                  r,
+                  cc,
+                  cellElimReasons[`${r},${cc}`] ?? {},
+                  level
+                )}`
+            );
+          const discText =
+            discParts.length > 0 ? ` (since ${discParts.join('; ')})` : '';
+
+          for (const dc of disqualifiedCols) {
+            const cellKey = `${r},${dc}`;
+            if (!recordedDisqualifiedCells.has(cellKey)) {
+              recordedDisqualifiedCells.add(cellKey);
+              const cellWhy = summarizeCellNonBuildingReason(
+                r,
+                dc,
+                cellElimReasons[cellKey] ?? {},
+                level
+              );
+              const thReason = cellElimReasons[cellKey]?.['town_hall'];
+              const stepTitle = 'Cannot Hold Building';
+              const stepMsg1 = `${xy(r, dc)} cannot hold a building: ${cellWhy}.`;
+              const stepMsg2 = `Mark ${xy(r, dc)} as clear ground.`;
+
+              let customSteps: HintStep[] | undefined = undefined;
+              if (thReason && (thReason.includes('forcing') || thReason.includes('which causes'))) {
+                const basicReasons: string[] = [];
+                if (cellElimReasons[cellKey]?.['woodcutter']) {
+                  basicReasons.push(
+                    cellElimReasons[cellKey]!['woodcutter']!.replace(
+                      'not next to a Tree',
+                      'no adjacent Tree'
+                    )
+                  );
+                }
+                const quotaReason =
+                  cellElimReasons[cellKey]?.['farm']?.match(
+                    /adjacent House would also be in (?:Row \d+|Column \d+), exceeding .*'s limit of \d+ building/
+                  )?.[0] ??
+                  cellElimReasons[cellKey]?.['house']?.match(
+                    /adjacent .* would also be in (?:Row \d+|Column \d+), exceeding .*'s limit of \d+ building/
+                  )?.[0];
+                if (quotaReason) {
+                  basicReasons.push(quotaReason);
+                } else if (
+                  cellElimReasons[cellKey]?.['farm'] ||
+                  cellElimReasons[cellKey]?.['house']
+                ) {
+                  basicReasons.push('no partner for House/Farm');
+                }
+                const basicText = basicReasons.join(', ');
+
+                const highlightCells: Coord[] = [{ r, c: dc }];
+                const allMatches = thReason.matchAll(/\((\d+),\s*(\d+)\)/g);
+                for (const m of allMatches) {
+                  const targetCoord = {
+                    r: parseInt(m[2], 10) - 1,
+                    c: parseInt(m[1], 10) - 1
+                  };
+                  if (!highlightCells.some((h) => h.r === targetCoord.r && h.c === targetCoord.c)) {
+                    highlightCells.push(targetCoord);
+                  }
+                }
+
+                customSteps = [
+                  {
+                    title: stepTitle,
+                    message: `${xy(r, dc)} cannot hold a Woodcutter, Farm, or House: ${basicText}.`,
+                    focusCells: [{ r, c: dc }],
+                    discardedCells: [{ r, c: dc }]
+                  },
+                  {
+                    title: stepTitle,
+                    message: `Town Hall at ${xy(r, dc)} would ${thReason}.`,
+                    focusCells: [{ r, c: dc }],
+                    candidateCells: highlightCells
+                  },
+                  {
+                    title: stepTitle,
+                    message: `Since no building type can fit at ${xy(r, dc)}, mark it as clear ground.`,
+                    focusCells: [{ r, c: dc }],
+                    targetCell: { r, c: dc }
+                  }
+                ];
+              }
+
+              steps.push({
+                r,
+                c: dc,
+                action: 'mark_empty',
+                ruleName: stepTitle,
+                explanation: `${stepMsg1} ${stepMsg2}`,
+                steps: customSteps ?? [
+                  {
+                    title: stepTitle,
+                    message: stepMsg1,
+                    focusCells: [{ r, c: dc }],
+                    discardedCells: [{ r, c: dc }]
+                  },
+                  {
+                    title: stepTitle,
+                    message: stepMsg2,
+                    focusCells: [{ r, c: dc }],
+                    targetCell: { r, c: dc }
+                  }
+                ]
+              });
+            }
+          }
+
+          const spotText =
+            openCandidates.length === 1
+              ? `${xy(r, openCandidates[0])} is its only valid spot`
+              : `only ${openCandidates.map((cc) => xy(r, cc)).join(' and ')} can hold buildings`;
+
+          const reason = `${needText}, and ${spotText}${discText}`;
+
+          for (const c of openCandidates) {
+            const prev = domains[r][c].size;
+            const removedEmpty = domains[r][c].delete('empty');
+            const removedRoad = domains[r][c].delete('road');
+            if (removedEmpty || removedRoad) {
+              recordElimReason(r, c, 'empty', reason);
+              recordElimReason(r, c, 'road', reason);
+              progress = true;
+              recordLockIfNew(r, c, prev, 'Row Must Be Filled', reason, false);
+            }
           }
         }
       }
@@ -479,20 +935,174 @@ export function solveByDeduction(
       for (let r = 0; r < size; r++) {
         if (canBeAnyBuilding(domains[r][c])) buildingCandidates.push(r);
       }
-      if (
-        buildingCandidates.length === level.colClues[c] &&
-        level.colClues[c] > 0
-      ) {
-        for (const r of buildingCandidates) {
-          const prev = domains[r][c].size;
-          const removedEmpty = domains[r][c].delete('empty');
-          const removedRoad = domains[r][c].delete('road');
-          if (removedEmpty || removedRoad) {
-            const reason = `Column ${c + 1} needs ${level.colClues[c]} building(s) and only ${buildingCandidates.length} valid building spot(s) exist in this column`;
-            recordElimReason(r, c, 'empty', reason);
-            recordElimReason(r, c, 'road', reason);
-            progress = true;
-            recordLockIfNew(r, c, prev, 'Column Must Be Filled', reason, false);
+      let placedInCol = 0;
+      const placedDesc: string[] = [];
+      for (let r = 0; r < size; r++) {
+        if (startingGrid && isBuilding(startingGrid[r][c])) {
+          placedInCol++;
+          placedDesc.push(`${formatTileName(startingGrid[r][c])} at ${xy(r, c)}`);
+        }
+      }
+      const quota = level.colClues[c];
+      const remainingNeeded = quota - placedInCol;
+
+      if (remainingNeeded > 0) {
+        const openCandidates = buildingCandidates.filter(
+          (r) => !(startingGrid && isBuilding(startingGrid[r][c]))
+        );
+        if (openCandidates.length === remainingNeeded) {
+          // Find any unplaced, unmarked cells in this column that were disqualified from being buildings:
+          const disqualifiedRows: number[] = [];
+          for (let r = 0; r < size; r++) {
+            const isObstacle = isFixedObstacle(level.initialGrid[r][c]);
+            const isPlaced = startingGrid && startingGrid[r][c] !== 'empty';
+            const isMarked = playerMarks && playerMarks[r][c];
+            if (!isObstacle && !isPlaced && !isMarked && !openCandidates.includes(r)) {
+              disqualifiedRows.push(r);
+            }
+          }
+
+          const needText =
+            placedInCol > 0
+              ? remainingNeeded === 1
+                ? `Column ${c + 1} needs 1 more building`
+                : `Column ${c + 1} needs ${remainingNeeded} more buildings`
+              : quota === 1
+                ? `Column ${c + 1} needs 1 building`
+                : `Column ${c + 1} needs ${quota} buildings`;
+
+          const discParts = disqualifiedRows
+            .filter((rr) => !lookaheadEliminatedCells.has(`${rr},${c}`))
+            .map(
+              (rr) =>
+                `${xy(rr, c)} cannot hold a building: ${summarizeCellNonBuildingReason(
+                  rr,
+                  c,
+                  cellElimReasons[`${rr},${c}`] ?? {},
+                  level
+                )}`
+            );
+          const discText =
+            discParts.length > 0 ? ` (since ${discParts.join('; ')})` : '';
+
+          for (const dr of disqualifiedRows) {
+            const cellKey = `${dr},${c}`;
+            if (!recordedDisqualifiedCells.has(cellKey)) {
+              recordedDisqualifiedCells.add(cellKey);
+              const cellWhy = summarizeCellNonBuildingReason(
+                dr,
+                c,
+                cellElimReasons[cellKey] ?? {},
+                level
+              );
+              const thReason = cellElimReasons[cellKey]?.['town_hall'];
+              const stepTitle = 'Cannot Hold Building';
+              const stepMsg1 = `${xy(dr, c)} cannot hold a building: ${cellWhy}.`;
+              const stepMsg2 = `Mark ${xy(dr, c)} as clear ground.`;
+
+              let customSteps: HintStep[] | undefined = undefined;
+              if (thReason && (thReason.includes('forcing') || thReason.includes('which causes'))) {
+                const basicReasons: string[] = [];
+                if (cellElimReasons[cellKey]?.['woodcutter']) {
+                  basicReasons.push(
+                    cellElimReasons[cellKey]!['woodcutter']!.replace(
+                      'not next to a Tree',
+                      'no adjacent Tree'
+                    )
+                  );
+                }
+                const quotaReason =
+                  cellElimReasons[cellKey]?.['farm']?.match(
+                    /adjacent House would also be in (?:Row \d+|Column \d+), exceeding .*'s limit of \d+ building/
+                  )?.[0] ??
+                  cellElimReasons[cellKey]?.['house']?.match(
+                    /adjacent .* would also be in (?:Row \d+|Column \d+), exceeding .*'s limit of \d+ building/
+                  )?.[0];
+                if (quotaReason) {
+                  basicReasons.push(quotaReason);
+                } else if (
+                  cellElimReasons[cellKey]?.['farm'] ||
+                  cellElimReasons[cellKey]?.['house']
+                ) {
+                  basicReasons.push('no partner for House/Farm');
+                }
+                const basicText = basicReasons.join(', ');
+
+                const highlightCells: Coord[] = [{ r: dr, c }];
+                const allMatches = thReason.matchAll(/\((\d+),\s*(\d+)\)/g);
+                for (const m of allMatches) {
+                  const targetCoord = {
+                    r: parseInt(m[2], 10) - 1,
+                    c: parseInt(m[1], 10) - 1
+                  };
+                  if (!highlightCells.some((h) => h.r === targetCoord.r && h.c === targetCoord.c)) {
+                    highlightCells.push(targetCoord);
+                  }
+                }
+
+                customSteps = [
+                  {
+                    title: stepTitle,
+                    message: `${xy(dr, c)} cannot hold a Woodcutter, Farm, or House: ${basicText}.`,
+                    focusCells: [{ r: dr, c }],
+                    discardedCells: [{ r: dr, c }]
+                  },
+                  {
+                    title: stepTitle,
+                    message: `Town Hall at ${xy(dr, c)} would ${thReason}.`,
+                    focusCells: [{ r: dr, c }],
+                    candidateCells: highlightCells
+                  },
+                  {
+                    title: stepTitle,
+                    message: `Since no building type can fit at ${xy(dr, c)}, mark it as clear ground.`,
+                    focusCells: [{ r: dr, c }],
+                    targetCell: { r: dr, c }
+                  }
+                ];
+              }
+
+              steps.push({
+                r: dr,
+                c,
+                action: 'mark_empty',
+                ruleName: stepTitle,
+                explanation: `${stepMsg1} ${stepMsg2}`,
+                steps: customSteps ?? [
+                  {
+                    title: stepTitle,
+                    message: stepMsg1,
+                    focusCells: [{ r: dr, c }],
+                    discardedCells: [{ r: dr, c }]
+                  },
+                  {
+                    title: stepTitle,
+                    message: stepMsg2,
+                    focusCells: [{ r: dr, c }],
+                    targetCell: { r: dr, c }
+                  }
+                ]
+              });
+            }
+          }
+
+          const spotText =
+            openCandidates.length === 1
+              ? `${xy(openCandidates[0], c)} is its only valid spot`
+              : `only ${openCandidates.map((rr) => xy(rr, c)).join(' and ')} can hold buildings`;
+
+          const reason = `${needText}, and ${spotText}${discText}`;
+
+          for (const r of openCandidates) {
+            const prev = domains[r][c].size;
+            const removedEmpty = domains[r][c].delete('empty');
+            const removedRoad = domains[r][c].delete('road');
+            if (removedEmpty || removedRoad) {
+              recordElimReason(r, c, 'empty', reason);
+              recordElimReason(r, c, 'road', reason);
+              progress = true;
+              recordLockIfNew(r, c, prev, 'Column Must Be Filled', reason, false);
+            }
           }
         }
       }
@@ -508,8 +1118,8 @@ export function solveByDeduction(
 
         if (dom.has('woodcutter')) {
           const hasTree = ortho.some((n) => domains[n.r][n.c].has('tree'));
-          const hasHouse = ortho.some((n) => domains[n.r][n.c].has('house'));
-          if (!hasTree || !hasHouse) {
+          const houseSpots = ortho.filter((n) => domains[n.r][n.c].has('house'));
+          if (!hasTree || houseSpots.length === 0) {
             dom.delete('woodcutter');
             const shortReason = !hasTree
               ? 'not next to a Tree'
@@ -525,6 +1135,34 @@ export function solveByDeduction(
                 ? `${xy(r, c)} is not orthogonally next to a Tree, so it cannot be a Woodcutter.`
                 : `${xy(r, c)} has no adjacent spot for a House, so it cannot be a Woodcutter.`
             );
+          } else {
+            const allHouseInSameRow = houseSpots.every((n) => n.r === r);
+            const allHouseInSameCol = houseSpots.every((n) => n.c === c);
+            if (allHouseInSameRow && level.rowClues[r] < 2) {
+              dom.delete('woodcutter');
+              const shortReason = `adjacent House would also be in Row ${r + 1}, exceeding Row ${r + 1}'s limit of ${level.rowClues[r]} building`;
+              recordElimReason(r, c, 'woodcutter', shortReason);
+              progress = true;
+              recordLockIfNew(
+                r,
+                c,
+                prev,
+                'Row Limit Exceeded',
+                `${xy(r, c)} cannot be a Woodcutter because its adjacent House would also have to be in Row ${r + 1}, exceeding Row ${r + 1}'s limit of ${level.rowClues[r]} building.`
+              );
+            } else if (allHouseInSameCol && level.colClues[c] < 2) {
+              dom.delete('woodcutter');
+              const shortReason = `adjacent House would also be in Column ${c + 1}, exceeding Column ${c + 1}'s limit of ${level.colClues[c]} building`;
+              recordElimReason(r, c, 'woodcutter', shortReason);
+              progress = true;
+              recordLockIfNew(
+                r,
+                c,
+                prev,
+                'Column Limit Exceeded',
+                `${xy(r, c)} cannot be a Woodcutter because its adjacent House would also have to be in Column ${c + 1}, exceeding Column ${c + 1}'s limit of ${level.colClues[c]} building.`
+              );
+            }
           }
         }
 
@@ -553,12 +1191,12 @@ export function solveByDeduction(
         }
 
         if (dom.has('house')) {
-          const hasPartner = ortho.some(
+          const partnerSpots = ortho.filter(
             (n) =>
               domains[n.r][n.c].has('woodcutter') ||
               domains[n.r][n.c].has('farm')
           );
-          if (!hasPartner) {
+          if (partnerSpots.length === 0) {
             dom.delete('house');
             recordElimReason(
               r,
@@ -574,12 +1212,40 @@ export function solveByDeduction(
               'House Adjacency',
               `${xy(r, c)} has no adjacent spot for a Woodcutter or Farm, so it cannot be a House.`
             );
+          } else {
+            const allPartnerInSameRow = partnerSpots.every((n) => n.r === r);
+            const allPartnerInSameCol = partnerSpots.every((n) => n.c === c);
+            if (allPartnerInSameRow && level.rowClues[r] < 2) {
+              dom.delete('house');
+              const shortReason = `adjacent Woodcutter/Farm would also be in Row ${r + 1}, exceeding Row ${r + 1}'s limit of ${level.rowClues[r]} building`;
+              recordElimReason(r, c, 'house', shortReason);
+              progress = true;
+              recordLockIfNew(
+                r,
+                c,
+                prev,
+                'Row Limit Exceeded',
+                `${xy(r, c)} cannot be a House because its adjacent Woodcutter or Farm would also have to be in Row ${r + 1}, exceeding Row ${r + 1}'s limit of ${level.rowClues[r]} building.`
+              );
+            } else if (allPartnerInSameCol && level.colClues[c] < 2) {
+              dom.delete('house');
+              const shortReason = `adjacent Woodcutter/Farm would also be in Column ${c + 1}, exceeding Column ${c + 1}'s limit of ${level.colClues[c]} building`;
+              recordElimReason(r, c, 'house', shortReason);
+              progress = true;
+              recordLockIfNew(
+                r,
+                c,
+                prev,
+                'Column Limit Exceeded',
+                `${xy(r, c)} cannot be a House because its adjacent Woodcutter or Farm would also have to be in Column ${c + 1}, exceeding Column ${c + 1}'s limit of ${level.colClues[c]} building.`
+              );
+            }
           }
         }
 
         if (dom.has('farm')) {
-          const hasHouse = ortho.some((n) => domains[n.r][n.c].has('house'));
-          if (!hasHouse) {
+          const houseSpots = ortho.filter((n) => domains[n.r][n.c].has('house'));
+          if (houseSpots.length === 0) {
             dom.delete('farm');
             recordElimReason(r, c, 'farm', 'no adjacent spot for a House');
             progress = true;
@@ -590,6 +1256,34 @@ export function solveByDeduction(
               'Farm Adjacency',
               `${xy(r, c)} has no adjacent spot for a House, so it cannot be a Farm.`
             );
+          } else {
+            const allHouseInSameRow = houseSpots.every((n) => n.r === r);
+            const allHouseInSameCol = houseSpots.every((n) => n.c === c);
+            if (allHouseInSameRow && level.rowClues[r] < 2) {
+              dom.delete('farm');
+              const shortReason = `adjacent House would also be in Row ${r + 1}, exceeding Row ${r + 1}'s limit of ${level.rowClues[r]} building`;
+              recordElimReason(r, c, 'farm', shortReason);
+              progress = true;
+              recordLockIfNew(
+                r,
+                c,
+                prev,
+                'Row Limit Exceeded',
+                `${xy(r, c)} cannot be a Farm because its adjacent House would also have to be in Row ${r + 1}, exceeding Row ${r + 1}'s limit of ${level.rowClues[r]} building.`
+              );
+            } else if (allHouseInSameCol && level.colClues[c] < 2) {
+              dom.delete('farm');
+              const shortReason = `adjacent House would also be in Column ${c + 1}, exceeding Column ${c + 1}'s limit of ${level.colClues[c]} building`;
+              recordElimReason(r, c, 'farm', shortReason);
+              progress = true;
+              recordLockIfNew(
+                r,
+                c,
+                prev,
+                'Column Limit Exceeded',
+                `${xy(r, c)} cannot be a Farm because its adjacent House would also have to be in Column ${c + 1}, exceeding Column ${c + 1}'s limit of ${level.colClues[c]} building.`
+              );
+            }
           }
         }
 
@@ -735,69 +1429,7 @@ export function solveByDeduction(
       }
     }
 
-    // --- RULE 5: Inventory Exhaustion & Hidden Singles ---
-    for (const pType of PLACEABLE_TYPES) {
-      const targetCount = level.inventory[pType];
-      if (targetCount === 0) continue;
-
-      const confirmedCells: Coord[] = [];
-      const candidateCells: Coord[] = [];
-      for (let r = 0; r < size; r++) {
-        for (let c = 0; c < size; c++) {
-          if (getLockedTile(domains[r][c]) === pType) {
-            confirmedCells.push({ r, c });
-          }
-          if (domains[r][c].has(pType)) {
-            candidateCells.push({ r, c });
-          }
-        }
-      }
-
-      if (confirmedCells.length === targetCount) {
-        for (const cell of candidateCells) {
-          if (getLockedTile(domains[cell.r][cell.c]) !== pType) {
-            const prev = domains[cell.r][cell.c].size;
-            domains[cell.r][cell.c].delete(pType);
-            recordElimReason(
-              cell.r,
-              cell.c,
-              pType,
-              `all ${targetCount} ${formatTileName(pType)}(s) already placed`
-            );
-            progress = true;
-            recordLockIfNew(
-              cell.r,
-              cell.c,
-              prev,
-              'Inventory Complete',
-              `All ${targetCount} ${formatTileName(pType)} tile(s) have already been placed.`
-            );
-          }
-        }
-      }
-
-      if (candidateCells.length === targetCount) {
-        for (const cell of candidateCells) {
-          const dom = domains[cell.r][cell.c];
-          if (dom.size > 1) {
-            const prev = dom.size;
-            dom.clear();
-            dom.add(pType);
-            progress = true;
-            recordLockIfNew(
-              cell.r,
-              cell.c,
-              prev,
-              'Only Remaining Spot',
-              `${xy(cell.r, cell.c)} is the only remaining valid spot on the board for the required ${formatTileName(pType)}.`,
-              true
-            );
-          }
-        }
-      }
-    }
-
-    // --- RULE 6: Forced Adjacency Partners & Line Claiming ---
+    // --- RULE 5: Forced Adjacency Partners & Line Claiming ---
     for (let r = 0; r < size; r++) {
       for (let c = 0; c < size; c++) {
         const locked = getLockedTile(domains[r][c]);
@@ -822,13 +1454,51 @@ export function solveByDeduction(
                 target,
                 'woodcutter'
               );
+              const otherEmpty = ortho.filter(
+                (n) =>
+                  (n.r !== target.r || n.c !== target.c) &&
+                  !isFixedObstacle(level.initialGrid[n.r][n.c]) &&
+                  (!startingGrid || startingGrid[n.r][n.c] === 'empty')
+              );
+              const customSteps: HintStep[] = [
+                {
+                  title: 'Tree Needs Woodcutter',
+                  message: `Tree needs a Woodcutter: Every Tree must have a Woodcutter next to it.`,
+                  focusCells: [{ r, c }],
+                  candidateCells: [target, ...otherEmpty]
+                }
+              ];
+              for (const n of otherEmpty) {
+                const reason =
+                  cellElimReasons[`${n.r},${n.c}`]?.['woodcutter'] ??
+                  cellElimReasons[`${n.r},${n.c}`]?.['empty'];
+                customSteps.push({
+                  title: 'Tree Needs Woodcutter',
+                  message: reason
+                    ? `${xy(n.r, n.c)} cannot be a Woodcutter (${reason}).`
+                    : `${xy(n.r, n.c)} cannot be a Woodcutter.`,
+                  focusCells: [{ r, c }],
+                  discardedCells: [n]
+                });
+              }
+              customSteps.push({
+                title: 'Tree Needs Woodcutter',
+                message:
+                  otherEmpty.length > 0
+                    ? `That leaves ${xy(target.r, target.c)} as the only valid spot next to the Tree at ${xy(r, c)}.`
+                    : `${xy(target.r, target.c)} is the only adjacent spot next to the Tree at ${xy(r, c)} for a Woodcutter.`,
+                focusCells: [{ r, c }],
+                targetCell: target
+              });
+
               recordLockIfNew(
                 target.r,
                 target.c,
                 prev,
                 'Tree Needs Woodcutter',
                 `Every Tree must have a Woodcutter next to it, so ${xy(target.r, target.c)} is the only valid spot next to the Tree at ${xy(r, c)}${otherWhy}.`,
-                true
+                true,
+                customSteps
               );
             }
           } else if (wcNeighbors.length > 1) {
@@ -915,13 +1585,51 @@ export function solveByDeduction(
                 target,
                 'house'
               );
+              const otherEmpty = ortho.filter(
+                (n) =>
+                  (n.r !== target.r || n.c !== target.c) &&
+                  !isFixedObstacle(level.initialGrid[n.r][n.c]) &&
+                  (!startingGrid || startingGrid[n.r][n.c] === 'empty')
+              );
+              const customSteps: HintStep[] = [
+                {
+                  title: `${formatTileName(locked)} Needs House`,
+                  message: `The ${formatTileName(locked)} at ${xy(r, c)} must touch a House.`,
+                  focusCells: [{ r, c }],
+                  candidateCells: [target, ...otherEmpty]
+                }
+              ];
+              for (const n of otherEmpty) {
+                const reason =
+                  cellElimReasons[`${n.r},${n.c}`]?.['house'] ??
+                  cellElimReasons[`${n.r},${n.c}`]?.['empty'];
+                customSteps.push({
+                  title: `${formatTileName(locked)} Needs House`,
+                  message: reason
+                    ? `${xy(n.r, n.c)} cannot be a House (${reason}).`
+                    : `${xy(n.r, n.c)} cannot be a House.`,
+                  focusCells: [{ r, c }],
+                  discardedCells: [n]
+                });
+              }
+              customSteps.push({
+                title: `${formatTileName(locked)} Needs House`,
+                message:
+                  otherEmpty.length > 0
+                    ? `That leaves ${xy(target.r, target.c)} as the only valid spot next to the ${formatTileName(locked)} at ${xy(r, c)}.`
+                    : `${xy(target.r, target.c)} is the only adjacent spot next to the ${formatTileName(locked)} at ${xy(r, c)} for a House.`,
+                focusCells: [{ r, c }],
+                targetCell: target
+              });
+
               recordLockIfNew(
                 target.r,
                 target.c,
                 prev,
                 `${formatTileName(locked)} Needs House`,
                 `The ${formatTileName(locked)} at ${xy(r, c)} must touch a House, and ${xy(target.r, target.c)} is its only valid neighbor${otherWhy}.`,
-                true
+                true,
+                customSteps
               );
             }
           } else if (houseNeighbors.length > 1) {
@@ -1051,15 +1759,117 @@ export function solveByDeduction(
                 target,
                 'road'
               );
+              const otherEmpty = ortho.filter(
+                (n) =>
+                  (n.r !== target.r || n.c !== target.c) &&
+                  !isFixedObstacle(level.initialGrid[n.r][n.c]) &&
+                  (!startingGrid || startingGrid[n.r][n.c] === 'empty')
+              );
+              const connTarget =
+                locked === 'town_hall' ? 'connect to the village' : 'reach the Town Hall';
+              const customSteps: HintStep[] = [
+                {
+                  title: 'Road Entry Point',
+                  message: `The ${formatTileName(locked)} at ${xy(r, c)} needs a Road connection to ${connTarget}.`,
+                  focusCells: [{ r, c }],
+                  candidateCells: [target, ...otherEmpty]
+                }
+              ];
+              for (const n of otherEmpty) {
+                const reason =
+                  cellElimReasons[`${n.r},${n.c}`]?.['road'] ??
+                  cellElimReasons[`${n.r},${n.c}`]?.['empty'];
+                customSteps.push({
+                  title: 'Road Entry Point',
+                  message: reason
+                    ? `${xy(n.r, n.c)} cannot be a Road (${reason}).`
+                    : `${xy(n.r, n.c)} cannot be a Road.`,
+                  focusCells: [{ r, c }],
+                  discardedCells: [n]
+                });
+              }
+              customSteps.push({
+                title: 'Road Entry Point',
+                message:
+                  otherEmpty.length > 0
+                    ? `That leaves ${xy(target.r, target.c)} as the only available Road exit for the ${formatTileName(locked)} at ${xy(r, c)}!`
+                    : `${xy(target.r, target.c)} is the only adjacent spot next to the ${formatTileName(locked)} at ${xy(r, c)} for a Road.`,
+                focusCells: [{ r, c }],
+                targetCell: target
+              });
+
               recordLockIfNew(
                 target.r,
                 target.c,
                 prev,
                 'Road Entry Point',
                 `The ${formatTileName(locked)} at ${xy(r, c)} needs a Road connection, and ${xy(target.r, target.c)} is its only available exit${otherWhy}.`,
-                true
+                true,
+                customSteps
               );
             }
+          }
+        }
+      }
+    }
+
+    // --- RULE 6: Inventory Exhaustion & Hidden Singles ---
+    for (const pType of PLACEABLE_TYPES) {
+      const targetCount = level.inventory[pType];
+      if (targetCount === 0) continue;
+
+      const confirmedCells: Coord[] = [];
+      const candidateCells: Coord[] = [];
+      for (let r = 0; r < size; r++) {
+        for (let c = 0; c < size; c++) {
+          if (getLockedTile(domains[r][c]) === pType) {
+            confirmedCells.push({ r, c });
+          }
+          if (domains[r][c].has(pType)) {
+            candidateCells.push({ r, c });
+          }
+        }
+      }
+
+      if (confirmedCells.length === targetCount) {
+        for (const cell of candidateCells) {
+          if (getLockedTile(domains[cell.r][cell.c]) !== pType) {
+            const prev = domains[cell.r][cell.c].size;
+            domains[cell.r][cell.c].delete(pType);
+            recordElimReason(
+              cell.r,
+              cell.c,
+              pType,
+              `all ${targetCount} ${formatTileName(pType)}(s) already placed`
+            );
+            progress = true;
+            recordLockIfNew(
+              cell.r,
+              cell.c,
+              prev,
+              'Inventory Complete',
+              `All ${targetCount} ${formatTileName(pType)} tile(s) have already been placed.`
+            );
+          }
+        }
+      }
+
+      if (candidateCells.length === targetCount) {
+        for (const cell of candidateCells) {
+          const dom = domains[cell.r][cell.c];
+          if (dom.size > 1) {
+            const prev = dom.size;
+            dom.clear();
+            dom.add(pType);
+            progress = true;
+            recordLockIfNew(
+              cell.r,
+              cell.c,
+              prev,
+              'Only Remaining Spot',
+              `${xy(cell.r, cell.c)} is the only remaining valid spot on the board for the required ${formatTileName(pType)}.`,
+              true
+            );
           }
         }
       }
@@ -1198,8 +2008,10 @@ export function solveByDeduction(
               candidate
             );
             if (contradiction !== null) {
+              lookaheadCount++;
               const prev = domains[r][c].size;
               domains[r][c].delete(candidate);
+              lookaheadEliminatedCells.add(`${r},${c}`);
               recordElimReason(r, c, candidate, contradiction);
               progress = true;
               recordLockIfNew(
@@ -1225,7 +2037,8 @@ export function solveByDeduction(
   return {
     solved,
     steps,
-    finalDomains: domains
+    finalDomains: domains,
+    lookaheadCount
   };
 }
 
@@ -1246,6 +2059,12 @@ function findSpecificAssignmentContradiction(
   );
   domains[testR][testC] = new Set([candidate]);
 
+  interface ForcedStep {
+    text: string;
+    targetR: number;
+    targetC: number;
+  }
+  const forcedSteps: ForcedStep[] = [];
   let changed = true;
   while (changed) {
     changed = false;
@@ -1267,6 +2086,34 @@ function findSpecificAssignmentContradiction(
         if (canBeAnyBuilding(domains[r][c])) maxB++;
       }
       if (minB > level.rowClues[r]) {
+        const relevant = forcedSteps.filter((s) => s.targetR === r);
+        const stepsToUse = relevant.length > 0 ? relevant : forcedSteps;
+        if (stepsToUse.length > 0) {
+          const fillCol =
+            candidate === 'town_hall' || isBuilding(candidate)
+              ? `fill Column ${testC + 1}, `
+              : '';
+          const otherMustCols: number[] = [];
+          for (let cc = 0; cc < size; cc++) {
+            if (
+              mustBeBuilding(domains[r][cc]) &&
+              !stepsToUse.some((s) => s.targetC === cc && s.targetR === r)
+            ) {
+              otherMustCols.push(cc);
+            }
+          }
+          if (otherMustCols.length > 0) {
+            const names = otherMustCols.map((cc) => {
+              const alreadyLocked = getLockedTile(baseDomains[r][cc]);
+              if (alreadyLocked && isBuilding(alreadyLocked)) {
+                return `${formatTileName(alreadyLocked)} at ${xy(r, cc)}`;
+              }
+              return `${xy(r, cc)} (needed for Column ${cc + 1})`;
+            });
+            return `${fillCol}${stepsToUse.map((s) => s.text).join(', ')}. Along with ${names.join(' and ')}, Row ${r + 1} would have ${minB} buildings, exceeding its limit of ${level.rowClues[r]} building(s)`;
+          }
+          return `${fillCol}${stepsToUse.map((s) => s.text).join(', ')}, which causes Row ${r + 1} to exceed its limit of ${level.rowClues[r]} building(s)`;
+        }
         return `Row ${r + 1} would exceed its limit of ${level.rowClues[r]} building(s)`;
       }
       if (maxB < level.rowClues[r]) {
@@ -1301,6 +2148,34 @@ function findSpecificAssignmentContradiction(
         if (canBeAnyBuilding(domains[r][c])) maxB++;
       }
       if (minB > level.colClues[c]) {
+        const relevant = forcedSteps.filter((s) => s.targetC === c);
+        const stepsToUse = relevant.length > 0 ? relevant : forcedSteps;
+        if (stepsToUse.length > 0) {
+          const fillRow =
+            candidate === 'town_hall' || isBuilding(candidate)
+              ? `fill Row ${testR + 1}, `
+              : '';
+          const otherMustRows: number[] = [];
+          for (let rr = 0; rr < size; rr++) {
+            if (
+              mustBeBuilding(domains[rr][c]) &&
+              !stepsToUse.some((s) => s.targetR === rr && s.targetC === c)
+            ) {
+              otherMustRows.push(rr);
+            }
+          }
+          if (otherMustRows.length > 0) {
+            const names = otherMustRows.map((rr) => {
+              const alreadyLocked = getLockedTile(baseDomains[rr][c]);
+              if (alreadyLocked && isBuilding(alreadyLocked)) {
+                return `${formatTileName(alreadyLocked)} at ${xy(rr, c)}`;
+              }
+              return `${xy(rr, c)} (needed for Row ${rr + 1})`;
+            });
+            return `${fillRow}${stepsToUse.map((s) => s.text).join(', ')}. Along with ${names.join(' and ')}, Column ${c + 1} would have ${minB} buildings, exceeding its limit of ${level.colClues[c]} building(s)`;
+          }
+          return `${fillRow}${stepsToUse.map((s) => s.text).join(', ')}, which causes Column ${c + 1} to exceed its limit of ${level.colClues[c]} building(s)`;
+        }
         return `Column ${c + 1} would exceed its limit of ${level.colClues[c]} building(s)`;
       }
       if (maxB < level.colClues[c]) {
@@ -1405,6 +2280,11 @@ function findSpecificAssignmentContradiction(
               domains[target.r][target.c].clear();
               domains[target.r][target.c].add('house');
               changed = true;
+              forcedSteps.push({
+                text: `forcing ${formatTileName(locked)} at ${xy(r, c)}'s House into ${xy(target.r, target.c)}`,
+                targetR: target.r,
+                targetC: target.c
+              });
             }
           }
         }
@@ -1693,34 +2573,166 @@ export function getNextHint(
       const pTile = playerGrid[r][c];
       if (isFixedObstacle(pTile) || pTile === 'empty') continue;
       if (pTile !== level.solution[r][c]) {
+        const msg = `The ${formatTileName(pTile)} at ${xy(r, c)} doesn't belong there — try removing it first!`;
         return {
           r,
           c,
           action: 'mark_empty',
           ruleName: 'Check Placement',
-          explanation: `The ${formatTileName(pTile)} at ${xy(r, c)} doesn't belong there — try removing it first!`
+          explanation: msg,
+          steps: [
+            {
+              title: 'Check Placement',
+              message: msg,
+              discardedCells: [{ r, c }],
+              targetCell: { r, c }
+            }
+          ]
         };
       }
     }
   }
 
-  const result = solveByDeduction(level, playerGrid);
-
-  // 1. Strictly in chronological deduction order: return the earliest placement that is valid right now
-  for (const step of result.steps) {
-    if (step.action === 'place' && playerGrid[step.r][step.c] === 'empty') {
-      return step;
+  // 0. Check for any satisfied Row or Column clues that still have un-marked sand squares
+  for (let r = 0; r < size; r++) {
+    let placedInRow = 0;
+    const placedDesc: string[] = [];
+    for (let c = 0; c < size; c++) {
+      if (isBuilding(playerGrid[r][c])) {
+        placedInRow++;
+        placedDesc.push(`${formatTileName(playerGrid[r][c])} at ${xy(r, c)}`);
+      }
+    }
+    const quota = level.rowClues[r];
+    if (placedInRow === quota) {
+      const unmarkedInRow: Coord[] = [];
+      for (let c = 0; c < size; c++) {
+        if (
+          playerGrid[r][c] === 'empty' &&
+          !playerMarks[r][c] &&
+          !isFixedObstacle(level.initialGrid[r][c])
+        ) {
+          unmarkedInRow.push({ r, c });
+        }
+      }
+      if (unmarkedInRow.length > 0) {
+        const title = 'Row Clue Complete';
+        const msg1 =
+          quota === 0
+            ? `Row ${r + 1} has a clue of 0, so no buildings can be placed here.`
+            : `Row ${r + 1} already has all ${quota} of its required building(s) placed (${placedDesc.join(', ')}).`;
+        const msg2 = `Tap the Row ${r + 1} badge (or click Apply) to mark the remaining ${unmarkedInRow.length} spot(s) as clear ground.`;
+        return {
+          r: unmarkedInRow[0].r,
+          c: unmarkedInRow[0].c,
+          action: 'mark_empty',
+          lineAction: { axis: 'row', index: r },
+          ruleName: title,
+          explanation: `${msg1} ${msg2}`,
+          steps: [
+            {
+              title,
+              message: msg1,
+              highlightLine: { axis: 'row', index: r },
+              focusCells: unmarkedInRow,
+              candidateCells: unmarkedInRow
+            },
+            {
+              title,
+              message: msg2,
+              highlightLine: { axis: 'row', index: r },
+              focusCells: unmarkedInRow,
+              targetCell: unmarkedInRow[0],
+              candidateCells: unmarkedInRow
+            }
+          ]
+        };
+      }
     }
   }
 
-  // 2. If no placement is ready, return the earliest un-marked empty cell
+  for (let c = 0; c < size; c++) {
+    let placedInCol = 0;
+    const placedDesc: string[] = [];
+    for (let r = 0; r < size; r++) {
+      if (isBuilding(playerGrid[r][c])) {
+        placedInCol++;
+        placedDesc.push(`${formatTileName(playerGrid[r][c])} at ${xy(r, c)}`);
+      }
+    }
+    const quota = level.colClues[c];
+    if (placedInCol === quota) {
+      const unmarkedInCol: Coord[] = [];
+      for (let r = 0; r < size; r++) {
+        if (
+          playerGrid[r][c] === 'empty' &&
+          !playerMarks[r][c] &&
+          !isFixedObstacle(level.initialGrid[r][c])
+        ) {
+          unmarkedInCol.push({ r, c });
+        }
+      }
+      if (unmarkedInCol.length > 0) {
+        const title = 'Column Clue Complete';
+        const msg1 =
+          quota === 0
+            ? `Column ${c + 1} has a clue of 0, so no buildings can be placed here.`
+            : `Column ${c + 1} already has all ${quota} of its required building(s) placed (${placedDesc.join(', ')}).`;
+        const msg2 = `Tap the Column ${c + 1} badge (or click Apply) to mark the remaining ${unmarkedInCol.length} spot(s) as clear ground.`;
+        return {
+          r: unmarkedInCol[0].r,
+          c: unmarkedInCol[0].c,
+          action: 'mark_empty',
+          lineAction: { axis: 'col', index: c },
+          ruleName: title,
+          explanation: `${msg1} ${msg2}`,
+          steps: [
+            {
+              title,
+              message: msg1,
+              highlightLine: { axis: 'col', index: c },
+              focusCells: unmarkedInCol,
+              candidateCells: unmarkedInCol
+            },
+            {
+              title,
+              message: msg2,
+              highlightLine: { axis: 'col', index: c },
+              focusCells: unmarkedInCol,
+              targetCell: unmarkedInCol[0],
+              candidateCells: unmarkedInCol
+            }
+          ]
+        };
+      }
+    }
+  }
+
+  const result = solveByDeduction(level, playerGrid, playerMarks);
+
+  const normalizeHint = (step: DeductionHint): DeductionHint => {
+    if (!step.steps || step.steps.length === 0) {
+      step.steps = [
+        {
+          title: step.ruleName,
+          message: step.explanation,
+          targetCell: { r: step.r, c: step.c }
+        }
+      ];
+    }
+    return step;
+  };
+
+  // Strictly in chronological deduction order: return the earliest unfulfilled deduction
   for (const step of result.steps) {
-    if (
-      step.action === 'mark_empty' &&
-      playerGrid[step.r][step.c] === 'empty' &&
-      !playerMarks[step.r][step.c]
-    ) {
-      return step;
+    if (playerGrid[step.r][step.c] !== 'empty') continue;
+
+    if (step.action === 'mark_empty') {
+      if (!playerMarks[step.r][step.c]) {
+        return normalizeHint(step);
+      }
+    } else if (step.action === 'place') {
+      return normalizeHint(step);
     }
   }
 

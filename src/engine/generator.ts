@@ -41,9 +41,9 @@ export function calculateDifficultyMetrics(
 ): DifficultyMetrics {
   const trace = solveByDeduction(level);
   const stepCount = trace.steps.length;
-  const hasContradiction = trace.steps.some(
-    (s) => s.ruleName === 'Logical Elimination'
-  );
+  const hasContradiction =
+    trace.lookaheadCount > 0 ||
+    trace.steps.some((s) => s.ruleName === 'Logical Elimination');
 
   let maxRuleLevel = 1;
   let maxRuleName = 'Line Clue Complete';
@@ -121,7 +121,8 @@ export function calculateDifficultyMetrics(
     maxRuleName,
     stepCount,
     density,
-    filledTiles
+    filledTiles,
+    lookaheadCount: trace.lookaheadCount
   };
 }
 
@@ -577,6 +578,7 @@ export function generateVerifiedLevel(
 
     const deduction = solveByDeduction(candidateLevel);
     if (!deduction.solved) continue;
+    if (deduction.lookaheadCount > 3) continue;
 
     const metrics = calculateDifficultyMetrics(candidateLevel);
     candidateLevel.difficultyMetrics = metrics;

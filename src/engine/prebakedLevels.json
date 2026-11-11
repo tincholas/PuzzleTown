@@ -2584,44 +2584,44 @@
         "empty"
       ],
       [
-        "empty",
-        "empty",
         "tree",
-        "empty",
-        "tree"
-      ],
-      [
-        "empty",
-        "empty",
-        "tree",
-        "empty",
-        "empty"
-      ],
-      [
-        "empty",
-        "tree",
-        "empty",
-        "empty",
-        "rock"
-      ],
-      [
-        "empty",
         "empty",
         "rock",
         "empty",
         "empty"
+      ],
+      [
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "tree"
+      ],
+      [
+        "tree",
+        "empty",
+        "empty",
+        "empty",
+        "empty"
+      ],
+      [
+        "rock",
+        "empty",
+        "empty",
+        "empty",
+        "tree"
       ]
     ],
     "rowClues": [
-      2,
-      1,
-      2,
-      1,
+      0,
+      0,
+      3,
+      3,
       0
     ],
     "colClues": [
-      2,
       1,
+      2,
       0,
       2,
       1
@@ -2638,49 +2638,49 @@
         "empty",
         "empty",
         "empty",
-        "house",
-        "farm"
-      ],
-      [
-        "empty",
-        "empty",
-        "tree",
-        "woodcutter",
-        "tree"
-      ],
-      [
-        "house",
-        "woodcutter",
-        "tree",
         "empty",
         "empty"
       ],
       [
-        "farm",
         "tree",
-        "empty",
-        "empty",
-        "rock"
-      ],
-      [
-        "empty",
         "empty",
         "rock",
         "empty",
         "empty"
+      ],
+      [
+        "woodcutter",
+        "house",
+        "empty",
+        "farm",
+        "tree"
+      ],
+      [
+        "tree",
+        "farm",
+        "empty",
+        "house",
+        "woodcutter"
+      ],
+      [
+        "rock",
+        "empty",
+        "empty",
+        "empty",
+        "tree"
       ]
     ],
     "difficulty": "Medium",
     "difficultyMetrics": {
-      "score": 52,
+      "score": 54,
       "tier": "Medium",
-      "maxRuleLevel": 5,
-      "maxRuleName": "Logical Elimination",
-      "stepCount": 19,
+      "maxRuleLevel": 2,
+      "maxRuleName": "Tree Needs Woodcutter",
+      "stepCount": 30,
       "density": 0.48,
       "filledTiles": 12
     },
-    "difficultyScore": 52,
+    "difficultyScore": 54,
     "density": 0.48
   },
   {
@@ -4516,32 +4516,32 @@
     "size": 5,
     "initialGrid": [
       [
-        "empty",
-        "empty",
-        "empty",
-        "empty",
-        "empty"
-      ],
-      [
         "rock",
-        "empty",
         "tree",
+        "empty",
+        "empty",
+        "empty"
+      ],
+      [
+        "tree",
+        "empty",
+        "empty",
         "empty",
         "empty"
       ],
       [
         "empty",
         "empty",
-        "tree",
+        "empty",
+        "empty",
+        "empty"
+      ],
+      [
+        "empty",
+        "empty",
+        "empty",
         "empty",
         "tree"
-      ],
-      [
-        "empty",
-        "empty",
-        "empty",
-        "empty",
-        "empty"
       ],
       [
         "empty",
@@ -4552,75 +4552,75 @@
       ]
     ],
     "rowClues": [
-      1,
+      0,
       2,
-      1,
+      2,
       1,
       2
     ],
     "colClues": [
-      0,
+      2,
       2,
       1,
-      2,
+      0,
       2
     ],
     "inventory": {
       "house": 3,
       "woodcutter": 2,
-      "road": 4,
+      "road": 5,
       "farm": 1,
       "town_hall": 1
     },
     "solution": [
       [
-        "empty",
-        "house",
-        "empty",
-        "empty",
-        "empty"
-      ],
-      [
         "rock",
-        "woodcutter",
         "tree",
-        "house",
+        "empty",
+        "empty",
         "empty"
       ],
       [
-        "empty",
-        "road",
         "tree",
         "woodcutter",
+        "road",
+        "empty",
+        "house"
+      ],
+      [
+        "empty",
+        "house",
+        "road",
+        "road",
+        "woodcutter"
+      ],
+      [
+        "farm",
+        "road",
+        "road",
+        "empty",
         "tree"
       ],
       [
-        "empty",
-        "road",
-        "road",
-        "road",
-        "farm"
-      ],
-      [
-        "empty",
+        "house",
         "empty",
         "town_hall",
         "empty",
-        "house"
+        "empty"
       ]
     ],
     "difficulty": "Hard",
     "difficultyMetrics": {
-      "score": 72,
+      "score": 77,
       "tier": "Hard",
-      "maxRuleLevel": 5,
-      "maxRuleName": "Logical Elimination",
-      "stepCount": 21,
-      "density": 0.6,
-      "filledTiles": 15
+      "maxRuleLevel": 4,
+      "maxRuleName": "Road Entry Point",
+      "stepCount": 34,
+      "density": 0.64,
+      "filledTiles": 16
     },
-    "difficultyScore": 72,
-    "density": 0.6
+    "difficultyScore": 77,
+    "density": 0.64
   },
   {
     "id": 43,
@@ -4744,21 +4744,14 @@
     "size": 5,
     "initialGrid": [
       [
-        "empty",
-        "empty",
-        "rock",
-        "empty",
-        "empty"
-      ],
-      [
-        "empty",
-        "empty",
-        "empty",
-        "empty",
-        "empty"
-      ],
-      [
         "tree",
+        "empty",
+        "empty",
+        "empty",
+        "empty"
+      ],
+      [
+        "empty",
         "empty",
         "empty",
         "empty",
@@ -4773,54 +4766,54 @@
       ],
       [
         "empty",
+        "rock",
         "empty",
-        "tree",
+        "empty",
+        "empty"
+      ],
+      [
+        "empty",
+        "empty",
+        "empty",
         "empty",
         "empty"
       ]
     ],
     "rowClues": [
-      1,
-      1,
       2,
+      1,
+      1,
       1,
       2
     ],
     "colClues": [
-      2,
-      0,
+      1,
+      3,
       2,
       1,
-      2
+      0
     ],
     "inventory": {
       "house": 3,
       "woodcutter": 2,
-      "road": 5,
+      "road": 6,
       "farm": 1,
       "town_hall": 1
     },
     "solution": [
       [
-        "house",
-        "empty",
-        "rock",
-        "empty",
-        "empty"
-      ],
-      [
+        "tree",
         "woodcutter",
         "road",
-        "road",
-        "road",
+        "town_hall",
         "empty"
       ],
       [
-        "tree",
         "empty",
         "house",
+        "empty",
         "road",
-        "town_hall"
+        "empty"
       ],
       [
         "rock",
@@ -4831,23 +4824,30 @@
       ],
       [
         "empty",
-        "empty",
-        "tree",
+        "rock",
+        "house",
+        "road",
+        "empty"
+      ],
+      [
+        "house",
         "farm",
-        "house"
+        "road",
+        "road",
+        "empty"
       ]
     ],
-    "difficulty": "Hard",
+    "difficulty": "Expert",
     "difficultyMetrics": {
-      "score": 73,
-      "tier": "Hard",
-      "maxRuleLevel": 5,
-      "maxRuleName": "Logical Elimination",
-      "stepCount": 20,
+      "score": 79,
+      "tier": "Expert",
+      "maxRuleLevel": 4,
+      "maxRuleName": "Road Entry Point",
+      "stepCount": 35,
       "density": 0.68,
       "filledTiles": 17
     },
-    "difficultyScore": 73,
+    "difficultyScore": 79,
     "density": 0.68
   },
   {
@@ -5318,14 +5318,7 @@
         "empty",
         "empty",
         "empty",
-        "empty"
-      ],
-      [
-        "empty",
-        "empty",
-        "empty",
-        "empty",
-        "empty"
+        "tree"
       ],
       [
         "empty",
@@ -5337,31 +5330,38 @@
       [
         "rock",
         "empty",
-        "tree",
+        "empty",
+        "empty",
+        "empty"
+      ],
+      [
+        "empty",
+        "empty",
+        "empty",
         "empty",
         "tree"
       ],
       [
+        "empty",
+        "empty",
         "rock",
-        "empty",
-        "empty",
-        "empty",
+        "tree",
         "empty"
       ]
     ],
     "rowClues": [
-      2,
-      2,
       1,
+      2,
       0,
+      2,
       2
     ],
     "colClues": [
       1,
-      1,
       2,
       1,
-      2
+      2,
+      1
     ],
     "inventory": {
       "house": 3,
@@ -5373,52 +5373,52 @@
     "solution": [
       [
         "empty",
+        "town_hall",
+        "empty",
+        "empty",
+        "tree"
+      ],
+      [
+        "empty",
+        "road",
         "empty",
         "house",
-        "farm",
-        "empty"
-      ],
-      [
-        "town_hall",
-        "road",
-        "road",
-        "road",
-        "house"
-      ],
-      [
-        "empty",
-        "empty",
-        "empty",
-        "road",
         "woodcutter"
       ],
       [
         "rock",
-        "empty",
-        "tree",
         "road",
+        "road",
+        "road",
+        "road"
+      ],
+      [
+        "empty",
+        "road",
+        "house",
+        "woodcutter",
         "tree"
       ],
       [
-        "rock",
         "house",
-        "woodcutter",
-        "road",
+        "farm",
+        "rock",
+        "tree",
         "empty"
       ]
     ],
     "difficulty": "Hard",
     "difficultyMetrics": {
-      "score": 66,
+      "score": 77,
       "tier": "Hard",
       "maxRuleLevel": 4,
       "maxRuleName": "Road Entry Point",
-      "stepCount": 21,
-      "density": 0.68,
-      "filledTiles": 17
+      "stepCount": 33,
+      "density": 0.72,
+      "filledTiles": 18
     },
-    "difficultyScore": 66,
-    "density": 0.68
+    "difficultyScore": 77,
+    "density": 0.72
   },
   {
     "id": 50,
@@ -7686,6 +7686,14 @@
         "empty"
       ],
       [
+        "tree",
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "empty"
+      ],
+      [
         "empty",
         "empty",
         "empty",
@@ -7697,7 +7705,7 @@
         "empty",
         "empty",
         "empty",
-        "rock",
+        "empty",
         "empty",
         "empty"
       ],
@@ -7705,7 +7713,7 @@
         "empty",
         "empty",
         "empty",
-        "rock",
+        "empty",
         "empty",
         "empty"
       ],
@@ -7713,34 +7721,26 @@
         "tree",
         "empty",
         "empty",
-        "empty",
-        "empty",
-        "tree"
-      ],
-      [
-        "empty",
-        "tree",
-        "empty",
-        "empty",
         "rock",
-        "rock"
+        "rock",
+        "empty"
       ]
     ],
     "rowClues": [
-      2,
       1,
       2,
-      1,
       2,
-      0
+      1,
+      0,
+      2
     ],
     "colClues": [
       1,
       3,
       1,
+      3,
       0,
-      0,
-      3
+      0
     ],
     "inventory": {
       "house": 3,
@@ -7751,66 +7751,66 @@
     },
     "solution": [
       [
-        "house",
+        "empty",
+        "empty",
+        "road",
         "farm",
         "empty",
+        "empty"
+      ],
+      [
+        "tree",
+        "farm",
+        "road",
+        "house",
         "empty",
+        "empty"
+      ],
+      [
+        "woodcutter",
+        "house",
+        "road",
+        "empty",
+        "empty",
+        "empty"
+      ],
+      [
+        "road",
+        "road",
+        "road",
+        "town_hall",
         "empty",
         "empty"
       ],
       [
         "empty",
         "road",
-        "road",
-        "road",
-        "road",
-        "farm"
-      ],
-      [
         "empty",
-        "town_hall",
         "empty",
-        "rock",
-        "road",
-        "house"
-      ],
-      [
         "empty",
-        "road",
-        "empty",
-        "rock",
-        "road",
-        "woodcutter"
+        "empty"
       ],
       [
         "tree",
         "woodcutter",
         "house",
-        "empty",
-        "empty",
-        "tree"
-      ],
-      [
-        "empty",
-        "tree",
-        "empty",
-        "empty",
         "rock",
-        "rock"
+        "rock",
+        "empty"
       ]
     ],
     "difficulty": "Expert",
     "difficultyMetrics": {
-      "score": 90,
+      "score": 98,
       "tier": "Expert",
-      "maxRuleLevel": 5,
-      "maxRuleName": "Logical Elimination",
-      "stepCount": 29,
-      "density": 0.61,
-      "filledTiles": 22
+      "maxRuleLevel": 4,
+      "maxRuleName": "Road Entry Point",
+      "stepCount": 54,
+      "density": 0.53,
+      "filledTiles": 19
     },
-    "difficultyScore": 90,
-    "density": 0.61
+    "difficultyScore": 98,
+    "density": 0.53
   },
   {
     "id": 70,
@@ -8247,17 +8247,41 @@
     "initialGrid": [
       [
         "empty",
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "empty"
+      ],
+      [
+        "empty",
+        "empty",
+        "empty",
+        "tree",
+        "empty",
+        "empty"
+      ],
+      [
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "tree",
+        "empty"
+      ],
+      [
+        "empty",
         "rock",
+        "empty",
+        "empty",
+        "empty",
+        "tree"
+      ],
+      [
+        "empty",
         "rock",
         "empty",
         "empty",
-        "empty"
-      ],
-      [
-        "empty",
-        "empty",
-        "empty",
-        "empty",
         "empty",
         "empty"
       ],
@@ -8265,120 +8289,96 @@
         "empty",
         "empty",
         "empty",
-        "tree",
-        "empty",
-        "empty"
-      ],
-      [
-        "empty",
-        "empty",
-        "empty",
-        "empty",
-        "empty",
-        "empty"
-      ],
-      [
-        "tree",
-        "empty",
-        "tree",
-        "empty",
-        "empty",
-        "empty"
-      ],
-      [
-        "empty",
-        "empty",
-        "empty",
-        "empty",
+        "rock",
         "empty",
         "empty"
       ]
     ],
     "rowClues": [
+      1,
+      2,
+      1,
+      3,
+      1,
+      0
+    ],
+    "colClues": [
+      3,
       0,
       2,
       2,
       1,
-      2,
-      1
-    ],
-    "colClues": [
-      2,
-      2,
-      0,
-      0,
-      3,
-      1
+      0
     ],
     "inventory": {
       "house": 3,
       "woodcutter": 2,
-      "road": 6,
+      "road": 8,
       "farm": 2,
       "town_hall": 1
     },
     "solution": [
       [
         "empty",
-        "rock",
-        "rock",
+        "empty",
+        "house",
         "empty",
         "empty",
         "empty"
       ],
       [
+        "town_hall",
+        "road",
+        "woodcutter",
+        "tree",
         "empty",
-        "empty",
-        "empty",
-        "empty",
-        "house",
-        "farm"
+        "empty"
       ],
       [
-        "house",
-        "empty",
-        "empty",
+        "road",
+        "road",
+        "road",
+        "farm",
         "tree",
-        "woodcutter",
-        "road"
+        "empty"
       ],
       [
         "farm",
+        "rock",
         "road",
-        "road",
-        "road",
-        "road",
-        "road"
+        "house",
+        "woodcutter",
+        "tree"
       ],
       [
-        "tree",
-        "woodcutter",
-        "tree",
-        "empty",
-        "town_hall",
+        "house",
+        "rock",
+        "road",
+        "road",
+        "road",
         "empty"
       ],
       [
         "empty",
-        "house",
         "empty",
         "empty",
+        "rock",
         "empty",
         "empty"
       ]
     ],
     "difficulty": "Expert",
     "difficultyMetrics": {
-      "score": 90,
+      "score": 97,
       "tier": "Expert",
-      "maxRuleLevel": 5,
-      "maxRuleName": "Logical Elimination",
-      "stepCount": 31,
-      "density": 0.53,
-      "filledTiles": 19
+      "maxRuleLevel": 4,
+      "maxRuleName": "Road Entry Point",
+      "stepCount": 50,
+      "density": 0.61,
+      "filledTiles": 22
     },
-    "difficultyScore": 90,
-    "density": 0.53
+    "difficultyScore": 97,
+    "density": 0.61
   },
   {
     "id": 74,
@@ -8391,7 +8391,15 @@
         "empty",
         "empty",
         "empty",
+        "empty",
         "rock",
+        "empty"
+      ],
+      [
+        "empty",
+        "rock",
+        "empty",
+        "empty",
         "empty",
         "empty"
       ],
@@ -8404,53 +8412,45 @@
         "empty"
       ],
       [
-        "empty",
-        "rock",
         "tree",
         "empty",
-        "rock",
-        "empty"
-      ],
-      [
-        "empty",
-        "empty",
         "empty",
         "empty",
         "empty",
         "empty"
       ],
       [
-        "empty",
-        "empty",
-        "empty",
-        "empty",
-        "empty",
-        "empty"
-      ],
-      [
-        "empty",
-        "empty",
-        "empty",
         "empty",
         "tree",
+        "empty",
+        "empty",
+        "empty",
+        "empty"
+      ],
+      [
+        "empty",
+        "tree",
+        "empty",
+        "empty",
+        "empty",
         "empty"
       ]
     ],
     "rowClues": [
       1,
       1,
-      0,
-      3,
+      1,
+      2,
       2,
       1
     ],
     "colClues": [
       0,
+      2,
+      2,
       1,
-      4,
       0,
-      1,
-      2
+      3
     ],
     "inventory": {
       "house": 3,
@@ -8463,63 +8463,63 @@
       [
         "empty",
         "empty",
-        "house",
-        "rock",
         "empty",
-        "empty"
-      ],
-      [
-        "empty",
-        "empty",
-        "farm",
-        "road",
-        "empty",
-        "empty"
-      ],
-      [
         "empty",
         "rock",
-        "tree",
-        "road",
-        "rock",
-        "empty"
-      ],
-      [
-        "empty",
-        "house",
-        "woodcutter",
-        "road",
-        "road",
-        "farm"
-      ],
-      [
-        "empty",
-        "empty",
-        "road",
-        "road",
-        "woodcutter",
         "house"
       ],
       [
         "empty",
+        "rock",
         "empty",
-        "town_hall",
-        "road",
+        "empty",
+        "empty",
+        "farm"
+      ],
+      [
+        "empty",
+        "house",
+        "empty",
+        "empty",
+        "empty",
+        "road"
+      ],
+      [
         "tree",
+        "woodcutter",
+        "road",
+        "road",
+        "road",
+        "town_hall"
+      ],
+      [
+        "empty",
+        "tree",
+        "house",
+        "farm",
+        "road",
+        "empty"
+      ],
+      [
+        "empty",
+        "tree",
+        "woodcutter",
+        "road",
+        "road",
         "empty"
       ]
     ],
     "difficulty": "Expert",
     "difficultyMetrics": {
-      "score": 81,
+      "score": 99,
       "tier": "Expert",
-      "maxRuleLevel": 3,
-      "maxRuleName": "Only Remaining Spot",
-      "stepCount": 31,
+      "maxRuleLevel": 4,
+      "maxRuleName": "Road Entry Point",
+      "stepCount": 54,
       "density": 0.56,
       "filledTiles": 20
     },
-    "difficultyScore": 81,
+    "difficultyScore": 99,
     "density": 0.56
   },
   {
@@ -8689,52 +8689,52 @@
       ],
       [
         "empty",
+        "empty",
+        "empty",
+        "empty",
         "tree",
-        "empty",
-        "rock",
-        "empty",
-        "empty"
+        "rock"
       ],
       [
+        "rock",
+        "empty",
+        "empty",
         "tree",
-        "empty",
-        "empty",
-        "empty",
-        "empty",
-        "empty"
-      ],
-      [
-        "rock",
-        "empty",
-        "empty",
-        "empty",
-        "empty",
+        "tree",
         "empty"
       ],
       [
         "empty",
-        "rock",
+        "empty",
         "empty",
         "empty",
         "empty",
         "tree"
+      ],
+      [
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "empty"
       ]
     ],
     "rowClues": [
       1,
-      0,
+      1,
+      1,
       0,
       2,
-      3,
-      2
+      3
     ],
     "colClues": [
+      2,
       0,
-      2,
       1,
-      1,
+      3,
       2,
-      2
+      0
     ],
     "inventory": {
       "house": 3,
@@ -8747,63 +8747,63 @@
       [
         "empty",
         "empty",
+        "road",
+        "farm",
         "empty",
-        "empty",
-        "town_hall",
         "empty"
       ],
       [
-        "empty",
-        "empty",
         "empty",
         "empty",
         "road",
+        "house",
+        "empty",
         "empty"
       ],
       [
         "empty",
-        "tree",
         "empty",
-        "rock",
         "road",
-        "empty"
-      ],
-      [
-        "tree",
         "woodcutter",
-        "road",
-        "road",
-        "road",
-        "house"
+        "tree",
+        "rock"
       ],
       [
         "rock",
-        "house",
-        "farm",
+        "empty",
         "road",
-        "road",
-        "woodcutter"
+        "tree",
+        "tree",
+        "empty"
       ],
       [
-        "empty",
-        "rock",
-        "empty",
         "house",
-        "farm",
+        "empty",
+        "road",
+        "road",
+        "woodcutter",
         "tree"
+      ],
+      [
+        "farm",
+        "road",
+        "town_hall",
+        "empty",
+        "house",
+        "empty"
       ]
     ],
     "difficulty": "Expert",
     "difficultyMetrics": {
-      "score": 80,
+      "score": 96,
       "tier": "Expert",
       "maxRuleLevel": 4,
       "maxRuleName": "Road Entry Point",
-      "stepCount": 30,
+      "stepCount": 50,
       "density": 0.58,
       "filledTiles": 21
     },
-    "difficultyScore": 80,
+    "difficultyScore": 96,
     "density": 0.58
   },
   {
@@ -9108,16 +9108,24 @@
       [
         "tree",
         "empty",
-        "empty",
-        "empty",
-        "empty",
-        "empty"
-      ],
-      [
         "rock",
-        "tree",
+        "empty",
+        "empty",
+        "empty"
+      ],
+      [
+        "empty",
+        "empty",
+        "empty",
         "empty",
         "tree",
+        "empty"
+      ],
+      [
+        "empty",
+        "empty",
+        "empty",
+        "empty",
         "empty",
         "empty"
       ],
@@ -9127,110 +9135,102 @@
         "empty",
         "empty",
         "empty",
-        "rock"
-      ],
-      [
-        "empty",
-        "empty",
-        "empty",
-        "empty",
-        "empty",
         "empty"
       ],
       [
         "empty",
         "empty",
-        "empty",
+        "rock",
         "empty",
         "empty",
         "empty"
       ]
     ],
     "rowClues": [
-      2,
-      1,
       0,
-      2,
       1,
-      2
-    ],
-    "colClues": [
-      1,
-      2,
-      2,
-      2,
+      3,
+      3,
       1,
       0
+    ],
+    "colClues": [
+      2,
+      1,
+      1,
+      1,
+      1,
+      2
     ],
     "inventory": {
       "house": 3,
       "woodcutter": 2,
-      "road": 6,
+      "road": 8,
       "farm": 2,
       "town_hall": 1
     },
     "solution": [
       [
         "empty",
-        "house",
-        "farm",
+        "empty",
+        "empty",
         "empty",
         "empty",
         "empty"
       ],
       [
         "tree",
-        "woodcutter",
-        "road",
         "empty",
-        "empty",
-        "empty"
-      ],
-      [
         "rock",
-        "tree",
-        "road",
-        "tree",
         "empty",
-        "empty"
+        "empty",
+        "house"
       ],
       [
-        "empty",
-        "empty",
-        "road",
         "woodcutter",
         "house",
-        "rock"
+        "empty",
+        "empty",
+        "tree",
+        "farm"
+      ],
+      [
+        "road",
+        "road",
+        "farm",
+        "house",
+        "woodcutter",
+        "road"
       ],
       [
         "town_hall",
         "road",
         "road",
         "road",
-        "empty",
-        "empty"
+        "road",
+        "road"
       ],
       [
         "empty",
         "empty",
-        "house",
-        "farm",
+        "rock",
+        "empty",
         "empty",
         "empty"
       ]
     ],
     "difficulty": "Expert",
     "difficultyMetrics": {
-      "score": 80,
+      "score": 99,
       "tier": "Expert",
       "maxRuleLevel": 4,
       "maxRuleName": "Road Entry Point",
-      "stepCount": 31,
-      "density": 0.53,
-      "filledTiles": 19
+      "stepCount": 56,
+      "density": 0.56,
+      "filledTiles": 20
     },
-    "difficultyScore": 80,
-    "density": 0.53
+    "difficultyScore": 99,
+    "density": 0.56
   },
   {
     "id": 80,
@@ -9382,35 +9382,35 @@
     "size": 6,
     "initialGrid": [
       [
+        "empty",
+        "empty",
+        "empty",
+        "rock",
+        "empty",
+        "empty"
+      ],
+      [
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "empty"
+      ],
+      [
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "rock"
+      ],
+      [
         "tree",
         "empty",
-        "empty",
-        "empty",
-        "empty",
-        "empty"
-      ],
-      [
-        "empty",
+        "tree",
         "empty",
         "rock",
-        "empty",
-        "empty",
-        "empty"
-      ],
-      [
-        "empty",
-        "rock",
-        "empty",
-        "empty",
-        "empty",
-        "empty"
-      ],
-      [
-        "empty",
-        "rock",
-        "empty",
-        "empty",
-        "empty",
         "empty"
       ],
       [
@@ -9431,19 +9431,19 @@
       ]
     ],
     "rowClues": [
-      1,
-      1,
       0,
-      2,
+      3,
+      0,
+      1,
       1,
       3
     ],
     "colClues": [
-      2,
-      2,
+      0,
+      3,
       1,
       2,
-      1,
+      2,
       0
     ],
     "inventory": {
@@ -9455,40 +9455,40 @@
     },
     "solution": [
       [
-        "tree",
-        "woodcutter",
-        "road",
-        "road",
+        "empty",
+        "empty",
+        "empty",
+        "rock",
         "empty",
         "empty"
       ],
       [
-        "empty",
-        "house",
-        "rock",
-        "road",
-        "empty",
-        "empty"
-      ],
-      [
-        "empty",
-        "rock",
-        "empty",
-        "road",
-        "empty",
-        "empty"
-      ],
-      [
-        "house",
-        "rock",
         "empty",
         "town_hall",
-        "empty",
+        "road",
+        "farm",
+        "house",
         "empty"
       ],
       [
-        "farm",
+        "empty",
         "road",
+        "road",
+        "road",
+        "empty",
+        "rock"
+      ],
+      [
+        "tree",
+        "woodcutter",
+        "tree",
+        "road",
+        "rock",
+        "empty"
+      ],
+      [
+        "empty",
+        "house",
         "road",
         "road",
         "road",
@@ -9505,16 +9505,16 @@
     ],
     "difficulty": "Expert",
     "difficultyMetrics": {
-      "score": 81,
+      "score": 96,
       "tier": "Expert",
       "maxRuleLevel": 4,
       "maxRuleName": "Road Entry Point",
-      "stepCount": 31,
-      "density": 0.58,
-      "filledTiles": 21
+      "stepCount": 49,
+      "density": 0.61,
+      "filledTiles": 22
     },
-    "difficultyScore": 81,
-    "density": 0.58
+    "difficultyScore": 96,
+    "density": 0.61
   },
   {
     "id": 82,
@@ -9667,7 +9667,7 @@
     "initialGrid": [
       [
         "empty",
-        "rock",
+        "empty",
         "empty",
         "empty",
         "empty",
@@ -9675,10 +9675,26 @@
       ],
       [
         "empty",
+        "rock",
+        "empty",
+        "empty",
+        "empty",
+        "rock"
+      ],
+      [
         "empty",
         "empty",
         "empty",
         "empty",
+        "rock",
+        "empty"
+      ],
+      [
+        "empty",
+        "tree",
+        "empty",
+        "empty",
+        "tree",
         "empty"
       ],
       [
@@ -9695,109 +9711,93 @@
         "empty",
         "empty",
         "empty",
-        "empty"
-      ],
-      [
-        "empty",
-        "empty",
-        "empty",
-        "tree",
-        "empty",
-        "empty"
-      ],
-      [
-        "empty",
-        "empty",
-        "empty",
-        "empty",
-        "rock",
         "empty"
       ]
     ],
     "rowClues": [
-      1,
-      1,
       0,
+      1,
       2,
-      2,
-      2
+      1,
+      1,
+      3
     ],
     "colClues": [
-      3,
       0,
-      3,
       2,
-      0,
-      0
+      1,
+      2,
+      1,
+      2
     ],
     "inventory": {
       "house": 3,
       "woodcutter": 2,
-      "road": 7,
+      "road": 5,
       "farm": 2,
       "town_hall": 1
     },
     "solution": [
       [
-        "house",
-        "rock",
+        "empty",
+        "empty",
         "empty",
         "empty",
         "empty",
         "empty"
       ],
       [
-        "woodcutter",
+        "empty",
+        "rock",
+        "empty",
+        "house",
+        "empty",
+        "rock"
+      ],
+      [
+        "empty",
+        "empty",
+        "empty",
+        "farm",
+        "rock",
+        "house"
+      ],
+      [
+        "empty",
+        "tree",
+        "empty",
         "road",
-        "empty",
-        "empty",
-        "empty",
-        "empty"
+        "tree",
+        "woodcutter"
       ],
       [
         "tree",
+        "woodcutter",
         "road",
         "road",
         "road",
-        "empty",
-        "empty"
+        "road"
       ],
       [
         "empty",
-        "road",
         "house",
         "farm",
         "empty",
-        "empty"
-      ],
-      [
         "town_hall",
-        "road",
-        "woodcutter",
-        "tree",
-        "empty",
-        "empty"
-      ],
-      [
-        "empty",
-        "road",
-        "farm",
-        "house",
-        "rock",
         "empty"
       ]
     ],
     "difficulty": "Expert",
     "difficultyMetrics": {
-      "score": 81,
+      "score": 96,
       "tier": "Expert",
       "maxRuleLevel": 4,
       "maxRuleName": "Road Entry Point",
-      "stepCount": 32,
+      "stepCount": 51,
       "density": 0.53,
       "filledTiles": 19
     },
-    "difficultyScore": 81,
+    "difficultyScore": 96,
     "density": 0.53
   },
   {
@@ -9951,138 +9951,138 @@
     "initialGrid": [
       [
         "empty",
-        "empty",
-        "tree",
-        "empty",
-        "empty",
-        "empty"
-      ],
-      [
-        "empty",
-        "empty",
-        "empty",
-        "empty",
         "rock",
-        "empty"
-      ],
-      [
-        "empty",
-        "empty",
-        "empty",
-        "empty",
-        "empty",
-        "empty"
-      ],
-      [
-        "empty",
-        "rock",
-        "empty",
-        "empty",
-        "empty",
-        "empty"
-      ],
-      [
-        "empty",
-        "empty",
         "empty",
         "empty",
         "empty",
         "tree"
       ],
       [
-        "empty",
-        "empty",
-        "empty",
-        "empty",
         "tree",
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "empty"
+      ],
+      [
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "empty"
+      ],
+      [
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "empty"
+      ],
+      [
+        "rock",
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "empty"
+      ],
+      [
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "empty",
         "empty"
       ]
     ],
     "rowClues": [
+      0,
       1,
+      4,
       1,
       2,
-      1,
-      1,
-      2
+      0
     ],
     "colClues": [
       2,
-      2,
-      2,
+      0,
+      1,
       0,
       2,
-      0
+      3
     ],
     "inventory": {
       "house": 3,
       "woodcutter": 2,
-      "road": 8,
+      "road": 7,
       "farm": 2,
       "town_hall": 1
     },
     "solution": [
       [
-        "town_hall",
-        "empty",
-        "tree",
-        "empty",
-        "empty",
-        "empty"
-      ],
-      [
-        "road",
-        "road",
-        "woodcutter",
         "empty",
         "rock",
-        "empty"
-      ],
-      [
-        "road",
-        "farm",
-        "house",
         "empty",
         "empty",
-        "empty"
-      ],
-      [
-        "road",
-        "rock",
         "empty",
-        "empty",
-        "house",
-        "empty"
-      ],
-      [
-        "road",
-        "road",
-        "road",
-        "road",
-        "woodcutter",
         "tree"
       ],
       [
+        "tree",
+        "empty",
+        "empty",
+        "road",
+        "road",
+        "woodcutter"
+      ],
+      [
+        "woodcutter",
+        "road",
+        "town_hall",
+        "road",
         "farm",
+        "house"
+      ],
+      [
         "house",
         "empty",
         "empty",
-        "tree",
+        "road",
+        "road",
+        "road"
+      ],
+      [
+        "rock",
+        "empty",
+        "empty",
+        "empty",
+        "house",
+        "farm"
+      ],
+      [
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "empty",
         "empty"
       ]
     ],
     "difficulty": "Expert",
     "difficultyMetrics": {
-      "score": 81,
+      "score": 97,
       "tier": "Expert",
       "maxRuleLevel": 4,
       "maxRuleName": "Road Entry Point",
-      "stepCount": 31,
-      "density": 0.58,
-      "filledTiles": 21
+      "stepCount": 53,
+      "density": 0.53,
+      "filledTiles": 19
     },
-    "difficultyScore": 81,
-    "density": 0.58
+    "difficultyScore": 97,
+    "density": 0.53
   },
   {
     "id": 86,
@@ -10094,25 +10094,9 @@
       [
         "empty",
         "empty",
-        "empty",
-        "tree",
-        "empty",
-        "empty"
-      ],
-      [
-        "empty",
-        "empty",
-        "empty",
-        "empty",
-        "empty",
-        "empty"
-      ],
-      [
         "tree",
         "empty",
         "empty",
-        "empty",
-        "empty",
         "empty"
       ],
       [
@@ -10126,14 +10110,30 @@
       [
         "empty",
         "empty",
+        "empty",
+        "empty",
+        "empty",
+        "empty"
+      ],
+      [
         "empty",
         "rock",
+        "empty",
+        "empty",
         "rock",
         "empty"
       ],
       [
         "empty",
         "empty",
+        "empty",
+        "empty",
+        "empty",
+        "empty"
+      ],
+      [
+        "empty",
+        "tree",
         "empty",
         "empty",
         "empty",
@@ -10142,89 +10142,89 @@
     ],
     "rowClues": [
       2,
-      3,
-      2,
+      1,
       0,
       1,
-      0
+      2,
+      2
     ],
     "colClues": [
-      2,
-      1,
-      3,
       0,
+      0,
+      3,
       2,
-      0
+      2,
+      1
     ],
     "inventory": {
       "house": 3,
       "woodcutter": 2,
-      "road": 8,
+      "road": 7,
       "farm": 2,
       "town_hall": 1
     },
     "solution": [
       [
-        "house",
-        "road",
-        "woodcutter",
-        "tree",
         "empty",
-        "empty"
-      ],
-      [
+        "empty",
+        "tree",
         "woodcutter",
         "road",
+        "town_hall"
+      ],
+      [
+        "empty",
+        "empty",
+        "empty",
         "house",
         "road",
-        "farm",
-        "empty"
-      ],
-      [
-        "tree",
-        "road",
-        "farm",
-        "road",
-        "house",
         "empty"
       ],
       [
         "empty",
-        "road",
-        "road",
-        "road",
         "empty",
+        "empty",
+        "road",
+        "road",
         "empty"
       ],
       [
-        "empty",
-        "town_hall",
         "empty",
         "rock",
+        "farm",
+        "road",
         "rock",
         "empty"
       ],
       [
         "empty",
         "empty",
+        "house",
+        "road",
+        "farm",
+        "empty"
+      ],
+      [
         "empty",
-        "empty",
-        "empty",
+        "tree",
+        "woodcutter",
+        "road",
+        "house",
         "empty"
       ]
     ],
     "difficulty": "Expert",
     "difficultyMetrics": {
-      "score": 82,
+      "score": 98,
       "tier": "Expert",
       "maxRuleLevel": 4,
       "maxRuleName": "Road Entry Point",
-      "stepCount": 32,
-      "density": 0.56,
-      "filledTiles": 20
+      "stepCount": 54,
+      "density": 0.53,
+      "filledTiles": 19
     },
-    "difficultyScore": 82,
-    "density": 0.56
+    "difficultyScore": 98,
+    "density": 0.53
   },
   {
     "id": 87,
@@ -10802,11 +10802,27 @@
     "size": 6,
     "initialGrid": [
       [
-        "empty",
-        "empty",
         "rock",
         "empty",
         "empty",
+        "empty",
+        "empty",
+        "empty"
+      ],
+      [
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "tree"
+      ],
+      [
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "empty",
         "empty"
       ],
       [
@@ -10814,127 +10830,111 @@
         "empty",
         "empty",
         "empty",
-        "tree",
-        "rock"
-      ],
-      [
-        "empty",
-        "empty",
-        "tree",
-        "tree",
         "empty",
         "empty"
       ],
       [
-        "empty",
-        "empty",
+        "tree",
+        "tree",
         "empty",
         "empty",
         "empty",
         "empty"
       ],
       [
-        "empty",
         "empty",
         "rock",
-        "empty",
-        "empty",
-        "empty"
-      ],
-      [
-        "empty",
-        "empty",
-        "empty",
-        "empty",
         "tree",
+        "empty",
+        "empty",
         "empty"
       ]
     ],
     "rowClues": [
       0,
+      1,
+      3,
+      3,
       2,
-      2,
-      2,
-      0,
-      3
+      0
     ],
     "colClues": [
-      1,
-      1,
-      2,
       2,
       1,
+      1,
+      3,
+      0,
       2
     ],
     "inventory": {
       "house": 3,
       "woodcutter": 3,
-      "road": 8,
+      "road": 5,
       "farm": 2,
       "town_hall": 1
     },
     "solution": [
       [
-        "empty",
-        "empty",
         "rock",
+        "empty",
+        "empty",
         "empty",
         "empty",
         "empty"
       ],
       [
         "empty",
-        "road",
-        "woodcutter",
-        "house",
-        "tree",
-        "rock"
+        "empty",
+        "empty",
+        "town_hall",
+        "empty",
+        "tree"
       ],
       [
-        "empty",
+        "house",
+        "farm",
         "road",
-        "tree",
-        "tree",
+        "road",
+        "road",
+        "woodcutter"
+      ],
+      [
         "woodcutter",
+        "road",
+        "road",
+        "farm",
+        "empty",
         "house"
       ],
       [
-        "town_hall",
-        "road",
-        "road",
-        "road",
-        "road",
-        "farm"
-      ],
-      [
-        "empty",
-        "road",
-        "rock",
-        "road",
+        "tree",
+        "tree",
+        "woodcutter",
+        "house",
         "empty",
         "empty"
       ],
       [
         "empty",
-        "farm",
-        "house",
-        "woodcutter",
+        "rock",
         "tree",
+        "empty",
+        "empty",
         "empty"
       ]
     ],
     "difficulty": "Expert",
     "difficultyMetrics": {
-      "score": 81,
+      "score": 95,
       "tier": "Expert",
       "maxRuleLevel": 4,
       "maxRuleName": "Road Entry Point",
-      "stepCount": 29,
-      "density": 0.67,
-      "filledTiles": 24
+      "stepCount": 49,
+      "density": 0.56,
+      "filledTiles": 20
     },
-    "difficultyScore": 81,
-    "density": 0.67
+    "difficultyScore": 95,
+    "density": 0.56
   },
   {
     "id": 92,
@@ -11657,66 +11657,66 @@
         "empty",
         "empty",
         "empty",
-        "tree",
-        "empty",
-        "empty"
-      ],
-      [
-        "empty",
-        "empty",
-        "empty",
         "empty",
         "empty",
         "empty"
       ],
       [
-        "empty",
-        "empty",
-        "tree",
-        "empty",
-        "empty",
-        "empty"
-      ],
-      [
-        "tree",
-        "empty",
-        "empty",
-        "empty",
-        "empty",
-        "empty"
-      ],
-      [
-        "empty",
-        "empty",
-        "empty",
-        "empty",
-        "empty",
-        "empty"
-      ],
-      [
-        "empty",
-        "empty",
-        "empty",
         "rock",
         "empty",
-        "rock"
+        "empty",
+        "empty",
+        "tree",
+        "empty"
+      ],
+      [
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "empty"
+      ],
+      [
+        "empty",
+        "tree",
+        "empty",
+        "empty",
+        "empty",
+        "empty"
+      ],
+      [
+        "empty",
+        "empty",
+        "tree",
+        "rock",
+        "empty",
+        "empty"
+      ],
+      [
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "tree"
       ]
     ],
     "rowClues": [
-      3,
-      1,
       2,
-      1,
       2,
-      0
-    ],
-    "colClues": [
-      3,
       1,
       2,
       0,
+      2
+    ],
+    "colClues": [
+      0,
+      0,
+      3,
+      1,
       2,
-      1
+      3
     ],
     "inventory": {
       "house": 3,
@@ -11727,66 +11727,66 @@
     },
     "solution": [
       [
-        "farm",
-        "road",
         "empty",
-        "tree",
-        "woodcutter",
+        "empty",
+        "empty",
+        "road",
+        "farm",
         "house"
       ],
       [
-        "house",
-        "road",
-        "road",
-        "road",
-        "road",
-        "empty"
-      ],
-      [
-        "woodcutter",
-        "road",
-        "tree",
-        "empty",
-        "town_hall",
-        "empty"
-      ],
-      [
-        "tree",
-        "road",
-        "woodcutter",
-        "empty",
-        "empty",
-        "empty"
-      ],
-      [
-        "empty",
-        "farm",
-        "house",
-        "empty",
-        "empty",
-        "empty"
-      ],
-      [
-        "empty",
-        "empty",
-        "empty",
         "rock",
         "empty",
-        "rock"
+        "farm",
+        "road",
+        "tree",
+        "woodcutter"
+      ],
+      [
+        "empty",
+        "empty",
+        "house",
+        "road",
+        "empty",
+        "road"
+      ],
+      [
+        "empty",
+        "tree",
+        "woodcutter",
+        "road",
+        "road",
+        "town_hall"
+      ],
+      [
+        "empty",
+        "empty",
+        "tree",
+        "rock",
+        "road",
+        "empty"
+      ],
+      [
+        "empty",
+        "empty",
+        "empty",
+        "house",
+        "woodcutter",
+        "tree"
       ]
     ],
     "difficulty": "Expert",
     "difficultyMetrics": {
-      "score": 81,
+      "score": 96,
       "tier": "Expert",
       "maxRuleLevel": 4,
       "maxRuleName": "Road Entry Point",
-      "stepCount": 31,
-      "density": 0.58,
-      "filledTiles": 21
+      "stepCount": 49,
+      "density": 0.61,
+      "filledTiles": 22
     },
-    "difficultyScore": 81,
-    "density": 0.58
+    "difficultyScore": 96,
+    "density": 0.61
   },
   {
     "id": 98,

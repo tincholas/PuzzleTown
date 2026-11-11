@@ -27,6 +27,8 @@ import {
 } from './engine/campaignLevels';
 import { getNextHint } from './engine/solver';
 import {
+  BUILDING_TYPES,
+  BuildingType,
   Coord,
   DeductionHint,
   isFixedObstacle,
@@ -55,6 +57,7 @@ import {
   playVictorySound,
   toggleSound
 } from './utils/sound';
+import { pwaManager } from './pwaManager';
 
 interface HistorySnapshot {
   grid: TileType[][];
@@ -63,10 +66,25 @@ interface HistorySnapshot {
 }
 
 const STORAGE_KEY_PROGRESS = 'puzzletown_progress_v1';
+const STORAGE_KEY_ACTIVE_SESSION = 'puzzletown_active_session_v1';
 
 interface SavedProgress {
   currentLevelId: number;
   starsByLevel: Record<number, number>;
+}
+
+interface SavedSession {
+  levelId: number;
+  grid: TileType[][];
+  marks: boolean[][];
+  excludedByCell: PlaceableType[][][];
+  history: Array<{
+    grid: TileType[][];
+    marks: boolean[][];
+    excludedByCell: PlaceableType[][][];
+  }>;
+  hintsUsed: number;
+  mistakesMade: number;
 }
 
 function loadSavedProgress(): SavedProgress {
@@ -97,6 +115,81 @@ function cloneExcludedGrid(
   return src.map((row) => row.map((s) => new Set(s)));
 }
 
+function loadSavedSession(level: LevelDefinition): {
+  grid: TileType[][];
+  marks: boolean[][];
+  excludedByCell: Set<PlaceableType>[][];
+  history: HistorySnapshot[];
+  hintsUsed: number;
+  mistakesMade: number;
+} | null {
+  try {
+    const raw = localStorage.getItem(STORAGE_KEY_ACTIVE_SESSION);
+    if (!raw) return null;
+    const data: SavedSession = JSON.parse(raw);
+    if (data.levelId !== level.id) return null;
+    if (!Array.isArray(data.grid) || data.grid.length !== level.size) return null;
+
+    // Verify terrain matches current level definition
+    for (let r = 0; r < level.size; r++) {
+      for (let c = 0; c < level.size; c++) {
+        const initTile = level.initialGrid[r][c];
+        if ((initTile === 'tree' || initTile === 'rock') && data.grid[r][c] !== initTile) {
+          return null;
+        }
+      }
+    }
+
+    const marks =
+      Array.isArray(data.marks) && data.marks.length === level.size
+        ? data.marks
+        : Array.from({ length: level.size }, () => Array(level.size).fill(false));
+
+    const excludedByCell = createEmptyExcludedGrid(level.size);
+    if (Array.isArray(data.excludedByCell) && data.excludedByCell.length === level.size) {
+      for (let r = 0; r < level.size; r++) {
+        for (let c = 0; c < level.size; c++) {
+          if (Array.isArray(data.excludedByCell[r][c])) {
+            excludedByCell[r][c] = new Set(data.excludedByCell[r][c]);
+          }
+        }
+      }
+    }
+
+    const history: HistorySnapshot[] = [];
+    if (Array.isArray(data.history)) {
+      for (const h of data.history) {
+        if (h && Array.isArray(h.grid) && Array.isArray(h.marks) && Array.isArray(h.excludedByCell)) {
+          const snapshotExcluded = createEmptyExcludedGrid(level.size);
+          for (let r = 0; r < level.size; r++) {
+            for (let c = 0; c < level.size; c++) {
+              if (Array.isArray(h.excludedByCell[r]?.[c])) {
+                snapshotExcluded[r][c] = new Set(h.excludedByCell[r][c]);
+              }
+            }
+          }
+          history.push({
+            grid: h.grid,
+            marks: h.marks,
+            excludedByCell: snapshotExcluded
+          });
+        }
+      }
+    }
+
+    return {
+      grid: data.grid,
+      marks,
+      excludedByCell,
+      history,
+      hintsUsed: typeof data.hintsUsed === 'number' ? data.hintsUsed : 0,
+      mistakesMade: typeof data.mistakesMade === 'number' ? data.mistakesMade : 0
+    };
+  } catch {
+    return null;
+  }
+}
+
 export const App: React.FC = () => {
   const [savedProgress, setSavedProgress] =
     useState<SavedProgress>(loadSavedProgress);
@@ -105,17 +198,26 @@ export const App: React.FC = () => {
     getCampaignLevel(savedProgress.currentLevelId)
   );
 
+  const initialSession = useMemo(
+    () => loadSavedSession(level),
+    []
+  );
+
   const [grid, setGrid] = useState<TileType[][]>(() =>
-    level.initialGrid.map((r) => [...r])
+    initialSession ? initialSession.grid : level.initialGrid.map((r) => [...r])
   );
   const [marks, setMarks] = useState<boolean[][]>(() =>
-    Array.from({ length: level.size }, () => Array(level.size).fill(false))
+    initialSession
+      ? initialSession.marks
+      : Array.from({ length: level.size }, () => Array(level.size).fill(false))
   );
   const [excludedByCell, setExcludedByCell] = useState<
     Set<PlaceableType>[][]
-  >(() => createEmptyExcludedGrid(level.size));
+  >(() => (initialSession ? initialSession.excludedByCell : createEmptyExcludedGrid(level.size)));
 
-  const [history, setHistory] = useState<HistorySnapshot[]>([]);
+  const [history, setHistory] = useState<HistorySnapshot[]>(() =>
+    initialSession ? initialSession.history : []
+  );
 
   const [activeTool, setActiveTool] = useState<ActiveTool>(() => {
     const firstActive = PLACEABLE_TYPES.find((t) => level.inventory[t] > 0);
@@ -125,12 +227,34 @@ export const App: React.FC = () => {
   const [actionMode, setActionMode] = useState<TouchActionMode>('build');
 
   const [activeHint, setActiveHint] = useState<DeductionHint | null>(null);
-  const [hintsUsed, setHintsUsed] = useState<number>(0);
-  const [mistakesMade, setMistakesMade] = useState<number>(0);
+  const [hintStepIndex, setHintStepIndex] = useState<number>(0);
+  const [hintsUsed, setHintsUsed] = useState<number>(() =>
+    initialSession ? initialSession.hintsUsed : 0
+  );
+  const [mistakesMade, setMistakesMade] = useState<number>(() =>
+    initialSession ? initialSession.mistakesMade : 0
+  );
   const [selectedCell, setSelectedCell] = useState<Coord | null>(null);
   const [showRulesModal, setShowRulesModal] = useState<boolean>(false);
   const [showLevelsModal, setShowLevelsModal] = useState<boolean>(false);
   const [dismissedTip, setDismissedTip] = useState<boolean>(false);
+
+  // PWA update notification state
+  const [hasPwaUpdate, setHasPwaUpdate] = useState<boolean>(() =>
+    pwaManager.getHasUpdate()
+  );
+  const [dismissedUpdateToast, setDismissedUpdateToast] = useState<boolean>(false);
+
+  useEffect(() => {
+    return pwaManager.subscribe((hasUpdate) => {
+      setHasPwaUpdate(hasUpdate);
+    });
+  }, []);
+
+  const clearActiveHint = () => {
+    setActiveHint(null);
+    setHintStepIndex(0);
+  };
 
   // Animations & Sound
   const [justPlacedCell, setJustPlacedCell] = useState<Coord | null>(null);
@@ -202,6 +326,53 @@ export const App: React.FC = () => {
     () => validateBoard(grid, level),
     [grid, level]
   );
+
+  // Persist in-progress level session to localStorage so reloads/updates never lose state
+  useEffect(() => {
+    if (validation.isSolved) {
+      try {
+        localStorage.removeItem(STORAGE_KEY_ACTIVE_SESSION);
+      } catch {
+        // ignore
+      }
+      return;
+    }
+
+    try {
+      const serializableSession: SavedSession = {
+        levelId: level.id,
+        grid,
+        marks,
+        excludedByCell: excludedByCell.map((row) =>
+          row.map((cellSet) => Array.from(cellSet))
+        ),
+        history: history.slice(-30).map((h) => ({
+          grid: h.grid,
+          marks: h.marks,
+          excludedByCell: h.excludedByCell.map((row) =>
+            row.map((cellSet) => Array.from(cellSet))
+          )
+        })),
+        hintsUsed,
+        mistakesMade
+      };
+      localStorage.setItem(
+        STORAGE_KEY_ACTIVE_SESSION,
+        JSON.stringify(serializableSession)
+      );
+    } catch {
+      // ignore quota errors
+    }
+  }, [
+    level.id,
+    grid,
+    marks,
+    excludedByCell,
+    history,
+    hintsUsed,
+    mistakesMade,
+    validation.isSolved
+  ]);
 
   // Automatically record star rating, cascade pop in remaining unmarked empty tiles, and celebrate victory
   useEffect(() => {
@@ -338,6 +509,11 @@ export const App: React.FC = () => {
   }, [validation.isSolved, hintsUsed, mistakesMade, level.id, activeLevelPlaceables]);
 
   const startNewLevel = (newLevel: LevelDefinition) => {
+    try {
+      localStorage.removeItem(STORAGE_KEY_ACTIVE_SESSION);
+    } catch {
+      // ignore
+    }
     trackLevelStart(newLevel.id, newLevel.title, newLevel.chapter);
     setLevel(newLevel);
     setGrid(newLevel.initialGrid.map((r) => [...r]));
@@ -353,7 +529,7 @@ export const App: React.FC = () => {
     );
     setActiveTool(firstActive ?? 'house');
     setActionMode('build');
-    setActiveHint(null);
+    clearActiveHint();
     setHintsUsed(0);
     setMistakesMade(0);
     setSelectedCell(null);
@@ -369,6 +545,20 @@ export const App: React.FC = () => {
   };
 
   const handleSelectCampaignLevel = (id: number) => {
+    if (hasPwaUpdate) {
+      setSavedProgress((prev) => {
+        const next = { ...prev, currentLevelId: id };
+        try {
+          localStorage.setItem(STORAGE_KEY_PROGRESS, JSON.stringify(next));
+          localStorage.removeItem(STORAGE_KEY_ACTIVE_SESSION);
+        } catch {
+          // ignore
+        }
+        return next;
+      });
+      pwaManager.applyUpdate();
+      return;
+    }
     startNewLevel(getCampaignLevel(id));
   };
 
@@ -396,17 +586,22 @@ export const App: React.FC = () => {
     setMarks(last.marks);
     setExcludedByCell(last.excludedByCell);
     setHistory((prev) => prev.slice(0, -1));
-    setActiveHint(null);
+    clearActiveHint();
   };
 
   const handleReset = () => {
+    try {
+      localStorage.removeItem(STORAGE_KEY_ACTIVE_SESSION);
+    } catch {
+      // ignore
+    }
     pushHistory();
     setGrid(level.initialGrid.map((r) => [...r]));
     setMarks(
       Array.from({ length: level.size }, () => Array(level.size).fill(false))
     );
     setExcludedByCell(createEmptyExcludedGrid(level.size));
-    setActiveHint(null);
+    clearActiveHint();
     setPoppingEmptyCells({});
   };
 
@@ -414,6 +609,7 @@ export const App: React.FC = () => {
     const hint = getNextHint(grid, marks, level);
     if (hint) {
       setActiveHint(hint);
+      setHintStepIndex(0);
       setHintsUsed((h) => h + 1);
       setSelectedCell({ r: hint.r, c: hint.c });
     }
@@ -421,6 +617,11 @@ export const App: React.FC = () => {
 
   const applyHintMove = () => {
     if (!activeHint) return;
+    if (activeHint.lineAction) {
+      handleLineClueClick(activeHint.lineAction.axis, activeHint.lineAction.index);
+      clearActiveHint();
+      return;
+    }
     pushHistory();
     const { r, c, action, tileType } = activeHint;
     if (action === 'place' && tileType) {
@@ -458,8 +659,53 @@ export const App: React.FC = () => {
       nextMarks[r][c] = true;
       setMarks(nextMarks);
     }
-    setActiveHint(null);
+    clearActiveHint();
   };
+
+  const activeHintSteps =
+    activeHint?.steps && activeHint.steps.length > 0
+      ? activeHint.steps
+      : null;
+  const currentHintStep = activeHintSteps
+    ? activeHintSteps[Math.min(hintStepIndex, activeHintSteps.length - 1)]
+    : null;
+  const isLastHintStep =
+    !activeHintSteps || hintStepIndex >= activeHintSteps.length - 1;
+  const totalHintSteps = activeHintSteps ? activeHintSteps.length : 1;
+
+  useEffect(() => {
+    if (!activeHint) return;
+
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (
+        document.activeElement instanceof HTMLInputElement ||
+        document.activeElement instanceof HTMLTextAreaElement
+      ) {
+        return;
+      }
+
+      if (e.key === 'Escape') {
+        clearActiveHint();
+      } else if (e.key === 'ArrowRight') {
+        if (!isLastHintStep) {
+          setHintStepIndex((i) => Math.min(totalHintSteps - 1, i + 1));
+        }
+      } else if (e.key === 'ArrowLeft') {
+        if (hintStepIndex > 0) {
+          setHintStepIndex((i) => Math.max(0, i - 1));
+        }
+      } else if (e.key === 'Enter') {
+        if (isLastHintStep) {
+          applyHintMove();
+        } else {
+          setHintStepIndex((i) => Math.min(totalHintSteps - 1, i + 1));
+        }
+      }
+    };
+
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [activeHint, hintStepIndex, isLastHintStep, totalHintSteps]);
 
   /**
    * Toggles or sets a per-building exclusion mark on (r, c), automatically
@@ -472,16 +718,19 @@ export const App: React.FC = () => {
     forceValue?: boolean,
     skipHistory?: boolean
   ) => {
+    // Roads and empty cannot have exclusions placed on them
+    if (targetType === 'road') return;
+
     if (!skipHistory) pushHistory();
 
     const nextExcluded = cloneExcludedGrid(excludedByCell);
     const nextMarks = marks.map((row) => [...row]);
     const cellSet = nextExcluded[r][c];
 
-    // If cell was globally marked empty (Grass), populate cellSet with all active types first
+    // If cell was globally marked empty (Grass), populate cellSet with all active buildings first
     if (nextMarks[r][c]) {
       for (const p of activeLevelPlaceables) {
-        cellSet.add(p);
+        if (p !== 'road') cellSet.add(p);
       }
     }
 
@@ -490,13 +739,18 @@ export const App: React.FC = () => {
 
     if (shouldExclude) {
       cellSet.add(targetType);
+      // If there are 4 exclusions on a tile (no house, no farm, no woodcutter, no town hall) change it to empty
+      const activeBuildings = BUILDING_TYPES.filter((b) => level.inventory[b] > 0);
+      const hasAll4 = BUILDING_TYPES.every((b) => cellSet.has(b));
+      const hasAllActive = activeBuildings.length > 0 && activeBuildings.every((b) => cellSet.has(b));
+
+      if (hasAll4 || hasAllActive) {
+        nextMarks[r][c] = true;
+      }
     } else {
       cellSet.delete(targetType);
+      nextMarks[r][c] = false;
     }
-
-    // Check if ALL active placeables in this level are now ruled out on (r, c)
-    const allExcluded = activeLevelPlaceables.every((p) => cellSet.has(p));
-    nextMarks[r][c] = allExcluded;
 
     setExcludedByCell(nextExcluded);
     setMarks(nextMarks);
@@ -513,7 +767,7 @@ export const App: React.FC = () => {
     if (isFixedObstacle(currentTile)) return;
 
     setSelectedCell({ r, c });
-    setActiveHint(null);
+    clearActiveHint();
 
     // 1. Global "Mark Empty (Grass)" tool selected
     if (activeTool === 'mark_empty') {
@@ -648,7 +902,7 @@ export const App: React.FC = () => {
     if (isFixedObstacle(currentTile)) return;
 
     setSelectedCell({ r, c });
-    setActiveHint(null);
+    clearActiveHint();
 
     if (currentTile !== 'empty') {
       pushHistory();
@@ -666,7 +920,7 @@ export const App: React.FC = () => {
       return;
     }
 
-    if (activeTool === 'mark_empty') {
+    if (activeTool === 'mark_empty' || activeTool === 'road') {
       pushHistory();
       const nextMarks = marks.map((row) => [...row]);
       nextMarks[r][c] = !nextMarks[r][c];
@@ -680,6 +934,7 @@ export const App: React.FC = () => {
 
   const handleLineClueClick = (axis: 'row' | 'col', index: number) => {
     if (validation.isSolved) return;
+    clearActiveHint();
     playLineClueRippleSound(level.size);
     setAnimatingLine({ axis, index });
     setTimeout(() => setAnimatingLine(null), 500);
@@ -695,7 +950,7 @@ export const App: React.FC = () => {
         : Array.from({ length: level.size }, (_, r) => ({ r, c: index }));
 
     // If user is in per-building Rule-Out mode, toggle that building's exclusion across the whole row/col!
-    if (activeTool !== 'mark_empty' && actionMode === 'rule_out') {
+    if (activeTool !== 'mark_empty' && activeTool !== 'road' && actionMode === 'rule_out') {
       const emptyCoords = coords.filter((pt) => grid[pt.r][pt.c] === 'empty');
       const allHaveExcluded = emptyCoords.every((pt) =>
         nextExcluded[pt.r][pt.c].has(activeTool)
@@ -703,12 +958,18 @@ export const App: React.FC = () => {
       for (const pt of emptyCoords) {
         if (allHaveExcluded) {
           nextExcluded[pt.r][pt.c].delete(activeTool);
+          nextMarks[pt.r][pt.c] = false;
         } else {
           nextExcluded[pt.r][pt.c].add(activeTool);
+          const activeBuildings = BUILDING_TYPES.filter((b) => level.inventory[b] > 0);
+          const cellSet = nextExcluded[pt.r][pt.c];
+          if (
+            BUILDING_TYPES.every((b) => cellSet.has(b)) ||
+            (activeBuildings.length > 0 && activeBuildings.every((b) => cellSet.has(b)))
+          ) {
+            nextMarks[pt.r][pt.c] = true;
+          }
         }
-        nextMarks[pt.r][pt.c] = activeLevelPlaceables.every((p) =>
-          nextExcluded[pt.r][pt.c].has(p)
-        );
         changed = true;
       }
     } else {
@@ -750,6 +1011,30 @@ export const App: React.FC = () => {
 
   return (
     <div className="app-shell">
+      {hasPwaUpdate && !dismissedUpdateToast && (
+        <div className="pwa-update-toast">
+          <div className="pwa-update-toast-text">
+            <span className="pwa-update-sparkle">✨</span>
+            <span>A new PuzzleTown update is ready!</span>
+          </div>
+          <button
+            type="button"
+            className="pwa-update-apply-btn"
+            onClick={() => pwaManager.applyUpdate()}
+          >
+            Update Now
+          </button>
+          <button
+            type="button"
+            className="pwa-update-dismiss-btn"
+            onClick={() => setDismissedUpdateToast(true)}
+            aria-label="Dismiss"
+          >
+            ✕
+          </button>
+        </div>
+      )}
+
       <HeaderBar
         level={level}
         currentStars={
@@ -769,17 +1054,63 @@ export const App: React.FC = () => {
       <div className="context-banner-slot">
         {activeHint ? (
           <div className="banner-pill banner-hint">
-            <Lightbulb size={18} className="banner-icon" />
+            <Lightbulb size={20} className="banner-icon" />
             <div className="banner-content">
-              <strong>{activeHint.ruleName}:</strong> {activeHint.explanation}
+              <div className="banner-hint-header">
+                <strong>{currentHintStep?.title || activeHint.ruleName}</strong>
+                {totalHintSteps > 1 && (
+                  <span className="hint-step-badge">
+                    {hintStepIndex + 1}/{totalHintSteps}
+                  </span>
+                )}
+              </div>
+              <div className="banner-hint-text">
+                {currentHintStep?.message || activeHint.explanation}
+              </div>
             </div>
-            <button
-              type="button"
-              className="banner-action-btn"
-              onClick={applyHintMove}
-            >
-              Apply
-            </button>
+            <div className="banner-hint-actions">
+              {hintStepIndex > 0 && (
+                <button
+                  type="button"
+                  className="banner-nav-btn banner-back-btn"
+                  onClick={() => setHintStepIndex((i) => Math.max(0, i - 1))}
+                  title="Previous hint step"
+                >
+                  Back
+                </button>
+              )}
+              {!isLastHintStep && (
+                <button
+                  type="button"
+                  className="banner-nav-btn banner-next-btn"
+                  onClick={() =>
+                    setHintStepIndex((i) => Math.min(totalHintSteps - 1, i + 1))
+                  }
+                  title="Next hint step"
+                >
+                  Next
+                </button>
+              )}
+              {isLastHintStep && (
+                <button
+                  type="button"
+                  className="banner-action-btn banner-apply-btn"
+                  onClick={applyHintMove}
+                  title="Apply hint move"
+                >
+                  Apply
+                </button>
+              )}
+              <button
+                type="button"
+                className="banner-close-btn"
+                onClick={clearActiveHint}
+                title="Dismiss hint"
+                aria-label="Dismiss hint"
+              >
+                ✕
+              </button>
+            </div>
           </div>
         ) : topErrorMessage ? (
           <div className="banner-pill banner-error">
@@ -812,6 +1143,7 @@ export const App: React.FC = () => {
           actionMode={actionMode}
           validation={validation}
           activeHint={activeHint}
+          activeHintStep={currentHintStep}
           selectedCell={selectedCell}
           justPlacedCell={justPlacedCell}
           newlyBuiltCells={newlyBuiltCells}
@@ -832,7 +1164,7 @@ export const App: React.FC = () => {
         actionMode={actionMode}
         onSelectTool={(tool) => {
           setActiveTool(tool);
-          if (tool === 'mark_empty') {
+          if (tool === 'mark_empty' || tool === 'road') {
             setActionMode('build');
           }
         }}

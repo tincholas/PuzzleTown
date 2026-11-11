@@ -34,10 +34,16 @@ export const BuildingTray: React.FC<BuildingTrayProps> = ({
   );
 
   const isGlobalEmptySelected = activeTool === 'mark_empty';
+  const isNonExcludable = isGlobalEmptySelected || activeTool === 'road';
   const activeBuildingMeta =
     activeTool !== 'mark_empty' ? BUILDING_METADATA[activeTool] : null;
 
   const handleCardTap = (type: PlaceableType) => {
+    if (type === 'road') {
+      onSelectTool('road');
+      onToggleActionMode('build');
+      return;
+    }
     if (activeTool === type) {
       // Tapping the already-selected building card flips between Build & Rule-Out mode!
       onToggleActionMode(actionMode === 'build' ? 'rule_out' : 'build');
@@ -55,7 +61,7 @@ export const BuildingTray: React.FC<BuildingTrayProps> = ({
             type="button"
             className={[
               'mode-pill-btn',
-              !isGlobalEmptySelected && actionMode === 'build'
+              !isGlobalEmptySelected && (actionMode === 'build' || isNonExcludable)
                 ? 'mode-pill-active-build'
                 : ''
             ]
@@ -63,7 +69,7 @@ export const BuildingTray: React.FC<BuildingTrayProps> = ({
               .join(' ')}
             onClick={() => {
               if (isGlobalEmptySelected) {
-                onSelectTool(activeTypes[0] ?? 'house');
+                onSelectTool(activeTypes[0] ?? 'woodcutter');
               }
               onToggleActionMode('build');
             }}
@@ -77,19 +83,20 @@ export const BuildingTray: React.FC<BuildingTrayProps> = ({
 
           <button
             type="button"
+            disabled={isNonExcludable}
             className={[
               'mode-pill-btn',
-              !isGlobalEmptySelected && actionMode === 'rule_out'
+              !isNonExcludable && actionMode === 'rule_out'
                 ? 'mode-pill-active-ruleout'
-                : ''
+                : '',
+              isNonExcludable ? 'mode-pill-disabled' : ''
             ]
               .filter(Boolean)
               .join(' ')}
             onClick={() => {
-              if (isGlobalEmptySelected) {
-                onSelectTool(activeTypes[0] ?? 'house');
+              if (!isNonExcludable) {
+                onToggleActionMode('rule_out');
               }
-              onToggleActionMode('rule_out');
             }}
           >
             <Ban size={15} />
@@ -102,6 +109,8 @@ export const BuildingTray: React.FC<BuildingTrayProps> = ({
         <span className="mode-hint-text">
           {isGlobalEmptySelected
             ? 'Tap or swipe to mark empty grass (no buildings)'
+            : activeTool === 'road'
+            ? 'Tap or drag to build Roads connecting village to Town Hall'
             : actionMode === 'rule_out'
             ? `Tap or swipe squares that CAN'T be ${activeBuildingMeta?.name}`
             : `Tap a square to place ${activeBuildingMeta?.name} (tap card again for "Not ${activeBuildingMeta?.shortName}")`}
@@ -114,7 +123,8 @@ export const BuildingTray: React.FC<BuildingTrayProps> = ({
             const rem = remainingInventory[type];
             const total = level.inventory[type];
             const isSelected = activeTool === type;
-            const isRuleOutActive = isSelected && actionMode === 'rule_out';
+            const isRuleOutActive =
+              type !== 'road' && isSelected && actionMode === 'rule_out';
             const meta = BUILDING_METADATA[type];
 
             return (
@@ -131,7 +141,11 @@ export const BuildingTray: React.FC<BuildingTrayProps> = ({
                   .filter(Boolean)
                   .join(' ')}
                 onClick={() => handleCardTap(type)}
-                title={`${meta.name} (${rem} of ${total} left) — Tap again to toggle "Not ${meta.shortName}" mode`}
+                title={
+                  type === 'road'
+                    ? `${meta.name} (${rem} of ${total} left) — Connects buildings to Town Hall`
+                    : `${meta.name} (${rem} of ${total} left) — Tap again to toggle "Not ${meta.shortName}" mode`
+                }
               >
                 {isRuleOutActive && (
                   <span className="tray-ruleout-tag" aria-label="Rule Out Mode">

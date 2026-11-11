@@ -4,10 +4,15 @@ import { VitePWA } from 'vite-plugin-pwa';
 
 export default defineConfig({
   base: './',
+  define: {
+    __APP_VERSION__: JSON.stringify('1.1.0'),
+    __BUILD_DATE__: JSON.stringify(new Date().toISOString().split('T')[0])
+  },
   plugins: [
     react(),
     VitePWA({
-      registerType: 'autoUpdate',
+      registerType: 'prompt',
+      injectRegister: null,
       includeAssets: ['favicon.svg', 'icons/app-icon.png', 'icons/icon-192.svg', 'icons/icon-512.svg'],
       manifest: {
         name: 'PuzzleTown — Logic Village Builder',
