@@ -308,10 +308,10 @@ export const App: React.FC = () => {
     });
   };
 
-  const activeLevelPlaceables = useMemo(
-    () => PLACEABLE_TYPES.filter((t) => level.inventory[t] > 0),
-    [level]
-  );
+  const activeLevelBuildings = useMemo(() => {
+    const active = BUILDING_TYPES.filter((t) => level.inventory[t] > 0);
+    return active.length > 0 ? active : BUILDING_TYPES;
+  }, [level]);
 
   // Save progress to localStorage
   useEffect(() => {
@@ -442,8 +442,8 @@ export const App: React.FC = () => {
 
         setExcludedByCell((prev) => {
           const next = cloneExcludedGrid(prev);
-          for (const p of activeLevelPlaceables) {
-            next[coord.r][coord.c].add(p);
+          for (const b of activeLevelBuildings) {
+            next[coord.r][coord.c].add(b);
           }
           return next;
         });
@@ -506,7 +506,7 @@ export const App: React.FC = () => {
     return () => {
       timers.forEach((t) => clearTimeout(t));
     };
-  }, [validation.isSolved, hintsUsed, mistakesMade, level.id, activeLevelPlaceables]);
+  }, [validation.isSolved, hintsUsed, mistakesMade, level.id, activeLevelBuildings]);
 
   const startNewLevel = (newLevel: LevelDefinition) => {
     try {
@@ -729,8 +729,8 @@ export const App: React.FC = () => {
 
     // If cell was globally marked empty (Grass), populate cellSet with all active buildings first
     if (nextMarks[r][c]) {
-      for (const p of activeLevelPlaceables) {
-        if (p !== 'road') cellSet.add(p);
+      for (const b of activeLevelBuildings) {
+        cellSet.add(b);
       }
     }
 
@@ -786,8 +786,8 @@ export const App: React.FC = () => {
         const nextExcluded = cloneExcludedGrid(excludedByCell);
         nextMarks[r][c] = targetVal;
         if (targetVal) {
-          for (const p of activeLevelPlaceables) {
-            nextExcluded[r][c].add(p);
+          for (const b of activeLevelBuildings) {
+            nextExcluded[r][c].add(b);
           }
         } else {
           nextExcluded[r][c].clear();
@@ -949,45 +949,23 @@ export const App: React.FC = () => {
         ? Array.from({ length: level.size }, (_, c) => ({ r: index, c }))
         : Array.from({ length: level.size }, (_, r) => ({ r, c: index }));
 
-    // If user is in per-building Rule-Out mode, toggle that building's exclusion across the whole row/col!
-    if (activeTool !== 'mark_empty' && activeTool !== 'road' && actionMode === 'rule_out') {
-      const emptyCoords = coords.filter((pt) => grid[pt.r][pt.c] === 'empty');
-      const allHaveExcluded = emptyCoords.every((pt) =>
-        nextExcluded[pt.r][pt.c].has(activeTool)
-      );
-      for (const pt of emptyCoords) {
-        if (allHaveExcluded) {
-          nextExcluded[pt.r][pt.c].delete(activeTool);
-          nextMarks[pt.r][pt.c] = false;
-        } else {
-          nextExcluded[pt.r][pt.c].add(activeTool);
-          const activeBuildings = BUILDING_TYPES.filter((b) => level.inventory[b] > 0);
-          const cellSet = nextExcluded[pt.r][pt.c];
-          if (
-            BUILDING_TYPES.every((b) => cellSet.has(b)) ||
-            (activeBuildings.length > 0 && activeBuildings.every((b) => cellSet.has(b)))
-          ) {
-            nextMarks[pt.r][pt.c] = true;
+    // Tapping a row or column clue marks all remaining empty spots in that line as clear (Grass),
+    // regardless of which tool or mode is currently active in the bottom tray.
+    const allMarked = coords.every(
+      (pt) => grid[pt.r][pt.c] !== 'empty' || nextMarks[pt.r][pt.c]
+    );
+
+    for (const pt of coords) {
+      if (grid[pt.r][pt.c] === 'empty') {
+        nextMarks[pt.r][pt.c] = !allMarked;
+        if (!allMarked) {
+          for (const b of activeLevelBuildings) {
+            nextExcluded[pt.r][pt.c].add(b);
           }
+        } else {
+          nextExcluded[pt.r][pt.c].clear();
         }
         changed = true;
-      }
-    } else {
-      const allMarked = coords.every(
-        (pt) => grid[pt.r][pt.c] !== 'empty' || nextMarks[pt.r][pt.c]
-      );
-      for (const pt of coords) {
-        if (grid[pt.r][pt.c] === 'empty') {
-          nextMarks[pt.r][pt.c] = !allMarked;
-          if (!allMarked) {
-            for (const p of activeLevelPlaceables) {
-              nextExcluded[pt.r][pt.c].add(p);
-            }
-          } else {
-            nextExcluded[pt.r][pt.c].clear();
-          }
-          changed = true;
-        }
       }
     }
 
