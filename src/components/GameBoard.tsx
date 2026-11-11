@@ -188,7 +188,11 @@ export const GameBoard: React.FC<GameBoardProps> = ({
               type="button"
               className={`clue-badge col-clue status-${status} ${remaining === 0 ? 'clue-zero' : ''} ${isColAnimating ? 'clue-animating' : ''} ${isColHinted ? 'clue-hint-highlight' : ''}`}
               onClick={() => onLineClueClick('col', c)}
-              title={`Column ${c + 1}: ${remaining} more building(s) needed (${current}/${clue} placed). Tap to mark remaining empty spots.`}
+              title={
+                remaining === 0
+                  ? `Column ${c + 1}: All buildings placed (0 needed). Tap to fill remaining spots with grass.`
+                  : `Column ${c + 1}: ${remaining} more building(s) needed (${current}/${clue} placed).`
+              }
             >
               <span className="clue-number">{remaining}</span>
             </button>
@@ -214,7 +218,11 @@ export const GameBoard: React.FC<GameBoardProps> = ({
                 type="button"
                 className={`clue-badge row-clue status-${rowStatus} ${rowRemaining === 0 ? 'clue-zero' : ''} ${isRowAnimating ? 'clue-animating' : ''} ${isRowHinted ? 'clue-hint-highlight' : ''}`}
                 onClick={() => onLineClueClick('row', r)}
-                title={`Row ${r + 1}: ${rowRemaining} more building(s) needed (${rowCurrent}/${rowClue} placed). Tap to mark remaining empty spots.`}
+                title={
+                  rowRemaining === 0
+                    ? `Row ${r + 1}: All buildings placed (0 needed). Tap to fill remaining spots with grass.`
+                    : `Row ${r + 1}: ${rowRemaining} more building(s) needed (${rowCurrent}/${rowClue} placed).`
+                }
               >
                 <span className="clue-number">{rowRemaining}</span>
               </button>

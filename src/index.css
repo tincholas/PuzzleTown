@@ -504,17 +504,24 @@ body,
   display: flex;
   align-items: center;
   justify-content: center;
-  cursor: pointer;
+  cursor: default;
   box-shadow: none;
   transition: transform 0.1s ease, background-color 0.2s ease;
 }
 
-.clue-badge:hover {
-  transform: scale(1.05);
+.clue-badge.clue-zero,
+.clue-badge.clue-hint-highlight {
+  cursor: pointer;
 }
 
-.clue-badge:active {
-  transform: scale(0.92);
+.clue-badge.clue-zero:hover,
+.clue-badge.clue-hint-highlight:hover {
+  transform: scale(1.08);
+}
+
+.clue-badge.clue-zero:active,
+.clue-badge.clue-hint-highlight:active {
+  transform: scale(0.94);
 }
 
 .clue-badge.status-exact {

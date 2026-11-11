@@ -934,6 +934,17 @@ export const App: React.FC = () => {
 
   const handleLineClueClick = (axis: 'row' | 'col', index: number) => {
     if (validation.isSolved) return;
+
+    // Only tapping a 0 should clear the remaining cells.
+    // If there are more than 0 buildings that still need to be placed, ignore the tap.
+    const clue = axis === 'row' ? level.rowClues[index] : level.colClues[index];
+    const currentCount =
+      axis === 'row' ? validation.rowCounts[index] : validation.colCounts[index];
+    const remaining = clue - currentCount;
+    if (remaining !== 0) {
+      return;
+    }
+
     clearActiveHint();
     playLineClueRippleSound(level.size);
     setAnimatingLine({ axis, index });
