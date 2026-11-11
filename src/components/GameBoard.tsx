@@ -22,6 +22,9 @@ interface GameBoardProps {
   activeHint: DeductionHint | null;
   selectedCell: Coord | null;
   justPlacedCell?: Coord | null;
+  newlyBuiltCells?: Record<string, number>;
+  poppingEmptyCells?: Record<string, number>;
+  isVictoryVisible?: boolean;
   animatingLine?: { axis: 'row' | 'col'; index: number } | null;
   onCellAction: (
     r: number,
@@ -67,6 +70,9 @@ export const GameBoard: React.FC<GameBoardProps> = ({
   activeHint,
   selectedCell,
   justPlacedCell,
+  newlyBuiltCells,
+  poppingEmptyCells,
+  isVictoryVisible = false,
   animatingLine,
   onCellAction,
   onCellRightClick,
@@ -151,17 +157,15 @@ export const GameBoard: React.FC<GameBoardProps> = ({
       onPointerCancel={handleBoardPointerUp}
     >
       <div
-        className={`board-grid-with-clues ${validation.isSolved ? 'board-solved' : ''}`}
+        className={`board-grid-with-clues ${isVictoryVisible ? 'board-solved' : ''}`}
         style={
           {
             '--grid-size': size
           } as React.CSSProperties
         }
       >
-        {/* Top-left corner spacer */}
-        <div className="clue-corner" title="Row & Column Building Totals">
-          🏠
-        </div>
+        {/* Top-left corner spacer without emoji */}
+        <div className="clue-corner" title="Row & Column Building Totals" />
 
         {/* Column Clue Badges (Remaining Buildings Needed) */}
         {level.colClues.map((clue, c) => {
@@ -209,6 +213,7 @@ export const GameBoard: React.FC<GameBoardProps> = ({
                 const isMarkedAllEmpty = marks[r][c];
                 const cellExcludedSet = excludedByCell[r][c];
                 const isRuledOutForActive =
+                  !isMarkedAllEmpty &&
                   activeTool !== 'mark_empty' &&
                   cellExcludedSet.has(activeTool);
 
@@ -220,10 +225,25 @@ export const GameBoard: React.FC<GameBoardProps> = ({
                   activeHint?.r === r && activeHint?.c === c;
                 const isSelected =
                   selectedCell?.r === r && selectedCell?.c === c;
-                const isGrassBase = tile === 'tree';
 
-                const isJustPlaced =
-                  justPlacedCell?.r === r && justPlacedCell?.c === c;
+                let bgClass = 'tile-bg-grass';
+                if (tile === 'empty') {
+                  if (isMarkedAllEmpty) {
+                    const emptyIdx = ((r * 11 + c * 17 + level.id * 7) % 3) + 1;
+                    bgClass = `tile-bg-empty-${emptyIdx}`;
+                  } else {
+                    const earthIdx = ((r * 7 + c * 13 + level.id * 5) % 3) + 1;
+                    bgClass = `tile-bg-earth-${earthIdx}`;
+                  }
+                }
+
+                const isNewlyBuilt = Boolean(newlyBuiltCells?.[key]);
+                const buildTimestamp = newlyBuiltCells?.[key];
+                const isPoppingEmpty = Boolean(poppingEmptyCells?.[key]);
+                const isJustPlacedRoad =
+                  tile === 'road' &&
+                  justPlacedCell?.r === r &&
+                  justPlacedCell?.c === c;
                 const isRowRipple =
                   animatingLine?.axis === 'row' && animatingLine?.index === r;
                 const isColRipple =
@@ -235,7 +255,7 @@ export const GameBoard: React.FC<GameBoardProps> = ({
                   ...(isRippling
                     ? ({ '--ripple-idx': rippleIdx } as React.CSSProperties)
                     : {}),
-                  ...(validation.isSolved
+                  ...(isVictoryVisible
                     ? ({ '--wave-idx': r + c } as React.CSSProperties)
                     : {})
                 };
@@ -254,15 +274,17 @@ export const GameBoard: React.FC<GameBoardProps> = ({
                     style={tileStyle}
                     className={[
                       'board-tile',
-                      isGrassBase ? 'tile-grass' : 'tile-sand',
+                      bgClass,
                       isFixedObstacle(tile) ? 'tile-fixed' : 'tile-interactive',
                       hasError ? 'tile-error' : '',
                       isSatisfied ? 'tile-satisfied' : '',
                       isHinted ? 'tile-hinted' : '',
                       isSelected ? 'tile-selected' : '',
-                      isJustPlaced ? 'tile-just-placed' : '',
+                      isJustPlacedRoad ? 'tile-just-placed' : '',
+                      isNewlyBuilt ? 'tile-building-active' : '',
+                      isPoppingEmpty ? 'tile-empty-popping' : '',
                       isRippling ? 'tile-line-ripple' : '',
-                      validation.isSolved ? 'tile-victory-wave' : '',
+                      isVictoryVisible ? 'tile-victory-wave' : '',
                       tile === 'empty' && isRuledOutForActive
                         ? 'tile-ruled-out-active'
                         : ''
@@ -278,19 +300,18 @@ export const GameBoard: React.FC<GameBoardProps> = ({
                     }
                   >
                     <TileGraphic
+                      key={isNewlyBuilt ? `built-${buildTimestamp}` : `static-${tile}-${key}`}
                       type={tile}
                       markedEmpty={tile === 'empty' && isMarkedAllEmpty}
                       ruledOutForActiveType={
-                        tile === 'empty' &&
-                        !isMarkedAllEmpty &&
-                        activeTool !== 'mark_empty' &&
-                        isRuledOutForActive
+                        tile === 'empty' && isRuledOutForActive
                           ? activeTool
                           : null
                       }
                       excludedCount={cellExcludedSet.size}
                       roadConnections={roadConns}
                       variantSeed={r * 7 + c * 13}
+                      isNewlyBuilt={isNewlyBuilt}
                     />
                     {hasError && (
                       <span

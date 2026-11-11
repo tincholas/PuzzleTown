@@ -30,7 +30,7 @@ export function toggleSound(): boolean {
   return soundEnabled;
 }
 
-/** Satisfying woody thock when placing a building */
+/** Satisfying continuous woody sound when placing a building */
 export function playPlaceBuildingSound() {
   if (!soundEnabled) return;
   const ctx = getAudioContext();
@@ -100,6 +100,32 @@ export function playMarkEmptySound() {
 
   osc.start(now);
   osc.stop(now + 0.05);
+}
+
+/** Playful pop sound with ascending pitch when remaining empty tiles pop in at level completion */
+export function playEmptyPopCascadeSound(index: number, total: number) {
+  if (!soundEnabled) return;
+  const ctx = getAudioContext();
+  if (!ctx) return;
+
+  const now = ctx.currentTime;
+  const progress = total > 1 ? index / (total - 1) : 0.5;
+  const baseFreq = 480 + progress * 280; // 480Hz rising smoothly to 760Hz
+  const osc = ctx.createOscillator();
+  const gain = ctx.createGain();
+
+  osc.type = 'sine';
+  osc.frequency.setValueAtTime(baseFreq, now);
+  osc.frequency.exponentialRampToValueAtTime(baseFreq * 0.72, now + 0.05);
+
+  gain.gain.setValueAtTime(0.14, now);
+  gain.gain.exponentialRampToValueAtTime(0.001, now + 0.06);
+
+  osc.connect(gain);
+  gain.connect(ctx.destination);
+
+  osc.start(now);
+  osc.stop(now + 0.06);
 }
 
 /** Cascading melodic ripple when tapping a border clue to fill row/column */

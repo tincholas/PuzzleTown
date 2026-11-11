@@ -46,6 +46,7 @@ import {
 } from './utils/analytics';
 import {
   isSoundMuted,
+  playEmptyPopCascadeSound,
   playErrorSound,
   playLineClueRippleSound,
   playMarkEmptySound,
@@ -133,6 +134,9 @@ export const App: React.FC = () => {
 
   // Animations & Sound
   const [justPlacedCell, setJustPlacedCell] = useState<Coord | null>(null);
+  const [newlyBuiltCells, setNewlyBuiltCells] = useState<Record<string, number>>({});
+  const [poppingEmptyCells, setPoppingEmptyCells] = useState<Record<string, number>>({});
+  const [showVictoryModal, setShowVictoryModal] = useState<boolean>(false);
   const [animatingLine, setAnimatingLine] = useState<{
     axis: 'row' | 'col';
     index: number;
@@ -199,9 +203,107 @@ export const App: React.FC = () => {
     [grid, level]
   );
 
-  // Automatically record star rating & trigger victory confetti/sound/analytics when solved
+  // Automatically record star rating, cascade pop in remaining unmarked empty tiles, and celebrate victory
   useEffect(() => {
-    if (validation.isSolved) {
+    if (!validation.isSolved) {
+      setShowVictoryModal(false);
+      setPoppingEmptyCells({});
+      return;
+    }
+
+    const earnedStars =
+      hintsUsed === 0 && mistakesMade === 0
+        ? 3
+        : hintsUsed <= 1
+        ? 2
+        : 1;
+
+    // Track completion event in Google Analytics
+    trackLevelComplete(
+      level.id,
+      level.title,
+      level.chapter,
+      earnedStars,
+      hintsUsed,
+      mistakesMade
+    );
+
+    setSavedProgress((prev) => {
+      const existing = prev.starsByLevel[level.id] ?? 0;
+      if (earnedStars > existing) {
+        return {
+          ...prev,
+          starsByLevel: {
+            ...prev.starsByLevel,
+            [level.id]: earnedStars
+          }
+        };
+      }
+      return prev;
+    });
+
+    // Collect all remaining unmarked empty tiles in row-major order (top-left to bottom-right)
+    const unmarkedCoords: Coord[] = [];
+    for (let r = 0; r < level.size; r++) {
+      for (let c = 0; c < level.size; c++) {
+        if (grid[r][c] === 'empty' && !marks[r][c]) {
+          unmarkedCoords.push({ r, c });
+        }
+      }
+    }
+
+    const timers: Array<ReturnType<typeof setTimeout>> = [];
+    const BUILD_FINISH_DELAY = 500; // Wait for the final building placement animation
+    const POP_INTERVAL = 80; // Snappy pop-in cadence
+
+    // Cascade pop each remaining unmarked empty tile
+    unmarkedCoords.forEach((coord, i) => {
+      const popDelay = BUILD_FINISH_DELAY + i * POP_INTERVAL;
+      const t = setTimeout(() => {
+        const cellKey = `${coord.r},${coord.c}`;
+        const ts = Date.now();
+
+        setMarks((prev) => {
+          const next = prev.map((row) => [...row]);
+          next[coord.r][coord.c] = true;
+          return next;
+        });
+
+        setExcludedByCell((prev) => {
+          const next = cloneExcludedGrid(prev);
+          for (const p of activeLevelPlaceables) {
+            next[coord.r][coord.c].add(p);
+          }
+          return next;
+        });
+
+        setPoppingEmptyCells((prev) => ({ ...prev, [cellKey]: ts }));
+        playEmptyPopCascadeSound(i, unmarkedCoords.length);
+
+        const clearT = setTimeout(() => {
+          setPoppingEmptyCells((prev) => {
+            if (prev[cellKey] === ts) {
+              const copy = { ...prev };
+              delete copy[cellKey];
+              return copy;
+            }
+            return prev;
+          });
+        }, 400);
+        timers.push(clearT);
+      }, popDelay);
+
+      timers.push(t);
+    });
+
+    // Once all remaining tiles have been popped in, show the victory celebration
+    const allDoneDelay =
+      BUILD_FINISH_DELAY +
+      unmarkedCoords.length * POP_INTERVAL +
+      (unmarkedCoords.length > 0 ? 320 : 50);
+
+    const victoryTimer = setTimeout(() => {
+      setShowVictoryModal(true);
       playVictorySound();
       confetti({
         particleCount: 75,
@@ -225,41 +327,15 @@ export const App: React.FC = () => {
           colors: ['#f59e0b', '#10b981', '#ea580c', '#38bdf8']
         });
       }, 250);
+      timers.push(t1);
+    }, allDoneDelay);
 
-      const earnedStars =
-        hintsUsed === 0 && mistakesMade === 0
-          ? 3
-          : hintsUsed <= 1
-          ? 2
-          : 1;
+    timers.push(victoryTimer);
 
-      // Track completion event in Google Analytics
-      trackLevelComplete(
-        level.id,
-        level.title,
-        level.chapter,
-        earnedStars,
-        hintsUsed,
-        mistakesMade
-      );
-
-      setSavedProgress((prev) => {
-        const existing = prev.starsByLevel[level.id] ?? 0;
-        if (earnedStars > existing) {
-          return {
-            ...prev,
-            starsByLevel: {
-              ...prev.starsByLevel,
-              [level.id]: earnedStars
-            }
-          };
-        }
-        return prev;
-      });
-
-      return () => clearTimeout(t1);
-    }
-  }, [validation.isSolved, hintsUsed, mistakesMade, level.id]);
+    return () => {
+      timers.forEach((t) => clearTimeout(t));
+    };
+  }, [validation.isSolved, hintsUsed, mistakesMade, level.id, activeLevelPlaceables]);
 
   const startNewLevel = (newLevel: LevelDefinition) => {
     trackLevelStart(newLevel.id, newLevel.title, newLevel.chapter);
@@ -282,6 +358,7 @@ export const App: React.FC = () => {
     setMistakesMade(0);
     setSelectedCell(null);
     setDismissedTip(false);
+    setPoppingEmptyCells({});
 
     if (newLevel.id <= CAMPAIGN_CONFIGS.length) {
       setSavedProgress((prev) => ({
@@ -330,6 +407,7 @@ export const App: React.FC = () => {
     );
     setExcludedByCell(createEmptyExcludedGrid(level.size));
     setActiveHint(null);
+    setPoppingEmptyCells({});
   };
 
   const handleHint = () => {
@@ -352,6 +430,26 @@ export const App: React.FC = () => {
       const nextMarks = marks.map((row) => [...row]);
       nextMarks[r][c] = false;
       setMarks(nextMarks);
+      if (tileType === 'road') {
+        playPlaceRoadSound();
+        setJustPlacedCell({ r, c });
+        setTimeout(() => setJustPlacedCell(null), 400);
+      } else {
+        playPlaceBuildingSound();
+        const cellKey = `${r},${c}`;
+        const timestamp = Date.now();
+        setNewlyBuiltCells((prev) => ({ ...prev, [cellKey]: timestamp }));
+        setTimeout(() => {
+          setNewlyBuiltCells((prev) => {
+            if (prev[cellKey] === timestamp) {
+              const next = { ...prev };
+              delete next[cellKey];
+              return next;
+            }
+            return prev;
+          });
+        }, 500);
+      }
     } else if (action === 'mark_empty') {
       const nextGrid = grid.map((row) => [...row]);
       nextGrid[r][c] = 'empty';
@@ -410,6 +508,7 @@ export const App: React.FC = () => {
     isDragContinue = false,
     dragTargetValue?: boolean
   ) => {
+    if (validation.isSolved) return;
     const currentTile = grid[r][c];
     if (isFixedObstacle(currentTile)) return;
 
@@ -474,7 +573,9 @@ export const App: React.FC = () => {
     if (isDragContinue) return;
 
     // Protect squares marked as Empty Grass or ruled out for this specific building from accidental taps!
+    // Roads are permitted to draw directly over an "empty" tile without clearing first.
     if (
+      activeTool !== 'road' &&
       currentTile === 'empty' &&
       (marks[r][c] || excludedByCell[r][c].has(activeTool))
     ) {
@@ -486,19 +587,43 @@ export const App: React.FC = () => {
 
     pushHistory();
     const nextGrid = grid.map((row) => [...row]);
+    const nextMarks = marks.map((row) => [...row]);
+    const nextExcluded = cloneExcludedGrid(excludedByCell);
 
     if (currentTile === activeTool) {
       nextGrid[r][c] = 'empty';
+      const cellKey = `${r},${c}`;
+      setNewlyBuiltCells((prev) => {
+        if (!prev[cellKey]) return prev;
+        const next = { ...prev };
+        delete next[cellKey];
+        return next;
+      });
       playMarkEmptySound();
     } else {
       nextGrid[r][c] = activeTool;
+      nextMarks[r][c] = false;
+      nextExcluded[r][c].clear();
       if (activeTool === 'road') {
         playPlaceRoadSound();
+        setJustPlacedCell({ r, c });
+        setTimeout(() => setJustPlacedCell(null), 400);
       } else {
         playPlaceBuildingSound();
+        const cellKey = `${r},${c}`;
+        const timestamp = Date.now();
+        setNewlyBuiltCells((prev) => ({ ...prev, [cellKey]: timestamp }));
+        setTimeout(() => {
+          setNewlyBuiltCells((prev) => {
+            if (prev[cellKey] === timestamp) {
+              const next = { ...prev };
+              delete next[cellKey];
+              return next;
+            }
+            return prev;
+          });
+        }, 500);
       }
-      setJustPlacedCell({ r, c });
-      setTimeout(() => setJustPlacedCell(null), 400);
 
       const newVal = validateBoard(nextGrid, level);
       if (newVal.cellErrors[`${r},${c}`]) {
@@ -508,6 +633,8 @@ export const App: React.FC = () => {
     }
 
     setGrid(nextGrid);
+    setMarks(nextMarks);
+    setExcludedByCell(nextExcluded);
   };
 
   const handleCellRightClick = (
@@ -516,6 +643,7 @@ export const App: React.FC = () => {
     e: React.MouseEvent
   ) => {
     e.preventDefault();
+    if (validation.isSolved) return;
     const currentTile = grid[r][c];
     if (isFixedObstacle(currentTile)) return;
 
@@ -526,6 +654,13 @@ export const App: React.FC = () => {
       pushHistory();
       const nextGrid = grid.map((row) => [...row]);
       nextGrid[r][c] = 'empty';
+      const cellKey = `${r},${c}`;
+      setNewlyBuiltCells((prev) => {
+        if (!prev[cellKey]) return prev;
+        const next = { ...prev };
+        delete next[cellKey];
+        return next;
+      });
       setGrid(nextGrid);
       playMarkEmptySound();
       return;
@@ -544,6 +679,7 @@ export const App: React.FC = () => {
   };
 
   const handleLineClueClick = (axis: 'row' | 'col', index: number) => {
+    if (validation.isSolved) return;
     playLineClueRippleSound(level.size);
     setAnimatingLine({ axis, index });
     setTimeout(() => setAnimatingLine(null), 500);
@@ -678,6 +814,9 @@ export const App: React.FC = () => {
           activeHint={activeHint}
           selectedCell={selectedCell}
           justPlacedCell={justPlacedCell}
+          newlyBuiltCells={newlyBuiltCells}
+          poppingEmptyCells={poppingEmptyCells}
+          isVictoryVisible={showVictoryModal}
           animatingLine={animatingLine}
           onCellAction={handleCellAction}
           onCellRightClick={handleCellRightClick}
@@ -701,7 +840,7 @@ export const App: React.FC = () => {
       />
 
       {/* Victory Overlay */}
-      {validation.isSolved && (
+      {showVictoryModal && (
         <div className="victory-backdrop">
           <div className="victory-card">
             <div className="victory-badge-icon">

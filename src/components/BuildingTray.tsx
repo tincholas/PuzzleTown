@@ -7,6 +7,7 @@ import {
   PlaceableType
 } from '../engine/types';
 import { MarkedGrassSvg, TileGraphic } from './TileGraphic';
+import emptyBgImg from '../assets/empty_bg1.png';
 
 export type ActiveTool = PlaceableType | 'mark_empty';
 export type TouchActionMode = 'build' | 'rule_out';
@@ -171,7 +172,12 @@ export const BuildingTray: React.FC<BuildingTrayProps> = ({
             title="Empty Grass: Mark squares where NO building can go"
           >
             <div className="tray-card-art">
-              <MarkedGrassSvg />
+              <img
+                src={emptyBgImg}
+                alt="Empty"
+                className="tray-empty-img"
+                draggable={false}
+              />
             </div>
             <span className="tray-card-label">Empty</span>
           </button>

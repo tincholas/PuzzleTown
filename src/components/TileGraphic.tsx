@@ -1,5 +1,31 @@
 import React from 'react';
-import { PlaceableType, TileType } from '../engine/types';
+import { BuildingType, PlaceableType, TileType } from '../engine/types';
+
+import farmStage1 from '../assets/buildings/farm_stage1.png';
+import farmStage2 from '../assets/buildings/farm_stage2.png';
+import farmStage3 from '../assets/buildings/farm_stage3.png';
+
+import houseStage1 from '../assets/buildings/house_stage1.png';
+import houseStage2 from '../assets/buildings/house_stage2.png';
+import houseStage3 from '../assets/buildings/house_stage3.png';
+
+import woodcutterStage1 from '../assets/buildings/woodcutter_stage1.png';
+import woodcutterStage2 from '../assets/buildings/woodcutter_stage2.png';
+import woodcutterStage3 from '../assets/buildings/woodcutter_stage3.png';
+
+import townHallStage1 from '../assets/buildings/town_hall_stage1.png';
+import townHallStage2 from '../assets/buildings/town_hall_stage2.png';
+import townHallStage3 from '../assets/buildings/town_hall_stage3.png';
+
+import treeImg from '../assets/obstacles/tree.png';
+import rockImg from '../assets/obstacles/rock.png';
+import tileBgImg from '../assets/tile_bg.png';
+import earthBg1 from '../assets/earth_bg1.png';
+import earthBg2 from '../assets/earth_bg2.png';
+import earthBg3 from '../assets/earth_bg3.png';
+import emptyBg1 from '../assets/empty_bg1.png';
+import emptyBg2 from '../assets/empty_bg2.png';
+import emptyBg3 from '../assets/empty_bg3.png';
 
 export interface RoadConnections {
   up: boolean;
@@ -8,6 +34,87 @@ export interface RoadConnections {
   right: boolean;
 }
 
+export const BUILDING_STAGE_ASSETS: Record<
+  BuildingType,
+  { stage1: string; stage2: string; stage3: string }
+> = {
+  farm: { stage1: farmStage1, stage2: farmStage2, stage3: farmStage3 },
+  house: { stage1: houseStage1, stage2: houseStage2, stage3: houseStage3 },
+  woodcutter: { stage1: woodcutterStage1, stage2: woodcutterStage2, stage3: woodcutterStage3 },
+  town_hall: { stage1: townHallStage1, stage2: townHallStage2, stage3: townHallStage3 }
+};
+
+// Preload building & obstacle images for instant zero-lag animations
+if (typeof window !== 'undefined') {
+  Object.values(BUILDING_STAGE_ASSETS).forEach((layers) => {
+    [layers.stage1, layers.stage2, layers.stage3].forEach((src) => {
+      const img = new Image();
+      img.src = src;
+    });
+  });
+  [treeImg, rockImg, tileBgImg, earthBg1, earthBg2, earthBg3, emptyBg1, emptyBg2, emptyBg3].forEach((src) => {
+    const img = new Image();
+    img.src = src;
+  });
+}
+
+export const TreeGraphic: React.FC = () => (
+  <img
+    src={treeImg}
+    alt="Tree"
+    className="tile-obstacle-img"
+    draggable={false}
+  />
+);
+
+export const RockGraphic: React.FC = () => (
+  <img
+    src={rockImg}
+    alt="Rock"
+    className="tile-obstacle-img"
+    draggable={false}
+  />
+);
+
+export interface BuildingSpriteProps {
+  type: BuildingType;
+  isNewlyBuilt?: boolean;
+}
+
+export const BuildingSprite: React.FC<BuildingSpriteProps> = ({
+  type,
+  isNewlyBuilt = false
+}) => {
+  const assets = BUILDING_STAGE_ASSETS[type];
+  if (!assets) return null;
+
+  return (
+    <div
+      className={`building-sprite-container ${isNewlyBuilt ? 'is-animating-build' : ''}`}
+      aria-label={type}
+    >
+      <img
+        src={assets.stage1}
+        alt=""
+        className="building-layer building-layer-1"
+        draggable={false}
+      />
+      <img
+        src={assets.stage2}
+        alt=""
+        className="building-layer building-layer-2"
+        draggable={false}
+      />
+      <img
+        src={assets.stage3}
+        alt=""
+        className="building-layer building-layer-3"
+        draggable={false}
+      />
+    </div>
+  );
+};
+
 interface TileGraphicProps {
   type: TileType;
   markedEmpty?: boolean;
@@ -15,6 +122,7 @@ interface TileGraphicProps {
   excludedCount?: number;
   roadConnections?: RoadConnections;
   variantSeed?: number;
+  isNewlyBuilt?: boolean;
 }
 
 export const TileGraphic: React.FC<TileGraphicProps> = ({
@@ -23,27 +131,25 @@ export const TileGraphic: React.FC<TileGraphicProps> = ({
   ruledOutForActiveType = null,
   excludedCount = 0,
   roadConnections,
-  variantSeed = 0
+  variantSeed = 0,
+  isNewlyBuilt = false
 }) => {
   switch (type) {
     case 'tree':
-      return <TreeSvg />;
+      return <TreeGraphic />;
     case 'rock':
-      return <RockSvg />;
+      return <RockGraphic />;
     case 'house':
-      return <HouseSvg />;
     case 'woodcutter':
-      return <WoodcutterSvg />;
     case 'farm':
-      return <FarmSvg />;
     case 'town_hall':
-      return <TownHallSvg />;
+      return <BuildingSprite type={type} isNewlyBuilt={isNewlyBuilt} />;
     case 'road':
       return <RoadSvg connections={roadConnections} />;
     case 'empty':
     default:
       if (markedEmpty) {
-        return <MarkedGrassSvg />;
+        return null;
       }
       if (ruledOutForActiveType) {
         return <RuledOutBuildingSvg excludedType={ruledOutForActiveType} />;
@@ -58,48 +164,26 @@ export const TileGraphic: React.FC<TileGraphicProps> = ({
 };
 
 const EmptyGroundSvg: React.FC<{ seed: number; excludedCount?: number }> = ({
-  seed,
   excludedCount = 0
 }) => {
-  const v = seed % 3;
+  if (excludedCount <= 0) return null;
   return (
     <svg viewBox="0 0 100 100" className="tile-svg">
-      <ellipse cx="50" cy="52" rx="34" ry="30" fill="#cfa96e" opacity="0.55" />
-      {v === 0 && (
-        <>
-          <circle cx="34" cy="36" r="3" fill="#b38b52" />
-          <circle cx="66" cy="68" r="3.5" fill="#b38b52" />
-        </>
-      )}
-      {v === 1 && (
-        <>
-          <circle cx="64" cy="34" r="3" fill="#b38b52" />
-          <circle cx="42" cy="70" r="3.5" fill="#b38b52" />
-        </>
-      )}
-      {v === 2 && (
-        <>
-          <circle cx="32" cy="62" r="3" fill="#b38b52" />
-          <circle cx="67" cy="44" r="2.8" fill="#b38b52" />
-        </>
-      )}
       {/* Subtle bottom-left pips indicating how many other building types were ruled out here */}
-      {excludedCount > 0 && (
-        <g>
-          {Array.from({ length: Math.min(excludedCount, 4) }, (_, idx) => (
-            <circle
-              key={idx}
-              cx={16 + idx * 12}
-              cy={86}
-              r="4"
-              fill="#b84a39"
-              stroke="#2b1e16"
-              strokeWidth="2"
-              opacity="0.85"
-            />
-          ))}
-        </g>
-      )}
+      <g>
+        {Array.from({ length: Math.min(excludedCount, 4) }, (_, idx) => (
+          <circle
+            key={idx}
+            cx={16 + idx * 12}
+            cy={86}
+            r="4"
+            fill="#b84a39"
+            stroke="#2b1e16"
+            strokeWidth="2"
+            opacity="0.85"
+          />
+        ))}
+      </g>
     </svg>
   );
 };
@@ -111,7 +195,6 @@ export const RuledOutBuildingSvg: React.FC<{
   excludedType: PlaceableType;
 }> = ({ excludedType }) => (
   <svg viewBox="0 0 100 100" className="tile-svg">
-    <ellipse cx="50" cy="52" rx="34" ry="30" fill="#c2995e" opacity="0.55" />
     {/* Ghosted miniature silhouette of the ruled-out building */}
     <g opacity="0.32" transform="translate(15, 15) scale(0.7)">
       {excludedType === 'house' && <HouseSvg />}
@@ -148,7 +231,6 @@ export const RuledOutBuildingSvg: React.FC<{
  */
 export const MarkedGrassSvg: React.FC = () => (
   <svg viewBox="0 0 100 100" className="tile-svg">
-    <ellipse cx="50" cy="52" rx="34" ry="30" fill="#cfa96e" opacity="0.45" />
     {/* Small stones */}
     <path
       d="M24,68 C22,60 30,55 37,59 C42,62 41,70 35,72 Z"
@@ -608,7 +690,7 @@ export const RoadSvg: React.FC<{ connections?: RoadConnections }> = ({
               rx="3"
               fill="#a86b38"
               stroke="#2b1e16"
-              strokeWidth="3.2"
+              strokeWidth="2"
             />
           ))}
         </g>
@@ -625,7 +707,7 @@ export const RoadSvg: React.FC<{ connections?: RoadConnections }> = ({
               rx="3"
               fill="#a86b38"
               stroke="#2b1e16"
-              strokeWidth="3.2"
+              strokeWidth="2"
             />
           ))}
         </g>
@@ -644,7 +726,7 @@ export const RoadSvg: React.FC<{ connections?: RoadConnections }> = ({
               rx="3"
               fill="#a86b38"
               stroke="#2b1e16"
-              strokeWidth="3.2"
+              strokeWidth="2"
             />
           ))}
         </g>
@@ -661,7 +743,7 @@ export const RoadSvg: React.FC<{ connections?: RoadConnections }> = ({
               rx="3"
               fill="#a86b38"
               stroke="#2b1e16"
-              strokeWidth="3.2"
+              strokeWidth="2"
             />
           ))}
         </g>
@@ -680,7 +762,7 @@ export const RoadSvg: React.FC<{ connections?: RoadConnections }> = ({
               rx="2.5"
               fill="#b5763f"
               stroke="#2b1e16"
-              strokeWidth="3.2"
+              strokeWidth="2"
             />
           ))}
         </g>
@@ -693,7 +775,7 @@ export const RoadSvg: React.FC<{ connections?: RoadConnections }> = ({
           rx="6"
           fill="#b5763f"
           stroke="#2b1e16"
-          strokeWidth="3.5"
+          strokeWidth="2"
         />
       )}
       {anyConn && (showH || showV) && (
