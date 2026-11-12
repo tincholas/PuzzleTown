@@ -8,6 +8,7 @@ import {
 } from '../engine/types';
 import { BuildingFoundationSvg, MarkedGrassSvg, TileGraphic } from './TileGraphic';
 import emptyBgImg from '../assets/empty_bg1.png';
+import buildingImg from '../assets/building.png';
 
 export type ActiveTool = PlaceableType | 'mark_empty';
 export type TouchActionMode = 'build' | 'rule_out';
@@ -206,7 +207,12 @@ export const BuildingTray: React.FC<BuildingTrayProps> = ({
             )}
             <div className="tray-card-art">
               {isGlobalEmptySelected && actionMode === 'rule_out' ? (
-                <BuildingFoundationSvg />
+                <img
+                  src={buildingImg}
+                  alt="Building"
+                  className="tray-building-img"
+                  draggable={false}
+                />
               ) : (
                 <img
                   src={emptyBgImg}

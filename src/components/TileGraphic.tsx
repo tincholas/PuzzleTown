@@ -26,6 +26,7 @@ import earthBg3 from '../assets/earth_bg3.png';
 import emptyBg1 from '../assets/empty_bg1.png';
 import emptyBg2 from '../assets/empty_bg2.png';
 import emptyBg3 from '../assets/empty_bg3.png';
+import buildingImg from '../assets/building.png';
 
 export interface RoadConnections {
   up: boolean;
@@ -52,7 +53,7 @@ if (typeof window !== 'undefined') {
       img.src = src;
     });
   });
-  [treeImg, rockImg, tileBgImg, earthBg1, earthBg2, earthBg3, emptyBg1, emptyBg2, emptyBg3].forEach((src) => {
+  [treeImg, rockImg, tileBgImg, earthBg1, earthBg2, earthBg3, emptyBg1, emptyBg2, emptyBg3, buildingImg].forEach((src) => {
     const img = new Image();
     img.src = src;
   });
@@ -63,6 +64,17 @@ export const TreeGraphic: React.FC = () => (
     src={treeImg}
     alt="Tree"
     className="tile-obstacle-img"
+    draggable={false}
+  />
+);
+
+export const BuildingGraphic: React.FC<{ isNewlyBuilt?: boolean }> = ({
+  isNewlyBuilt = false
+}) => (
+  <img
+    src={buildingImg}
+    alt="Building"
+    className={`tile-building-img ${isNewlyBuilt ? 'is-animating-build' : ''}`}
     draggable={false}
   />
 );
@@ -177,7 +189,7 @@ export const TileGraphic: React.FC<TileGraphicProps> = ({
     case 'empty':
     default:
       if (markedBuilding) {
-        return <BuildingFoundationSvg isNewlyBuilt={isNewlyBuilt} />;
+        return <BuildingGraphic isNewlyBuilt={isNewlyBuilt} />;
       }
       if (markedEmpty) {
         return null;

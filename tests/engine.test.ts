@@ -298,13 +298,24 @@ describe('Multi-Step Hint Structure & Breakdown', () => {
     // After applying Hint 1:
     marks[3][2] = true;
 
-    // Hint 2: Now (2, 4) is the only remaining valid spot on the entire board for Town Hall!
+    // Hint 2: (4, 4) cannot hold a building
     const hint2 = getNextHint(grid, marks, level75);
     expect(hint2).not.toBeNull();
-    expect(hint2?.ruleName).toBe('Only Remaining Spot');
-    expect(hint2?.action).toBe('place');
+    expect(hint2?.ruleName).toBe('Cannot Hold Building');
+    expect(hint2?.action).toBe('mark_empty');
     expect(hint2?.r).toBe(3);
-    expect(hint2?.c).toBe(1);
+    expect(hint2?.c).toBe(3);
+
+    // After applying Hint 2:
+    marks[3][3] = true;
+
+    // Hint 3: Now (2, 4) is the only remaining valid spot in Row 4 for Town Hall!
+    const hint3 = getNextHint(grid, marks, level75);
+    expect(hint3).not.toBeNull();
+    expect(hint3?.ruleName).toBe('Only Town Hall Fits');
+    expect(hint3?.action).toBe('place');
+    expect(hint3?.r).toBe(3);
+    expect(hint3?.c).toBe(1);
   });
 
   it('inspects Level 75 screenshot 2 (Column Clue Complete then Only House Fits at 4,6)', () => {
@@ -337,19 +348,30 @@ describe('Multi-Step Hint Structure & Breakdown', () => {
     // Once Column 2 is marked (e.g. by applying the hint):
     marks[5][1] = true;
 
-    // Hint 2: Only House Fits at (4, 6)
+    // Hint 2: Row 6 needs 2 buildings and only (3, 6) and (4, 6) can hold buildings -> mark as Building foundation
     const hint2 = getNextHint(grid, marks, level75);
     expect(hint2).not.toBeNull();
-    expect(hint2?.ruleName).toBe('Only House Fits');
-    expect(hint2?.steps).toBeDefined();
-    expect(hint2?.steps).toHaveLength(5);
+    expect(hint2?.ruleName).toBe('Row Needs Building');
+    expect(hint2?.action).toBe('mark_building');
+
+    // Once player marks the building foundations:
+    const buildingMarks = Array.from({ length: 6 }, () => Array(6).fill(false));
+    buildingMarks[5][2] = true;
+    buildingMarks[5][3] = true;
+
+    // Hint 3: Only House Fits at (4, 6)
+    const hint3 = getNextHint(grid, marks, level75, buildingMarks);
+    expect(hint3).not.toBeNull();
+    expect(hint3?.ruleName).toBe('Only House Fits');
+    expect(hint3?.steps).toBeDefined();
+    expect(hint3?.steps).toHaveLength(5);
 
     // Step 1: Target cell is candidate
-    expect(hint2!.steps![0].candidateCells).toHaveLength(1);
+    expect(hint3!.steps![0].candidateCells).toHaveLength(1);
 
     // Final placement
-    expect(hint2!.steps![4].message).toBe('Therefore, (4, 6) must be a House!');
-    expect(hint2!.steps![4].targetCell).toEqual({ r: 5, c: 3 });
+    expect(hint3!.steps![4].message).toBe('Therefore, (4, 6) must be a House!');
+    expect(hint3!.steps![4].targetCell).toEqual({ r: 5, c: 3 });
   });
 
   it('inspects Level 76 Road Entry Point screenshot', () => {
@@ -439,54 +461,66 @@ describe('Multi-Step Hint Structure & Breakdown', () => {
     // Apply Hint 1 (mark (2, 1) as clear):
     marks[0][1] = true;
 
-    // Hint 2: Road Entry Point at (3, 4) — now (2, 1) is marked, so (2, 5) is visibly the only open spot in Column 2!
+    // Hint 2: Column 2 needs 1 more building, and (2, 5) is visibly its only open spot -> mark as Building foundation!
     const hint2 = getNextHint(grid, marks, level76Screenshot);
     expect(hint2).toBeDefined();
-    expect(hint2?.ruleName).toBe('Road Entry Point');
-    expect(hint2?.action).toBe('place');
-    expect(hint2?.tileType).toBe('road');
-    expect(hint2?.r).toBe(3);
-    expect(hint2?.c).toBe(2);
-    expect(hint2?.steps).toHaveLength(3);
+    expect(hint2?.ruleName).toBe('Column Needs Building');
+    expect(hint2?.action).toBe('mark_building');
+    expect(hint2?.r).toBe(4);
+    expect(hint2?.c).toBe(1);
+
+    // Apply Hint 2 (mark (2, 5) as Building foundation):
+    const bMarks = Array.from({ length: 6 }, () => Array(6).fill(false));
+    bMarks[4][1] = true;
+
+    // Hint 3: Road Entry Point at (3, 4) — with (2, 5) marked as a building, (3, 4) is the only available road exit!
+    const hint3 = getNextHint(grid, marks, level76Screenshot, bMarks);
+    expect(hint3).toBeDefined();
+    expect(hint3?.ruleName).toBe('Road Entry Point');
+    expect(hint3?.action).toBe('place');
+    expect(hint3?.tileType).toBe('road');
+    expect(hint3?.r).toBe(3);
+    expect(hint3?.c).toBe(2);
+    expect(hint3?.steps).toHaveLength(3);
 
     // Step 1: Premise focusing the Woodcutter and candidate exits
-    expect(hint2!.steps![0].title).toBe('Road Entry Point');
-    expect(hint2!.steps![0].message).toContain(
+    expect(hint3!.steps![0].title).toBe('Road Entry Point');
+    expect(hint3!.steps![0].message).toContain(
       'The Woodcutter at (2, 4) needs a Road connection to reach the Town Hall.'
     );
-    expect(hint2!.steps![0].focusCells).toEqual([{ r: 3, c: 1 }]);
-    expect(hint2!.steps![0].candidateCells).toEqual([
+    expect(hint3!.steps![0].focusCells).toEqual([{ r: 3, c: 1 }]);
+    expect(hint3!.steps![0].candidateCells).toEqual([
       { r: 3, c: 2 },
       { r: 4, c: 1 }
     ]);
 
     // Step 2: Discarding non-road exits without confusing lookahead references
-    expect(hint2!.steps![1].title).toBe('Road Entry Point');
-    expect(hint2!.steps![1].message).toBe(
-      '(2, 5) cannot be a Road (Column 2 needs 1 more building, and (2, 5) is its only valid spot).'
+    expect(hint3!.steps![1].title).toBe('Road Entry Point');
+    expect(hint3!.steps![1].message).toBe(
+      '(2, 5) cannot be a Road (marked as Building).'
     );
-    expect(hint2!.steps![1].focusCells).toEqual([{ r: 3, c: 1 }]);
-    expect(hint2!.steps![1].discardedCells).toEqual([{ r: 4, c: 1 }]);
+    expect(hint3!.steps![1].focusCells).toEqual([{ r: 3, c: 1 }]);
+    expect(hint3!.steps![1].discardedCells).toEqual([{ r: 4, c: 1 }]);
 
     // Step 3: Concluding the exit and pointing to target
-    expect(hint2!.steps![2].title).toBe('Road Entry Point');
-    expect(hint2!.steps![2].message).toBe(
+    expect(hint3!.steps![2].title).toBe('Road Entry Point');
+    expect(hint3!.steps![2].message).toBe(
       'That leaves (3, 4) as the only available Road exit for the Woodcutter at (2, 4)!'
     );
-    expect(hint2!.steps![2].focusCells).toEqual([{ r: 3, c: 1 }]);
-    expect(hint2!.steps![2].targetCell).toEqual({ r: 3, c: 2 });
+    expect(hint3!.steps![2].focusCells).toEqual([{ r: 3, c: 1 }]);
+    expect(hint3!.steps![2].targetCell).toEqual({ r: 3, c: 2 });
 
-    // Apply Hint 2 (place Road at (3, 4)):
+    // Apply Hint 3 (place Road at (3, 4)):
     grid[3][2] = 'road';
 
-    // Hint 3: Woodcutter Needs House at (2, 5)
-    const hint3 = getNextHint(grid, marks, level76Screenshot);
-    expect(hint3).toBeDefined();
-    expect(hint3?.ruleName).toBe('Woodcutter Needs House');
-    expect(hint3?.action).toBe('place');
-    expect(hint3?.tileType).toBe('house');
-    expect(hint3?.r).toBe(4);
-    expect(hint3?.c).toBe(1);
+    // Hint 4: Woodcutter Needs House at (2, 5)
+    const hint4 = getNextHint(grid, marks, level76Screenshot, bMarks);
+    expect(hint4).toBeDefined();
+    expect(hint4?.ruleName).toBe('Woodcutter Needs House');
+    expect(hint4?.action).toBe('place');
+    expect(hint4?.tileType).toBe('house');
+    expect(hint4?.r).toBe(4);
+    expect(hint4?.c).toBe(1);
 
     // Apply Hint 3 (place House at (2, 5)):
     grid[4][1] = 'house';
@@ -579,14 +613,37 @@ describe('Multi-Step Hint Structure & Breakdown', () => {
     marks[4][3] = true; // (4, 5)
     marks[5][0] = true; // (1, 6)
 
-    // Next hint places House at (1, 3) since Column 1 needs 1 building:
-    const hintHouse = getNextHint(grid, marks, level80);
+    // Next hint deduces Row 5 needs 1 building at (3, 5):
+    const hintRow5 = getNextHint(grid, marks, level80);
+    expect(hintRow5).not.toBeNull();
+    expect(hintRow5?.action).toBe('mark_building');
+    expect(hintRow5?.ruleName).toBe('Row Needs Building');
+    expect(hintRow5?.r).toBe(4);
+    expect(hintRow5?.c).toBe(2); // (3, 5)
+
+    // Player marks (3, 5) and (3, 6) as Building foundations:
+    const bMarks = Array.from({ length: level80.size }, () =>
+      Array(level80.size).fill(false)
+    );
+    bMarks[4][2] = true;
+    bMarks[5][2] = true;
+    marks[2][2] = true; // (3, 3) marked clear ground
+    marks[5][4] = true; // (5, 6) marked clear ground
+
+    // Column 3 clue is complete (2 buildings marked), so remaining open cell (3, 1) is cleared:
+    const hintCol3 = getNextHint(grid, marks, level80, bMarks);
+    expect(hintCol3).not.toBeNull();
+    expect(hintCol3?.ruleName).toBe('Column Clue Complete');
+    marks[0][2] = true; // (3, 1) marked clear ground
+
+    // Now Woodcutter at (2, 3) forces House at (1, 3):
+    const hintHouse = getNextHint(grid, marks, level80, bMarks);
     expect(hintHouse).not.toBeNull();
     expect(hintHouse?.action).toBe('place');
     expect(hintHouse?.r).toBe(2);
     expect(hintHouse?.c).toBe(0); // (1, 3)
     expect(hintHouse?.tileType).toBe('house');
-    expect(hintHouse?.ruleName).toBe('Only House Fits');
+    expect(hintHouse?.ruleName).toBe('Woodcutter Needs House');
   });
 
   it('generates mark_building hints and completes line clues logically on Level 80', () => {

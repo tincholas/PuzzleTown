@@ -723,6 +723,16 @@ body,
   user-select: none;
 }
 
+.tile-building-img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  image-rendering: -webkit-optimize-contrast;
+  image-rendering: crisp-edges;
+  pointer-events: none;
+  user-select: none;
+}
+
 /* While animating, layers start clipped at 100% so they never flash */
 .building-sprite-container.is-animating-build .building-layer {
   clip-path: inset(100% 0 0 0);
@@ -1188,6 +1198,16 @@ body,
   object-fit: cover;
   border-radius: 6px;
   border: 1.5px solid var(--ink);
+  image-rendering: -webkit-optimize-contrast;
+  image-rendering: crisp-edges;
+  pointer-events: none;
+}
+
+.tray-building-img {
+  width: 90%;
+  height: 90%;
+  margin: 0 auto;
+  object-fit: contain;
   image-rendering: -webkit-optimize-contrast;
   image-rendering: crisp-edges;
   pointer-events: none;
