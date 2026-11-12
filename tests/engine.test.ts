@@ -564,39 +564,28 @@ describe('Multi-Step Hint Structure & Breakdown', () => {
     marks[5][1] = true;
     marks[5][5] = true;
 
-    // First hint prioritizes marking (3, 1) as clear ground since no buildings fit there:
+    // First hint recognizes that (5, 5) is an essential road bottleneck to connect the corner road:
     const hint1 = getNextHint(grid, marks, level80);
     expect(hint1).not.toBeNull();
-    expect(hint1?.action).toBe('mark_empty');
-    expect(hint1?.ruleName).toBe('No Buildings Fit');
-    expect(hint1?.r).toBe(0);
-    expect(hint1?.c).toBe(2); // (3, 1)
+    expect(hint1?.action).toBe('place');
+    expect(hint1?.ruleName).toBe('Required Road Path');
+    expect(hint1?.r).toBe(4);
+    expect(hint1?.c).toBe(4); // (5, 5)
+    expect(hint1?.tileType).toBe('road');
 
-    // After player marks (3, 1) and (5, 1) as clear ground:
-    marks[0][2] = true;
-    marks[0][4] = true;
+    // Player places Road at (5, 5):
+    grid[4][4] = 'road';
+    marks[4][0] = true; // (1, 5)
+    marks[4][3] = true; // (4, 5)
+    marks[5][0] = true; // (1, 6)
 
-    // Next hint places Town Hall at (4, 1) directly via Row 1 quota, with NO Column 1 crosstalk:
-    const hintPlace = getNextHint(grid, marks, level80);
-    expect(hintPlace).not.toBeNull();
-    expect(hintPlace?.action).toBe('place');
-    expect(hintPlace?.r).toBe(0);
-    expect(hintPlace?.c).toBe(3); // (4, 1)
-    expect(hintPlace?.ruleName).toBe('Only Town Hall Fits');
-
-    // Verify hint does NOT hallucinate Column 1 as the line for (4, 1)
-    for (const step of hintPlace!.steps!) {
-      expect(step.message).not.toContain('Column 1');
-      expect(step.message).not.toContain('(1, 5)');
-      if (step.highlightLine) {
-        expect(step.highlightLine.axis).toBe('row');
-        expect(step.highlightLine.index).toBe(0);
-      }
-    }
-
-    // Step 1 states the clean direct premise:
-    expect(hintPlace!.steps![0].message).toBe(
-      '(4, 1) must contain a building (Row 1 needs 1 building, and (4, 1) is its only valid spot).'
-    );
+    // Next hint places House at (1, 3) since Column 1 needs 1 building:
+    const hintHouse = getNextHint(grid, marks, level80);
+    expect(hintHouse).not.toBeNull();
+    expect(hintHouse?.action).toBe('place');
+    expect(hintHouse?.r).toBe(2);
+    expect(hintHouse?.c).toBe(0); // (1, 3)
+    expect(hintHouse?.tileType).toBe('house');
+    expect(hintHouse?.ruleName).toBe('Only House Fits');
   });
 });

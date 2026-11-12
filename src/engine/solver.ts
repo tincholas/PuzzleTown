@@ -1851,6 +1851,43 @@ export function solveByDeduction(
           }
         }
 
+        // 6c. Any cell that must be a building (Farm/House) needs an adjacent partner building
+        if (mustBeBuilding(domains[r][c])) {
+          const canBeWc =
+            domains[r][c].has('woodcutter') &&
+            ortho.some((n) => domains[n.r][n.c].has('tree'));
+          const canBeTH = domains[r][c].has('town_hall');
+          if (!canBeWc && !canBeTH) {
+            // (r, c) must be Farm or House, both of which require an adjacent building!
+            const partnerNeighbors = ortho.filter((n) =>
+              canBeAnyBuilding(domains[n.r][n.c])
+            );
+            if (partnerNeighbors.length === 1) {
+              const target = partnerNeighbors[0];
+              const dom = domains[target.r][target.c];
+              if (!mustBeBuilding(dom)) {
+                const prev = dom.size;
+                const remEmpty = dom.delete('empty');
+                const remRoad = dom.delete('road');
+                if (remEmpty || remRoad) {
+                  progress = true;
+                  const reason = `must contain a partner building for the ${xy(r, c)} building`;
+                  recordElimReason(target.r, target.c, 'empty', reason);
+                  recordElimReason(target.r, target.c, 'road', reason);
+                  recordLockIfNew(
+                    target.r,
+                    target.c,
+                    prev,
+                    'Building Partner Required',
+                    `The building at ${xy(r, c)} requires an adjacent partner building, and ${xy(target.r, target.c)} is its only available neighbor.`,
+                    false
+                  );
+                }
+              }
+            }
+          }
+        }
+
         if (
           hasTownHall &&
           (locked === 'woodcutter' ||
@@ -2025,6 +2062,116 @@ export function solveByDeduction(
                 'Road Distance Limit',
                 `A ${formatTileName(bType)} at ${xy(r, c)} cannot reach the Town Hall within ${maxRoads} Road tile(s).`
               );
+            }
+          }
+        }
+      }
+
+      if (!progress) {
+        const placedSources: { r: number; c: number; type: TileType }[] = [];
+        for (let r = 0; r < size; r++) {
+          for (let c = 0; c < size; c++) {
+            const isRoad =
+              (domains[r][c].size === 1 && domains[r][c].has('road')) ||
+              (startingGrid && startingGrid[r][c] === 'road');
+            if (isRoad) {
+              placedSources.push({ r, c, type: 'road' });
+            } else if (
+              startingGrid &&
+              (startingGrid[r][c] === 'woodcutter' ||
+                startingGrid[r][c] === 'farm')
+            ) {
+              placedSources.push({ r, c, type: startingGrid[r][c] });
+            }
+          }
+        }
+
+        bottleneckLoop: for (const src of placedSources) {
+          const touchesTH = thCandidates.some(
+            (th) =>
+              (src.r === th.r && src.c === th.c) ||
+              Math.abs(src.r - th.r) + Math.abs(src.c - th.c) === 1
+          );
+          if (touchesTH) continue;
+
+          const ortho = getOrthoNeighbors(size, src.r, src.c);
+          const roadNeighbors = ortho.filter(
+            (n) => domains[n.r][n.c].has('road') && domains[n.r][n.c].size > 1
+          );
+
+          for (const cand of roadNeighbors) {
+            const q: Coord[] = [{ r: src.r, c: src.c }];
+            const visited = new Set<string>([`${src.r},${src.c}`]);
+            let canReachTH = false;
+
+            while (q.length > 0) {
+              const curr = q.shift()!;
+              for (const th of thCandidates) {
+                if (
+                  (curr.r === th.r && curr.c === th.c) ||
+                  Math.abs(curr.r - th.r) + Math.abs(curr.c - th.c) === 1
+                ) {
+                  canReachTH = true;
+                  break;
+                }
+              }
+              if (canReachTH) break;
+
+              for (const n of getOrthoNeighbors(size, curr.r, curr.c)) {
+                if (n.r === cand.r && n.c === cand.c) continue;
+                const nKey = `${n.r},${n.c}`;
+                if (visited.has(nKey)) continue;
+
+                if (domains[n.r][n.c].has('road')) {
+                  visited.add(nKey);
+                  q.push(n);
+                }
+              }
+            }
+
+            if (!canReachTH) {
+              const prev = domains[cand.r][cand.c].size;
+              domains[cand.r][cand.c].clear();
+              domains[cand.r][cand.c].add('road');
+              progress = true;
+
+              const otherNeighbors = roadNeighbors.filter(
+                (n) => n.r !== cand.r || n.c !== cand.c
+              );
+              const customSteps: HintStep[] = [
+                {
+                  title: 'Road Connection Required',
+                  message: `The ${formatTileName(src.type)} at ${xy(src.r, src.c)} needs a Road connection to reach the Town Hall.`,
+                  focusCells: [{ r: src.r, c: src.c }],
+                  candidateCells: [cand, ...otherNeighbors]
+                },
+                {
+                  title: 'Required Road Path',
+                  message:
+                    otherNeighbors.length > 0
+                      ? `Any other path out of this corner is blocked or leads to a dead end. Every valid path to the Town Hall must pass through ${xy(cand.r, cand.c)}.`
+                      : `Every valid path connecting to the Town Hall must pass through ${xy(cand.r, cand.c)}.`,
+                  focusCells: [{ r: src.r, c: src.c }, cand],
+                  discardedCells: otherNeighbors
+                },
+                {
+                  title: 'Place Road',
+                  message: `Place a Road at ${xy(cand.r, cand.c)} to maintain connection to the rest of the village.`,
+                  focusCells: [{ r: src.r, c: src.c }],
+                  targetCell: cand
+                }
+              ];
+
+              recordLockIfNew(
+                cand.r,
+                cand.c,
+                prev,
+                'Required Road Path',
+                `The ${formatTileName(src.type)} at ${xy(src.r, src.c)} must connect to the Town Hall, and every valid path must pass through ${xy(cand.r, cand.c)}.`,
+                true,
+                customSteps
+              );
+              break bottleneckLoop;
             }
           }
         }
