@@ -61,6 +61,20 @@ function computeRoadConnections(
   };
 }
 
+function computeBuildingRoadConnections(
+  grid: TileType[][],
+  r: number,
+  c: number
+): RoadConnections {
+  const size = grid.length;
+  return {
+    up: r > 0 && grid[r - 1][c] === 'road',
+    down: r < size - 1 && grid[r + 1][c] === 'road',
+    left: c > 0 && grid[r][c - 1] === 'road',
+    right: c < size - 1 && grid[r][c + 1] === 'road'
+  };
+}
+
 export const GameBoard: React.FC<GameBoardProps> = ({
   level,
   grid,
@@ -300,9 +314,14 @@ export const GameBoard: React.FC<GameBoardProps> = ({
                     : {})
                 };
 
+                const isRoadBuilding =
+                  tile === 'woodcutter' || tile === 'farm' || tile === 'town_hall';
+
                 const roadConns =
                   tile === 'road'
                     ? computeRoadConnections(grid, r, c)
+                    : isRoadBuilding
+                    ? computeBuildingRoadConnections(grid, r, c)
                     : undefined;
 
                 return (

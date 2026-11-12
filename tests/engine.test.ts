@@ -548,4 +548,50 @@ describe('Multi-Step Hint Structure & Breakdown', () => {
       'Since no buildings can fit at (1, 1), this space must be marked as clear ground (Grass).'
     );
   });
+
+  it('verifies Level 80 Town Hall hint does not cross-talk with Column 1 or inline (1, 5)', () => {
+    const level80 = getCampaignLevel(80);
+    const grid: TileType[][] = level80.initialGrid.map((r) => [...r]);
+    const marks: boolean[][] = Array.from({ length: level80.size }, () =>
+      Array(level80.size).fill(false)
+    );
+
+    // Exact board state from user report:
+    marks[0][0] = true;
+    marks[0][5] = true;
+    marks[1][0] = true;
+    marks[1][2] = true;
+    marks[1][3] = true;
+    marks[1][4] = true;
+    marks[1][5] = true;
+    grid[2][1] = 'woodcutter';
+    marks[3][0] = true;
+    marks[3][2] = true;
+    marks[3][3] = true;
+    grid[3][4] = 'house';
+    grid[3][5] = 'woodcutter';
+    marks[4][1] = true;
+    grid[4][5] = 'road';
+    marks[5][1] = true;
+    marks[5][5] = true;
+
+    const hint = getNextHint(grid, marks, level80);
+    expect(hint).not.toBeNull();
+    expect(hint?.action).toBe('place');
+    expect(hint?.r).toBe(0);
+    expect(hint?.c).toBe(3); // (4, 1)
+
+    // Verify hint does NOT hallucinate Column 1 as the line for (4, 1)
+    for (const step of hint!.steps!) {
+      expect(step.message).not.toContain('Column 1 needs 2 building(s) and only');
+      expect(step.message).not.toContain('(1, 5) cannot hold a building');
+      if (step.highlightLine) {
+        expect(step.highlightLine.axis).toBe('row');
+        expect(step.highlightLine.index).toBe(0);
+      }
+    }
+
+    // Step 1 must have explicit conditionality
+    expect(hint!.steps![0].message).toContain('If (4, 1) were empty');
+  });
 });

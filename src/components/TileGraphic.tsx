@@ -144,10 +144,34 @@ export const TileGraphic: React.FC<TileGraphicProps> = ({
     case 'house':
     case 'woodcutter':
     case 'farm':
-    case 'town_hall':
-      return <BuildingSprite type={type} isNewlyBuilt={isNewlyBuilt} />;
+    case 'town_hall': {
+      const hasRoadConns =
+        (type === 'woodcutter' || type === 'farm' || type === 'town_hall') &&
+        roadConnections &&
+        (roadConnections.up ||
+          roadConnections.down ||
+          roadConnections.left ||
+          roadConnections.right);
+
+      if (!hasRoadConns) {
+        return <BuildingSprite type={type} isNewlyBuilt={isNewlyBuilt} />;
+      }
+
+      return (
+        <div style={{ position: 'relative', width: '100%', height: '100%' }}>
+          <div style={{ position: 'absolute', inset: 0, pointerEvents: 'none' }}>
+            <RoadSvg
+              connections={roadConnections}
+              variantSeed={variantSeed}
+              isBuildingUnderlay
+            />
+          </div>
+          <BuildingSprite type={type} isNewlyBuilt={isNewlyBuilt} />
+        </div>
+      );
+    }
     case 'road':
-      return <RoadSvg connections={roadConnections} />;
+      return <RoadSvg connections={roadConnections} variantSeed={variantSeed} />;
     case 'empty':
     default:
       if (markedEmpty) {
@@ -747,131 +771,469 @@ export const TownHallSvg: React.FC = () => (
   </svg>
 );
 
-export const RoadSvg: React.FC<{ connections?: RoadConnections }> = ({
-  connections
-}) => {
+/**
+ * Configurable Road Styling Parameters
+ * Easily tweakable values for waviness, stroke widths, roughness, and pebbles.
+ */
+export const ROAD_CONFIG = {
+  // Centerline meander wave amplitude on straight/dead-end paths (in SVG units)
+  meanderAmplitude: 12.0,
+  // Layer stroke widths
+  vergeWidth: 52, // Soft grass-to-dirt outer blend
+  borderWidth: 44, // Rich dark earthy brown road shoulder
+  earthWidth: 34, // Main masked earth PNG road width
+  centerTrackWidth: 14, // Lighter center worn vehicle track
+  // SVG edge displacement (higher = more organic/wavy road borders)
+  roughnessScale: 4.2, // Filter displacement amplitude
+  roughnessFreq: 0.075, // Noise frequency (0.075 gives broad natural dirt-road waves)
+  // Pebble scale multiplier (makes pebbles slightly larger and chunkier)
+  pebbleScale: 1.35
+};
+
+export interface PebbleData {
+  cx: number;
+  cy: number;
+  rx: number;
+  ry: number;
+  rot: number;
+  isSpeck?: boolean;
+}
+
+/**
+ * Generates natural, varied shoulder pebbles based on tile topology and seed.
+ * Features multi-stone clusters, staggered placements, and occasional clean stretches.
+ */
+export function generatePebblesForTile(
+  connections: RoadConnections | undefined,
+  variantSeed: number,
+  scale: number = ROAD_CONFIG.pebbleScale
+): PebbleData[] {
   const up = connections?.up ?? false;
   const down = connections?.down ?? false;
   const left = connections?.left ?? false;
   const right = connections?.right ?? false;
-  const anyConn = up || down || left || right;
+  const connCount =
+    (up ? 1 : 0) + (down ? 1 : 0) + (left ? 1 : 0) + (right ? 1 : 0);
 
-  // Default to horizontal plank bridge if isolated/tray icon
-  const showH = !anyConn || left || right;
-  const showV = up || down;
+  const pebbles: PebbleData[] = [];
+  const pSeed = (variantSeed * 17 + 11) % 100;
+
+  const addStoneCluster = (
+    cx: number,
+    cy: number,
+    baseRot: number,
+    count: number = 2
+  ) => {
+    // Primary main stone
+    pebbles.push({
+      cx,
+      cy,
+      rx: 4.6 * scale,
+      ry: 3.3 * scale,
+      rot: baseRot + (pSeed % 18) - 9
+    });
+    // Secondary companion pebble
+    if (count >= 2) {
+      const angle = (baseRot + 50) * (Math.PI / 180);
+      pebbles.push({
+        cx: cx + 5.6 * scale * Math.cos(angle),
+        cy: cy + 5.6 * scale * Math.sin(angle),
+        rx: 3.0 * scale,
+        ry: 2.2 * scale,
+        rot: baseRot - 32
+      });
+    }
+    // Tiny crumb / dirt speck
+    if (count >= 3) {
+      pebbles.push({
+        cx: cx - 4.2 * scale,
+        cy: cy + 3.2 * scale,
+        rx: 1.5 * scale,
+        ry: 1.3 * scale,
+        rot: 12,
+        isSpeck: true
+      });
+    }
+  };
+
+  if (connCount === 0) {
+    // Isolated road / tray preview
+    addStoneCluster(22, 24, -15, 2);
+    addStoneCluster(78, 76, 25, 3);
+  } else if (connCount === 1) {
+    // Dead-end: variety around the turnaround
+    const mode = pSeed % 3;
+    if (mode === 0) {
+      if (up) addStoneCluster(24, 62, 15, 2);
+      else if (down) addStoneCluster(76, 38, -20, 2);
+      else if (left) addStoneCluster(62, 24, 25, 2);
+      else if (right) addStoneCluster(38, 76, -15, 2);
+    } else if (mode === 1) {
+      if (up) addStoneCluster(76, 62, -25, 3);
+      else if (down) addStoneCluster(24, 38, 20, 3);
+      else if (left) addStoneCluster(62, 76, -15, 3);
+      else if (right) addStoneCluster(38, 24, 20, 3);
+    }
+  } else if (connCount === 2 && up && down) {
+    // Straight vertical: 5 diverse patterns (left cluster, right cluster, staggered duo, single, or clean)
+    const mode = pSeed % 5;
+    if (mode === 0) addStoneCluster(16, 34, -20, 2);
+    else if (mode === 1) addStoneCluster(84, 66, 25, 3);
+    else if (mode === 2) {
+      addStoneCluster(16, 25, -15, 1);
+      addStoneCluster(84, 75, 30, 2);
+    } else if (mode === 3) addStoneCluster(84, 42, -10, 2);
+    // mode 4: clean grass
+  } else if (connCount === 2 && left && right) {
+    // Straight horizontal: 5 diverse patterns (top, bottom, staggered, single, or clean)
+    const mode = pSeed % 5;
+    if (mode === 0) addStoneCluster(66, 16, 15, 2);
+    else if (mode === 1) addStoneCluster(34, 84, -25, 3);
+    else if (mode === 2) {
+      addStoneCluster(26, 16, 20, 2);
+      addStoneCluster(74, 84, -15, 1);
+    } else if (mode === 3) addStoneCluster(46, 16, -30, 2);
+    // mode 4: clean grass
+  } else if (connCount === 2) {
+    // 90-degree Turn: place in the wide outer corner or tight inner bend
+    const mode = pSeed % 4;
+    let outerX = 22;
+    let outerY = 78;
+    let innerX = 78;
+    let innerY = 22;
+    if (up && right) {
+      outerX = 22;
+      outerY = 78;
+      innerX = 80;
+      innerY = 20;
+    } else if (up && left) {
+      outerX = 78;
+      outerY = 78;
+      innerX = 20;
+      innerY = 20;
+    } else if (down && right) {
+      outerX = 22;
+      outerY = 22;
+      innerX = 80;
+      innerY = 80;
+    } else if (down && left) {
+      outerX = 78;
+      outerY = 22;
+      innerX = 20;
+      innerY = 80;
+    }
+
+    if (mode === 0) addStoneCluster(outerX, outerY, -25, 3);
+    else if (mode === 1) addStoneCluster(outerX, outerY, 35, 2);
+    else if (mode === 2) {
+      addStoneCluster(outerX, outerY, 10, 2);
+      addStoneCluster(innerX, innerY, -40, 1);
+    }
+    // mode 3: clean grass
+  } else if (connCount === 3) {
+    // T-junction: place in one of the 2 grass corners
+    const mode = pSeed % 3;
+    if (mode === 0) {
+      if (!up) addStoneCluster(50, 20, 15, 2);
+      else if (!down) addStoneCluster(50, 80, -15, 2);
+      else if (!left) addStoneCluster(20, 50, 25, 2);
+      else if (!right) addStoneCluster(80, 50, -25, 2);
+    }
+  }
+
+  return pebbles;
+}
+
+export const RoadSvg: React.FC<{
+  connections?: RoadConnections;
+  variantSeed?: number;
+  isBuildingUnderlay?: boolean;
+}> = ({ connections, variantSeed = 0, isBuildingUnderlay = false }) => {
+  const rawId = React.useId();
+  const uid = rawId.replace(/[^a-zA-Z0-9_-]/g, '');
+
+  const up = connections?.up ?? false;
+  const down = connections?.down ?? false;
+  const left = connections?.left ?? false;
+  const right = connections?.right ?? false;
+  const connCount =
+    (up ? 1 : 0) + (down ? 1 : 0) + (left ? 1 : 0) + (right ? 1 : 0);
+
+  // Dynamic meander wave offset for straight & dead-end segments
+  const waveSign = variantSeed % 2 === 0 ? 1 : -1;
+  const w = waveSign * (ROAD_CONFIG.meanderAmplitude + (variantSeed % 3) * 0.7);
+
+  // Build smooth centerline SVG path(s).
+  // Connected edges are strictly straight & perpendicular at midpoint 50
+  // from -16 to 12 (or 88 to 116) so borders always align 100% flush across tiles.
+  const segments: string[] = [];
+
+  if (isBuildingUnderlay) {
+    // When leading into a building (woodcutter, farm, town hall),
+    // road arms travel straight into the center of the tile (50, 50) directly under the building sprite
+    if (up) segments.push('M 50 -16 L 50 50');
+    if (down) segments.push('M 50 116 L 50 50');
+    if (left) segments.push('M -16 50 L 50 50');
+    if (right) segments.push('M 116 50 L 50 50');
+  } else if (connCount === 0) {
+    // Graceful S-curve dirt path for tray icon & isolated road tile
+    segments.push('M 14 58 C 36 34, 64 66, 86 42');
+  } else if (connCount === 1) {
+    if (up) segments.push(`M 50 -16 L 50 12 C 50 28, ${50 + w} 42, ${50 + w * 0.4} 54`);
+    if (down) segments.push(`M 50 116 L 50 88 C 50 72, ${50 + w} 58, ${50 + w * 0.4} 46`);
+    if (left) segments.push(`M -16 50 L 12 50 C 28 50, 42 ${50 + w}, 54 ${50 + w * 0.4}`);
+    if (right) segments.push(`M 116 50 L 88 50 C 72 50, 58 ${50 + w}, 46 ${50 + w * 0.4}`);
+  } else if (connCount === 2) {
+    if (up && down) {
+      segments.push(`M 50 -16 L 50 10 C ${50 + w} 32, ${50 - w} 68, 50 90 L 50 116`);
+    } else if (left && right) {
+      segments.push(`M -16 50 L 10 50 C 32 ${50 + w}, 68 ${50 - w}, 90 50 L 116 50`);
+    } else if (up && right) {
+      segments.push('M 50 -16 L 50 15 A 35 35 0 0 0 85 50 L 116 50');
+    } else if (up && left) {
+      segments.push('M 50 -16 L 50 15 A 35 35 0 0 1 15 50 L -16 50');
+    } else if (down && right) {
+      segments.push('M 50 116 L 50 85 A 35 35 0 0 1 85 50 L 116 50');
+    } else if (down && left) {
+      segments.push('M 50 116 L 50 85 A 35 35 0 0 0 15 50 L -16 50');
+    }
+  } else {
+    // 3-way T-junction or 4-way crossroads:
+    // Straight arms from -16/116 into center (50, 50) + smooth fillet turns between adjacent arms
+    if (up) segments.push('M 50 -16 L 50 50');
+    if (down) segments.push('M 50 116 L 50 50');
+    if (left) segments.push('M -16 50 L 50 50');
+    if (right) segments.push('M 116 50 L 50 50');
+
+    if (up && right) segments.push('M 50 18 A 32 32 0 0 0 82 50');
+    if (up && left) segments.push('M 50 18 A 32 32 0 0 1 18 50');
+    if (down && right) segments.push('M 50 82 A 32 32 0 0 1 82 50');
+    if (down && left) segments.push('M 50 82 A 32 32 0 0 0 18 50');
+  }
+
+  const combinedPath = segments.join(' ');
+  const texRotation = (variantSeed % 4) * 90;
+  const turbSeed = (variantSeed * 17 + 5) % 97;
+
+  // Generate varied, hand-crafted shoulder pebbles
+  const pebbles = React.useMemo(
+    () => (isBuildingUnderlay ? [] : generatePebblesForTile(connections, variantSeed)),
+    [connections, variantSeed, isBuildingUnderlay]
+  );
+
+  const vergeFilterId = `road-verge-${uid}`;
+  const maskFilterId = `road-mask-filter-${uid}`;
+  const centerBlurId = `road-center-blur-${uid}`;
+  const roadMaskId = `road-mask-${uid}`;
+  const pebbleGradId = `pebble-grad-${uid}`;
 
   return (
-    <svg viewBox="0 0 100 100" className="tile-svg">
-      {/* Subtle dirt path bed under planks */}
-      <circle cx="50" cy="50" r="24" fill="#b89058" opacity="0.7" />
-      {up && <rect x="30" y="0" width="40" height="50" fill="#b89058" opacity="0.7" />}
-      {down && <rect x="30" y="50" width="40" height="50" fill="#b89058" opacity="0.7" />}
-      {left && <rect x="0" y="30" width="50" height="40" fill="#b89058" opacity="0.7" />}
-      {right && <rect x="50" y="30" width="50" height="40" fill="#b89058" opacity="0.7" />}
+    <svg
+      viewBox="0 0 100 100"
+      className="tile-svg"
+      style={{ overflow: 'hidden' }}
+    >
+      <defs>
+        {/* 3D Directional Stone Gradient: #c8b9a7 (light) to #816d5e (dark) */}
+        <radialGradient id={pebbleGradId} cx="35%" cy="30%" r="70%">
+          <stop offset="0%" stopColor="#c8b9a7" />
+          <stop offset="50%" stopColor="#a49382" />
+          <stop offset="100%" stopColor="#816d5e" />
+        </radialGradient>
 
-      {/* Vertical road planks */}
-      {up && (
-        <g>
-          {[8, 22, 36].map((y) => (
-            <rect
-              key={`u-${y}`}
-              x="28"
-              y={y}
-              width="44"
-              height="10"
-              rx="3"
-              fill="#a86b38"
-              stroke="#2b1e16"
-              strokeWidth="2"
-            />
-          ))}
-        </g>
-      )}
-      {down && (
-        <g>
-          {[54, 68, 82].map((y) => (
-            <rect
-              key={`d-${y}`}
-              x="28"
-              y={y}
-              width="44"
-              height="10"
-              rx="3"
-              fill="#a86b38"
-              stroke="#2b1e16"
-              strokeWidth="2"
-            />
-          ))}
-        </g>
-      )}
+        {/* Soft, wavy grass-to-dirt outer transition filter */}
+        <filter
+          id={vergeFilterId}
+          filterUnits="userSpaceOnUse"
+          x="-30"
+          y="-30"
+          width="160"
+          height="160"
+          colorInterpolationFilters="sRGB"
+        >
+          <feTurbulence
+            type="fractalNoise"
+            baseFrequency={ROAD_CONFIG.roughnessFreq}
+            numOctaves="2"
+            seed={turbSeed}
+            result="noise"
+          />
+          <feDisplacementMap
+            in="SourceGraphic"
+            in2="noise"
+            scale={ROAD_CONFIG.roughnessScale * 1.15}
+            xChannelSelector="R"
+            yChannelSelector="G"
+            result="displaced"
+          />
+          <feGaussianBlur in="displaced" stdDeviation="2.2" />
+        </filter>
 
-      {/* Horizontal road planks */}
-      {left && (
-        <g>
-          {[8, 22, 36].map((x) => (
-            <rect
-              key={`l-${x}`}
-              x={x}
-              y="28"
-              width="10"
-              height="44"
-              rx="3"
-              fill="#a86b38"
-              stroke="#2b1e16"
-              strokeWidth="2"
-            />
-          ))}
-        </g>
-      )}
-      {right && (
-        <g>
-          {[54, 68, 82].map((x) => (
-            <rect
-              key={`r-${x}`}
-              x={x}
-              y="28"
-              width="10"
-              height="44"
-              rx="3"
-              fill="#a86b38"
-              stroke="#2b1e16"
-              strokeWidth="2"
-            />
-          ))}
-        </g>
-      )}
+        {/* Organic wavy + softly feathered mask edge for the PNG dirt texture */}
+        <filter
+          id={maskFilterId}
+          filterUnits="userSpaceOnUse"
+          x="-30"
+          y="-30"
+          width="160"
+          height="160"
+          colorInterpolationFilters="sRGB"
+        >
+          <feTurbulence
+            type="fractalNoise"
+            baseFrequency={ROAD_CONFIG.roughnessFreq * 1.15}
+            numOctaves="2"
+            seed={turbSeed}
+            result="noise"
+          />
+          <feDisplacementMap
+            in="SourceGraphic"
+            in2="noise"
+            scale={ROAD_CONFIG.roughnessScale}
+            xChannelSelector="R"
+            yChannelSelector="G"
+            result="wavy"
+          />
+          <feGaussianBlur in="wavy" stdDeviation="0.9" />
+        </filter>
 
-      {/* Center hub / default diagonal plank icon when not connected */}
-      {!anyConn ? (
-        <g transform="rotate(-25 50 50)">
-          {[-24, -12, 0, 12, 24].map((offset) => (
-            <rect
-              key={offset}
-              x="22"
-              y={45 + offset}
-              width="56"
-              height="9"
-              rx="2.5"
-              fill="#b5763f"
-              stroke="#2b1e16"
-              strokeWidth="2"
-            />
-          ))}
-        </g>
-      ) : (
-        <rect
-          x="32"
-          y="32"
-          width="36"
-          height="36"
-          rx="6"
-          fill="#b5763f"
-          stroke="#2b1e16"
-          strokeWidth="2"
+        {/* Soft blur for the lighter center worn track */}
+        <filter
+          id={centerBlurId}
+          filterUnits="userSpaceOnUse"
+          x="-30"
+          y="-30"
+          width="160"
+          height="160"
+        >
+          <feGaussianBlur in="SourceGraphic" stdDeviation="2.2" />
+        </filter>
+
+        <mask
+          id={roadMaskId}
+          maskUnits="userSpaceOnUse"
+          maskContentUnits="userSpaceOnUse"
+          x="-30"
+          y="-30"
+          width="160"
+          height="160"
+        >
+          <rect x="-30" y="-30" width="160" height="160" fill="black" />
+          <path
+            d={combinedPath}
+            fill="none"
+            stroke="white"
+            strokeWidth={ROAD_CONFIG.earthWidth}
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            filter={`url(#${maskFilterId})`}
+          />
+        </mask>
+      </defs>
+
+      {/*
+        Layer 1: Outer grass-to-dirt transition verge & solid dirt border.
+        Drawn as solid wide strokes underneath the masked earth texture so borders
+        only appear on the OUTSIDE of the road and never create internal lines at junctions.
+      */}
+      <g filter={`url(#${vergeFilterId})`}>
+        <path
+          d={combinedPath}
+          fill="none"
+          stroke="#6f662c"
+          strokeWidth={ROAD_CONFIG.vergeWidth}
+          strokeLinecap="round"
+          strokeLinejoin="round"
+          opacity="0.52"
         />
-      )}
-      {anyConn && (showH || showV) && (
-        <circle cx="50" cy="50" r="4" fill="#824f24" />
+        <path
+          d={combinedPath}
+          fill="none"
+          stroke="#9e793e"
+          strokeWidth={ROAD_CONFIG.borderWidth}
+          strokeLinecap="round"
+          strokeLinejoin="round"
+        />
+      </g>
+
+      {/* Layer 2: Actual earth_bg3 PNG texture masked on top */}
+      <g mask={`url(#${roadMaskId})`}>
+        <rect x="0" y="0" width="100" height="100" fill="#e5c285" />
+        <image
+          href={earthBg3}
+          x="-8"
+          y="-8"
+          width="116"
+          height="116"
+          preserveAspectRatio="none"
+          transform={`rotate(${texRotation} 50 50)`}
+        />
+        {/* Lighter trodden center track */}
+        <path
+          d={combinedPath}
+          fill="none"
+          stroke="#f6e4bc"
+          strokeWidth={ROAD_CONFIG.centerTrackWidth}
+          strokeLinecap="round"
+          strokeLinejoin="round"
+          opacity="0.45"
+          filter={`url(#${centerBlurId})`}
+        />
+      </g>
+
+      {/* Layer 3: Organic hand-shaded shoulder pebbles matching earth_bg1 & empty_bg1 */}
+      {!isBuildingUnderlay && (
+        <g className="road-pebbles">
+          {pebbles.map((p, idx) => {
+            if (p.isSpeck) {
+              return (
+                <circle
+                  key={idx}
+                  cx={p.cx}
+                  cy={p.cy}
+                  r={p.rx}
+                  fill="#2b1e16"
+                  opacity={0.65}
+                />
+              );
+            }
+            return (
+              <g
+                key={idx}
+                transform={`rotate(${p.rot} ${p.cx} ${p.cy})`}
+              >
+                {/* Cast drop shadow */}
+                <ellipse
+                  cx={p.cx + 1.2}
+                  cy={p.cy + 1.6}
+                  rx={p.rx * 1.05}
+                  ry={p.ry * 0.9}
+                  fill="#1b140d"
+                  opacity={0.35}
+                />
+                {/* Main pebble body with 3D radial gradient */}
+                <ellipse
+                  cx={p.cx}
+                  cy={p.cy}
+                  rx={p.rx}
+                  ry={p.ry}
+                  fill={`url(#${pebbleGradId})`}
+                  stroke="#2b1e16"
+                  strokeWidth="1.8"
+                />
+                {/* Sunlit specular rim highlight */}
+                <path
+                  d={`M ${p.cx - p.rx * 0.55} ${p.cy - p.ry * 0.3} Q ${p.cx - p.rx * 0.1} ${p.cy - p.ry * 0.65} ${p.cx + p.rx * 0.45} ${p.cy - p.ry * 0.4}`}
+                  fill="none"
+                  stroke="#fffdf6"
+                  strokeWidth="1.2"
+                  opacity={0.72}
+                  strokeLinecap="round"
+                />
+              </g>
+            );
+          })}
+        </g>
       )}
     </svg>
   );

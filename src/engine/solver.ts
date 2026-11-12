@@ -546,20 +546,44 @@ export function solveByDeduction(
             .join(', ');
 
           const mustBeBuildingReason =
-            reasons['empty'] ?? 'this spot must contain a building';
+            ruleName === 'Row Must Be Filled' || ruleName === 'Column Must Be Filled'
+              ? explanation
+              : (reasons['empty'] ?? explanation ?? 'this spot must contain a building');
 
           if (isBuilding(locked)) {
             finalRuleName = `Only ${formatTileName(locked)} Fits`;
             finalExplanation = `${xy(r, c)} must be a ${formatTileName(locked)}: ${mustBeBuildingReason}, and it is ${ruledOutNotes}.`;
 
             if (!finalSteps) {
-              const rowMatch = mustBeBuildingReason.match(/Row (\d+)/i);
-              const colMatch = mustBeBuildingReason.match(/Column (\d+)/i);
-              const highlightLine = rowMatch
-                ? { axis: 'row' as const, index: parseInt(rowMatch[1], 10) - 1 }
-                : colMatch
-                  ? { axis: 'col' as const, index: parseInt(colMatch[1], 10) - 1 }
-                  : undefined;
+              let highlightLine: { axis: 'row' | 'col'; index: number } | undefined = undefined;
+              if (ruleName === 'Row Must Be Filled') {
+                highlightLine = { axis: 'row', index: r };
+              } else if (ruleName === 'Column Must Be Filled') {
+                highlightLine = { axis: 'col', index: c };
+              } else {
+                const isContradiction =
+                  lookaheadEliminatedCells.has(`${r},${c}`) ||
+                  mustBeBuildingReason.includes("wouldn't have") ||
+                  mustBeBuildingReason.includes('would exceed') ||
+                  mustBeBuildingReason.includes('would lead');
+
+                if (!isContradiction) {
+                  const rowMatch = mustBeBuildingReason.match(/Row (\d+)/i);
+                  const colMatch = mustBeBuildingReason.match(/Column (\d+)/i);
+                  const matched = rowMatch
+                    ? { axis: 'row' as const, index: parseInt(rowMatch[1], 10) - 1 }
+                    : colMatch
+                      ? { axis: 'col' as const, index: parseInt(colMatch[1], 10) - 1 }
+                      : undefined;
+                  if (matched) {
+                    const isCellInLine =
+                      matched.axis === 'row' ? r === matched.index : c === matched.index;
+                    if (isCellInLine) {
+                      highlightLine = matched;
+                    }
+                  }
+                }
+              }
 
               const allOpenInLine: Coord[] = [];
               const openDisqualifiedInLine: Coord[] = [];
@@ -643,10 +667,17 @@ export function solveByDeduction(
                   candidateCells: remainingBuildingSpots
                 });
               } else {
+                const premiseMsg =
+                  lookaheadEliminatedCells.has(`${r},${c}`) ||
+                  mustBeBuildingReason.includes("wouldn't have") ||
+                  mustBeBuildingReason.includes('would exceed')
+                    ? `If ${xy(r, c)} were empty, it would lead to a contradiction (${mustBeBuildingReason}), so this spot must contain a building.`
+                    : `${xy(r, c)} must contain a building (${mustBeBuildingReason}).`;
+
                 finalSteps = [
                   {
                     title: finalRuleName,
-                    message: `${xy(r, c)} must contain a building (${mustBeBuildingReason}).`,
+                    message: premiseMsg,
                     highlightLine,
                     focusCells: [{ r, c }],
                     candidateCells: [{ r, c }]
