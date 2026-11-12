@@ -783,37 +783,38 @@ export function solveByDeduction(
         if (mustBeBuilding(domains[r][c])) confirmedBuildings++;
       }
       if (confirmedBuildings === level.rowClues[r]) {
+        let placedInRow = 0;
+        for (let cc = 0; cc < size; cc++) {
+          if (startingGrid && isBuilding(startingGrid[r][cc])) placedInRow++;
+        }
+        const isFullyPlaced = placedInRow === level.rowClues[r];
+        const isZero = level.rowClues[r] === 0;
+
         for (let c = 0; c < size; c++) {
           if (!mustBeBuilding(domains[r][c]) && canBeAnyBuilding(domains[r][c])) {
             const prev = domains[r][c].size;
-            let placedInRow = 0;
-            for (let cc = 0; cc < size; cc++) {
-              if (startingGrid && isBuilding(startingGrid[r][cc])) placedInRow++;
-            }
-            const isFullyPlaced = placedInRow === level.rowClues[r];
-            const reason =
-              level.rowClues[r] === 0
-                ? `Row ${r + 1} needs 0 buildings`
-                : isFullyPlaced
-                  ? `Row ${r + 1} already has all ${level.rowClues[r]} building(s) placed`
-                  : `Row ${r + 1}'s quota of ${level.rowClues[r]} building(s) is already claimed`;
+            const reason = isZero
+              ? `Row ${r + 1} needs 0 buildings`
+              : isFullyPlaced
+                ? `Row ${r + 1} already has all ${level.rowClues[r]} building(s) placed`
+                : `Row ${r + 1}'s quota of ${level.rowClues[r]} building(s) is claimed by unplaced buildings`;
             for (const b of BUILDING_TYPES) {
               recordElimReason(r, c, b, reason);
             }
             if (removeBuildingsFromDomain(domains[r][c])) {
               progress = true;
-              recordLockIfNew(
-                r,
-                c,
-                prev,
-                'Row Clue Complete',
-                level.rowClues[r] === 0
-                  ? `Row ${r + 1} has a clue of 0, so no buildings can be placed in Row ${r + 1}.`
-                  : isFullyPlaced
-                    ? `Row ${r + 1} already has all ${level.rowClues[r]} of its placed buildings, so ${xy(r, c)} cannot be a building.`
-                    : `Row ${r + 1}'s quota of ${level.rowClues[r]} building(s) is already claimed, so ${xy(r, c)} cannot be a building.`,
-                true
-              );
+              if (isZero || isFullyPlaced) {
+                recordLockIfNew(
+                  r,
+                  c,
+                  prev,
+                  'Row Clue Complete',
+                  isZero
+                    ? `Row ${r + 1} has a clue of 0, so no buildings can be placed in Row ${r + 1}.`
+                    : `Row ${r + 1} already has all ${level.rowClues[r]} of its placed buildings, so ${xy(r, c)} cannot be a building.`,
+                  true
+                );
+              }
             }
           }
         }
@@ -826,37 +827,38 @@ export function solveByDeduction(
         if (mustBeBuilding(domains[r][c])) confirmedBuildings++;
       }
       if (confirmedBuildings === level.colClues[c]) {
+        let placedInCol = 0;
+        for (let rr = 0; rr < size; rr++) {
+          if (startingGrid && isBuilding(startingGrid[rr][c])) placedInCol++;
+        }
+        const isFullyPlaced = placedInCol === level.colClues[c];
+        const isZero = level.colClues[c] === 0;
+
         for (let r = 0; r < size; r++) {
           if (!mustBeBuilding(domains[r][c]) && canBeAnyBuilding(domains[r][c])) {
             const prev = domains[r][c].size;
-            let placedInCol = 0;
-            for (let rr = 0; rr < size; rr++) {
-              if (startingGrid && isBuilding(startingGrid[rr][c])) placedInCol++;
-            }
-            const isFullyPlaced = placedInCol === level.colClues[c];
-            const reason =
-              level.colClues[c] === 0
-                ? `Column ${c + 1} needs 0 buildings`
-                : isFullyPlaced
-                  ? `Column ${c + 1} already has all ${level.colClues[c]} building(s) placed`
-                  : `Column ${c + 1}'s quota of ${level.colClues[c]} building(s) is already claimed`;
+            const reason = isZero
+              ? `Column ${c + 1} needs 0 buildings`
+              : isFullyPlaced
+                ? `Column ${c + 1} already has all ${level.colClues[c]} building(s) placed`
+                : `Column ${c + 1}'s quota of ${level.colClues[c]} building(s) is claimed by unplaced buildings`;
             for (const b of BUILDING_TYPES) {
               recordElimReason(r, c, b, reason);
             }
             if (removeBuildingsFromDomain(domains[r][c])) {
               progress = true;
-              recordLockIfNew(
-                r,
-                c,
-                prev,
-                'Column Clue Complete',
-                level.colClues[c] === 0
-                  ? `Column ${c + 1} has a clue of 0, so no buildings can be placed in Column ${c + 1}.`
-                  : isFullyPlaced
-                    ? `Column ${c + 1} already has all ${level.colClues[c]} of its placed buildings, so ${xy(r, c)} cannot be a building.`
-                    : `Column ${c + 1}'s quota of ${level.colClues[c]} building(s) is already claimed, so ${xy(r, c)} cannot be a building.`,
-                true
-              );
+              if (isZero || isFullyPlaced) {
+                recordLockIfNew(
+                  r,
+                  c,
+                  prev,
+                  'Column Clue Complete',
+                  isZero
+                    ? `Column ${c + 1} has a clue of 0, so no buildings can be placed in Column ${c + 1}.`
+                    : `Column ${c + 1} already has all ${level.colClues[c]} of its placed buildings, so ${xy(r, c)} cannot be a building.`,
+                  true
+                );
+              }
             }
           }
         }
@@ -3063,6 +3065,15 @@ export function getNextHint(
   // Strictly in chronological deduction order: return the earliest unfulfilled deduction
   for (const step of result.steps) {
     if (playerGrid[step.r][step.c] !== 'empty') continue;
+
+    // Do not surface hints that rely on unplaced line quotas not visible on the board:
+    if (
+      step.explanation.includes('claimed by unplaced buildings') ||
+      (step.explanation.includes('quota of') &&
+        step.explanation.includes('already claimed'))
+    ) {
+      continue;
+    }
 
     if (step.action === 'mark_empty') {
       if (!playerMarks[step.r][step.c]) {
