@@ -1,5 +1,6 @@
 :root {
   --ink: #2b1e16;
+  --tile-border: #442e1b;
   --wood-bg-light: #ebcfa8;
   --wood-bg-mid: #dfb888;
   --wood-bg-dark: #c99d68;
@@ -470,8 +471,8 @@ body,
 }
 
 .board-grid-with-clues {
-  --tile-size: clamp(46px, min(11.2vw, 9.6vh), 74px);
-  --clue-size: clamp(30px, min(6.5vw, 5.6vh), 42px);
+  --tile-size: clamp(48px, min(12vw, 10.5vh), 82px);
+  --clue-size: clamp(22px, min(5vw, 4.2vh), 32px);
   display: grid;
   grid-template-columns: var(--clue-size) repeat(var(--grid-size), var(--tile-size));
   grid-template-rows: var(--clue-size) repeat(var(--grid-size), var(--tile-size));
@@ -490,23 +491,37 @@ body,
   align-items: center;
   justify-content: center;
   font-size: 1rem;
-  opacity: 0.75;
+  opacity: 0.5;
 }
 
+/* Option 2: Frameless Wood Inset Clues */
 .clue-badge {
-  border: 2px solid var(--ink);
-  border-radius: 7px;
-  background: var(--plaque-cream);
-  color: var(--ink);
+  border: none;
+  border-radius: 0;
+  background: transparent;
+  color: #442a15;
   font-family: var(--font-display);
-  font-size: clamp(0.95rem, 2.2vw, 1.2rem);
-  font-weight: 700;
+  font-size: clamp(0.95rem, 2.2vw, 1.25rem);
+  font-weight: 800;
   display: flex;
   align-items: center;
   justify-content: center;
   cursor: default;
   box-shadow: none;
-  transition: transform 0.1s ease, background-color 0.2s ease;
+  text-shadow:
+    0 1px 0 rgba(255, 245, 225, 0.65),
+    0 -1px 0 rgba(40, 24, 10, 0.45);
+  transition: transform 0.1s ease, color 0.15s ease;
+  z-index: 2;
+  padding: 0;
+}
+
+.clue-badge .clue-number {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
 }
 
 .clue-badge.clue-zero,
@@ -514,19 +529,53 @@ body,
   cursor: pointer;
 }
 
+/* Satisfied Clue (0 remaining): Soft organic sage-forest green circular badge */
+.clue-badge.status-exact .clue-number,
+.clue-badge.clue-zero .clue-number {
+  background: #507d2a;
+  color: #ffffff;
+  border-radius: 50%;
+  width: clamp(20px, 4.8vw, 26px);
+  height: clamp(20px, 4.8vw, 26px);
+  box-shadow:
+    0 2px 4px rgba(35, 18, 8, 0.35),
+    inset 0 1px 0.5px rgba(255, 255, 255, 0.45);
+  text-shadow: 0 -1px 0 rgba(25, 45, 12, 0.6);
+  border: 1px solid #36571b;
+}
+
+.clue-badge.status-exact,
+.clue-badge.clue-zero {
+  text-shadow: none;
+}
+
 .clue-badge.clue-zero:hover,
 .clue-badge.clue-hint-highlight:hover {
-  transform: scale(1.08);
+  transform: scale(1.12);
 }
 
 .clue-badge.clue-zero:active,
 .clue-badge.clue-hint-highlight:active {
-  transform: scale(0.94);
+  transform: scale(0.92);
 }
 
-.clue-badge.status-exact {
-  background: #88c452;
-  color: #1f330d;
+/* Over-quota Clue: Soft crimson indicator */
+.clue-badge.status-over .clue-number {
+  background: #c23b2e;
+  color: #ffffff;
+  border-radius: 50%;
+  width: clamp(20px, 4.8vw, 26px);
+  height: clamp(20px, 4.8vw, 26px);
+  box-shadow: 0 2px 4px rgba(35, 18, 8, 0.35);
+  text-shadow: 0 -1px 0 rgba(40, 15, 12, 0.6);
+  border: 1px solid #7a1f16;
+  animation: shake 0.3s ease;
+}
+
+.clue-badge.status-over {
+  background: transparent;
+  color: #fff;
+  text-shadow: none;
 }
 
 .clue-badge.clue-zero {
@@ -549,10 +598,44 @@ body,
   100% { transform: scale(1); }
 }
 
-.clue-badge.status-over {
-  background: #e55c50;
-  color: #fff;
-  animation: shake 0.3s ease;
+/* Bottom edge of board tiles & bottom row clue cast downward drop shadow */
+.board-tile.tile-row-bottom,
+.clue-badge.row-clue-bottom {
+  box-shadow:
+    inset 0 1.5px 0.8px rgba(255, 255, 255, 0.45),
+    inset 1px 0 0.5px rgba(255, 255, 255, 0.25),
+    inset 0 -2.5px 1.2px rgba(35, 18, 8, 0.35),
+    inset -1px 0 0.6px rgba(35, 18, 8, 0.2),
+    0 4px 6px -1px rgba(35, 18, 8, 0.35),
+    0 8px 16px -2px rgba(35, 18, 8, 0.28);
+}
+
+.board-tile.tile-col-right {
+  box-shadow:
+    inset 0 1.5px 0.8px rgba(255, 255, 255, 0.45),
+    inset 1px 0 0.5px rgba(255, 255, 255, 0.25),
+    inset 0 -2.5px 1.2px rgba(35, 18, 8, 0.35),
+    inset -1px 0 0.6px rgba(35, 18, 8, 0.2),
+    2px 2px 5px -1px rgba(35, 18, 8, 0.25);
+}
+
+.board-tile.tile-row-bottom.tile-col-right {
+  box-shadow:
+    inset 0 1.5px 0.8px rgba(255, 255, 255, 0.45),
+    inset 1px 0 0.5px rgba(255, 255, 255, 0.25),
+    inset 0 -2.5px 1.2px rgba(35, 18, 8, 0.35),
+    inset -1px 0 0.6px rgba(35, 18, 8, 0.2),
+    2px 4px 6px -1px rgba(35, 18, 8, 0.35),
+    3px 8px 16px -2px rgba(35, 18, 8, 0.28);
+}
+
+.board-tile.tile-row-bottom.tile-interactive:active {
+  transform: translateY(1px);
+  box-shadow:
+    inset 0 2px 1.5px rgba(35, 18, 8, 0.35),
+    inset 0 -1px 0.5px rgba(255, 255, 255, 0.2),
+    0 2px 3px -1px rgba(35, 18, 8, 0.35),
+    0 4px 8px -1px rgba(35, 18, 8, 0.25);
 }
 
 /* Individual Board Tiles */
@@ -562,18 +645,23 @@ body,
   height: 100%;
   aspect-ratio: 1 / 1;
   border-radius: 7px;
-  border: 2px solid var(--ink);
+  border: 1.25px solid var(--tile-border);
   padding: 0;
-  box-shadow: none;
   display: flex;
   align-items: center;
   justify-content: center;
   cursor: pointer;
   overflow: visible;
-  transition: transform 0.08s ease;
+  transition: transform 0.08s ease, filter 0.12s ease;
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
+  z-index: 2;
+  box-shadow:
+    inset 0 1.5px 0.75px rgba(255, 255, 255, 0.4),
+    inset 1px 0 0.5px rgba(255, 255, 255, 0.2),
+    inset 0 -2px 1px rgba(35, 18, 8, 0.3),
+    inset -1px 0 0.5px rgba(35, 18, 8, 0.18);
 }
 
 /* Tactile Pop Animation when placing a building */
@@ -688,6 +776,432 @@ body,
 }
 
 /* =========================================================================
+   NATURE & AMBIENT SCENERY (FLORA & CAPPED FAUNA)
+   ========================================================================= */
+
+/* Flora: Flowers, ferns, sunflowers, mushrooms, tufts gently swaying */
+.tile-flora-img {
+  position: absolute;
+  bottom: 4px;
+  right: 5px;
+  width: 46%;
+  height: 46%;
+  max-width: 32px;
+  max-height: 32px;
+  object-fit: contain;
+  image-rendering: pixelated;
+  image-rendering: crisp-edges;
+  pointer-events: none;
+  user-select: none;
+  z-index: 2;
+  filter: drop-shadow(0 2px 2px rgba(35, 18, 8, 0.35));
+  animation: floraSway 4.8s ease-in-out infinite alternate;
+  transform-origin: 50% 100%;
+}
+
+@keyframes floraSway {
+  0% { transform: rotate(-2deg); }
+  100% { transform: rotate(2deg); }
+}
+
+/* Stacking Layer Elevation for Fauna-Hosting Tiles */
+.board-tile.tile-has-bunny {
+  z-index: 7;
+}
+
+.board-tile.tile-has-chicken,
+.board-tile.tile-has-ground-fauna {
+  z-index: 8;
+}
+
+.board-tile.tile-has-butterfly {
+  z-index: 10;
+}
+
+/* Tree-Peeking Bunny: Physically hops out from behind the trunk & hops back (no fade/shrink) */
+.tree-peeking-bunny {
+  position: absolute;
+  bottom: 4px;
+  left: calc(50% - 13px);
+  width: 26px;
+  height: 26px;
+  object-fit: contain;
+  image-rendering: pixelated;
+  image-rendering: crisp-edges;
+  pointer-events: none;
+  user-select: none;
+  z-index: 0; /* Starts behind treeImg at z-index 1 */
+  filter: drop-shadow(0 2px 1.5px rgba(28, 14, 5, 0.4));
+  transform-origin: 50% 100%;
+}
+
+.tree-peeking-bunny.peek-left {
+  animation: bunnyPhysicalPeekLeft 14s cubic-bezier(0.34, 1.25, 0.64, 1) infinite;
+}
+
+.tree-peeking-bunny.peek-right {
+  animation: bunnyPhysicalPeekRight 14s cubic-bezier(0.34, 1.25, 0.64, 1) infinite;
+}
+
+/* Bunny naturally faces RIGHT in sprite: flip with scaleX(-1) when peeking LEFT */
+@keyframes bunnyPhysicalPeekLeft {
+  0%, 15% {
+    transform: translateX(0) scaleX(-1);
+    z-index: 0;
+  }
+  20% {
+    transform: translateX(-15px) scaleX(-1);
+    z-index: 2; /* Clears trunk and hops into foreground */
+  }
+  24% {
+    transform: translateX(-40px) scaleX(-1);
+    z-index: 2;
+  }
+  32% {
+    transform: translateX(-40px) scaleX(-1) rotate(8deg);
+    z-index: 2;
+  }
+  40% {
+    transform: translateX(-40px) scaleX(-1) rotate(-6deg);
+    z-index: 2;
+  }
+  48% {
+    transform: translateX(-40px) scaleX(-1) rotate(0deg);
+    z-index: 2;
+  }
+  56% {
+    transform: translateX(0) scaleX(-1);
+    z-index: 0;
+  }
+  57%, 100% {
+    transform: translateX(0) scaleX(-1);
+    z-index: 0;
+  }
+}
+
+/* Bunny naturally faces RIGHT in sprite: keep scaleX(1) when peeking RIGHT */
+@keyframes bunnyPhysicalPeekRight {
+  0%, 15% {
+    transform: translateX(0) scaleX(1);
+    z-index: 0;
+  }
+  20% {
+    transform: translateX(15px) scaleX(1);
+    z-index: 2;
+  }
+  24% {
+    transform: translateX(40px) scaleX(1);
+    z-index: 2;
+  }
+  32% {
+    transform: translateX(40px) scaleX(1) rotate(-8deg);
+    z-index: 2;
+  }
+  40% {
+    transform: translateX(40px) scaleX(1) rotate(6deg);
+    z-index: 2;
+  }
+  48% {
+    transform: translateX(40px) scaleX(1) rotate(0deg);
+    z-index: 2;
+  }
+  56% {
+    transform: translateX(0) scaleX(1);
+    z-index: 0;
+  }
+  57%, 100% {
+    transform: translateX(0) scaleX(1);
+    z-index: 0;
+  }
+}
+
+/* =========================================================================
+   BOARD FAUNA (TILE-CONTAINED ROTATING GROUND ANIMALS & BUTTERFLY)
+   ========================================================================= */
+.tile-fauna-actor {
+  position: absolute;
+  bottom: 6px;
+  left: 50%;
+  pointer-events: none;
+  user-select: none;
+  z-index: 3;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transform-origin: 50% 90%;
+}
+
+/* Individual species sizing & origin */
+.fauna-chicken {
+  width: 26px;
+  height: 26px;
+  margin-left: -13px;
+}
+
+.fauna-duck {
+  width: 30px;
+  height: 30px;
+  margin-left: -15px;
+}
+
+.fauna-goat,
+.fauna-sheep {
+  width: 35px;
+  height: 35px;
+  margin-left: -17.5px;
+}
+
+/* 1. Walk / Wobble Animations per species (use both fill-mode to guarantee zero initial jump) */
+.fauna-chicken.is-walking {
+  animation: chickenWalkTile 1.4s ease-in-out both;
+}
+
+.fauna-duck.is-walking {
+  animation: duckWaddleTile 1.4s ease-in-out both;
+}
+
+.fauna-goat.is-walking,
+.fauna-sheep.is-walking {
+  animation: quadrupedWobbleTile 1.5s ease-in-out both;
+}
+
+/* 2. Stationary / Idle Animations */
+/* Chickens & ducks peck and forage at the grass */
+.fauna-chicken.is-pecking {
+  transform: translate(0, 0) scaleX(var(--facing-scale, 1));
+  animation: chickenPeck 2.4s ease-in-out infinite;
+}
+
+.fauna-duck.is-pecking {
+  transform: translate(0, 0) scaleX(var(--facing-scale, 1));
+  animation: duckPeck 2.5s ease-in-out infinite;
+}
+
+/* Sheep & goats calmly stand in place without pecking */
+.fauna-goat.is-standing,
+.fauna-sheep.is-standing {
+  transform: translate(0, 0) scaleX(var(--facing-scale, 1));
+  animation: quadrupedStandIdle 3.6s ease-in-out infinite;
+}
+
+/* Walk / Wobble Keyframes */
+@keyframes chickenWalkTile {
+  0% {
+    transform: translate(calc(var(--walk-dx, 0) * var(--tile-size)), calc(var(--walk-dy, 0) * var(--tile-size))) scaleX(var(--facing-scale, 1));
+  }
+  25% {
+    transform: translate(calc(var(--walk-dx, 0) * 0.75 * var(--tile-size)), calc(var(--walk-dy, 0) * 0.75 * var(--tile-size) - 3px)) scaleX(var(--facing-scale, 1));
+  }
+  50% {
+    transform: translate(calc(var(--walk-dx, 0) * 0.5 * var(--tile-size)), calc(var(--walk-dy, 0) * 0.5 * var(--tile-size))) scaleX(var(--facing-scale, 1));
+  }
+  75% {
+    transform: translate(calc(var(--walk-dx, 0) * 0.25 * var(--tile-size)), calc(var(--walk-dy, 0) * 0.25 * var(--tile-size) - 3px)) scaleX(var(--facing-scale, 1));
+  }
+  100% {
+    transform: translate(0, 0) scaleX(var(--facing-scale, 1));
+  }
+}
+
+@keyframes duckWaddleTile {
+  0% {
+    transform: translate(calc(var(--walk-dx, 0) * var(--tile-size)), calc(var(--walk-dy, 0) * var(--tile-size))) scaleX(var(--facing-scale, 1)) rotate(0deg);
+  }
+  20% {
+    transform: translate(calc(var(--walk-dx, 0) * 0.8 * var(--tile-size)), calc(var(--walk-dy, 0) * 0.8 * var(--tile-size) - 2px)) scaleX(var(--facing-scale, 1)) rotate(-6deg);
+  }
+  40% {
+    transform: translate(calc(var(--walk-dx, 0) * 0.6 * var(--tile-size)), calc(var(--walk-dy, 0) * 0.6 * var(--tile-size))) scaleX(var(--facing-scale, 1)) rotate(6deg);
+  }
+  60% {
+    transform: translate(calc(var(--walk-dx, 0) * 0.4 * var(--tile-size)), calc(var(--walk-dy, 0) * 0.4 * var(--tile-size) - 2px)) scaleX(var(--facing-scale, 1)) rotate(-6deg);
+  }
+  80% {
+    transform: translate(calc(var(--walk-dx, 0) * 0.2 * var(--tile-size)), calc(var(--walk-dy, 0) * 0.2 * var(--tile-size))) scaleX(var(--facing-scale, 1)) rotate(6deg);
+  }
+  100% {
+    transform: translate(0, 0) scaleX(var(--facing-scale, 1)) rotate(0deg);
+  }
+}
+
+@keyframes quadrupedWobbleTile {
+  0% {
+    transform: translate(calc(var(--walk-dx, 0) * var(--tile-size)), calc(var(--walk-dy, 0) * var(--tile-size))) scaleX(var(--facing-scale, 1)) rotate(0deg);
+  }
+  25% {
+    transform: translate(calc(var(--walk-dx, 0) * 0.75 * var(--tile-size)), calc(var(--walk-dy, 0) * 0.75 * var(--tile-size) - 2px)) scaleX(var(--facing-scale, 1)) rotate(-3deg);
+  }
+  50% {
+    transform: translate(calc(var(--walk-dx, 0) * 0.5 * var(--tile-size)), calc(var(--walk-dy, 0) * 0.5 * var(--tile-size))) scaleX(var(--facing-scale, 1)) rotate(3deg);
+  }
+  75% {
+    transform: translate(calc(var(--walk-dx, 0) * 0.25 * var(--tile-size)), calc(var(--walk-dy, 0) * 0.25 * var(--tile-size) - 2px)) scaleX(var(--facing-scale, 1)) rotate(-2deg);
+  }
+  100% {
+    transform: translate(0, 0) scaleX(var(--facing-scale, 1)) rotate(0deg);
+  }
+}
+
+/* Idle / Pecking Keyframes */
+@keyframes chickenPeck {
+  0%, 10% { transform: translate(0, 0) scaleX(var(--facing-scale, 1)) rotate(0deg); }
+  18% { transform: translate(0, 1px) scaleX(var(--facing-scale, 1)) rotate(24deg); }
+  26% { transform: translate(0, 0) scaleX(var(--facing-scale, 1)) rotate(0deg); }
+  34% { transform: translate(0, 1px) scaleX(var(--facing-scale, 1)) rotate(22deg); }
+  42% { transform: translate(0, 0) scaleX(var(--facing-scale, 1)) rotate(0deg); }
+  56% { transform: translate(0, 1px) scaleX(var(--facing-scale, 1)) rotate(26deg); }
+  64%, 100% { transform: translate(0, 0) scaleX(var(--facing-scale, 1)) rotate(0deg); }
+}
+
+@keyframes duckPeck {
+  0%, 15% { transform: translate(0, 0) scaleX(var(--facing-scale, 1)) rotate(0deg); }
+  25% { transform: translate(0, 1.5px) scaleX(var(--facing-scale, 1)) rotate(22deg); }
+  35% { transform: translate(0, 0) scaleX(var(--facing-scale, 1)) rotate(0deg); }
+  45% { transform: translate(0, 1.5px) scaleX(var(--facing-scale, 1)) rotate(24deg); }
+  55% { transform: translate(0, 0) scaleX(var(--facing-scale, 1)) rotate(0deg); }
+  100% { transform: translate(0, 0) scaleX(var(--facing-scale, 1)) rotate(0deg); }
+}
+
+@keyframes quadrupedStandIdle {
+  0%, 100% {
+    transform: translate(0, 0) scaleX(var(--facing-scale, 1)) scaleY(1);
+  }
+  30% {
+    transform: translate(0, -0.6px) scaleX(var(--facing-scale, 1)) scaleY(1.02);
+  }
+  50% {
+    transform: translate(0, 0) scaleX(var(--facing-scale, 1)) scaleY(1);
+  }
+  70% {
+    transform: translate(0, 0) scaleX(var(--facing-scale, 1)) rotate(2.5deg);
+  }
+  80% {
+    transform: translate(0, 0) scaleX(var(--facing-scale, 1)) rotate(-1.5deg);
+  }
+}
+
+.tile-fauna-img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  image-rendering: pixelated;
+  image-rendering: crisp-edges;
+  filter: drop-shadow(0 2px 2px rgba(28, 14, 5, 0.42));
+}
+
+/* Butterfly Actor */
+.tile-butterfly-actor {
+  position: absolute;
+  top: 18%;
+  left: 50%;
+  width: 20px;
+  height: 20px;
+  margin-left: -10px;
+  pointer-events: none;
+  user-select: none;
+  z-index: 4;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transform-origin: 50% 50%;
+}
+
+.tile-butterfly-actor.is-flying {
+  animation: butterflyFlyTile 2.5s cubic-bezier(0.35, 0.1, 0.25, 1) both;
+}
+
+.tile-butterfly-actor.is-flying .tile-butterfly-img {
+  animation: butterflyWingFlap 0.16s ease-in-out infinite alternate;
+}
+
+.tile-butterfly-actor.is-landed {
+  transform: translate(0, 0) scale(1);
+}
+
+.tile-butterfly-actor.is-landed .tile-butterfly-img {
+  animation: butterflyLandRest 6s ease-in-out infinite;
+}
+
+@keyframes butterflyFlyTile {
+  0% {
+    transform: translate(calc(var(--fly-dx, 0) * var(--tile-size)), calc(var(--fly-dy, 0) * var(--tile-size))) scale(1);
+  }
+  45% {
+    transform: translate(calc(var(--fly-dx, 0) * 0.5 * var(--tile-size)), calc(var(--fly-dy, 0) * 0.5 * var(--tile-size) - 18px)) scale(1.18);
+  }
+  100% {
+    transform: translate(0, 0) scale(1);
+  }
+}
+
+@keyframes butterflyWingFlap {
+  0% { transform: scaleX(1); }
+  100% { transform: scaleX(0.42); }
+}
+
+@keyframes butterflyLandRest {
+  0%, 75% { transform: scaleX(0.72) rotate(-2deg); }
+  80% { transform: scaleX(0.88) rotate(1deg); }
+  85%, 100% { transform: scaleX(0.72) rotate(-2deg); }
+}
+
+.tile-butterfly-img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  image-rendering: pixelated;
+  image-rendering: crisp-edges;
+  filter: drop-shadow(0 2px 2px rgba(28, 14, 5, 0.35));
+}
+
+/* =========================================================================
+   GRADIENT OVAL GROUND CONTACT SHADOWS FOR BUILDINGS & OBSTACLES
+   ========================================================================= */
+.tile-ground-shadow {
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  border-radius: 50%;
+  background: radial-gradient(
+    ellipse at center,
+    rgba(28, 14, 5, 0.46) 0%,
+    rgba(28, 14, 5, 0.32) 42%,
+    rgba(28, 14, 5, 0.12) 65%,
+    transparent 80%
+  );
+  pointer-events: none;
+  z-index: 0;
+  user-select: none;
+}
+
+.obstacle-tree-shadow {
+  bottom: 5px;
+  width: 54%;
+  height: 20%;
+}
+
+.obstacle-rock-shadow {
+  bottom: 6px;
+  width: 66%;
+  height: 22%;
+}
+
+.building-shadow,
+.building-house-shadow,
+.building-woodcutter-shadow,
+.building-farm-shadow {
+  bottom: 5px;
+  width: 72%;
+  height: 22%;
+}
+
+.building-town_hall-shadow {
+  bottom: 4px;
+  width: 82%;
+  height: 26%;
+}
+
+/* =========================================================================
    3-PHASE BUILDING CONSTRUCTION SPRITES & 1-SECOND ANIMATION
    ========================================================================= */
 .building-sprite-container {
@@ -711,6 +1225,95 @@ body,
   transform-origin: 50% 100%;
   pointer-events: none;
   user-select: none;
+  z-index: 1;
+}
+
+/* =========================================================================
+   CHIMNEY SMOKE EMITTER & COZY ANIMATED PUFFS
+   ========================================================================= */
+.chimney-smoke-emitter {
+  position: absolute;
+  width: 0;
+  height: 0;
+  pointer-events: none;
+  z-index: 3;
+}
+
+.smoke-puff {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 7.5px;
+  height: 7.5px;
+  border-radius: 50%;
+  background: radial-gradient(
+    circle,
+    rgba(252, 250, 246, 0.9) 20%,
+    rgba(225, 230, 235, 0.62) 58%,
+    transparent 100%
+  );
+  pointer-events: none;
+  animation: chimneySmokeRise 2.8s ease-out infinite;
+  opacity: 0;
+}
+
+.smoke-puff-1 {
+  animation-delay: 0s;
+}
+
+.smoke-puff-2 {
+  animation-delay: 0.47s;
+  width: 6.8px;
+  height: 6.8px;
+}
+
+.smoke-puff-3 {
+  animation-delay: 0.94s;
+}
+
+.smoke-puff-4 {
+  animation-delay: 1.41s;
+  width: 8px;
+  height: 8px;
+}
+
+.smoke-puff-5 {
+  animation-delay: 1.88s;
+}
+
+.smoke-puff-6 {
+  animation-delay: 2.35s;
+  width: 7px;
+  height: 7px;
+}
+
+@keyframes chimneySmokeRise {
+  0% {
+    transform: translate(-50%, -50%) scale(0.35);
+    opacity: 0;
+  }
+  15% {
+    opacity: 0.85;
+  }
+  50% {
+    transform: translate(calc(-50% + 5px), calc(-50% - 13px)) scale(0.9);
+    opacity: 0.55;
+  }
+  100% {
+    transform: translate(calc(-50% + 12px), calc(-50% - 25px)) scale(1.4);
+    opacity: 0;
+  }
+}
+
+/* While building is being constructed (0.5s), chimney smoke remains hidden */
+.building-sprite-container.is-animating-build .chimney-smoke-emitter {
+  opacity: 0;
+  animation: smokeFadeInAfterBuild 0.4s ease-out 0.5s forwards;
+}
+
+@keyframes smokeFadeInAfterBuild {
+  0% { opacity: 0; }
+  100% { opacity: 1; }
 }
 
 .tile-obstacle-img {
@@ -830,7 +1433,6 @@ body,
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
-  box-shadow: none;
 }
 
 /* Declared Empty Tiles: Variants 1, 2, 3 */
@@ -841,7 +1443,6 @@ body,
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
-  box-shadow: none;
 }
 
 .board-tile.tile-bg-empty-2 {
@@ -850,7 +1451,6 @@ body,
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
-  box-shadow: none;
 }
 
 .board-tile.tile-bg-empty-3 {
@@ -859,7 +1459,6 @@ body,
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
-  box-shadow: none;
 }
 
 /* Background variants for unoccupied earth tiles */
@@ -869,7 +1468,6 @@ body,
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
-  box-shadow: none;
 }
 
 .board-tile.tile-bg-earth-2 {
@@ -878,7 +1476,6 @@ body,
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
-  box-shadow: none;
 }
 
 .board-tile.tile-bg-earth-3 {
@@ -887,7 +1484,6 @@ body,
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
-  box-shadow: none;
 }
 
 .board-tile.tile-sand {
@@ -896,15 +1492,18 @@ body,
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
-  box-shadow: none;
 }
 
 .board-tile.tile-interactive:hover {
-  filter: brightness(1.05);
+  filter: brightness(1.04);
 }
 
 .board-tile.tile-interactive:active {
-  filter: brightness(0.95);
+  transform: translateY(1px);
+  filter: brightness(0.96);
+  box-shadow:
+    inset 0 2px 1.5px rgba(35, 18, 8, 0.35),
+    inset 0 -1px 0.5px rgba(255, 255, 255, 0.2);
 }
 
 .board-tile.tile-fixed {
@@ -914,16 +1513,18 @@ body,
 .board-tile.tile-error {
   outline: 3.5px solid #e63946;
   background-color: #f4a49e;
+  z-index: 4;
 }
 
 .board-tile.tile-hinted {
   outline: 4px solid #ffbe0b;
   animation: pulseHint 1.1s infinite ease-in-out;
+  z-index: 4;
 }
 
 .board-tile.tile-hint-focus {
   outline: 4px solid #0096c7;
-  z-index: 3;
+  z-index: 4;
   animation: pulseFocus 1.2s infinite ease-in-out;
 }
 
@@ -939,13 +1540,16 @@ body,
 .board-tile.tile-hint-candidate {
   outline: 3.5px dashed #f4a261;
   outline-offset: -2px;
-  z-index: 2;
-  box-shadow: inset 0 0 8px rgba(244, 162, 97, 0.4);
+  z-index: 3;
+  box-shadow:
+    inset 0 1.5px 0.75px rgba(255, 255, 255, 0.4),
+    inset 0 -2px 1px rgba(35, 18, 8, 0.3),
+    inset 0 0 8px rgba(244, 162, 97, 0.4);
 }
 
 .board-tile.tile-hint-discarded {
   outline: 3.5px solid #e63946;
-  z-index: 3;
+  z-index: 4;
   background-color: rgba(230, 57, 70, 0.18) !important;
   filter: brightness(0.92);
 }
@@ -973,7 +1577,7 @@ body,
 
 .board-tile.tile-hint-target {
   outline: 4px solid #2a9d8f;
-  z-index: 3;
+  z-index: 4;
   animation: pulseTarget 1.1s infinite ease-in-out;
 }
 
@@ -1838,13 +2442,13 @@ body,
   }
 
   .board-grid-with-clues {
-    --mobile-clue-size: clamp(28px, 8.5vw, 36px);
+    --mobile-clue-size: clamp(20px, 6vw, 26px);
     width: 100vw;
     max-width: 100vw;
     padding: 0;
     border-radius: 0;
     background: transparent;
-    box-shadow: none;
+    box-shadow: 0 10px 20px -4px rgba(35, 18, 8, 0.4);
     gap: 0;
     grid-template-columns: var(--mobile-clue-size) repeat(var(--grid-size), 1fr);
     grid-template-rows: var(--mobile-clue-size) repeat(var(--grid-size), 1fr);

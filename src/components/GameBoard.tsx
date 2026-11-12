@@ -1,4 +1,4 @@
-import React, { useRef } from 'react';
+import React, { useMemo, useRef } from 'react';
 import {
   BoardValidationResult,
   Coord,
@@ -11,6 +11,10 @@ import {
 } from '../engine/types';
 import { ActiveTool, TouchActionMode } from './BuildingTray';
 import { RoadConnections, TileGraphic } from './TileGraphic';
+import {
+  getTileFlora,
+  useFaunaManager
+} from './Decorations';
 
 interface GameBoardProps {
   level: LevelDefinition;
@@ -170,6 +174,9 @@ export const GameBoard: React.FC<GameBoardProps> = ({
     dragStateRef.current.lastCoordKey = '';
   };
 
+  // Active rotating and wandering fauna (Bunny peeking across trees, wandering chicken, flying butterfly)
+  const fauna = useFaunaManager(grid, marks, level.id);
+
   return (
     <div
       className="board-wrapper"
@@ -252,7 +259,7 @@ export const GameBoard: React.FC<GameBoardProps> = ({
             <React.Fragment key={`row-${r}`}>
               <button
                 type="button"
-                className={`clue-badge row-clue status-${rowStatus} ${rowRemaining === 0 ? 'clue-zero' : ''} ${isRowAnimating ? 'clue-animating' : ''} ${isRowHinted ? 'clue-hint-highlight' : ''}`}
+                className={`clue-badge row-clue status-${rowStatus} ${rowRemaining === 0 ? 'clue-zero' : ''} ${isRowAnimating ? 'clue-animating' : ''} ${isRowHinted ? 'clue-hint-highlight' : ''} ${r === size - 1 ? 'row-clue-bottom' : ''}`}
                 onClick={() => onLineClueClick('row', r)}
                 title={
                   rowRemaining === 0
@@ -348,6 +355,35 @@ export const GameBoard: React.FC<GameBoardProps> = ({
                     ? computeBuildingRoadConnections(grid, r, c)
                     : undefined;
 
+                const isBunnyTree =
+                  tile === 'tree' &&
+                  fauna.bunnyTree?.r === r &&
+                  fauna.bunnyTree?.c === c;
+
+                const bunnyPeekDir =
+                  isBunnyTree ? fauna.bunnyTree?.peekDir ?? 'left' : 'left';
+
+                const tileFlora =
+                  tile === 'empty' && isMarkedAllEmpty
+                    ? getTileFlora(level.id, r, c)
+                    : null;
+
+                const tileGroundFauna =
+                  tile === 'empty' &&
+                  isMarkedAllEmpty &&
+                  fauna.groundFauna?.r === r &&
+                  fauna.groundFauna?.c === c
+                    ? fauna.groundFauna
+                    : null;
+
+                const tileButterfly =
+                  tile === 'empty' &&
+                  isMarkedAllEmpty &&
+                  fauna.butterfly?.r === r &&
+                  fauna.butterfly?.c === c
+                    ? fauna.butterfly
+                    : null;
+
                 return (
                   <button
                     key={key}
@@ -375,7 +411,12 @@ export const GameBoard: React.FC<GameBoardProps> = ({
                       isVictoryVisible ? 'tile-victory-wave' : '',
                       tile === 'empty' && isRuledOutForActive
                         ? 'tile-ruled-out-active'
-                        : ''
+                        : '',
+                      isBunnyTree ? 'tile-has-bunny' : '',
+                      tileGroundFauna ? 'tile-has-ground-fauna tile-has-chicken' : '',
+                      tileButterfly ? 'tile-has-butterfly' : '',
+                      r === size - 1 ? 'tile-row-bottom' : '',
+                      c === size - 1 ? 'tile-col-right' : ''
                     ]
                       .filter(Boolean)
                       .join(' ')}
@@ -402,6 +443,12 @@ export const GameBoard: React.FC<GameBoardProps> = ({
                       roadConnections={roadConns}
                       variantSeed={r * 7 + c * 13}
                       isNewlyBuilt={isNewlyBuilt}
+                      hasBunny={isBunnyTree}
+                      bunnyPeekDir={bunnyPeekDir}
+                      floraType={tileFlora}
+                      groundFaunaState={tileGroundFauna}
+                      chickenState={tileGroundFauna}
+                      butterflyState={tileButterfly}
                     />
                     {hasError && (
                       <span

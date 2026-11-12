@@ -1,5 +1,16 @@
 import React from 'react';
 import { BuildingType, PlaceableType, TileType } from '../engine/types';
+import {
+  ButterflyGraphic,
+  ButterflyTileState,
+  ChickenGraphic,
+  ChickenTileState,
+  FloraGraphic,
+  FloraType,
+  GroundFaunaGraphic,
+  GroundFaunaTileState,
+  PeekingBunnyGraphic
+} from './Decorations';
 
 import farmStage1 from '../assets/buildings/farm_stage1.png';
 import farmStage2 from '../assets/buildings/farm_stage2.png';
@@ -59,39 +70,60 @@ if (typeof window !== 'undefined') {
   });
 }
 
-export const TreeGraphic: React.FC = () => (
-  <img
-    src={treeImg}
-    alt="Tree"
-    className="tile-obstacle-img"
-    draggable={false}
-  />
+export const TreeGraphic: React.FC<{
+  hasBunny?: boolean;
+  bunnyPeekDir?: 'left' | 'right';
+}> = ({ hasBunny = false, bunnyPeekDir = 'left' }) => (
+  <div style={{ position: 'relative', width: '100%', height: '100%', overflow: 'visible', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+    <div className="tile-ground-shadow obstacle-tree-shadow" />
+    {hasBunny && <PeekingBunnyGraphic peekDir={bunnyPeekDir} />}
+    <img
+      src={treeImg}
+      alt="Tree"
+      className="tile-obstacle-img"
+      style={{ position: 'relative', zIndex: 1 }}
+      draggable={false}
+    />
+  </div>
 );
 
 export const BuildingGraphic: React.FC<{ isNewlyBuilt?: boolean }> = ({
   isNewlyBuilt = false
 }) => (
-  <img
-    src={buildingImg}
-    alt="Building"
-    className={`tile-building-img ${isNewlyBuilt ? 'is-animating-build' : ''}`}
-    draggable={false}
-  />
+  <div style={{ position: 'relative', width: '100%', height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+    <div className="tile-ground-shadow building-shadow" />
+    <img
+      src={buildingImg}
+      alt="Building"
+      className={`tile-building-img ${isNewlyBuilt ? 'is-animating-build' : ''}`}
+      draggable={false}
+    />
+  </div>
 );
 
 export const RockGraphic: React.FC = () => (
-  <img
-    src={rockImg}
-    alt="Rock"
-    className="tile-obstacle-img"
-    draggable={false}
-  />
+  <div style={{ position: 'relative', width: '100%', height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+    <div className="tile-ground-shadow obstacle-rock-shadow" />
+    <img
+      src={rockImg}
+      alt="Rock"
+      className="tile-obstacle-img"
+      style={{ position: 'relative', zIndex: 1 }}
+      draggable={false}
+    />
+  </div>
 );
 
 export interface BuildingSpriteProps {
   type: BuildingType;
   isNewlyBuilt?: boolean;
 }
+
+const CHIMNEY_COORDS: Partial<Record<BuildingType, { x: string; y: string }>> = {
+  house: { x: '76%', y: '21%' },
+  town_hall: { x: '76.67%', y: '15%' },
+  woodcutter: { x: '65.67%', y: '12.67%' }
+};
 
 export const BuildingSprite: React.FC<BuildingSpriteProps> = ({
   type,
@@ -100,11 +132,14 @@ export const BuildingSprite: React.FC<BuildingSpriteProps> = ({
   const assets = BUILDING_STAGE_ASSETS[type];
   if (!assets) return null;
 
+  const chimney = CHIMNEY_COORDS[type];
+
   return (
     <div
       className={`building-sprite-container ${isNewlyBuilt ? 'is-animating-build' : ''}`}
       aria-label={type}
     >
+      <div className={`tile-ground-shadow building-${type}-shadow`} />
       <img
         src={assets.stage1}
         alt=""
@@ -123,6 +158,20 @@ export const BuildingSprite: React.FC<BuildingSpriteProps> = ({
         className="building-layer building-layer-3"
         draggable={false}
       />
+      {chimney && (
+        <div
+          className="chimney-smoke-emitter"
+          style={{ left: chimney.x, top: chimney.y }}
+          aria-hidden="true"
+        >
+          <div className="smoke-puff smoke-puff-1" />
+          <div className="smoke-puff smoke-puff-2" />
+          <div className="smoke-puff smoke-puff-3" />
+          <div className="smoke-puff smoke-puff-4" />
+          <div className="smoke-puff smoke-puff-5" />
+          <div className="smoke-puff smoke-puff-6" />
+        </div>
+      )}
     </div>
   );
 };
@@ -137,6 +186,12 @@ interface TileGraphicProps {
   roadConnections?: RoadConnections;
   variantSeed?: number;
   isNewlyBuilt?: boolean;
+  hasBunny?: boolean;
+  bunnyPeekDir?: 'left' | 'right';
+  floraType?: FloraType | null;
+  groundFaunaState?: GroundFaunaTileState | null;
+  chickenState?: GroundFaunaTileState | null;
+  butterflyState?: ButterflyTileState | null;
 }
 
 export const TileGraphic: React.FC<TileGraphicProps> = ({
@@ -148,11 +203,17 @@ export const TileGraphic: React.FC<TileGraphicProps> = ({
   excludedTypes,
   roadConnections,
   variantSeed = 0,
-  isNewlyBuilt = false
+  isNewlyBuilt = false,
+  hasBunny = false,
+  bunnyPeekDir = 'left',
+  floraType = null,
+  groundFaunaState = null,
+  chickenState = null,
+  butterflyState = null
 }) => {
   switch (type) {
     case 'tree':
-      return <TreeGraphic />;
+      return <TreeGraphic hasBunny={hasBunny} bunnyPeekDir={bunnyPeekDir} />;
     case 'rock':
       return <RockGraphic />;
     case 'house':
@@ -192,7 +253,26 @@ export const TileGraphic: React.FC<TileGraphicProps> = ({
         return <BuildingGraphic isNewlyBuilt={isNewlyBuilt} />;
       }
       if (markedEmpty) {
-        return null;
+        const activeFauna = groundFaunaState ?? chickenState;
+        return (
+          <>
+            {floraType && <FloraGraphic type={floraType} seed={variantSeed} />}
+            {activeFauna && (
+              <GroundFaunaGraphic
+                species={activeFauna.species}
+                isWalking={activeFauna.isWalking}
+                facingLeft={activeFauna.facingLeft}
+                fromDelta={activeFauna.fromDelta}
+              />
+            )}
+            {butterflyState && (
+              <ButterflyGraphic
+                isFlying={butterflyState.isFlying}
+                fromDelta={butterflyState.fromDelta}
+              />
+            )}
+          </>
+        );
       }
       return (
         <CornerRuledOutIconsSvg
