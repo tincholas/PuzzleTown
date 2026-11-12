@@ -192,6 +192,39 @@ function summarizeCellNonBuildingReason(
   return allRecorded.length > 0 ? allRecorded.join(', ') : 'no building can fit here';
 }
 
+function getDetailedCellDisqualificationPoints(
+  r: number,
+  c: number,
+  reasons: Partial<Record<TileType, string>>,
+  level: LevelDefinition
+): string[] {
+  const points: string[] = [];
+  const activeBuildings = BUILDING_TYPES.filter((b) => level.inventory[b] > 0);
+
+  for (const b of activeBuildings) {
+    const rawReason = reasons[b];
+    if (b === 'woodcutter') {
+      const text = rawReason ? rawReason.replace('not next to a Tree', 'no adjacent Tree') : 'no adjacent Tree';
+      points.push(`Woodcutter: ${text}`);
+    } else if (b === 'town_hall') {
+      const text = rawReason ? rawReason.replace('too close to', 'perimeter blocked by') : 'perimeter requirements not met';
+      points.push(`Town Hall: ${text}`);
+    } else if (b === 'house') {
+      const text = rawReason ?? 'no adjacent Woodcutter or Farm';
+      points.push(`House: ${text}`);
+    } else if (b === 'farm') {
+      const text = rawReason ?? 'no adjacent House';
+      points.push(`Farm: ${text}`);
+    }
+  }
+
+  if (level.inventory.road > 0 && reasons['road']) {
+    points.push(`Road: ${reasons['road']}`);
+  }
+
+  return points;
+}
+
 function shortestPossibleRoadDistance(
   domains: Set<TileType>[][],
   sr: number,
@@ -430,8 +463,36 @@ export function solveByDeduction(
     if (prevSize > 1 && domains[r][c].size === 1) {
       const locked = getLockedTile(domains[r][c])!;
       if (locked === 'empty') {
+        let finalRuleName = ruleName;
+        let finalExplanation = explanation;
         let finalSteps = customSteps;
-        if (!finalSteps) {
+
+        if (!isDirectForce) {
+          const reasons = cellElimReasons[`${r},${c}`] ?? {};
+          const points = getDetailedCellDisqualificationPoints(r, c, reasons, level);
+
+          finalRuleName = 'No Buildings Fit';
+          finalExplanation = `No village buildings can be placed at ${xy(r, c)} (${points.join('; ')}), so this space must be marked as clear ground (Grass).`;
+
+          if (!finalSteps) {
+            finalSteps = [
+              {
+                title: 'No Buildings Fit',
+                message:
+                  `No village buildings can be placed at ${xy(r, c)}:\n` +
+                  points.map((p) => `• ${p}`).join('\n'),
+                focusCells: [{ r, c }],
+                candidateCells: [{ r, c }],
+                discardedCells: [{ r, c }]
+              },
+              {
+                title: 'Mark as Clear Ground',
+                message: `Since no buildings can fit at ${xy(r, c)}, this space must be marked as clear ground (Grass).`,
+                targetCell: { r, c }
+              }
+            ];
+          }
+        } else if (!finalSteps) {
           const rowMatch = explanation.match(/Row (\d+)/i);
           const colMatch = explanation.match(/Column (\d+)/i);
           const highlightLine = rowMatch
@@ -460,8 +521,8 @@ export function solveByDeduction(
           r,
           c,
           action: 'mark_empty',
-          ruleName,
-          explanation,
+          ruleName: finalRuleName,
+          explanation: finalExplanation,
           steps: finalSteps
         });
       } else if (locked !== 'tree' && locked !== 'rock') {
@@ -1173,11 +1234,18 @@ export function solveByDeduction(
           });
           if (blocker) {
             dom.delete('town_hall');
+            const initT = level.initialGrid[blocker.r][blocker.c];
+            const lockedT = getLockedTile(domains[blocker.r][blocker.c]);
+            const obstacleName = isFixedObstacle(initT)
+              ? formatTileName(initT)
+              : lockedT && isBuilding(lockedT)
+                ? formatTileName(lockedT)
+                : 'obstacle';
             recordElimReason(
               r,
               c,
               'town_hall',
-              `too close to ${xy(blocker.r, blocker.c)}`
+              `too close to ${obstacleName} at ${xy(blocker.r, blocker.c)}`
             );
             progress = true;
             recordLockIfNew(

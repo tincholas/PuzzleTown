@@ -520,4 +520,32 @@ describe('Multi-Step Hint Structure & Breakdown', () => {
     expect(buildings).toHaveLength(4);
     expect(buildings).not.toContain('road');
   });
+
+  it('explains why no buildings fit when marking a cell empty by process of elimination (e.g. Level 80)', () => {
+    const level80 = getCampaignLevel(80);
+    const grid: TileType[][] = level80.initialGrid.map((r) => [...r]);
+    const marks: boolean[][] = Array.from({ length: level80.size }, () =>
+      Array(level80.size).fill(false)
+    );
+
+    // Row 2 has clue 0, mark Row 2 empty
+    for (let c = 0; c < level80.size; c++) {
+      marks[1][c] = true;
+    }
+
+    const result = solveByDeduction(level80, grid, marks);
+    const step00 = result.steps.find((s) => s.r === 0 && s.c === 0);
+    expect(step00).toBeDefined();
+    expect(step00?.action).toBe('mark_empty');
+    expect(step00?.ruleName).toBe('No Buildings Fit');
+    expect(step00?.steps?.[0].title).toBe('No Buildings Fit');
+    expect(step00?.steps?.[0].message).toContain('Woodcutter: no adjacent Tree');
+    expect(step00?.steps?.[0].message).toContain('Town Hall: perimeter blocked by Rock at (2, 1)');
+    expect(step00?.steps?.[0].message).toContain('House: no adjacent spot for a Woodcutter or Farm');
+    expect(step00?.steps?.[0].message).toContain('Farm: no adjacent spot for a House');
+    expect(step00?.steps?.[1].title).toBe('Mark as Clear Ground');
+    expect(step00?.steps?.[1].message).toContain(
+      'Since no buildings can fit at (1, 1), this space must be marked as clear ground (Grass).'
+    );
+  });
 });
