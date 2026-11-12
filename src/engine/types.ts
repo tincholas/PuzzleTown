@@ -105,7 +105,7 @@ export interface HintStep {
 export interface DeductionHint {
   r: number;
   c: number;
-  action: 'place' | 'mark_empty';
+  action: 'place' | 'mark_empty' | 'mark_building';
   lineAction?: { axis: 'row' | 'col'; index: number };
   tileType?: PlaceableType;
   ruleName: string;

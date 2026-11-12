@@ -36,7 +36,8 @@ function xy(r: number, c: number): string {
 function createInitialDomains(
   level: LevelDefinition,
   currentGrid?: TileType[][],
-  playerMarks?: boolean[][]
+  playerMarks?: boolean[][],
+  playerBuildingMarks?: boolean[][]
 ): Set<TileType>[][] {
   const size = level.size;
   const activePlaceables = PLACEABLE_TYPES.filter(
@@ -51,6 +52,12 @@ function createInitialDomains(
       }
       if (currentGrid && currentGrid[r][c] !== 'empty') {
         return new Set<TileType>([currentGrid[r][c]]);
+      }
+      if (playerBuildingMarks && playerBuildingMarks[r][c]) {
+        // Player marked this cell as a generic Building!
+        // It cannot be empty grass or road:
+        const buildingsOnly = activePlaceables.filter((t) => isBuilding(t));
+        return new Set<TileType>(buildingsOnly);
       }
       if (playerMarks && playerMarks[r][c]) {
         // Player marked this cell as clear ground (Grass).
@@ -172,8 +179,17 @@ function summarizeCellNonBuildingReason(
 
   if (quotaReason) {
     parts.push(quotaReason);
-  } else if (reasons['house'] || reasons['farm']) {
-    parts.push('no partner for House/Farm');
+  } else {
+    const hReason = reasons['house'];
+    const fReason = reasons['farm'];
+    if (hReason && (hReason.includes('no adjacent') || hReason.includes('no partner'))) {
+      parts.push('no partner for House/Farm');
+    } else if (fReason && (fReason.includes('no adjacent') || fReason.includes('no partner'))) {
+      parts.push('no partner for Farm');
+    } else {
+      if (hReason) parts.push(`not House: ${hReason}`);
+      if (fReason) parts.push(`not Farm: ${fReason}`);
+    }
   }
 
   if (reasons['town_hall']) {
@@ -399,10 +415,11 @@ export function findValidRoadNetworksForBuildings(
 export function solveByDeduction(
   level: LevelDefinition,
   startingGrid?: TileType[][],
-  playerMarks?: boolean[][]
+  playerMarks?: boolean[][],
+  playerBuildingMarks?: boolean[][]
 ): DeductionResult {
   const size = level.size;
-  const domains = createInitialDomains(level, startingGrid, playerMarks);
+  const domains = createInitialDomains(level, startingGrid, playerMarks, playerBuildingMarks);
   const steps: DeductionHint[] = [];
   let lookaheadCount = 0;
   const hasTownHall = level.inventory.town_hall > 0;
@@ -411,6 +428,7 @@ export function solveByDeduction(
   // Store concise reasons why specific candidates were eliminated at each cell (r, c)
   const cellElimReasons: Record<string, Partial<Record<TileType, string>>> = {};
   const recordedDisqualifiedCells = new Set<string>();
+  const recordedMarkedBuildingCells = new Set<string>();
   const lookaheadEliminatedCells = new Set<string>();
   const recordElimReason = (
     r: number,
@@ -424,6 +442,17 @@ export function solveByDeduction(
       cellElimReasons[key][eliminatedType] = reason;
     }
   };
+
+  if (playerBuildingMarks) {
+    for (let r = 0; r < size; r++) {
+      for (let c = 0; c < size; c++) {
+        if (playerBuildingMarks[r][c]) {
+          recordElimReason(r, c, 'empty', 'Player marked as Building');
+          recordElimReason(r, c, 'road', 'Player marked as Building');
+        }
+      }
+    }
+  }
 
   if (playerMarks) {
     for (let r = 0; r < size; r++) {
@@ -786,6 +815,7 @@ export function solveByDeduction(
         let placedInRow = 0;
         for (let cc = 0; cc < size; cc++) {
           if (startingGrid && isBuilding(startingGrid[r][cc])) placedInRow++;
+          else if (playerBuildingMarks && playerBuildingMarks[r][cc]) placedInRow++;
         }
         const isFullyPlaced = placedInRow === level.rowClues[r];
         const isZero = level.rowClues[r] === 0;
@@ -830,6 +860,7 @@ export function solveByDeduction(
         let placedInCol = 0;
         for (let rr = 0; rr < size; rr++) {
           if (startingGrid && isBuilding(startingGrid[rr][c])) placedInCol++;
+          else if (playerBuildingMarks && playerBuildingMarks[rr][c]) placedInCol++;
         }
         const isFullyPlaced = placedInCol === level.colClues[c];
         const isZero = level.colClues[c] === 0;
@@ -877,6 +908,9 @@ export function solveByDeduction(
         if (startingGrid && isBuilding(startingGrid[r][c])) {
           placedInRow++;
           placedDesc.push(`${formatTileName(startingGrid[r][c])} at ${xy(r, c)}`);
+        } else if (playerBuildingMarks && playerBuildingMarks[r][c]) {
+          placedInRow++;
+          placedDesc.push(`Building at ${xy(r, c)}`);
         }
       }
       const quota = level.rowClues[r];
@@ -884,7 +918,9 @@ export function solveByDeduction(
 
       if (remainingNeeded > 0) {
         const openCandidates = buildingCandidates.filter(
-          (c) => !(startingGrid && isBuilding(startingGrid[r][c]))
+          (c) =>
+            !(startingGrid && isBuilding(startingGrid[r][c])) &&
+            !(playerBuildingMarks && playerBuildingMarks[r][c])
         );
         if (openCandidates.length === remainingNeeded) {
           // Find any unplaced, unmarked cells in this row that were disqualified from being buildings:
@@ -1055,6 +1091,9 @@ export function solveByDeduction(
         if (startingGrid && isBuilding(startingGrid[r][c])) {
           placedInCol++;
           placedDesc.push(`${formatTileName(startingGrid[r][c])} at ${xy(r, c)}`);
+        } else if (playerBuildingMarks && playerBuildingMarks[r][c]) {
+          placedInCol++;
+          placedDesc.push(`Building at ${xy(r, c)}`);
         }
       }
       const quota = level.colClues[c];
@@ -1062,7 +1101,9 @@ export function solveByDeduction(
 
       if (remainingNeeded > 0) {
         const openCandidates = buildingCandidates.filter(
-          (r) => !(startingGrid && isBuilding(startingGrid[r][c]))
+          (r) =>
+            !(startingGrid && isBuilding(startingGrid[r][c])) &&
+            !(playerBuildingMarks && playerBuildingMarks[r][c])
         );
         if (openCandidates.length === remainingNeeded) {
           // Find any unplaced, unmarked cells in this column that were disqualified from being buildings:
@@ -2314,6 +2355,71 @@ export function solveByDeduction(
       }
     }
 
+    // --- RULE 7.8: Generic Building Foundation Deduction ---
+    // If no concrete tile was locked to size 1, but we know a cell must contain a building,
+    // prompt the player to mark it as a Building foundation!
+    if (!progress) {
+      for (let r = 0; r < size; r++) {
+        for (let c = 0; c < size; c++) {
+          const isObstacle = isFixedObstacle(level.initialGrid[r][c]);
+          const isPlaced = startingGrid && startingGrid[r][c] !== 'empty';
+          const isMarkedBuilding = playerBuildingMarks && playerBuildingMarks[r][c];
+
+          const cellKey = `${r},${c}`;
+          if (
+            !isObstacle &&
+            !isPlaced &&
+            !isMarkedBuilding &&
+            !recordedMarkedBuildingCells.has(cellKey) &&
+            mustBeBuilding(domains[r][c])
+          ) {
+            recordedMarkedBuildingCells.add(cellKey);
+            const emptyReason =
+              cellElimReasons[`${r},${c}`]?.['empty'] ??
+              'quota requirements force a building here';
+            const ruleName = emptyReason.includes('Column')
+              ? 'Column Needs Building'
+              : emptyReason.includes('Row')
+              ? 'Row Needs Building'
+              : 'Building Foundation';
+
+            const axis = emptyReason.includes('Row')
+              ? ({ axis: 'row' as const, index: r })
+              : emptyReason.includes('Column')
+              ? ({ axis: 'col' as const, index: c })
+              : undefined;
+
+            steps.push({
+              r,
+              c,
+              action: 'mark_building',
+              ruleName,
+              explanation: `${emptyReason}. Mark ${xy(r, c)} as a Building.`,
+              steps: [
+                {
+                  title: ruleName,
+                  message: `${emptyReason}.`,
+                  highlightLine: axis,
+                  focusCells: [{ r, c }],
+                  candidateCells: [{ r, c }]
+                },
+                {
+                  title: ruleName,
+                  message: `${xy(r, c)} must contain a building! Mark it as a Building foundation.`,
+                  highlightLine: axis,
+                  focusCells: [{ r, c }],
+                  targetCell: { r, c }
+                }
+              ]
+            });
+            progress = true;
+            break;
+          }
+        }
+        if (progress) break;
+      }
+    }
+
     // --- RULE 8: Specific Contradiction Lookahead ---
     if (!progress) {
       outerLookahead: for (let r = 0; r < size; r++) {
@@ -2884,7 +2990,8 @@ export function countSolutions(
 export function getNextHint(
   playerGrid: TileType[][],
   playerMarks: boolean[][],
-  level: LevelDefinition
+  level: LevelDefinition,
+  playerBuildingMarks?: boolean[][]
 ): DeductionHint | null {
   const size = level.size;
 
@@ -2940,6 +3047,9 @@ export function getNextHint(
       if (isBuilding(playerGrid[r][c])) {
         placedInRow++;
         placedDesc.push(`${formatTileName(playerGrid[r][c])} at ${xy(r, c)}`);
+      } else if (playerBuildingMarks && playerBuildingMarks[r][c]) {
+        placedInRow++;
+        placedDesc.push(`Building at ${xy(r, c)}`);
       }
     }
     const quota = level.rowClues[r];
@@ -2949,6 +3059,7 @@ export function getNextHint(
         if (
           playerGrid[r][c] === 'empty' &&
           !playerMarks[r][c] &&
+          !(playerBuildingMarks && playerBuildingMarks[r][c]) &&
           !isFixedObstacle(level.initialGrid[r][c])
         ) {
           unmarkedInRow.push({ r, c });
@@ -2997,6 +3108,9 @@ export function getNextHint(
       if (isBuilding(playerGrid[r][c])) {
         placedInCol++;
         placedDesc.push(`${formatTileName(playerGrid[r][c])} at ${xy(r, c)}`);
+      } else if (playerBuildingMarks && playerBuildingMarks[r][c]) {
+        placedInCol++;
+        placedDesc.push(`Building at ${xy(r, c)}`);
       }
     }
     const quota = level.colClues[c];
@@ -3006,6 +3120,7 @@ export function getNextHint(
         if (
           playerGrid[r][c] === 'empty' &&
           !playerMarks[r][c] &&
+          !(playerBuildingMarks && playerBuildingMarks[r][c]) &&
           !isFixedObstacle(level.initialGrid[r][c])
         ) {
           unmarkedInCol.push({ r, c });
@@ -3047,7 +3162,7 @@ export function getNextHint(
     }
   }
 
-  const result = solveByDeduction(level, playerGrid, playerMarks);
+  const result = solveByDeduction(level, playerGrid, playerMarks, playerBuildingMarks);
 
   const normalizeHint = (step: DeductionHint): DeductionHint => {
     if (!step.steps || step.steps.length === 0) {
@@ -3077,6 +3192,10 @@ export function getNextHint(
 
     if (step.action === 'mark_empty') {
       if (!playerMarks[step.r][step.c]) {
+        return normalizeHint(step);
+      }
+    } else if (step.action === 'mark_building') {
+      if (!playerBuildingMarks?.[step.r]?.[step.c]) {
         return normalizeHint(step);
       }
     } else if (step.action === 'place') {

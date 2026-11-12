@@ -118,6 +118,7 @@ export const BuildingSprite: React.FC<BuildingSpriteProps> = ({
 interface TileGraphicProps {
   type: TileType;
   markedEmpty?: boolean;
+  markedBuilding?: boolean;
   ruledOutForActiveType?: PlaceableType | null;
   excludedCount?: number;
   excludedTypes?: Set<PlaceableType>;
@@ -129,6 +130,7 @@ interface TileGraphicProps {
 export const TileGraphic: React.FC<TileGraphicProps> = ({
   type,
   markedEmpty = false,
+  markedBuilding = false,
   ruledOutForActiveType = null,
   excludedCount = 0,
   excludedTypes,
@@ -174,6 +176,9 @@ export const TileGraphic: React.FC<TileGraphicProps> = ({
       return <RoadSvg connections={roadConnections} variantSeed={variantSeed} />;
     case 'empty':
     default:
+      if (markedBuilding) {
+        return <BuildingFoundationSvg isNewlyBuilt={isNewlyBuilt} />;
+      }
       if (markedEmpty) {
         return null;
       }
@@ -377,6 +382,139 @@ export const MarkedGrassSvg: React.FC = () => (
       strokeWidth="2.8"
     />
     <circle cx="36" cy="38" r="2" fill="#ffd966" />
+  </svg>
+);
+
+/**
+ * Generic Building Foundation / Construction Site marker.
+ * Used when a square is deduced to MUST contain a building, before its specific type is known.
+ */
+export const BuildingFoundationSvg: React.FC<{
+  isNewlyBuilt?: boolean;
+}> = ({ isNewlyBuilt = false }) => (
+  <svg
+    viewBox="0 0 100 100"
+    className={`tile-svg building-foundation-svg ${isNewlyBuilt ? 'is-animating-build' : ''}`}
+    aria-label="Building Foundation"
+  >
+    {/* Ground clearance drop shadow */}
+    <rect
+      x="16"
+      y="18"
+      width="68"
+      height="68"
+      rx="6"
+      fill="rgba(43, 30, 22, 0.28)"
+    />
+
+    {/* Packed earth / gravel building footprint base */}
+    <rect
+      x="18"
+      y="18"
+      width="64"
+      height="64"
+      rx="5"
+      fill="#a07c50"
+      stroke="#2b1e16"
+      strokeWidth="3.2"
+    />
+
+    {/* Cross-hatch construction layout blueprint lines */}
+    <g opacity="0.35" stroke="#f6e4bc" strokeWidth="1.8" strokeDasharray="3 3">
+      <line x1="18" y1="50" x2="82" y2="50" />
+      <line x1="50" y1="18" x2="50" y2="82" />
+      <line x1="26" y1="26" x2="74" y2="74" />
+      <line x1="74" y1="26" x2="26" y2="74" />
+    </g>
+
+    {/* Outer Timber Foundation Sill Beams */}
+    {/* Top Beam */}
+    <rect
+      x="20"
+      y="22"
+      width="60"
+      height="8"
+      rx="2"
+      fill="#8c5832"
+      stroke="#2b1e16"
+      strokeWidth="3"
+    />
+    {/* Bottom Beam */}
+    <rect
+      x="20"
+      y="70"
+      width="60"
+      height="8"
+      rx="2"
+      fill="#6e4226"
+      stroke="#2b1e16"
+      strokeWidth="3"
+    />
+    {/* Left Beam */}
+    <rect
+      x="22"
+      y="22"
+      width="8"
+      height="56"
+      rx="2"
+      fill="#7a4b29"
+      stroke="#2b1e16"
+      strokeWidth="3"
+    />
+    {/* Right Beam */}
+    <rect
+      x="70"
+      y="22"
+      width="8"
+      height="56"
+      rx="2"
+      fill="#7a4b29"
+      stroke="#2b1e16"
+      strokeWidth="3"
+    />
+
+    {/* 4 Corner Foundation Posts with peg accents */}
+    {[
+      { x: 18, y: 18 },
+      { x: 68, y: 18 },
+      { x: 18, y: 68 },
+      { x: 68, y: 68 }
+    ].map((post, idx) => (
+      <g key={idx}>
+        <rect
+          x={post.x}
+          y={post.y}
+          width="14"
+          height="14"
+          rx="3"
+          fill="#5c3419"
+          stroke="#2b1e16"
+          strokeWidth="3.2"
+        />
+        <circle cx={post.x + 7} cy={post.y + 7} r="2.5" fill="#ffd966" />
+      </g>
+    ))}
+
+    {/* Center Construction Badge / Building Silhouette */}
+    <circle
+      cx="50"
+      cy="50"
+      r="16"
+      fill="#d97706"
+      stroke="#2b1e16"
+      strokeWidth="3"
+    />
+    {/* Iconic Generic Building Gable & Pillars silhouette inside badge */}
+    <g fill="#fef3c7" stroke="#2b1e16" strokeWidth="1.6" strokeLinejoin="round">
+      {/* Roof */}
+      <polygon points="41,45 50,38 59,45" />
+      {/* 3 Pillars */}
+      <rect x="42.5" y="46" width="2.5" height="9" rx="0.5" />
+      <rect x="48.7" y="46" width="2.5" height="9" rx="0.5" />
+      <rect x="55" y="46" width="2.5" height="9" rx="0.5" />
+      {/* Floor */}
+      <rect x="40" y="55" width="20" height="2.5" rx="0.8" />
+    </g>
   </svg>
 );
 

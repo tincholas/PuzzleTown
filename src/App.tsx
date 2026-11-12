@@ -62,6 +62,7 @@ import { pwaManager } from './pwaManager';
 interface HistorySnapshot {
   grid: TileType[][];
   marks: boolean[][];
+  buildingMarks: boolean[][];
   excludedByCell: Set<PlaceableType>[][];
 }
 
@@ -77,10 +78,12 @@ interface SavedSession {
   levelId: number;
   grid: TileType[][];
   marks: boolean[][];
+  buildingMarks?: boolean[][];
   excludedByCell: PlaceableType[][][];
   history: Array<{
     grid: TileType[][];
     marks: boolean[][];
+    buildingMarks?: boolean[][];
     excludedByCell: PlaceableType[][][];
   }>;
   hintsUsed: number;
@@ -118,6 +121,7 @@ function cloneExcludedGrid(
 function loadSavedSession(level: LevelDefinition): {
   grid: TileType[][];
   marks: boolean[][];
+  buildingMarks: boolean[][];
   excludedByCell: Set<PlaceableType>[][];
   history: HistorySnapshot[];
   hintsUsed: number;
@@ -143,6 +147,11 @@ function loadSavedSession(level: LevelDefinition): {
     const marks =
       Array.isArray(data.marks) && data.marks.length === level.size
         ? data.marks
+        : Array.from({ length: level.size }, () => Array(level.size).fill(false));
+
+    const buildingMarks =
+      Array.isArray(data.buildingMarks) && data.buildingMarks.length === level.size
+        ? data.buildingMarks
         : Array.from({ length: level.size }, () => Array(level.size).fill(false));
 
     const excludedByCell = createEmptyExcludedGrid(level.size);
@@ -171,6 +180,10 @@ function loadSavedSession(level: LevelDefinition): {
           history.push({
             grid: h.grid,
             marks: h.marks,
+            buildingMarks:
+              Array.isArray(h.buildingMarks) && h.buildingMarks.length === level.size
+                ? h.buildingMarks
+                : Array.from({ length: level.size }, () => Array(level.size).fill(false)),
             excludedByCell: snapshotExcluded
           });
         }
@@ -180,6 +193,7 @@ function loadSavedSession(level: LevelDefinition): {
     return {
       grid: data.grid,
       marks,
+      buildingMarks,
       excludedByCell,
       history,
       hintsUsed: typeof data.hintsUsed === 'number' ? data.hintsUsed : 0,
@@ -209,6 +223,11 @@ export const App: React.FC = () => {
   const [marks, setMarks] = useState<boolean[][]>(() =>
     initialSession
       ? initialSession.marks
+      : Array.from({ length: level.size }, () => Array(level.size).fill(false))
+  );
+  const [buildingMarks, setBuildingMarks] = useState<boolean[][]>(() =>
+    initialSession
+      ? initialSession.buildingMarks
       : Array.from({ length: level.size }, () => Array(level.size).fill(false))
   );
   const [excludedByCell, setExcludedByCell] = useState<
@@ -343,12 +362,14 @@ export const App: React.FC = () => {
         levelId: level.id,
         grid,
         marks,
+        buildingMarks,
         excludedByCell: excludedByCell.map((row) =>
           row.map((cellSet) => Array.from(cellSet))
         ),
         history: history.slice(-30).map((h) => ({
           grid: h.grid,
           marks: h.marks,
+          buildingMarks: h.buildingMarks,
           excludedByCell: h.excludedByCell.map((row) =>
             row.map((cellSet) => Array.from(cellSet))
           )
@@ -367,6 +388,7 @@ export const App: React.FC = () => {
     level.id,
     grid,
     marks,
+    buildingMarks,
     excludedByCell,
     history,
     hintsUsed,
@@ -522,6 +544,11 @@ export const App: React.FC = () => {
         Array(newLevel.size).fill(false)
       )
     );
+    setBuildingMarks(
+      Array.from({ length: newLevel.size }, () =>
+        Array(newLevel.size).fill(false)
+      )
+    );
     setExcludedByCell(createEmptyExcludedGrid(newLevel.size));
     setHistory([]);
     const firstActive = PLACEABLE_TYPES.find(
@@ -574,6 +601,7 @@ export const App: React.FC = () => {
       {
         grid: grid.map((r) => [...r]),
         marks: marks.map((r) => [...r]),
+        buildingMarks: buildingMarks.map((r) => [...r]),
         excludedByCell: cloneExcludedGrid(excludedByCell)
       }
     ]);
@@ -584,6 +612,10 @@ export const App: React.FC = () => {
     const last = history[history.length - 1];
     setGrid(last.grid);
     setMarks(last.marks);
+    setBuildingMarks(
+      last.buildingMarks ??
+        Array.from({ length: level.size }, () => Array(level.size).fill(false))
+    );
     setExcludedByCell(last.excludedByCell);
     setHistory((prev) => prev.slice(0, -1));
     clearActiveHint();
@@ -600,13 +632,16 @@ export const App: React.FC = () => {
     setMarks(
       Array.from({ length: level.size }, () => Array(level.size).fill(false))
     );
+    setBuildingMarks(
+      Array.from({ length: level.size }, () => Array(level.size).fill(false))
+    );
     setExcludedByCell(createEmptyExcludedGrid(level.size));
     clearActiveHint();
     setPoppingEmptyCells({});
   };
 
   const handleHint = () => {
-    const hint = getNextHint(grid, marks, level);
+    const hint = getNextHint(grid, marks, level, buildingMarks);
     if (hint) {
       setActiveHint(hint);
       setHintStepIndex(0);
@@ -631,6 +666,9 @@ export const App: React.FC = () => {
       const nextMarks = marks.map((row) => [...row]);
       nextMarks[r][c] = false;
       setMarks(nextMarks);
+      const nextBuildingMarks = buildingMarks.map((row) => [...row]);
+      nextBuildingMarks[r][c] = false;
+      setBuildingMarks(nextBuildingMarks);
       if (tileType === 'road') {
         playPlaceRoadSound();
         setJustPlacedCell({ r, c });
@@ -658,6 +696,33 @@ export const App: React.FC = () => {
       const nextMarks = marks.map((row) => [...row]);
       nextMarks[r][c] = true;
       setMarks(nextMarks);
+      const nextBuildingMarks = buildingMarks.map((row) => [...row]);
+      nextBuildingMarks[r][c] = false;
+      setBuildingMarks(nextBuildingMarks);
+    } else if (action === 'mark_building') {
+      const nextGrid = grid.map((row) => [...row]);
+      nextGrid[r][c] = 'empty';
+      setGrid(nextGrid);
+      const nextBuildingMarks = buildingMarks.map((row) => [...row]);
+      nextBuildingMarks[r][c] = true;
+      setBuildingMarks(nextBuildingMarks);
+      const nextMarks = marks.map((row) => [...row]);
+      nextMarks[r][c] = false;
+      setMarks(nextMarks);
+      playPlaceBuildingSound();
+      const cellKey = `${r},${c}`;
+      const timestamp = Date.now();
+      setNewlyBuiltCells((prev) => ({ ...prev, [cellKey]: timestamp }));
+      setTimeout(() => {
+        setNewlyBuiltCells((prev) => {
+          if (prev[cellKey] === timestamp) {
+            const next = { ...prev };
+            delete next[cellKey];
+            return next;
+          }
+          return prev;
+        });
+      }, 500);
     }
     clearActiveHint();
   };
@@ -769,7 +834,7 @@ export const App: React.FC = () => {
     setSelectedCell({ r, c });
     clearActiveHint();
 
-    // 1. Global "Mark Empty (Grass)" tool selected
+    // 1. Global "Mark Empty (Grass)" or "Building Foundation" tool selected
     if (activeTool === 'mark_empty') {
       if (!isDragContinue) pushHistory();
       if (currentTile !== 'empty') {
@@ -777,24 +842,51 @@ export const App: React.FC = () => {
           const nextGrid = grid.map((row) => [...row]);
           nextGrid[r][c] = 'empty';
           setGrid(nextGrid);
+          const nextBuildingMarks = buildingMarks.map((row) => [...row]);
+          nextBuildingMarks[r][c] = false;
+          setBuildingMarks(nextBuildingMarks);
           playMarkEmptySound();
         }
       } else {
-        const targetVal =
-          dragTargetValue !== undefined ? dragTargetValue : !marks[r][c];
-        const nextMarks = marks.map((row) => [...row]);
-        const nextExcluded = cloneExcludedGrid(excludedByCell);
-        nextMarks[r][c] = targetVal;
-        if (targetVal) {
-          for (const b of activeLevelBuildings) {
-            nextExcluded[r][c].add(b);
+        if (actionMode === 'rule_out') {
+          // Marking as Generic Building Foundation
+          const targetVal =
+            dragTargetValue !== undefined ? dragTargetValue : !buildingMarks[r][c];
+          const nextBuildingMarks = buildingMarks.map((row) => [...row]);
+          const nextMarks = marks.map((row) => [...row]);
+          const nextExcluded = cloneExcludedGrid(excludedByCell);
+          nextBuildingMarks[r][c] = targetVal;
+          if (targetVal) {
+            nextMarks[r][c] = false;
+            nextExcluded[r][c].clear();
+            playPlaceBuildingSound();
+          } else {
+            playMarkEmptySound();
           }
+          setBuildingMarks(nextBuildingMarks);
+          setMarks(nextMarks);
+          setExcludedByCell(nextExcluded);
         } else {
-          nextExcluded[r][c].clear();
+          // Marking as Empty Grass
+          const targetVal =
+            dragTargetValue !== undefined ? dragTargetValue : !marks[r][c];
+          const nextMarks = marks.map((row) => [...row]);
+          const nextBuildingMarks = buildingMarks.map((row) => [...row]);
+          const nextExcluded = cloneExcludedGrid(excludedByCell);
+          nextMarks[r][c] = targetVal;
+          if (targetVal) {
+            nextBuildingMarks[r][c] = false;
+            for (const b of activeLevelBuildings) {
+              nextExcluded[r][c].add(b);
+            }
+          } else {
+            nextExcluded[r][c].clear();
+          }
+          setMarks(nextMarks);
+          setBuildingMarks(nextBuildingMarks);
+          setExcludedByCell(nextExcluded);
+          playMarkEmptySound();
         }
-        setMarks(nextMarks);
-        setExcludedByCell(nextExcluded);
-        playMarkEmptySound();
       }
       return;
     }
@@ -842,10 +934,12 @@ export const App: React.FC = () => {
     pushHistory();
     const nextGrid = grid.map((row) => [...row]);
     const nextMarks = marks.map((row) => [...row]);
+    const nextBuildingMarks = buildingMarks.map((row) => [...row]);
     const nextExcluded = cloneExcludedGrid(excludedByCell);
 
     if (currentTile === activeTool) {
       nextGrid[r][c] = 'empty';
+      nextBuildingMarks[r][c] = false;
       const cellKey = `${r},${c}`;
       setNewlyBuiltCells((prev) => {
         if (!prev[cellKey]) return prev;
@@ -857,6 +951,7 @@ export const App: React.FC = () => {
     } else {
       nextGrid[r][c] = activeTool;
       nextMarks[r][c] = false;
+      nextBuildingMarks[r][c] = false;
       nextExcluded[r][c].clear();
       if (activeTool === 'road') {
         playPlaceRoadSound();
@@ -888,6 +983,7 @@ export const App: React.FC = () => {
 
     setGrid(nextGrid);
     setMarks(nextMarks);
+    setBuildingMarks(nextBuildingMarks);
     setExcludedByCell(nextExcluded);
   };
 
@@ -920,7 +1016,26 @@ export const App: React.FC = () => {
       return;
     }
 
-    if (activeTool === 'mark_empty' || activeTool === 'road') {
+    if (activeTool === 'mark_empty') {
+      pushHistory();
+      if (actionMode === 'rule_out') {
+        const nextBuildingMarks = buildingMarks.map((row) => [...row]);
+        const nextMarks = marks.map((row) => [...row]);
+        nextBuildingMarks[r][c] = !nextBuildingMarks[r][c];
+        if (nextBuildingMarks[r][c]) nextMarks[r][c] = false;
+        setBuildingMarks(nextBuildingMarks);
+        setMarks(nextMarks);
+        playPlaceBuildingSound();
+      } else {
+        const nextMarks = marks.map((row) => [...row]);
+        const nextBuildingMarks = buildingMarks.map((row) => [...row]);
+        nextMarks[r][c] = !nextMarks[r][c];
+        if (nextMarks[r][c]) nextBuildingMarks[r][c] = false;
+        setMarks(nextMarks);
+        setBuildingMarks(nextBuildingMarks);
+        playMarkEmptySound();
+      }
+    } else if (activeTool === 'road') {
       pushHistory();
       const nextMarks = marks.map((row) => [...row]);
       nextMarks[r][c] = !nextMarks[r][c];
@@ -935,12 +1050,20 @@ export const App: React.FC = () => {
   const handleLineClueClick = (axis: 'row' | 'col', index: number) => {
     if (validation.isSolved) return;
 
-    // Only tapping a 0 should clear the remaining cells.
-    // If there are more than 0 buildings that still need to be placed, ignore the tap.
     const clue = axis === 'row' ? level.rowClues[index] : level.colClues[index];
     const currentCount =
       axis === 'row' ? validation.rowCounts[index] : validation.colCounts[index];
-    const remaining = clue - currentCount;
+
+    const coords: Coord[] =
+      axis === 'row'
+        ? Array.from({ length: level.size }, (_, c) => ({ r: index, c }))
+        : Array.from({ length: level.size }, (_, r) => ({ r, c: index }));
+
+    const markedBuildingsInLine = coords.filter(
+      (pt) => grid[pt.r][pt.c] === 'empty' && buildingMarks[pt.r][pt.c]
+    ).length;
+
+    const remaining = clue - currentCount - markedBuildingsInLine;
     if (remaining !== 0) {
       return;
     }
@@ -955,29 +1078,26 @@ export const App: React.FC = () => {
     const nextExcluded = cloneExcludedGrid(excludedByCell);
     let changed = false;
 
-    const coords: Coord[] =
-      axis === 'row'
-        ? Array.from({ length: level.size }, (_, c) => ({ r: index, c }))
-        : Array.from({ length: level.size }, (_, r) => ({ r, c: index }));
-
     // Tapping a row or column clue marks all remaining empty spots in that line as clear (Grass),
-    // regardless of which tool or mode is currently active in the bottom tray.
-    const allMarked = coords.every(
-      (pt) => grid[pt.r][pt.c] !== 'empty' || nextMarks[pt.r][pt.c]
+    // skipping cells that already contain placed buildings or generic building marks.
+    const eligibleCoords = coords.filter(
+      (pt) => grid[pt.r][pt.c] === 'empty' && !buildingMarks[pt.r][pt.c]
     );
 
-    for (const pt of coords) {
-      if (grid[pt.r][pt.c] === 'empty') {
-        nextMarks[pt.r][pt.c] = !allMarked;
-        if (!allMarked) {
-          for (const b of activeLevelBuildings) {
-            nextExcluded[pt.r][pt.c].add(b);
-          }
-        } else {
-          nextExcluded[pt.r][pt.c].clear();
+    const allMarked = eligibleCoords.every(
+      (pt) => nextMarks[pt.r][pt.c]
+    );
+
+    for (const pt of eligibleCoords) {
+      nextMarks[pt.r][pt.c] = !allMarked;
+      if (!allMarked) {
+        for (const b of activeLevelBuildings) {
+          nextExcluded[pt.r][pt.c].add(b);
         }
-        changed = true;
+      } else {
+        nextExcluded[pt.r][pt.c].clear();
       }
+      changed = true;
     }
 
     if (changed) {
@@ -1127,6 +1247,7 @@ export const App: React.FC = () => {
           level={level}
           grid={grid}
           marks={marks}
+          buildingMarks={buildingMarks}
           excludedByCell={excludedByCell}
           activeTool={activeTool}
           actionMode={actionMode}

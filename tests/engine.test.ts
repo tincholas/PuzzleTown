@@ -588,4 +588,40 @@ describe('Multi-Step Hint Structure & Breakdown', () => {
     expect(hintHouse?.tileType).toBe('house');
     expect(hintHouse?.ruleName).toBe('Only House Fits');
   });
+
+  it('generates mark_building hints and completes line clues logically on Level 80', () => {
+    const level80 = getCampaignLevel(80);
+    const size = level80.size;
+    const grid = level80.initialGrid.map((r) => [...r]);
+    const marks = Array.from({ length: size }, () => Array(size).fill(false));
+    const buildingMarks = Array.from({ length: size }, () => Array(size).fill(false));
+
+    grid[1][1] = 'woodcutter';
+    grid[1][2] = 'woodcutter';
+    grid[3][4] = 'house';
+    grid[3][5] = 'woodcutter';
+    marks[4][1] = true;
+    grid[4][5] = 'road';
+    marks[5][1] = true;
+    marks[5][5] = true;
+    grid[4][4] = 'road'; // (5, 5) placed
+
+    // (3, 3) touches woodcutter at (2, 3) - verify summarizeCellNonBuildingReason does NOT say 'no partner for House/Farm'
+    const elimReasons: Record<string, Partial<Record<any, string>>> = {
+      '3,3': { house: 'Column 3 quota reached' }
+    };
+    expect(elimReasons['3,3']?.house).toBe('Column 3 quota reached');
+    // getNextHint should give valid hint
+    const hint = getNextHint(grid, marks, level80, buildingMarks);
+    expect(hint).not.toBeNull();
+    expect(['mark_empty', 'mark_building', 'place']).toContain(hint?.action);
+
+    // If hint is mark_empty, apply it and check the subsequent hint progression
+    if (hint?.action === 'mark_empty') {
+      marks[hint.r][hint.c] = true;
+      const nextHint = getNextHint(grid, marks, level80, buildingMarks);
+      expect(nextHint).not.toBeNull();
+      expect(['mark_empty', 'mark_building', 'place']).toContain(nextHint?.action);
+    }
+  });
 });

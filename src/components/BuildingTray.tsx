@@ -6,7 +6,7 @@ import {
   PLACEABLE_TYPES,
   PlaceableType
 } from '../engine/types';
-import { MarkedGrassSvg, TileGraphic } from './TileGraphic';
+import { BuildingFoundationSvg, MarkedGrassSvg, TileGraphic } from './TileGraphic';
 import emptyBgImg from '../assets/empty_bg1.png';
 
 export type ActiveTool = PlaceableType | 'mark_empty';
@@ -34,7 +34,7 @@ export const BuildingTray: React.FC<BuildingTrayProps> = ({
   );
 
   const isGlobalEmptySelected = activeTool === 'mark_empty';
-  const isNonExcludable = isGlobalEmptySelected || activeTool === 'road';
+  const isNonExcludable = activeTool === 'road';
   const activeBuildingMeta =
     activeTool !== 'mark_empty' ? BUILDING_METADATA[activeTool] : null;
 
@@ -61,23 +61,22 @@ export const BuildingTray: React.FC<BuildingTrayProps> = ({
             type="button"
             className={[
               'mode-pill-btn',
-              !isGlobalEmptySelected && (actionMode === 'build' || isNonExcludable)
+              (isGlobalEmptySelected && actionMode === 'build') ||
+              (!isGlobalEmptySelected && (actionMode === 'build' || isNonExcludable))
                 ? 'mode-pill-active-build'
                 : ''
             ]
               .filter(Boolean)
               .join(' ')}
             onClick={() => {
-              if (isGlobalEmptySelected) {
-                onSelectTool(activeTypes[0] ?? 'woodcutter');
-              }
               onToggleActionMode('build');
             }}
           >
             <Hammer size={15} />
             <span>
-              Place{' '}
-              {activeBuildingMeta ? activeBuildingMeta.shortName : 'Tile'}
+              {isGlobalEmptySelected
+                ? 'Empty Grass'
+                : `Place ${activeBuildingMeta ? activeBuildingMeta.shortName : 'Tile'}`}
             </span>
           </button>
 
@@ -86,7 +85,8 @@ export const BuildingTray: React.FC<BuildingTrayProps> = ({
             disabled={isNonExcludable}
             className={[
               'mode-pill-btn',
-              !isNonExcludable && actionMode === 'rule_out'
+              (isGlobalEmptySelected && actionMode === 'rule_out') ||
+              (!isNonExcludable && actionMode === 'rule_out')
                 ? 'mode-pill-active-ruleout'
                 : '',
               isNonExcludable ? 'mode-pill-disabled' : ''
@@ -99,16 +99,19 @@ export const BuildingTray: React.FC<BuildingTrayProps> = ({
               }
             }}
           >
-            <Ban size={15} />
+            {isGlobalEmptySelected ? <Hammer size={15} /> : <Ban size={15} />}
             <span>
-              Not{' '}
-              {activeBuildingMeta ? activeBuildingMeta.shortName : 'Here'}
+              {isGlobalEmptySelected
+                ? 'Building'
+                : `Not ${activeBuildingMeta ? activeBuildingMeta.shortName : 'Here'}`}
             </span>
           </button>
         </div>
         <span className="mode-hint-text">
           {isGlobalEmptySelected
-            ? 'Tap or swipe to mark empty grass (no buildings)'
+            ? actionMode === 'rule_out'
+              ? 'Tap or swipe squares that MUST contain a building (tap card to return to Empty)'
+              : 'Tap or swipe to mark empty grass (no buildings) — tap card again for "Building"'
             : activeTool === 'road'
             ? 'Tap or drag to build Roads connecting village to Town Hall'
             : actionMode === 'rule_out'
@@ -173,27 +176,49 @@ export const BuildingTray: React.FC<BuildingTrayProps> = ({
             );
           })}
 
-          {/* Global "All Empty / Grass" tool */}
+          {/* Global "All Empty / Grass" or "Generic Building" tool */}
           <button
             type="button"
             className={[
               'tray-card tray-card-marker',
-              isGlobalEmptySelected ? 'tray-card-selected' : ''
+              isGlobalEmptySelected ? 'tray-card-selected' : '',
+              isGlobalEmptySelected && actionMode === 'rule_out' ? 'tray-card-ruleout' : ''
             ]
               .filter(Boolean)
               .join(' ')}
-            onClick={() => onSelectTool('mark_empty')}
-            title="Empty Grass: Mark squares where NO building can go"
+            onClick={() => {
+              if (activeTool === 'mark_empty') {
+                onToggleActionMode(actionMode === 'build' ? 'rule_out' : 'build');
+              } else {
+                onSelectTool('mark_empty');
+              }
+            }}
+            title={
+              isGlobalEmptySelected && actionMode === 'rule_out'
+                ? 'Building Foundation: Squares that MUST contain a building (tap again for Empty Grass)'
+                : 'Empty Grass: Squares where NO building can go (tap again for Building)'
+            }
           >
+            {isGlobalEmptySelected && actionMode === 'rule_out' && (
+              <span className="tray-ruleout-tag" aria-label="Building Mode">
+                🏗️
+              </span>
+            )}
             <div className="tray-card-art">
-              <img
-                src={emptyBgImg}
-                alt="Empty"
-                className="tray-empty-img"
-                draggable={false}
-              />
+              {isGlobalEmptySelected && actionMode === 'rule_out' ? (
+                <BuildingFoundationSvg />
+              ) : (
+                <img
+                  src={emptyBgImg}
+                  alt="Empty"
+                  className="tray-empty-img"
+                  draggable={false}
+                />
+              )}
             </div>
-            <span className="tray-card-label">Empty</span>
+            <span className="tray-card-label">
+              {isGlobalEmptySelected && actionMode === 'rule_out' ? 'Building' : 'Empty'}
+            </span>
           </button>
         </div>
       </div>

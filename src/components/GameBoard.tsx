@@ -16,6 +16,7 @@ interface GameBoardProps {
   level: LevelDefinition;
   grid: TileType[][];
   marks: boolean[][];
+  buildingMarks?: boolean[][];
   excludedByCell: Set<PlaceableType>[][];
   activeTool: ActiveTool;
   actionMode: TouchActionMode;
@@ -79,6 +80,7 @@ export const GameBoard: React.FC<GameBoardProps> = ({
   level,
   grid,
   marks,
+  buildingMarks,
   excludedByCell,
   activeTool,
   actionMode,
@@ -122,7 +124,9 @@ export const GameBoard: React.FC<GameBoardProps> = ({
     if (isSwipeMarkMode && grid[r][c] === 'empty') {
       const currentlyMarked =
         activeTool === 'mark_empty'
-          ? marks[r][c]
+          ? actionMode === 'rule_out'
+            ? Boolean(buildingMarks?.[r]?.[c])
+            : marks[r][c]
           : excludedByCell[r][c].has(activeTool) || marks[r][c];
       dragStateRef.current = {
         active: true,
@@ -186,9 +190,18 @@ export const GameBoard: React.FC<GameBoardProps> = ({
 
         {/* Column Clue Badges (Remaining Buildings Needed) */}
         {level.colClues.map((clue, c) => {
-          const status = validation.colStatus[c];
           const current = validation.colCounts[c];
-          const remaining = clue - current;
+          const colBuildingMarks = buildingMarks
+            ? buildingMarks.filter((row, r) => row[c] && grid[r][c] === 'empty').length
+            : 0;
+          const totalColBuildings = current + colBuildingMarks;
+          const remaining = clue - totalColBuildings;
+          const status =
+            totalColBuildings === clue
+              ? 'exact'
+              : totalColBuildings > clue
+              ? 'over'
+              : 'under';
           const isColAnimating =
             animatingLine?.axis === 'col' && animatingLine?.index === c;
           const isColHinted = Boolean(
@@ -215,10 +228,19 @@ export const GameBoard: React.FC<GameBoardProps> = ({
 
         {/* Rows: Row Clue Badge (Remaining Buildings Needed) + Grid Cells */}
         {Array.from({ length: size }, (_, r) => {
-          const rowStatus = validation.rowStatus[r];
           const rowCurrent = validation.rowCounts[r];
           const rowClue = level.rowClues[r];
-          const rowRemaining = rowClue - rowCurrent;
+          const rowBuildingMarks = buildingMarks
+            ? buildingMarks[r].filter((bm, c) => bm && grid[r][c] === 'empty').length
+            : 0;
+          const totalRowBuildings = rowCurrent + rowBuildingMarks;
+          const rowRemaining = rowClue - totalRowBuildings;
+          const rowStatus =
+            totalRowBuildings === rowClue
+              ? 'exact'
+              : totalRowBuildings > rowClue
+              ? 'over'
+              : 'under';
           const isRowAnimating =
             animatingLine?.axis === 'row' && animatingLine?.index === r;
           const isRowHinted = Boolean(
@@ -244,9 +266,11 @@ export const GameBoard: React.FC<GameBoardProps> = ({
               {Array.from({ length: size }, (_, c) => {
                 const tile = grid[r][c];
                 const isMarkedAllEmpty = marks[r][c];
+                const isMarkedBuilding = Boolean(buildingMarks?.[r]?.[c] && tile === 'empty');
                 const cellExcludedSet = excludedByCell[r][c];
                 const isRuledOutForActive =
                   !isMarkedAllEmpty &&
+                  !isMarkedBuilding &&
                   activeTool !== 'mark_empty' &&
                   activeTool !== 'road' &&
                   cellExcludedSet.has(activeTool);
@@ -345,6 +369,7 @@ export const GameBoard: React.FC<GameBoardProps> = ({
                       isSelected ? 'tile-selected' : '',
                       isJustPlacedRoad ? 'tile-just-placed' : '',
                       isNewlyBuilt ? 'tile-building-active' : '',
+                      isMarkedBuilding ? 'tile-marked-building' : '',
                       isPoppingEmpty ? 'tile-empty-popping' : '',
                       isRippling ? 'tile-line-ripple' : '',
                       isVictoryVisible ? 'tile-victory-wave' : '',
@@ -366,6 +391,7 @@ export const GameBoard: React.FC<GameBoardProps> = ({
                       key={isNewlyBuilt ? `built-${buildTimestamp}` : `static-${tile}-${key}`}
                       type={tile}
                       markedEmpty={tile === 'empty' && isMarkedAllEmpty}
+                      markedBuilding={isMarkedBuilding}
                       ruledOutForActiveType={
                         tile === 'empty' && isRuledOutForActive
                           ? activeTool
