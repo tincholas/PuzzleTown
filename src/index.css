@@ -805,7 +805,8 @@ body,
 }
 
 /* Stacking Layer Elevation for Fauna-Hosting Tiles */
-.board-tile.tile-has-bunny {
+.board-tile.tile-has-bunny,
+.board-tile.tile-has-rock-animal {
   z-index: 7;
 }
 
@@ -916,6 +917,111 @@ body,
 }
 
 /* =========================================================================
+   ROCK-PEEKING ANIMAL (SHEEP, GOAT, DUCK, CHICKEN HIDEOUT)
+   ========================================================================= */
+.rock-peeking-animal {
+  position: absolute;
+  bottom: 8px;
+  left: 50%;
+  pointer-events: none;
+  user-select: none;
+  z-index: 0; /* Starts behind rockImg at z-index 1 */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transform-origin: 50% 90%;
+}
+
+.rock-peeking-animal.fauna-sheep,
+.rock-peeking-animal.fauna-goat {
+  width: 35px;
+  height: 35px;
+  margin-left: -17.5px;
+}
+
+.rock-peeking-animal.fauna-duck {
+  width: 30px;
+  height: 30px;
+  margin-left: -15px;
+}
+
+.rock-peeking-animal.fauna-chicken {
+  width: 26px;
+  height: 26px;
+  margin-left: -13px;
+}
+
+.rock-peeking-animal.peek-left {
+  animation: rockAnimalPeekLeft 10s cubic-bezier(0.34, 1.25, 0.64, 1) infinite;
+}
+
+.rock-peeking-animal.peek-right {
+  animation: rockAnimalPeekRight 10s cubic-bezier(0.34, 1.25, 0.64, 1) infinite;
+}
+
+@keyframes rockAnimalPeekLeft {
+  0%, 15% {
+    transform: translateX(0) scaleX(-1);
+    z-index: 0;
+  }
+  25% {
+    transform: translateX(-30px) scaleX(-1);
+    z-index: 2; /* Peeks out from behind the boulder */
+  }
+  35% {
+    transform: translateX(-30px) scaleX(-1) rotate(6deg);
+    z-index: 2;
+  }
+  45% {
+    transform: translateX(-30px) scaleX(-1) rotate(-4deg);
+    z-index: 2;
+  }
+  55% {
+    transform: translateX(-30px) scaleX(-1) rotate(0deg);
+    z-index: 2;
+  }
+  65% {
+    transform: translateX(0) scaleX(-1);
+    z-index: 0;
+  }
+  66%, 100% {
+    transform: translateX(0) scaleX(-1);
+    z-index: 0;
+  }
+}
+
+@keyframes rockAnimalPeekRight {
+  0%, 15% {
+    transform: translateX(0) scaleX(1);
+    z-index: 0;
+  }
+  25% {
+    transform: translateX(30px) scaleX(1);
+    z-index: 2;
+  }
+  35% {
+    transform: translateX(30px) scaleX(1) rotate(-6deg);
+    z-index: 2;
+  }
+  45% {
+    transform: translateX(30px) scaleX(1) rotate(4deg);
+    z-index: 2;
+  }
+  55% {
+    transform: translateX(30px) scaleX(1) rotate(0deg);
+    z-index: 2;
+  }
+  65% {
+    transform: translateX(0) scaleX(1);
+    z-index: 0;
+  }
+  66%, 100% {
+    transform: translateX(0) scaleX(1);
+    z-index: 0;
+  }
+}
+
+/* =========================================================================
    BOARD FAUNA (TILE-CONTAINED ROTATING GROUND ANIMALS & BUTTERFLY)
    ========================================================================= */
 .tile-fauna-actor {
@@ -929,6 +1035,37 @@ body,
   align-items: center;
   justify-content: center;
   transform-origin: 50% 90%;
+}
+
+/* Spawn & Retire Graceful Transitions (No abrupt pop-in or pop-out) */
+.tile-fauna-actor.is-spawning {
+  animation: faunaSpawnFadeIn 0.8s ease-out both;
+}
+
+.tile-fauna-actor.is-retiring {
+  animation: faunaRetireFadeOut 0.8s ease-in forwards;
+}
+
+@keyframes faunaSpawnFadeIn {
+  0% {
+    opacity: 0;
+    transform: scale(0.6) scaleX(var(--facing-scale, 1));
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1) scaleX(var(--facing-scale, 1));
+  }
+}
+
+@keyframes faunaRetireFadeOut {
+  0% {
+    opacity: 1;
+    transform: scale(1) scaleX(var(--facing-scale, 1));
+  }
+  100% {
+    opacity: 0;
+    transform: scale(0.55) scaleX(var(--facing-scale, 1));
+  }
 }
 
 /* Individual species sizing & origin */

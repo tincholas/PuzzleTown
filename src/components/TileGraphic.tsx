@@ -8,8 +8,10 @@ import {
   FloraGraphic,
   FloraType,
   GroundFaunaGraphic,
+  GroundFaunaSpecies,
   GroundFaunaTileState,
-  PeekingBunnyGraphic
+  PeekingBunnyGraphic,
+  PeekingRockAnimalGraphic
 } from './Decorations';
 
 import farmStage1 from '../assets/buildings/farm_stage1.png';
@@ -101,9 +103,15 @@ export const BuildingGraphic: React.FC<{ isNewlyBuilt?: boolean }> = ({
   </div>
 );
 
-export const RockGraphic: React.FC = () => (
-  <div style={{ position: 'relative', width: '100%', height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+export const RockGraphic: React.FC<{
+  peekingAnimal?: GroundFaunaSpecies | null;
+  peekDir?: 'left' | 'right';
+}> = ({ peekingAnimal = null, peekDir = 'left' }) => (
+  <div style={{ position: 'relative', width: '100%', height: '100%', overflow: 'visible', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
     <div className="tile-ground-shadow obstacle-rock-shadow" />
+    {peekingAnimal && (
+      <PeekingRockAnimalGraphic species={peekingAnimal} peekDir={peekDir} />
+    )}
     <img
       src={rockImg}
       alt="Rock"
@@ -188,6 +196,8 @@ interface TileGraphicProps {
   isNewlyBuilt?: boolean;
   hasBunny?: boolean;
   bunnyPeekDir?: 'left' | 'right';
+  peekingRockAnimal?: GroundFaunaSpecies | null;
+  rockPeekDir?: 'left' | 'right';
   floraType?: FloraType | null;
   groundFaunaState?: GroundFaunaTileState | null;
   chickenState?: GroundFaunaTileState | null;
@@ -206,6 +216,8 @@ export const TileGraphic: React.FC<TileGraphicProps> = ({
   isNewlyBuilt = false,
   hasBunny = false,
   bunnyPeekDir = 'left',
+  peekingRockAnimal = null,
+  rockPeekDir = 'left',
   floraType = null,
   groundFaunaState = null,
   chickenState = null,
@@ -215,7 +227,7 @@ export const TileGraphic: React.FC<TileGraphicProps> = ({
     case 'tree':
       return <TreeGraphic hasBunny={hasBunny} bunnyPeekDir={bunnyPeekDir} />;
     case 'rock':
-      return <RockGraphic />;
+      return <RockGraphic peekingAnimal={peekingRockAnimal} peekDir={rockPeekDir} />;
     case 'house':
     case 'woodcutter':
     case 'farm':

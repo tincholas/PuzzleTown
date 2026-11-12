@@ -39,7 +39,7 @@ export type FloraType =
   | 'mushrooms'
   | 'tufts';
 
-export type GroundFaunaSpecies = 'chicken' | 'duck' | 'goat' | 'sheep';
+export type GroundFaunaSpecies = 'sheep' | 'goat' | 'duck' | 'chicken';
 
 export type FaunaType = 'bunny' | 'butterfly' | GroundFaunaSpecies | 'pig';
 
@@ -86,6 +86,8 @@ export interface GroundFaunaTileState {
   c: number;
   facingLeft: boolean;
   isWalking: boolean;
+  isSpawning?: boolean;
+  isRetiring?: boolean;
   fromDelta?: { dx: number; dy: number };
 }
 
@@ -99,20 +101,29 @@ export interface ButterflyTileState {
   fromDelta?: { dx: number; dy: number };
 }
 
+export interface PeekingRockAnimalState {
+  r: number;
+  c: number;
+  species: GroundFaunaSpecies;
+  peekDir: 'left' | 'right';
+}
+
 export interface FaunaManagerResult {
   bunnyTree: { r: number; c: number; peekDir: 'left' | 'right' } | null;
+  peekingRockAnimal: PeekingRockAnimalState | null;
   groundFauna: GroundFaunaTileState | null;
   chicken: GroundFaunaTileState | null; // alias for backwards compatibility
   butterfly: ButterflyTileState | null;
 }
 
-const GROUND_SPECIES_ROSTER: GroundFaunaSpecies[] = ['chicken', 'duck', 'sheep', 'goat'];
+const GROUND_SPECIES_ROSTER: GroundFaunaSpecies[] = ['sheep', 'goat', 'duck', 'chicken'];
 
 /**
  * Comprehensive Fauna Hook managing:
  * 1. Bunny rotating across available trees every 14-second peek cycle.
- * 2. Ground Fauna (Chicken, Duck, Sheep, Goat) rotating through species so only 1 ground animal
- *    wanders at a time, strictly avoiding on-screen clutter.
+ * 2. Ground Fauna (Sheep, Goat, Duck, Chicken) emerging naturally from behind rocks!
+ *    When entering the meadow, they step out from behind a rock instead of popping into existence.
+ *    Only 1 ground animal roams at a time, strictly avoiding on-screen clutter.
  * 3. Butterfly flying from flower patch to flower patch, landing still, then meandering again.
  */
 export function useFaunaManager(
@@ -122,17 +133,21 @@ export function useFaunaManager(
 ): FaunaManagerResult {
   const size = grid.length;
 
-  // 1. Gather all tree coordinates
+  // 1. Gather all tree & rock coordinates
   const trees: Array<{ r: number; c: number }> = [];
+  const rocks: Array<{ r: number; c: number }> = [];
+
   for (let r = 0; r < size; r++) {
     for (let c = 0; c < size; c++) {
       if (grid[r][c] === 'tree') {
         trees.push({ r, c });
+      } else if (grid[r][c] === 'rock') {
+        rocks.push({ r, c });
       }
     }
   }
 
-  // Active tree index rotates every 14s (the exact duration of bunnyPhysicalPeek)
+  // Active tree index rotates every 14s for bunny peek
   const [activeTreeIdx, setActiveTreeIdx] = useState(0);
 
   useEffect(() => {
@@ -166,85 +181,173 @@ export function useFaunaManager(
     }
   }
 
-  // 3. Ground Fauna Species Rotation (Cycles every 26s across Chicken -> Duck -> Sheep -> Goat)
+  // 3. Ground Fauna Species & Rock Hideout
   const [speciesIdx, setSpeciesIdx] = useState(
     () => Math.abs(levelId * 3) % GROUND_SPECIES_ROSTER.length
   );
 
-  useEffect(() => {
-    const rotInterval = setInterval(() => {
-      setSpeciesIdx((prev) => (prev + 1) % GROUND_SPECIES_ROSTER.length);
-    }, 26000);
-    return () => clearInterval(rotInterval);
-  }, []);
-
   const currentSpecies = GROUND_SPECIES_ROSTER[speciesIdx % GROUND_SPECIES_ROSTER.length];
 
-  // Wandering Ground Fauna State (Only 1 ground animal on screen at a time)
-  const [groundFauna, setGroundFauna] = useState<GroundFaunaTileState | null>(null);
+  // Pick the active rock hideout (fallback to tree if no rock)
+  const activeHideout =
+    rocks.length > 0
+      ? rocks[speciesIdx % rocks.length]
+      : trees.length > 0
+      ? trees[speciesIdx % trees.length]
+      : null;
 
+  const hideoutPeekDir: 'left' | 'right' =
+    activeHideout?.c === 0 ? 'right' : activeHideout?.c === size - 1 ? 'left' : 'left';
+
+  // Ground Fauna & Rock State
+  const [groundFauna, setGroundFauna] = useState<GroundFaunaTileState | null>(null);
+  const [isFaunaRoaming, setIsFaunaRoaming] = useState(false);
+  const [wanderCount, setWanderCount] = useState(0);
+
+  // Peeking rock animal is visible when the animal is still at its hideout and hasn't emerged yet
+  const peekingRockAnimal: PeekingRockAnimalState | null =
+    activeHideout && rocks.length > 0 && !isFaunaRoaming
+      ? {
+          r: activeHideout.r,
+          c: activeHideout.c,
+          species: currentSpecies,
+          peekDir: hideoutPeekDir
+        }
+      : null;
+
+  // Emergence & Lifecycle Controller
   useEffect(() => {
+    // If no grass on board, animal rests/peeks behind the rock
     if (markedGrass.length === 0) {
       setGroundFauna(null);
+      setIsFaunaRoaming(false);
+      setWanderCount(0);
       return;
     }
 
-    setGroundFauna((prev) => {
-      if (prev && markedGrass.some((g) => g.r === prev.r && g.c === prev.c)) {
-        return { ...prev, species: currentSpecies };
+    // If already roaming, verify current position is still valid grass
+    if (isFaunaRoaming && groundFauna) {
+      const isValid = markedGrass.some((g) => g.r === groundFauna.r && g.c === groundFauna.c);
+      if (!isValid) {
+        // Current cell was un-marked, gracefully retire and restart from rock
+        setGroundFauna(null);
+        setIsFaunaRoaming(false);
+        setWanderCount(0);
       }
-      const initial = markedGrass[(levelId * 5) % markedGrass.length];
-      return {
-        species: currentSpecies,
-        r: initial.r,
-        c: initial.c,
-        isWalking: false,
-        facingLeft: false
-      };
-    });
+      return;
+    }
+
+    // If not roaming yet, schedule emergence from behind the rock!
+    const emergeTimer = setTimeout(() => {
+      // Find marked grass adjacent to hideout
+      const adjGrass = activeHideout
+        ? markedGrass.filter(
+            (g) => Math.abs(g.r - activeHideout.r) + Math.abs(g.c - activeHideout.c) === 1
+          )
+        : [];
+
+      if (adjGrass.length > 0 && activeHideout) {
+        // Step out directly from behind the rock onto adjacent grass
+        const target = adjGrass[0];
+        const facingLeft = target.c < activeHideout.c;
+        setGroundFauna({
+          species: currentSpecies,
+          r: target.r,
+          c: target.c,
+          isWalking: true,
+          facingLeft,
+          fromDelta: { dx: activeHideout.c - target.c, dy: activeHideout.r - target.r }
+        });
+        setIsFaunaRoaming(true);
+        setWanderCount(0);
+
+        // After walking out of rock (1.5s), settle on grass
+        setTimeout(() => {
+          setGroundFauna((curr) => (curr ? { ...curr, isWalking: false } : null));
+        }, 1500);
+      } else {
+        // No adjacent grass to rock: emerge on nearest grass with a soft fade-in
+        const initial = markedGrass[(levelId * 5) % markedGrass.length];
+        setGroundFauna({
+          species: currentSpecies,
+          r: initial.r,
+          c: initial.c,
+          isWalking: false,
+          facingLeft: false,
+          isSpawning: true
+        });
+        setIsFaunaRoaming(true);
+        setWanderCount(0);
+      }
+    }, 2800); // Peeks behind rock for 2.8s, then emerges into the village
+
+    return () => clearTimeout(emergeTimer);
+  }, [markedGrass.length, isFaunaRoaming, currentSpecies, activeHideout]);
+
+  // Wandering Interval (Only active while roaming on grass)
+  useEffect(() => {
+    if (!isFaunaRoaming || !groundFauna) return;
 
     const wanderInterval = setInterval(() => {
-      setGroundFauna((curr) => {
-        if (!curr) return null;
-        // Find adjacent marked grass cells
-        const neighbors = [
-          { r: curr.r - 1, c: curr.c, dx: 0, dy: 1 },
-          { r: curr.r + 1, c: curr.c, dx: 0, dy: -1 },
-          { r: curr.r, c: curr.c - 1, dx: 1, dy: 0 },
-          { r: curr.r, c: curr.c + 1, dx: -1, dy: 0 }
-        ].filter((n) => markedGrass.some((g) => g.r === n.r && g.c === n.c));
+      setWanderCount((count) => {
+        // After 4 wander steps (~24s on meadow), retire back to hideout and cycle species
+        if (count >= 4) {
+          // Retire with soft fade-out
+          setGroundFauna((curr) => (curr ? { ...curr, isRetiring: true } : null));
 
-        if (neighbors.length > 0) {
-          const next = neighbors[Math.floor(Math.random() * neighbors.length)];
-          const facingLeft = next.c < curr.c ? true : next.c > curr.c ? false : curr.facingLeft;
-          return {
-            species: currentSpecies,
-            r: next.r,
-            c: next.c,
-            isWalking: true,
-            facingLeft,
-            fromDelta: { dx: curr.c - next.c, dy: curr.r - next.r }
-          };
-        } else {
-          // Single cell: turn around and stand/peck in place
-          return {
-            ...curr,
-            species: currentSpecies,
-            isWalking: false,
-            facingLeft: !curr.facingLeft,
-            fromDelta: undefined
-          };
+          setTimeout(() => {
+            setGroundFauna(null);
+            setIsFaunaRoaming(false);
+            setSpeciesIdx((prev) => (prev + 1) % GROUND_SPECIES_ROSTER.length);
+          }, 800);
+
+          return 0;
         }
-      });
 
-      // Stop walking after walk animation (1.5s)
-      setTimeout(() => {
-        setGroundFauna((curr) => (curr ? { ...curr, isWalking: false } : null));
-      }, 1500);
+        // Wander to adjacent marked grass cell
+        setGroundFauna((curr) => {
+          if (!curr) return null;
+          const neighbors = [
+            { r: curr.r - 1, c: curr.c, dx: 0, dy: 1 },
+            { r: curr.r + 1, c: curr.c, dx: 0, dy: -1 },
+            { r: curr.r, c: curr.c - 1, dx: 1, dy: 0 },
+            { r: curr.r, c: curr.c + 1, dx: -1, dy: 0 }
+          ].filter((n) => markedGrass.some((g) => g.r === n.r && g.c === n.c));
+
+          if (neighbors.length > 0) {
+            const next = neighbors[Math.floor(Math.random() * neighbors.length)];
+            const facingLeft = next.c < curr.c ? true : next.c > curr.c ? false : curr.facingLeft;
+            return {
+              species: currentSpecies,
+              r: next.r,
+              c: next.c,
+              isWalking: true,
+              facingLeft,
+              fromDelta: { dx: curr.c - next.c, dy: curr.r - next.r }
+            };
+          } else {
+            // Single cell: turn around and stand/peck in place
+            return {
+              ...curr,
+              species: currentSpecies,
+              isWalking: false,
+              facingLeft: !curr.facingLeft,
+              fromDelta: undefined
+            };
+          }
+        });
+
+        // Stop walking after walk animation (1.5s)
+        setTimeout(() => {
+          setGroundFauna((curr) => (curr ? { ...curr, isWalking: false, isSpawning: false } : null));
+        }, 1500);
+
+        return count + 1;
+      });
     }, 5800);
 
     return () => clearInterval(wanderInterval);
-  }, [markedGrass.length, levelId, currentSpecies]);
+  }, [isFaunaRoaming, currentSpecies, markedGrass]);
 
   // 4. Flying Butterfly State
   const [butterfly, setButterfly] = useState<ButterflyTileState | null>(null);
@@ -288,6 +391,7 @@ export function useFaunaManager(
 
   return {
     bunnyTree,
+    peekingRockAnimal,
     groundFauna,
     chicken: groundFauna,
     butterfly
@@ -329,25 +433,52 @@ const GROUND_FAUNA_IMG: Record<GroundFaunaSpecies, string> = {
   sheep: sheepImg
 };
 
+export const PeekingRockAnimalGraphic: React.FC<{
+  species: GroundFaunaSpecies;
+  peekDir?: 'left' | 'right';
+}> = ({ species, peekDir = 'left' }) => {
+  return (
+    <div className={`rock-peeking-animal fauna-${species} peek-${peekDir}`}>
+      <img
+        src={GROUND_FAUNA_IMG[species]}
+        alt={species}
+        className={`tile-fauna-img fauna-img-${species}`}
+        draggable={false}
+      />
+    </div>
+  );
+};
+
 export const GroundFaunaGraphic: React.FC<{
   species: GroundFaunaSpecies;
   isWalking: boolean;
   facingLeft: boolean;
+  isSpawning?: boolean;
+  isRetiring?: boolean;
   fromDelta?: { dx: number; dy: number };
-}> = ({ species, isWalking, facingLeft, fromDelta }) => {
+}> = ({ species, isWalking, facingLeft, isSpawning = false, isRetiring = false, fromDelta }) => {
   const isPecker = species === 'chicken' || species === 'duck';
-  const animClass = isWalking ? 'is-walking' : isPecker ? 'is-pecking' : 'is-standing';
+  const animClass = isRetiring
+    ? 'is-retiring'
+    : isSpawning
+    ? 'is-spawning'
+    : isWalking
+    ? 'is-walking'
+    : isPecker
+    ? 'is-pecking'
+    : 'is-standing';
+
   const dx = fromDelta?.dx ?? 0;
   const dy = fromDelta?.dy ?? 0;
 
-  // Crucial: Set the initial transform so the element mounts at its prior location and never jumps
+  // Crucial: Set initial transform so the element mounts at its prior location and never jumps
   const initialTransform = isWalking && fromDelta
     ? `translate(calc(${dx} * var(--tile-size)), calc(${dy} * var(--tile-size))) scaleX(${facingLeft ? -1 : 1})`
     : `translate(0, 0) scaleX(${facingLeft ? -1 : 1})`;
 
   return (
     <div
-      key={`${species}-${dx}-${dy}-${isWalking}`}
+      key={`${species}-${dx}-${dy}-${isWalking}-${isSpawning}-${isRetiring}`}
       className={`tile-fauna-actor fauna-${species} ${animClass}`}
       style={
         {

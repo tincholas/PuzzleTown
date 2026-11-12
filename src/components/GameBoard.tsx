@@ -363,6 +363,19 @@ export const GameBoard: React.FC<GameBoardProps> = ({
                 const bunnyPeekDir =
                   isBunnyTree ? fauna.bunnyTree?.peekDir ?? 'left' : 'left';
 
+                const isRockAnimal =
+                  tile === 'rock' &&
+                  fauna.peekingRockAnimal?.r === r &&
+                  fauna.peekingRockAnimal?.c === c;
+
+                const peekingRockSpecies = isRockAnimal
+                  ? fauna.peekingRockAnimal?.species ?? null
+                  : null;
+
+                const rockPeekDir = isRockAnimal
+                  ? fauna.peekingRockAnimal?.peekDir ?? 'left'
+                  : 'left';
+
                 const tileFlora =
                   tile === 'empty' && isMarkedAllEmpty
                     ? getTileFlora(level.id, r, c)
@@ -413,6 +426,7 @@ export const GameBoard: React.FC<GameBoardProps> = ({
                         ? 'tile-ruled-out-active'
                         : '',
                       isBunnyTree ? 'tile-has-bunny' : '',
+                      isRockAnimal ? 'tile-has-bunny tile-has-rock-animal' : '',
                       tileGroundFauna ? 'tile-has-ground-fauna tile-has-chicken' : '',
                       tileButterfly ? 'tile-has-butterfly' : '',
                       r === size - 1 ? 'tile-row-bottom' : '',
@@ -445,6 +459,8 @@ export const GameBoard: React.FC<GameBoardProps> = ({
                       isNewlyBuilt={isNewlyBuilt}
                       hasBunny={isBunnyTree}
                       bunnyPeekDir={bunnyPeekDir}
+                      peekingRockAnimal={peekingRockSpecies}
+                      rockPeekDir={rockPeekDir}
                       floraType={tileFlora}
                       groundFaunaState={tileGroundFauna}
                       chickenState={tileGroundFauna}
