@@ -298,24 +298,13 @@ describe('Multi-Step Hint Structure & Breakdown', () => {
     // After applying Hint 1:
     marks[3][2] = true;
 
-    // Hint 2: (4, 4) cannot hold a building
+    // Hint 2: Now (2, 4) is the only remaining valid spot on the entire board for Town Hall!
     const hint2 = getNextHint(grid, marks, level75);
     expect(hint2).not.toBeNull();
-    expect(hint2?.ruleName).toBe('Cannot Hold Building');
-    expect(hint2?.action).toBe('mark_empty');
+    expect(hint2?.ruleName).toBe('Only Remaining Spot');
+    expect(hint2?.action).toBe('place');
     expect(hint2?.r).toBe(3);
-    expect(hint2?.c).toBe(3);
-
-    // After applying Hint 2:
-    marks[3][3] = true;
-
-    // Hint 3: (2, 4) is the only open spot in Row 4 that can hold a building!
-    const hint3 = getNextHint(grid, marks, level75);
-    expect(hint3).not.toBeNull();
-    expect(hint3?.ruleName).toBe('Only Town Hall Fits');
-    expect(hint3?.action).toBe('place');
-    expect(hint3?.r).toBe(3);
-    expect(hint3?.c).toBe(1);
+    expect(hint2?.c).toBe(1);
   });
 
   it('inspects Level 75 screenshot 2 (Column Clue Complete then Only House Fits at 4,6)', () => {
@@ -575,23 +564,39 @@ describe('Multi-Step Hint Structure & Breakdown', () => {
     marks[5][1] = true;
     marks[5][5] = true;
 
-    const hint = getNextHint(grid, marks, level80);
-    expect(hint).not.toBeNull();
-    expect(hint?.action).toBe('place');
-    expect(hint?.r).toBe(0);
-    expect(hint?.c).toBe(3); // (4, 1)
+    // First hint prioritizes marking (3, 1) as clear ground since no buildings fit there:
+    const hint1 = getNextHint(grid, marks, level80);
+    expect(hint1).not.toBeNull();
+    expect(hint1?.action).toBe('mark_empty');
+    expect(hint1?.ruleName).toBe('No Buildings Fit');
+    expect(hint1?.r).toBe(0);
+    expect(hint1?.c).toBe(2); // (3, 1)
+
+    // After player marks (3, 1) and (5, 1) as clear ground:
+    marks[0][2] = true;
+    marks[0][4] = true;
+
+    // Next hint places Town Hall at (4, 1) directly via Row 1 quota, with NO Column 1 crosstalk:
+    const hintPlace = getNextHint(grid, marks, level80);
+    expect(hintPlace).not.toBeNull();
+    expect(hintPlace?.action).toBe('place');
+    expect(hintPlace?.r).toBe(0);
+    expect(hintPlace?.c).toBe(3); // (4, 1)
+    expect(hintPlace?.ruleName).toBe('Only Town Hall Fits');
 
     // Verify hint does NOT hallucinate Column 1 as the line for (4, 1)
-    for (const step of hint!.steps!) {
-      expect(step.message).not.toContain('Column 1 needs 2 building(s) and only');
-      expect(step.message).not.toContain('(1, 5) cannot hold a building');
+    for (const step of hintPlace!.steps!) {
+      expect(step.message).not.toContain('Column 1');
+      expect(step.message).not.toContain('(1, 5)');
       if (step.highlightLine) {
         expect(step.highlightLine.axis).toBe('row');
         expect(step.highlightLine.index).toBe(0);
       }
     }
 
-    // Step 1 must have explicit conditionality
-    expect(hint!.steps![0].message).toContain('If (4, 1) were empty');
+    // Step 1 states the clean direct premise:
+    expect(hintPlace!.steps![0].message).toBe(
+      '(4, 1) must contain a building (Row 1 needs 1 building, and (4, 1) is its only valid spot).'
+    );
   });
 });

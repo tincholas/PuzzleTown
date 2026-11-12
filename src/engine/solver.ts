@@ -35,7 +35,8 @@ function xy(r: number, c: number): string {
 
 function createInitialDomains(
   level: LevelDefinition,
-  currentGrid?: TileType[][]
+  currentGrid?: TileType[][],
+  playerMarks?: boolean[][]
 ): Set<TileType>[][] {
   const size = level.size;
   const activePlaceables = PLACEABLE_TYPES.filter(
@@ -50,6 +51,13 @@ function createInitialDomains(
       }
       if (currentGrid && currentGrid[r][c] !== 'empty') {
         return new Set<TileType>([currentGrid[r][c]]);
+      }
+      if (playerMarks && playerMarks[r][c]) {
+        // Player marked this cell as clear ground (Grass).
+        // No buildings can be placed here! Roads can still pass through if road inventory > 0.
+        const nonBuildings: TileType[] = ['empty'];
+        if (level.inventory.road > 0) nonBuildings.push('road');
+        return new Set<TileType>(nonBuildings);
       }
       return new Set<TileType>(['empty', ...activePlaceables]);
     })
@@ -394,7 +402,7 @@ export function solveByDeduction(
   playerMarks?: boolean[][]
 ): DeductionResult {
   const size = level.size;
-  const domains = createInitialDomains(level, startingGrid);
+  const domains = createInitialDomains(level, startingGrid, playerMarks);
   const steps: DeductionHint[] = [];
   let lookaheadCount = 0;
   const hasTownHall = level.inventory.town_hall > 0;
@@ -416,6 +424,18 @@ export function solveByDeduction(
       cellElimReasons[key][eliminatedType] = reason;
     }
   };
+
+  if (playerMarks) {
+    for (let r = 0; r < size; r++) {
+      for (let c = 0; c < size; c++) {
+        if (playerMarks[r][c]) {
+          for (const b of BUILDING_TYPES) {
+            recordElimReason(r, c, b, 'marked as clear ground');
+          }
+        }
+      }
+    }
+  }
 
   /**
    * Summarizes why other currently-empty neighbors of (centerR, centerC) cannot hold `targetType`.
@@ -2093,6 +2113,58 @@ export function solveByDeduction(
       }
     }
 
+    // --- RULE 7.5: Mark Cells Where No Buildings Fit ---
+    // Before falling back to multi-step proof-by-contradiction lookahead,
+    // check if any unplaced, unmarked cells have had all village building types eliminated.
+    // If so, prompt the player to mark that cell as clear ground (Grass),
+    // which simplifies the board and often reveals direct line-filling placements naturally!
+    if (!progress) {
+      for (let r = 0; r < size; r++) {
+        for (let c = 0; c < size; c++) {
+          const cellKey = `${r},${c}`;
+          const isObstacle = isFixedObstacle(level.initialGrid[r][c]);
+          const isPlaced = startingGrid && startingGrid[r][c] !== 'empty';
+          const isMarked = playerMarks && playerMarks[r][c];
+          if (!isObstacle && !isPlaced && !isMarked && !recordedDisqualifiedCells.has(cellKey)) {
+            if (!canBeAnyBuilding(domains[r][c])) {
+              recordedDisqualifiedCells.add(cellKey);
+              const reasons = cellElimReasons[cellKey] ?? {};
+              const points = getDetailedCellDisqualificationPoints(r, c, reasons, level);
+              const ruleName = 'No Buildings Fit';
+              const explanation = `No village buildings can be placed at ${xy(r, c)} (${points.join('; ')}), so this space must be marked as clear ground (Grass).`;
+
+              steps.push({
+                r,
+                c,
+                action: 'mark_empty',
+                ruleName,
+                explanation,
+                steps: [
+                  {
+                    title: 'No Buildings Fit',
+                    message:
+                      `No village buildings can be placed at ${xy(r, c)}:\n` +
+                      points.map((p) => `• ${p}`).join('\n'),
+                    focusCells: [{ r, c }],
+                    candidateCells: [{ r, c }],
+                    discardedCells: [{ r, c }]
+                  },
+                  {
+                    title: 'Mark as Clear Ground',
+                    message: `Since no buildings can fit at ${xy(r, c)}, this space must be marked as clear ground (Grass).`,
+                    targetCell: { r, c }
+                  }
+                ]
+              });
+              progress = true;
+              break;
+            }
+          }
+        }
+        if (progress) break;
+      }
+    }
+
     // --- RULE 8: Specific Contradiction Lookahead ---
     if (!progress) {
       outerLookahead: for (let r = 0; r < size; r++) {
@@ -2684,6 +2756,25 @@ export function getNextHint(
               title: 'Check Placement',
               message: msg,
               discardedCells: [{ r, c }],
+              targetCell: { r, c }
+            }
+          ]
+        };
+      }
+
+      if (playerMarks[r][c] && isBuilding(level.solution[r][c])) {
+        const msg = `${xy(r, c)} is marked as clear ground, but a building belongs here — try unmarking it!`;
+        return {
+          r,
+          c,
+          action: 'mark_empty',
+          ruleName: 'Check Mark',
+          explanation: msg,
+          steps: [
+            {
+              title: 'Check Mark',
+              message: msg,
+              focusCells: [{ r, c }],
               targetCell: { r, c }
             }
           ]
