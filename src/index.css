@@ -598,9 +598,8 @@ body,
   100% { transform: scale(1); }
 }
 
-/* Bottom edge of board tiles & bottom row clue cast downward drop shadow */
-.board-tile.tile-row-bottom,
-.clue-badge.row-clue-bottom {
+/* Bottom edge of board tiles cast downward drop shadow */
+.board-tile.tile-row-bottom {
   box-shadow:
     inset 0 1.5px 0.8px rgba(255, 255, 255, 0.45),
     inset 1px 0 0.5px rgba(255, 255, 255, 0.25),

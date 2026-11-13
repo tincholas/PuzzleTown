@@ -259,7 +259,7 @@ export const GameBoard: React.FC<GameBoardProps> = ({
             <React.Fragment key={`row-${r}`}>
               <button
                 type="button"
-                className={`clue-badge row-clue status-${rowStatus} ${rowRemaining === 0 ? 'clue-zero' : ''} ${isRowAnimating ? 'clue-animating' : ''} ${isRowHinted ? 'clue-hint-highlight' : ''} ${r === size - 1 ? 'row-clue-bottom' : ''}`}
+                className={`clue-badge row-clue status-${rowStatus} ${rowRemaining === 0 ? 'clue-zero' : ''} ${isRowAnimating ? 'clue-animating' : ''} ${isRowHinted ? 'clue-hint-highlight' : ''}`}
                 onClick={() => onLineClueClick('row', r)}
                 title={
                   rowRemaining === 0
