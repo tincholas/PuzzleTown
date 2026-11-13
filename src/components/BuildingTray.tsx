@@ -41,8 +41,9 @@ export const BuildingTray: React.FC<BuildingTrayProps> = ({
 
   const handleCardTap = (type: PlaceableType) => {
     if (type === 'road') {
-      onSelectTool('road');
-      onToggleActionMode('build');
+      if (activeTool !== 'road') {
+        onSelectTool('road');
+      }
       return;
     }
     if (activeTool === type) {

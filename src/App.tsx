@@ -1282,7 +1282,12 @@ export const App: React.FC = () => {
             setActionMode('build');
           }
         }}
-        onToggleActionMode={setActionMode}
+        onToggleActionMode={(mode) => {
+          if (mode !== actionMode) {
+            playSelectToolSound();
+          }
+          setActionMode(mode);
+        }}
       />
 
       {/* Victory Overlay */}
