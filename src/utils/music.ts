@@ -4,12 +4,16 @@
 // A handcrafted, procedural acoustic ensemble evocative of a sunny afternoon
 // in a quaint medieval village. Lilting 6/8 folk meter (94 BPM) in G Major.
 //
+// Structured as authentic 8-bar musical strophes (A-Section Village Theme,
+// B-Section Orchard Walk, C-Section Folk Fair Modal Variation) with clear
+// antecedent/consequent phrasing, call-and-response, and dynamic breathing room.
+//
 // Instrumentation:
-//  - Plucked Strings (Celtic Harp / Dulcimer) — Main lyrical melodic voice
-//  - Wooden Flute (Breathy Recorder / Pipe) — Occasional call-and-response flourishes
-//  - Pizzicato Strings — Gentle rhythmic 6/8 arpeggio accompaniment
-//  - Warm Acoustic Bass — Root & fifth acoustic bass foundation
-//  - Bells & Wooden Chimes — Soft, sparse cadence accents
+//  - Plucked Celtic Harp / Dulcimer (warm, rounded melodic lead)
+//  - Wooden Flute / Recorder (breathy, sweet melodic responses and counterpoint)
+//  - Pizzicato Strings (gentle rhythmic 6/8 arpeggio accompaniment)
+//  - Warm Acoustic Bass (root and fifth acoustic foundation)
+//  - Bells & Wooden Chimes (soft, sparkling cadence accents)
 // ===========================================================================
 
 import { getAudioContext } from './sound';
@@ -51,7 +55,7 @@ export function setMusicEnabled(enabled: boolean) {
 // Pitch Frequency Table (G Major / Folk Modal Scale)
 // ---------------------------------------------------------------------------
 const NOTE_FREQS: Record<string, number> = {
-  // Octave 2 (Bass)
+  // Octave 2 (Bass roots)
   E2: 82.41,
   F2: 87.31,
   Fs2: 92.5,
@@ -59,7 +63,7 @@ const NOTE_FREQS: Record<string, number> = {
   A2: 110.0,
   B2: 123.47,
 
-  // Octave 3 (Tenor & Bass Fifths)
+  // Octave 3 (Bass fifths & low chord notes)
   C3: 130.81,
   D3: 146.83,
   E3: 164.81,
@@ -69,7 +73,7 @@ const NOTE_FREQS: Record<string, number> = {
   A3: 220.0,
   B3: 246.94,
 
-  // Octave 4 (Melody & Pizzicato Accompaniment)
+  // Octave 4 (Melody & Pizzicato accompaniment)
   C4: 261.63,
   D4: 293.66,
   E4: 329.63,
@@ -79,7 +83,7 @@ const NOTE_FREQS: Record<string, number> = {
   A4: 440.0,
   B4: 493.88,
 
-  // Octave 5 (Harp Highs & Flute)
+  // Octave 5 (High harp & wooden flute)
   C5: 523.25,
   D5: 587.33,
   E5: 659.25,
@@ -89,7 +93,7 @@ const NOTE_FREQS: Record<string, number> = {
   A5: 880.0,
   B5: 987.77,
 
-  // Octave 6 (Bells & Chimes)
+  // Octave 6 (Sparkling bells & chimes)
   C6: 1046.5,
   D6: 1174.66,
   E6: 1318.51,
@@ -97,18 +101,20 @@ const NOTE_FREQS: Record<string, number> = {
 };
 
 // ---------------------------------------------------------------------------
-// 6/8 Timing Grid (Compound Duple Folk Dance Meter)
+// 6/8 Folk Meter Grid (Compound Duple lilting meter at 94 BPM)
 // ---------------------------------------------------------------------------
-// 94 BPM (dotted-quarter beats per minute)
 // 1 measure = 2 dotted-quarter beats = 6 eighth-note steps (steps 0, 1, 2, 3, 4, 5)
+// Beat 1: step 0 (downbeat)
+// Beat 2: step 3 (mid-measure lilt)
 // ---------------------------------------------------------------------------
 const TEMPO = 94;
 const BEAT_DURATION = 60 / TEMPO; // ~0.638s per dotted-quarter beat
-const STEP_DURATION = BEAT_DURATION / 3; // ~0.213s per 8th note step
+const STEP_DURATION = BEAT_DURATION / 3; // ~0.213s per eighth note step
 const MEASURE_DURATION = STEP_DURATION * 6; // ~1.277s per 6/8 measure
+const EIGHT_BAR_DURATION = MEASURE_DURATION * 8; // ~10.213s per 8-measure strophe
 
 // ---------------------------------------------------------------------------
-// Audio Routing & Bus Effects (Stereo Panning, Lowpass, Acoustic Room Delay)
+// Audio Graph & Routing
 // ---------------------------------------------------------------------------
 let isPlaying = false;
 let masterMusicGain: GainNode | null = null;
@@ -117,13 +123,13 @@ let delayNode: DelayNode | null = null;
 let delayFeedback: GainNode | null = null;
 let schedulerTimer: number | null = null;
 
-// Panners for organic stereo separation
+// Instrument stereo panners for natural acoustic spread
 let harpPanner: StereoPannerNode | GainNode | null = null;
 let flutePanner: StereoPannerNode | GainNode | null = null;
 let pizzPanner: StereoPannerNode | GainNode | null = null;
 let bellPanner: StereoPannerNode | GainNode | null = null;
 
-// Noise buffer cache for wooden flute breath attacks
+// Breath noise buffer cache for wooden flute attacks
 let breathNoiseBuffer: AudioBuffer | null = null;
 function getBreathNoiseBuffer(ctx: AudioContext): AudioBuffer {
   if (!breathNoiseBuffer || breathNoiseBuffer.sampleRate !== ctx.sampleRate) {
@@ -150,17 +156,17 @@ function createPanner(ctx: AudioContext, pan: number): StereoPannerNode | GainNo
 function initAudioGraph(ctx: AudioContext) {
   if (masterMusicGain) return;
 
-  // Master Gain Node (fades in to ~0.08)
+  // Master Gain Node
   masterMusicGain = ctx.createGain();
   masterMusicGain.gain.setValueAtTime(0.0001, ctx.currentTime);
 
-  // Warm Acoustic Master Lowpass Filter (rolls off harsh highs above 2600Hz)
+  // Warm master lowpass filter (rolls off digital harshness above 2600Hz)
   masterFilter = ctx.createBiquadFilter();
   masterFilter.type = 'lowpass';
   masterFilter.frequency.setValueAtTime(2600, ctx.currentTime);
   masterFilter.Q.setValueAtTime(0.8, ctx.currentTime);
 
-  // Subtle acoustic room delay (delay: 0.22s, gentle feedback: 0.15)
+  // Gentle acoustic room delay (delay: 0.22s, feedback: 0.15)
   delayNode = ctx.createDelay();
   delayNode.delayTime.setValueAtTime(0.22, ctx.currentTime);
 
@@ -170,7 +176,7 @@ function initAudioGraph(ctx: AudioContext) {
   const delayWet = ctx.createGain();
   delayWet.gain.setValueAtTime(0.12, ctx.currentTime);
 
-  // Connect Delay Network
+  // Delay network routing
   masterFilter.connect(delayNode);
   delayNode.connect(delayFeedback);
   delayFeedback.connect(delayNode);
@@ -180,27 +186,27 @@ function initAudioGraph(ctx: AudioContext) {
   masterFilter.connect(masterMusicGain);
   masterMusicGain.connect(ctx.destination);
 
-  // Individual instrument stereo panners
-  harpPanner = createPanner(ctx, -0.2); // Harp panned slightly left
+  // Stereo placement for acoustic ensemble
+  harpPanner = createPanner(ctx, -0.22); // Harp slightly to the left
   harpPanner.connect(masterFilter);
 
-  flutePanner = createPanner(ctx, 0.22); // Flute panned slightly right
+  flutePanner = createPanner(ctx, 0.24); // Flute slightly to the right
   flutePanner.connect(masterFilter);
 
-  pizzPanner = createPanner(ctx, -0.1); // Pizzicato center-left
+  pizzPanner = createPanner(ctx, -0.1); // Pizzicato strings center-left
   pizzPanner.connect(masterFilter);
 
-  bellPanner = createPanner(ctx, 0.15); // Bells center-right
+  bellPanner = createPanner(ctx, 0.18); // Bells center-right
   bellPanner.connect(masterFilter);
 }
 
 // ---------------------------------------------------------------------------
-// Procedurally Synthesized Acoustic Instruments
+// Procedurally Synthesized Instruments
 // ---------------------------------------------------------------------------
 
 /**
  * A. Plucked Celtic Harp / Dulcimer (Main Melodic Voice)
- * Warm, rounded attack, natural acoustic decay, sine/triangle harmonics.
+ * Warm, rounded attack, natural acoustic decay, rich harmonic overtone blend.
  */
 function scheduleHarpNote(
   ctx: AudioContext,
@@ -220,19 +226,19 @@ function scheduleHarpNote(
   osc1.type = 'triangle';
   osc1.frequency.setValueAtTime(freq, time);
 
-  // 2. Octave overtone (plucked string ring)
+  // 2. Octave overtone (plucked string bloom)
   const osc2 = ctx.createOscillator();
   const gain2 = ctx.createGain();
   osc2.type = 'sine';
   osc2.frequency.setValueAtTime(freq * 2, time);
 
-  // 3. Subtle 3rd harmonic (string warmth)
+  // 3. 3rd harmonic (string warmth)
   const osc3 = ctx.createOscillator();
   const gain3 = ctx.createGain();
   osc3.type = 'sine';
   osc3.frequency.setValueAtTime(freq * 3, time);
 
-  // Plucked envelope: 4ms attack, natural resonant decay
+  // Plucked envelope: 5ms attack, natural resonant decay
   const peak = 0.14 * vol;
   gain1.gain.setValueAtTime(0.0001, time);
   gain1.gain.linearRampToValueAtTime(peak, time + 0.005);
@@ -263,8 +269,8 @@ function scheduleHarpNote(
 }
 
 /**
- * B. Wooden Flute / Recorder (Melodic Responses & Flourishes)
- * Breathy, soft wooden tone, natural vibrato fading in after 80ms.
+ * B. Wooden Flute / Recorder (Sweet Melodic Responses & Counterpoint)
+ * Soft attack, natural cylindrical wood resonance, gentle 5.2Hz vibrato.
  */
 function scheduleFluteNote(
   ctx: AudioContext,
@@ -278,54 +284,53 @@ function scheduleFluteNote(
 
   const duration = durationSteps * STEP_DURATION;
 
-  // 1. Primary breathy sine fundamental
+  // 1. Primary breathy fundamental
   const osc1 = ctx.createOscillator();
   const gain1 = ctx.createGain();
   osc1.type = 'sine';
   osc1.frequency.setValueAtTime(freq, time);
 
-  // 2. Soft 3rd harmonic (cylindrical wooden bore resonance)
+  // 2. Wooden resonance 3rd harmonic
   const osc2 = ctx.createOscillator();
   const gain2 = ctx.createGain();
   osc2.type = 'triangle';
   osc2.frequency.setValueAtTime(freq * 3, time);
 
-  // 3. Natural vibrato LFO (5.2 Hz gentle waver starting after 70ms)
+  // 3. Gentle vibrato LFO (5.2Hz, begins after 70ms)
   const lfo = ctx.createOscillator();
   const lfoGain = ctx.createGain();
   lfo.frequency.setValueAtTime(5.2, time);
   lfoGain.gain.setValueAtTime(0.0, time);
-  lfoGain.gain.linearRampToValueAtTime(freq * 0.012, time + 0.12); // subtle 1.2% vibrato
+  lfoGain.gain.linearRampToValueAtTime(freq * 0.012, time + 0.12);
   lfo.connect(lfoGain);
   lfoGain.connect(osc1.frequency);
 
-  // 4. Breath noise puff on attack
-  const noise = getBreathNoiseBuffer(ctx);
-  const noiseSrc = ctx.createBufferSource();
-  noiseSrc.buffer = noise;
+  // 4. Soft breath attack puff
+  const noiseSource = ctx.createBufferSource();
+  noiseSource.buffer = getBreathNoiseBuffer(ctx);
   const noiseFilter = ctx.createBiquadFilter();
   noiseFilter.type = 'bandpass';
-  noiseFilter.frequency.setValueAtTime(freq * 1.4, time);
-  noiseFilter.Q.setValueAtTime(2.5, time);
+  noiseFilter.frequency.setValueAtTime(freq * 1.5, time);
+  noiseFilter.Q.setValueAtTime(3.0, time);
+
   const noiseGain = ctx.createGain();
-  noiseGain.gain.setValueAtTime(0.0001, time);
-  noiseGain.gain.linearRampToValueAtTime(0.025 * vol, time + 0.02);
+  noiseGain.gain.setValueAtTime(0.025 * vol, time);
   noiseGain.gain.exponentialRampToValueAtTime(0.0001, time + 0.07);
 
-  noiseSrc.connect(noiseFilter);
+  noiseSource.connect(noiseFilter);
   noiseFilter.connect(noiseGain);
   noiseGain.connect(flutePanner);
 
-  // Flute envelope: Soft 25ms attack, smooth breath release
-  const peak = 0.11 * vol;
+  // Note envelope: smooth 25ms attack, gentle release
+  const peak = 0.12 * vol;
   gain1.gain.setValueAtTime(0.0001, time);
   gain1.gain.linearRampToValueAtTime(peak, time + 0.025);
-  gain1.gain.setValueAtTime(peak, time + duration * 0.7);
-  gain1.gain.exponentialRampToValueAtTime(0.0001, time + duration + 0.05);
+  gain1.gain.setValueAtTime(peak * 0.85, time + duration * 0.7);
+  gain1.gain.exponentialRampToValueAtTime(0.0001, time + duration + 0.06);
 
   gain2.gain.setValueAtTime(0.0001, time);
-  gain2.gain.linearRampToValueAtTime(peak * 0.14, time + 0.025);
-  gain2.gain.exponentialRampToValueAtTime(0.0001, time + duration * 0.8);
+  gain2.gain.linearRampToValueAtTime(peak * 0.18, time + 0.03);
+  gain2.gain.exponentialRampToValueAtTime(0.0001, time + duration * 0.6);
 
   osc1.connect(gain1);
   osc2.connect(gain2);
@@ -335,68 +340,74 @@ function scheduleFluteNote(
   osc1.start(time);
   osc2.start(time);
   lfo.start(time);
-  noiseSrc.start(time);
+  noiseSource.start(time);
 
-  osc1.stop(time + duration + 0.06);
-  osc2.stop(time + duration + 0.06);
-  lfo.stop(time + duration + 0.06);
-  noiseSrc.stop(time + 0.08);
+  const stopTime = time + duration + 0.08;
+  osc1.stop(stopTime);
+  osc2.stop(stopTime);
+  lfo.stop(stopTime);
+  noiseSource.stop(time + 0.08);
 }
 
 /**
- * C. Pizzicato Strings (Rhythmic Folk Accompaniment)
- * Damped plucked triangle wave with lowpass filtering.
+ * C. Pizzicato Strings (Gentle Rhythmic 6/8 Accompaniment)
+ * Snappy pluck with fast-closing lowpass filter.
  */
 function schedulePizzicatoNote(
   ctx: AudioContext,
   noteName: string,
   time: number,
-  vol = 0.6
+  vol = 0.55
 ) {
   const freq = NOTE_FREQS[noteName];
   if (!freq || !pizzPanner) return;
 
   const osc = ctx.createOscillator();
   const gain = ctx.createGain();
+  const filter = ctx.createBiquadFilter();
+
   osc.type = 'triangle';
   osc.frequency.setValueAtTime(freq, time);
 
-  // Crisp fast pluck attack and short damping (0.24s)
-  const peak = 0.09 * vol;
+  filter.type = 'lowpass';
+  filter.frequency.setValueAtTime(1800, time);
+  filter.frequency.exponentialRampToValueAtTime(280, time + 0.18);
+
+  const peak = 0.1 * vol;
   gain.gain.setValueAtTime(0.0001, time);
   gain.gain.linearRampToValueAtTime(peak, time + 0.004);
-  gain.gain.exponentialRampToValueAtTime(0.0001, time + 0.24);
+  gain.gain.exponentialRampToValueAtTime(0.0001, time + 0.28);
 
-  osc.connect(gain);
+  osc.connect(filter);
+  filter.connect(gain);
   gain.connect(pizzPanner);
 
   osc.start(time);
-  osc.stop(time + 0.25);
+  osc.stop(time + 0.3);
 }
 
 /**
- * D. Warm Acoustic Bass (Harmonic Anchor)
- * Rounded low-frequency acoustic upright / lute bass.
+ * D. Warm Acoustic Bass (Harmonic Foundation)
+ * Rounded low-frequency acoustic warmth (steps 0 and 3).
  */
 function scheduleAcousticBass(
   ctx: AudioContext,
   noteName: string,
   time: number,
-  durationSteps = 3,
-  vol = 0.85
+  durationSteps: number,
+  vol = 0.8
 ) {
   const freq = NOTE_FREQS[noteName];
   if (!freq || !masterFilter) return;
 
   const duration = durationSteps * STEP_DURATION;
-
   const osc = ctx.createOscillator();
   const gain = ctx.createGain();
-  osc.type = 'sine';
+  const filter = ctx.createBiquadFilter();
+
+  osc.type = 'triangle';
   osc.frequency.setValueAtTime(freq, time);
 
-  // Soft lowpass on bass to keep it warm and grounded
-  const filter = ctx.createBiquadFilter();
   filter.type = 'lowpass';
   filter.frequency.setValueAtTime(320, time);
 
@@ -415,6 +426,7 @@ function scheduleAcousticBass(
 
 /**
  * E. Soft Bells & Wooden Chimes (Sparse Cadence Accents)
+ * Inharmonic shimmering bell partials (1.0, 2.76, 5.40).
  */
 function scheduleBellNote(
   ctx: AudioContext,
@@ -425,7 +437,6 @@ function scheduleBellNote(
   const freq = NOTE_FREQS[noteName];
   if (!freq || !bellPanner) return;
 
-  // Inharmonic bell partials (1.0, 2.76, 5.40)
   [1.0, 2.76, 5.4].forEach((ratio, idx) => {
     const osc = ctx.createOscillator();
     const gain = ctx.createGain();
@@ -447,9 +458,9 @@ function scheduleBellNote(
 }
 
 /**
- * Subtle wooden percussion tap to gently mark 6/8 lilt (step 0 and step 3)
+ * Gentle wooden percussion tap to mark the 6/8 pulse (steps 0 and 3).
  */
-function scheduleWoodClick(ctx: AudioContext, time: number, vol = 0.04) {
+function scheduleWoodClick(ctx: AudioContext, time: number, vol = 0.03) {
   if (!masterFilter) return;
 
   const osc = ctx.createOscillator();
@@ -469,316 +480,367 @@ function scheduleWoodClick(ctx: AudioContext, time: number, vol = 0.04) {
 }
 
 // ---------------------------------------------------------------------------
-// Procedural Composition Architecture
+// Composition Data Architecture (Cohesive 8-Bar Folk Strophes)
 // ---------------------------------------------------------------------------
 
 interface ChordBar {
-  chord: string; // e.g. 'G', 'D', 'Em', 'C', 'F', 'Am'
-  bassRoot: string; // e.g. 'G2'
-  bassFifth: string; // e.g. 'D3'
-  pizzNotes: [string, string, string]; // Triad accompaniment (e.g. ['G3', 'B3', 'D4'])
+  chord: string;
+  bassRoot: string;
+  bassFifth: string;
+  pizzNotes: [string, string, string];
 }
-
-interface ProgressionScheme {
-  name: string;
-  bars: ChordBar[];
-}
-
-// 5 Compatible Harmonic Progressions in G Major with Folk Modal Color
-const PROGRESSIONS: ProgressionScheme[] = [
-  // 1. The Village Green (I – V – vi – IV)
-  {
-    name: 'Village Green',
-    bars: [
-      { chord: 'G', bassRoot: 'G2', bassFifth: 'D3', pizzNotes: ['G3', 'B3', 'D4'] },
-      { chord: 'D', bassRoot: 'D3', bassFifth: 'A3', pizzNotes: ['Fs3', 'A3', 'D4'] },
-      { chord: 'Em', bassRoot: 'E2', bassFifth: 'B2', pizzNotes: ['G3', 'B3', 'E4'] },
-      { chord: 'C', bassRoot: 'C3', bassFifth: 'G3', pizzNotes: ['E3', 'G3', 'C4'] }
-    ]
-  },
-  // 2. Sunny Orchard (I – IV – V – I)
-  {
-    name: 'Sunny Orchard',
-    bars: [
-      { chord: 'G', bassRoot: 'G2', bassFifth: 'D3', pizzNotes: ['G3', 'B3', 'D4'] },
-      { chord: 'C', bassRoot: 'C3', bassFifth: 'G3', pizzNotes: ['E3', 'G3', 'C4'] },
-      { chord: 'D', bassRoot: 'D3', bassFifth: 'A3', pizzNotes: ['Fs3', 'A3', 'D4'] },
-      { chord: 'G', bassRoot: 'G2', bassFifth: 'D3', pizzNotes: ['G3', 'B3', 'D4'] }
-    ]
-  },
-  // 3. Meadow Twilight (vi – IV – I – V)
-  {
-    name: 'Meadow Twilight',
-    bars: [
-      { chord: 'Em', bassRoot: 'E2', bassFifth: 'B2', pizzNotes: ['G3', 'B3', 'E4'] },
-      { chord: 'C', bassRoot: 'C3', bassFifth: 'G3', pizzNotes: ['E3', 'G3', 'C4'] },
-      { chord: 'G', bassRoot: 'G2', bassFifth: 'D3', pizzNotes: ['G3', 'B3', 'D4'] },
-      { chord: 'D', bassRoot: 'D3', bassFifth: 'A3', pizzNotes: ['Fs3', 'A3', 'D4'] }
-    ]
-  },
-  // 4. Folk Fair (I – ♭VII – IV – I, Mixolydian Countryside Warmth!)
-  {
-    name: 'Folk Fair',
-    bars: [
-      { chord: 'G', bassRoot: 'G2', bassFifth: 'D3', pizzNotes: ['G3', 'B3', 'D4'] },
-      { chord: 'F', bassRoot: 'F2', bassFifth: 'C3', pizzNotes: ['F3', 'A3', 'C4'] },
-      { chord: 'C', bassRoot: 'C3', bassFifth: 'G3', pizzNotes: ['E3', 'G3', 'C4'] },
-      { chord: 'G', bassRoot: 'G2', bassFifth: 'D3', pizzNotes: ['G3', 'B3', 'D4'] }
-    ]
-  },
-  // 5. Cozy Hearth (I – vi – ii – V)
-  {
-    name: 'Cozy Hearth',
-    bars: [
-      { chord: 'G', bassRoot: 'G2', bassFifth: 'D3', pizzNotes: ['G3', 'B3', 'D4'] },
-      { chord: 'Em', bassRoot: 'E2', bassFifth: 'B2', pizzNotes: ['G3', 'B3', 'E4'] },
-      { chord: 'Am', bassRoot: 'A2', bassFifth: 'E3', pizzNotes: ['A3', 'C4', 'E4'] },
-      { chord: 'D', bassRoot: 'D3', bassFifth: 'A3', pizzNotes: ['Fs3', 'A3', 'D4'] }
-    ]
-  }
-];
-
-// ---------------------------------------------------------------------------
-// Melodic Motifs in 6/8 Folk Meter
-// (Steps 0, 1, 2, 3, 4, 5 per bar. Durations in steps.)
-// ---------------------------------------------------------------------------
 
 interface MelodicNote {
-  step: number; // 0 to 5
+  bar: number; // 0 to 7 (measure within the 8-bar strophe)
+  step: number; // 0 to 5 (eighth-note beat in 6/8 meter)
   note: string;
-  dur: number; // in steps (1 = 8th note, 3 = dotted quarter)
+  dur: number; // duration in steps (1 = eighth note, 2 = quarter note, 3 = dotted quarter)
   vol?: number;
 }
 
-// Collection of lilting 4-bar melodic phrases for Celtic Harp
-const HARP_THEMES: MelodicNote[][] = [
-  // Theme 1: Cheerful morning stroll
-  [
+interface BellAccent {
+  bar: number;
+  step: number;
+  note: string;
+  vol?: number;
+}
+
+interface SectionDefinition {
+  name: string;
+  bars: ChordBar[]; // exactly 8 bars
+  mainMelody: MelodicNote[]; // Primary melodic theme
+  counterMelody?: MelodicNote[]; // Harmonizing counterpoint / response
+  bellAccents: BellAccent[];
+}
+
+// ---------------------------------------------------------------------------
+// SECTION A: "The Village Green" (8 Bars, G Major)
+// Memorable, hummable folk theme with balanced antecedent & consequent phrasing.
+// ---------------------------------------------------------------------------
+const SECTION_A: SectionDefinition = {
+  name: 'The Village Green',
+  bars: [
+    // Antecedent Phrase: I - V - vi - V (ends on open half-cadence)
+    { chord: 'G', bassRoot: 'G2', bassFifth: 'D3', pizzNotes: ['G3', 'B3', 'D4'] }, // Bar 0
+    { chord: 'D', bassRoot: 'D3', bassFifth: 'A3', pizzNotes: ['Fs3', 'A3', 'D4'] }, // Bar 1
+    { chord: 'Em', bassRoot: 'E2', bassFifth: 'B2', pizzNotes: ['G3', 'B3', 'E4'] }, // Bar 2
+    { chord: 'D', bassRoot: 'D3', bassFifth: 'A3', pizzNotes: ['Fs3', 'A3', 'D4'] }, // Bar 3
+    // Consequent Phrase: I - IV - V - I (resolves cleanly to tonic G)
+    { chord: 'G', bassRoot: 'G2', bassFifth: 'D3', pizzNotes: ['G3', 'B3', 'D4'] }, // Bar 4
+    { chord: 'C', bassRoot: 'C3', bassFifth: 'G3', pizzNotes: ['E3', 'G3', 'C4'] }, // Bar 5
+    { chord: 'D', bassRoot: 'D3', bassFifth: 'A3', pizzNotes: ['Fs3', 'A3', 'D4'] }, // Bar 6
+    { chord: 'G', bassRoot: 'G2', bassFifth: 'D3', pizzNotes: ['G3', 'B3', 'D4'] } // Bar 7
+  ],
+  mainMelody: [
+    // Bar 0 (G): Opening lilting theme
+    { bar: 0, step: 0, note: 'D4', dur: 2 },
+    { bar: 0, step: 2, note: 'G4', dur: 1 },
+    { bar: 0, step: 3, note: 'B4', dur: 3 },
+    // Bar 1 (D): Gentle turnaround
+    { bar: 1, step: 0, note: 'A4', dur: 2 },
+    { bar: 1, step: 2, note: 'B4', dur: 1 },
+    { bar: 1, step: 3, note: 'A4', dur: 2 },
+    { bar: 1, step: 5, note: 'Fs4', dur: 1 },
+    // Bar 2 (Em): Rising pastoral contour
+    { bar: 2, step: 0, note: 'G4', dur: 2 },
+    { bar: 2, step: 2, note: 'A4', dur: 1 },
+    { bar: 2, step: 3, note: 'B4', dur: 2 },
+    { bar: 2, step: 5, note: 'C5', dur: 1 },
+    // Bar 3 (D): Half-cadence resting on A
+    { bar: 3, step: 0, note: 'D5', dur: 2 },
+    { bar: 3, step: 2, note: 'C5', dur: 1 },
+    { bar: 3, step: 3, note: 'B4', dur: 2 },
+    { bar: 3, step: 5, note: 'A4', dur: 1 },
+
+    // Bar 4 (G): Consequent answer soaring higher
+    { bar: 4, step: 0, note: 'B4', dur: 2 },
+    { bar: 4, step: 2, note: 'C5', dur: 1 },
+    { bar: 4, step: 3, note: 'D5', dur: 3 },
+    // Bar 5 (C): High joyful flourish
+    { bar: 5, step: 0, note: 'E5', dur: 2 },
+    { bar: 5, step: 2, note: 'D5', dur: 1 },
+    { bar: 5, step: 3, note: 'C5', dur: 2 },
+    { bar: 5, step: 5, note: 'B4', dur: 1 },
+    // Bar 6 (D): Stepped descent
+    { bar: 6, step: 0, note: 'A4', dur: 2 },
+    { bar: 6, step: 2, note: 'B4', dur: 1 },
+    { bar: 6, step: 3, note: 'C5', dur: 2 },
+    { bar: 6, step: 5, note: 'A4', dur: 1 },
+    // Bar 7 (G): Satisfying resolution home
+    { bar: 7, step: 0, note: 'B4', dur: 2 },
+    { bar: 7, step: 2, note: 'A4', dur: 1 },
+    { bar: 7, step: 3, note: 'G4', dur: 3 }
+  ],
+  counterMelody: [
+    // Flute harmony in bars 4-7 (soaring in 3rds & 6ths)
+    { bar: 4, step: 3, note: 'G5', dur: 3, vol: 0.8 },
+    { bar: 5, step: 0, note: 'G5', dur: 2, vol: 0.8 },
+    { bar: 5, step: 2, note: 'Fs5', dur: 1, vol: 0.75 },
+    { bar: 5, step: 3, note: 'E5', dur: 3, vol: 0.8 },
+    { bar: 6, step: 0, note: 'Fs5', dur: 2, vol: 0.75 },
+    { bar: 6, step: 2, note: 'G5', dur: 1, vol: 0.8 },
+    { bar: 6, step: 3, note: 'A5', dur: 3, vol: 0.85 },
+    { bar: 7, step: 0, note: 'D5', dur: 2, vol: 0.75 },
+    { bar: 7, step: 2, note: 'Fs5', dur: 1, vol: 0.75 },
+    { bar: 7, step: 3, note: 'G5', dur: 3, vol: 0.85 }
+  ],
+  bellAccents: [
+    { bar: 3, step: 3, note: 'D6', vol: 0.4 },
+    { bar: 7, step: 3, note: 'G6', vol: 0.55 }
+  ]
+};
+
+// ---------------------------------------------------------------------------
+// SECTION B: "The Sunny Orchard" (8 Bars, C Major / G Major)
+// Playful, wandering, pastoral change of scenery with true call-and-response.
+// ---------------------------------------------------------------------------
+const SECTION_B: SectionDefinition = {
+  name: 'The Sunny Orchard',
+  bars: [
+    // First 4 bars: IV - I - vi - V
+    { chord: 'C', bassRoot: 'C3', bassFifth: 'G3', pizzNotes: ['E3', 'G3', 'C4'] }, // Bar 0
+    { chord: 'G', bassRoot: 'G2', bassFifth: 'D3', pizzNotes: ['G3', 'B3', 'D4'] }, // Bar 1
+    { chord: 'Em', bassRoot: 'E2', bassFifth: 'B2', pizzNotes: ['G3', 'B3', 'E4'] }, // Bar 2
+    { chord: 'D', bassRoot: 'D3', bassFifth: 'A3', pizzNotes: ['Fs3', 'A3', 'D4'] }, // Bar 3
+    // Second 4 bars: IV - I6 - ii - V - I
+    { chord: 'C', bassRoot: 'C3', bassFifth: 'G3', pizzNotes: ['E3', 'G3', 'C4'] }, // Bar 4
+    { chord: 'G', bassRoot: 'B2', bassFifth: 'D3', pizzNotes: ['G3', 'B3', 'D4'] }, // Bar 5
+    { chord: 'Am', bassRoot: 'A2', bassFifth: 'E3', pizzNotes: ['A3', 'C4', 'E4'] }, // Bar 6
+    { chord: 'G', bassRoot: 'G2', bassFifth: 'D3', pizzNotes: ['G3', 'B3', 'D4'] } // Bar 7
+  ],
+  mainMelody: [
+    // Bar 0 (C): Wandering step
+    { bar: 0, step: 0, note: 'E5', dur: 2 },
+    { bar: 0, step: 2, note: 'D5', dur: 1 },
+    { bar: 0, step: 3, note: 'C5', dur: 3 },
+    // Bar 1 (G): Gentle descent
+    { bar: 1, step: 0, note: 'D5', dur: 2 },
+    { bar: 1, step: 2, note: 'C5', dur: 1 },
+    { bar: 1, step: 3, note: 'B4', dur: 3 },
+    // Bar 2 (Em): Whimsical turn
+    { bar: 2, step: 0, note: 'C5', dur: 2 },
+    { bar: 2, step: 2, note: 'B4', dur: 1 },
+    { bar: 2, step: 3, note: 'A4', dur: 2 },
+    { bar: 2, step: 5, note: 'G4', dur: 1 },
+    // Bar 3 (D): Upward leap to D5
+    { bar: 3, step: 0, note: 'Fs4', dur: 1 },
+    { bar: 3, step: 1, note: 'G4', dur: 1 },
+    { bar: 3, step: 2, note: 'A4', dur: 1 },
+    { bar: 3, step: 3, note: 'D5', dur: 3 },
+
+    // Bar 4 (C): High sunny meadow flourish
+    { bar: 4, step: 0, note: 'G5', dur: 2 },
+    { bar: 4, step: 2, note: 'E5', dur: 1 },
+    { bar: 4, step: 3, note: 'C5', dur: 3 },
+    // Bar 5 (G/B): Cascading steps
+    { bar: 5, step: 0, note: 'D5', dur: 2 },
+    { bar: 5, step: 2, note: 'B4', dur: 1 },
+    { bar: 5, step: 3, note: 'G4', dur: 3 },
+    // Bar 6 (Am): Cadence run
+    { bar: 6, step: 0, note: 'A4', dur: 1 },
+    { bar: 6, step: 1, note: 'B4', dur: 1 },
+    { bar: 6, step: 2, note: 'C5', dur: 1 },
+    { bar: 6, step: 3, note: 'D5', dur: 3 },
+    // Bar 7 (G): Full warm cadence
+    { bar: 7, step: 0, note: 'B4', dur: 2 },
+    { bar: 7, step: 2, note: 'A4', dur: 1 },
+    { bar: 7, step: 3, note: 'G4', dur: 3 }
+  ],
+  bellAccents: [
+    { bar: 1, step: 3, note: 'D6', vol: 0.4 },
+    { bar: 7, step: 3, note: 'G6', vol: 0.5 }
+  ]
+};
+
+// ---------------------------------------------------------------------------
+// SECTION C: "The Folk Fair" (8 Bars, Mixolydian Countryside Color)
+// Traditional folk modal tune (I – ♭VII – IV – I) with infectious Celtic warmth.
+// ---------------------------------------------------------------------------
+const SECTION_C: SectionDefinition = {
+  name: 'The Folk Fair',
+  bars: [
+    { chord: 'G', bassRoot: 'G2', bassFifth: 'D3', pizzNotes: ['G3', 'B3', 'D4'] }, // Bar 0
+    { chord: 'F', bassRoot: 'F2', bassFifth: 'C3', pizzNotes: ['F3', 'A3', 'C4'] }, // Bar 1 (♭VII Mixolydian!)
+    { chord: 'C', bassRoot: 'C3', bassFifth: 'G3', pizzNotes: ['E3', 'G3', 'C4'] }, // Bar 2
+    { chord: 'G', bassRoot: 'G2', bassFifth: 'D3', pizzNotes: ['G3', 'B3', 'D4'] }, // Bar 3
+    { chord: 'G', bassRoot: 'G2', bassFifth: 'D3', pizzNotes: ['G3', 'B3', 'D4'] }, // Bar 4
+    { chord: 'F', bassRoot: 'F2', bassFifth: 'C3', pizzNotes: ['F3', 'A3', 'C4'] }, // Bar 5
+    { chord: 'C', bassRoot: 'C3', bassFifth: 'G3', pizzNotes: ['E3', 'G3', 'C4'] }, // Bar 6
+    { chord: 'G', bassRoot: 'G2', bassFifth: 'D3', pizzNotes: ['G3', 'B3', 'D4'] } // Bar 7
+  ],
+  mainMelody: [
     // Bar 0 (G)
-    { step: 0, note: 'B4', dur: 2 },
-    { step: 2, note: 'C5', dur: 1 },
-    { step: 3, note: 'D5', dur: 3 },
-    // Bar 1 (D)
-    { step: 0, note: 'A4', dur: 2 },
-    { step: 2, note: 'B4', dur: 1 },
-    { step: 3, note: 'Fs4', dur: 3 },
-    // Bar 2 (Em)
-    { step: 0, note: 'G4', dur: 1 },
-    { step: 1, note: 'A4', dur: 1 },
-    { step: 2, note: 'B4', dur: 1 },
-    { step: 3, note: 'E5', dur: 3 },
-    // Bar 3 (C)
-    { step: 0, note: 'D5', dur: 2 },
-    { step: 2, note: 'C5', dur: 1 },
-    { step: 3, note: 'B4', dur: 3 }
-  ],
-  // Theme 2: Sunny pasture dance
-  [
-    // Bar 0
-    { step: 0, note: 'D5', dur: 2 },
-    { step: 2, note: 'E5', dur: 1 },
-    { step: 3, note: 'D5', dur: 2 },
-    { step: 5, note: 'B4', dur: 1 },
-    // Bar 1
-    { step: 0, note: 'C5', dur: 2 },
-    { step: 2, note: 'D5', dur: 1 },
-    { step: 3, note: 'C5', dur: 2 },
-    { step: 5, note: 'A4', dur: 1 },
-    // Bar 2
-    { step: 0, note: 'B4', dur: 2 },
-    { step: 2, note: 'C5', dur: 1 },
-    { step: 3, note: 'D5', dur: 2 },
-    { step: 5, note: 'G4', dur: 1 },
-    // Bar 3
-    { step: 0, note: 'A4', dur: 3 },
-    { step: 3, note: 'G4', dur: 3 }
-  ],
-  // Theme 3: Lilting countryside cadence
-  [
-    // Bar 0
-    { step: 0, note: 'G4', dur: 3 },
-    { step: 3, note: 'B4', dur: 2 },
-    { step: 5, note: 'D5', dur: 1 },
-    // Bar 1
-    { step: 0, note: 'C5', dur: 2 },
-    { step: 2, note: 'B4', dur: 1 },
-    { step: 3, note: 'A4', dur: 3 },
-    // Bar 2
-    { step: 0, note: 'B4', dur: 1 },
-    { step: 1, note: 'C5', dur: 1 },
-    { step: 2, note: 'D5', dur: 1 },
-    { step: 3, note: 'G5', dur: 3 },
-    // Bar 3
-    { step: 0, note: 'Fs5', dur: 2 },
-    { step: 2, note: 'E5', dur: 1 },
-    { step: 3, note: 'D5', dur: 3 }
-  ]
-];
+    { bar: 0, step: 0, note: 'G4', dur: 2 },
+    { bar: 0, step: 2, note: 'B4', dur: 1 },
+    { bar: 0, step: 3, note: 'D5', dur: 3 },
+    // Bar 1 (F): Flatted 7th modal warmth!
+    { bar: 1, step: 0, note: 'C5', dur: 2 },
+    { bar: 1, step: 2, note: 'A4', dur: 1 },
+    { bar: 1, step: 3, note: 'F4', dur: 3 },
+    // Bar 2 (C)
+    { bar: 2, step: 0, note: 'G4', dur: 2 },
+    { bar: 2, step: 2, note: 'A4', dur: 1 },
+    { bar: 2, step: 3, note: 'C5', dur: 3 },
+    // Bar 3 (G)
+    { bar: 3, step: 0, note: 'B4', dur: 2 },
+    { bar: 3, step: 2, note: 'A4', dur: 1 },
+    { bar: 3, step: 3, note: 'G4', dur: 3 },
 
-// Wooden Flute answering phrases (plays on bars 2-3 or 0-1 as call-and-response)
-const FLUTE_RESPONSES: MelodicNote[][] = [
-  // Response 1: Joyful ascending trill & breathy resolution
-  [
-    { step: 0, note: 'D5', dur: 1, vol: 0.8 },
-    { step: 1, note: 'E5', dur: 1, vol: 0.8 },
-    { step: 2, note: 'Fs5', dur: 1, vol: 0.85 },
-    { step: 3, note: 'G5', dur: 3, vol: 0.9 },
-    // Bar 3 response
-    { step: 0, note: 'E5', dur: 2, vol: 0.8 },
-    { step: 2, note: 'D5', dur: 1, vol: 0.75 },
-    { step: 3, note: 'C5', dur: 2, vol: 0.7 },
-    { step: 5, note: 'B4', dur: 1, vol: 0.65 }
+    // Bar 4 (G)
+    { bar: 4, step: 0, note: 'D5', dur: 2 },
+    { bar: 4, step: 2, note: 'B4', dur: 1 },
+    { bar: 4, step: 3, note: 'G4', dur: 3 },
+    // Bar 5 (F)
+    { bar: 5, step: 0, note: 'A4', dur: 2 },
+    { bar: 5, step: 2, note: 'C5', dur: 1 },
+    { bar: 5, step: 3, note: 'F5', dur: 3 },
+    // Bar 6 (C)
+    { bar: 6, step: 0, note: 'E5', dur: 2 },
+    { bar: 6, step: 2, note: 'D5', dur: 1 },
+    { bar: 6, step: 3, note: 'C5', dur: 2 },
+    { bar: 6, step: 5, note: 'A4', dur: 1 },
+    // Bar 7 (G)
+    { bar: 7, step: 0, note: 'B4', dur: 2 },
+    { bar: 7, step: 2, note: 'A4', dur: 1 },
+    { bar: 7, step: 3, note: 'G4', dur: 3 }
   ],
-  // Response 2: Whimsical recorder flourish
-  [
-    { step: 0, note: 'B5', dur: 2, vol: 0.85 },
-    { step: 2, note: 'A5', dur: 1, vol: 0.8 },
-    { step: 3, note: 'G5', dur: 3, vol: 0.85 },
-    // Bar 3 response
-    { step: 0, note: 'D5', dur: 2, vol: 0.75 },
-    { step: 2, note: 'Fs5', dur: 1, vol: 0.8 },
-    { step: 3, note: 'G5', dur: 3, vol: 0.9 }
-  ],
-  // Response 3: Sweet gentle echo
-  [
-    { step: 0, note: 'G5', dur: 2, vol: 0.8 },
-    { step: 2, note: 'E5', dur: 1, vol: 0.75 },
-    { step: 3, note: 'D5', dur: 3, vol: 0.85 },
-    // Bar 3 response
-    { step: 0, note: 'C5', dur: 1, vol: 0.7 },
-    { step: 1, note: 'B4', dur: 1, vol: 0.7 },
-    { step: 2, note: 'A4', dur: 1, vol: 0.7 },
-    { step: 3, note: 'G4', dur: 3, vol: 0.85 }
+  bellAccents: [
+    { bar: 3, step: 3, note: 'D6', vol: 0.4 },
+    { bar: 7, step: 3, note: 'G6', vol: 0.5 }
   ]
-];
+};
+
+const SECTIONS: SectionDefinition[] = [SECTION_A, SECTION_B, SECTION_A, SECTION_C];
 
 // ---------------------------------------------------------------------------
-// Arrangement Types (Orchestration Density Cycling)
+// Arrangement Orchestration Types (Varying Density to Prevent Ear Fatigue)
 // ---------------------------------------------------------------------------
-type ArrangementType =
-  | 'harp_solo' // Intimate solo harp + gentle bass
-  | 'call_response' // Harp calls, Wooden Flute answers!
-  | 'quiet_stroll' // Harp & Flute rest; peaceful pizzicato & bell accents
-  | 'full_village' // Full warm countryside ensemble
-  | 'flute_lead'; // Wooden Flute takes the melody
+type ArrangementMode =
+  | 'harp_pastoral' // Intimate Celtic harp melody + gentle bass & pizzicato
+  | 'call_response' // Harp plays bars 0-3, Wooden Flute answers bars 4-7
+  | 'full_village' // Full ensemble: Harp lead, Flute harmony/counterpoint, bells
+  | 'peaceful_breather' // Lead instruments rest; gentle pizzicato, bass, distant chime
+  | 'flute_lead'; // Wooden Flute takes the lead melody, soft & breathy
 
-const ARRANGEMENT_CYCLE: ArrangementType[] = [
-  'harp_solo',
-  'call_response',
-  'full_village',
-  'quiet_stroll',
-  'flute_lead',
-  'call_response',
-  'full_village',
-  'quiet_stroll'
+const ARRANGEMENT_SCHEDULE: ArrangementMode[] = [
+  'harp_pastoral', // 1. Quiet, welcoming opening
+  'call_response', // 2. Flute joins in dialogue
+  'full_village', // 3. Warm full ensemble
+  'peaceful_breather', // 4. Pure peaceful ambient break
+  'flute_lead', // 5. Flute takes the theme
+  'full_village', // 6. Cheerful return
+  'call_response', // 7. Gentle conversational variation
+  'peaceful_breather' // 8. Relaxing puzzle meditation break
 ];
 
-let phraseIndex = 0;
-let nextBarTime = 0;
+let cycleCount = 0;
+let nextSectionTime = 0;
 
 /**
- * Procedurally schedules a complete 4-bar strophe on the 6/8 meter grid.
+ * Schedules a coherent 8-bar musical strophe on the audio timeline.
  */
-function scheduleFourBarPhrase(ctx: AudioContext, startTime: number) {
-  // Pick progression and arrangement in an organic cycle with variation
-  const progression = PROGRESSIONS[phraseIndex % PROGRESSIONS.length];
-  const arrangement = ARRANGEMENT_CYCLE[phraseIndex % ARRANGEMENT_CYCLE.length];
-  const harpTheme = HARP_THEMES[phraseIndex % HARP_THEMES.length];
-  const fluteResponse = FLUTE_RESPONSES[phraseIndex % FLUTE_RESPONSES.length];
+function scheduleEightBarSection(ctx: AudioContext, startTime: number) {
+  const section = SECTIONS[cycleCount % SECTIONS.length];
+  const arrangement = ARRANGEMENT_SCHEDULE[cycleCount % ARRANGEMENT_SCHEDULE.length];
 
-  for (let barIdx = 0; barIdx < 4; barIdx++) {
+  // 1. Schedule Harmony, Bass, Rhythmic Pulse, and Pizzicato Accompaniment
+  for (let barIdx = 0; barIdx < 8; barIdx++) {
     const barTime = startTime + barIdx * MEASURE_DURATION;
-    const barData = progression.bars[barIdx];
+    const barData = section.bars[barIdx];
 
-    // 1. Warm Acoustic Bass:
-    // Root on step 0 (downbeat), Fifth on step 3 (mid-measure lilt)
+    // Acoustic Bass: Root on step 0 (downbeat), Fifth on step 3 (mid-measure)
     scheduleAcousticBass(ctx, barData.bassRoot, barTime, 3, 0.85);
     scheduleAcousticBass(ctx, barData.bassFifth, barTime + 3 * STEP_DURATION, 3, 0.7);
 
-    // 2. Light Wooden Click (subtle rhythmic heartbeat on steps 0 and 3)
-    if (arrangement !== 'quiet_stroll') {
-      scheduleWoodClick(ctx, barTime, 0.03);
-      scheduleWoodClick(ctx, barTime + 3 * STEP_DURATION, 0.025);
+    // Subtle rhythmic wooden click on steps 0 and 3 (gentle heartbeat)
+    if (arrangement !== 'peaceful_breather') {
+      scheduleWoodClick(ctx, barTime, 0.025);
+      scheduleWoodClick(ctx, barTime + 3 * STEP_DURATION, 0.02);
     }
 
-    // 3. Pizzicato Strings Accompaniment:
-    // Plays lilting 6/8 broken arpeggio (steps 0, 2, 3, 5)
-    if (arrangement !== 'harp_solo') {
-      const [n1, n2, n3] = barData.pizzNotes;
-      const pizzVol = arrangement === 'quiet_stroll' ? 0.75 : 0.55;
-      schedulePizzicatoNote(ctx, n1, barTime + 0 * STEP_DURATION, pizzVol);
-      schedulePizzicatoNote(ctx, n2, barTime + 2 * STEP_DURATION, pizzVol * 0.85);
-      schedulePizzicatoNote(ctx, n3, barTime + 3 * STEP_DURATION, pizzVol * 0.95);
-      schedulePizzicatoNote(ctx, n2, barTime + 5 * STEP_DURATION, pizzVol * 0.8);
-    }
-
-    // 4. Soft Bell Accent on phrase cadences
-    if (barIdx === 3 && (arrangement === 'call_response' || arrangement === 'full_village')) {
-      scheduleBellNote(ctx, 'D6', barTime + 3 * STEP_DURATION, 0.5);
-    } else if (arrangement === 'quiet_stroll' && (barIdx === 1 || barIdx === 3)) {
-      scheduleBellNote(ctx, barIdx === 1 ? 'B5' : 'G5', barTime + 0 * STEP_DURATION, 0.45);
-    }
+    // Pizzicato Triad Arpeggio (steps 0, 2, 3, 5)
+    const [p1, p2, p3] = barData.pizzNotes;
+    const pizzVol = arrangement === 'peaceful_breather' ? 0.7 : 0.52;
+    schedulePizzicatoNote(ctx, p1, barTime + 0 * STEP_DURATION, pizzVol);
+    schedulePizzicatoNote(ctx, p2, barTime + 2 * STEP_DURATION, pizzVol * 0.85);
+    schedulePizzicatoNote(ctx, p3, barTime + 3 * STEP_DURATION, pizzVol * 0.95);
+    schedulePizzicatoNote(ctx, p2, barTime + 5 * STEP_DURATION, pizzVol * 0.8);
   }
 
-  // 5. Melodic Scheduling according to Arrangement Type:
-  if (arrangement === 'harp_solo' || arrangement === 'full_village') {
-    // Harp plays the full 4-bar theme
-    harpTheme.forEach((noteItem) => {
-      // Find bar based on index in theme (4 notes per bar roughly)
-      const bar = Math.floor(harpTheme.indexOf(noteItem) / 3.5);
+  // 2. Schedule Sparkling Bell Cadence Accents
+  section.bellAccents.forEach((accent) => {
+    const bellTime =
+      startTime + accent.bar * MEASURE_DURATION + accent.step * STEP_DURATION;
+    scheduleBellNote(ctx, accent.note, bellTime, accent.vol ?? 0.5);
+  });
+
+  // 3. Schedule Melodies According to Arrangement Mode
+  if (arrangement === 'harp_pastoral') {
+    // Celtic Harp plays the complete 8-bar melody with expressive dynamics
+    section.mainMelody.forEach((noteItem) => {
       const noteTime =
-        startTime + Math.min(bar, 3) * MEASURE_DURATION + noteItem.step * STEP_DURATION;
+        startTime + noteItem.bar * MEASURE_DURATION + noteItem.step * STEP_DURATION;
+      scheduleHarpNote(ctx, noteItem.note, noteTime, noteItem.dur, noteItem.vol ?? 0.82);
+    });
+  } else if (arrangement === 'call_response') {
+    // Call: Harp plays antecedent phrase (bars 0-3)
+    section.mainMelody
+      .filter((n) => n.bar < 4)
+      .forEach((noteItem) => {
+        const noteTime =
+          startTime + noteItem.bar * MEASURE_DURATION + noteItem.step * STEP_DURATION;
+        scheduleHarpNote(ctx, noteItem.note, noteTime, noteItem.dur, noteItem.vol ?? 0.85);
+      });
+
+    // Response: Wooden Flute answers on consequent phrase (bars 4-7)
+    section.mainMelody
+      .filter((n) => n.bar >= 4)
+      .forEach((noteItem) => {
+        const noteTime =
+          startTime + noteItem.bar * MEASURE_DURATION + noteItem.step * STEP_DURATION;
+        scheduleFluteNote(ctx, noteItem.note, noteTime, noteItem.dur, noteItem.vol ?? 0.8);
+      });
+  } else if (arrangement === 'flute_lead') {
+    // Wooden Flute plays the lead 8-bar melody
+    section.mainMelody.forEach((noteItem) => {
+      const noteTime =
+        startTime + noteItem.bar * MEASURE_DURATION + noteItem.step * STEP_DURATION;
+      scheduleFluteNote(ctx, noteItem.note, noteTime, noteItem.dur, noteItem.vol ?? 0.8);
+    });
+  } else if (arrangement === 'full_village') {
+    // Full ensemble: Harp plays main melody
+    section.mainMelody.forEach((noteItem) => {
+      const noteTime =
+        startTime + noteItem.bar * MEASURE_DURATION + noteItem.step * STEP_DURATION;
       scheduleHarpNote(ctx, noteItem.note, noteTime, noteItem.dur, noteItem.vol ?? 0.8);
     });
 
-    // In full village, Flute joins on bars 2-3 as a counter-melody!
-    if (arrangement === 'full_village') {
-      fluteResponse.forEach((item) => {
-        const noteTime = startTime + 2 * MEASURE_DURATION + item.step * STEP_DURATION;
-        scheduleFluteNote(ctx, item.note, noteTime, item.dur, (item.vol ?? 0.7) * 0.8);
+    // Wooden Flute joins with counter-melody / harmony in bars 4-7
+    if (section.counterMelody) {
+      section.counterMelody.forEach((item) => {
+        const noteTime =
+          startTime + item.bar * MEASURE_DURATION + item.step * STEP_DURATION;
+        scheduleFluteNote(ctx, item.note, noteTime, item.dur, item.vol ?? 0.72);
       });
     }
-  } else if (arrangement === 'call_response') {
-    // Call: Harp plays bars 0-1
-    harpTheme.slice(0, 6).forEach((noteItem) => {
-      const bar = Math.floor(harpTheme.indexOf(noteItem) / 3);
-      const noteTime =
-        startTime + Math.min(bar, 1) * MEASURE_DURATION + noteItem.step * STEP_DURATION;
-      scheduleHarpNote(ctx, noteItem.note, noteTime, noteItem.dur, noteItem.vol ?? 0.85);
-    });
-
-    // Response: Wooden Flute answers on bars 2-3!
-    fluteResponse.forEach((item) => {
-      const noteTime = startTime + 2 * MEASURE_DURATION + item.step * STEP_DURATION;
-      scheduleFluteNote(ctx, item.note, noteTime, item.dur, item.vol ?? 0.8);
-    });
-  } else if (arrangement === 'flute_lead') {
-    // Flute plays the lead melodic motif
-    harpTheme.forEach((noteItem) => {
-      const bar = Math.floor(harpTheme.indexOf(noteItem) / 3.5);
-      const noteTime =
-        startTime + Math.min(bar, 3) * MEASURE_DURATION + noteItem.step * STEP_DURATION;
-      scheduleFluteNote(ctx, noteItem.note, noteTime, noteItem.dur, noteItem.vol ?? 0.8);
-    });
   }
-  // (In 'quiet_stroll', both lead instruments rest, creating peaceful breathing room!)
+  // (In 'peaceful_breather', lead instruments rest, creating a relaxing ambient pause)
 
-  phraseIndex++;
+  cycleCount++;
 }
 
 /**
- * Lookahead scheduler running every 250ms to queue up upcoming 4-bar phrases smoothly.
+ * High-precision lookahead scheduler running every 350ms.
  */
 function scheduleUpcomingMusic() {
   const ctx = getAudioContext();
   if (!ctx || !isPlaying) return;
 
-  const fourBarDuration = MEASURE_DURATION * 4; // ~5.1 seconds
-  const lookahead = 1.0; // Schedule 1 second ahead of current playback
+  const lookahead = 2.0; // Queue up audio 2 seconds in advance
 
-  while (nextBarTime < ctx.currentTime + lookahead) {
-    scheduleFourBarPhrase(ctx, nextBarTime);
-    nextBarTime += fourBarDuration;
+  while (nextSectionTime < ctx.currentTime + lookahead) {
+    scheduleEightBarSection(ctx, nextSectionTime);
+    nextSectionTime += EIGHT_BAR_DURATION;
   }
 }
 
@@ -803,16 +865,16 @@ export function startMusic() {
     const now = ctx.currentTime;
     masterMusicGain.gain.cancelScheduledValues(now);
     masterMusicGain.gain.setValueAtTime(0.0001, now);
-    // Unobtrusive, warm ambient background volume (~0.08)
+    // Pleasant, unobtrusive background volume (~0.08)
     masterMusicGain.gain.linearRampToValueAtTime(0.08, now + 1.5);
   }
 
   const now = ctx.currentTime;
-  nextBarTime = now + 0.1;
-  phraseIndex = 0;
+  nextSectionTime = now + 0.1;
+  cycleCount = 0;
 
   if (schedulerTimer === null) {
-    schedulerTimer = window.setInterval(scheduleUpcomingMusic, 250);
+    schedulerTimer = window.setInterval(scheduleUpcomingMusic, 350);
   }
 }
 
