@@ -66,8 +66,6 @@ export const LevelSelectModal: React.FC<LevelSelectModalProps> = ({
                 {ch.levels.map((lvl) => {
                   const stars = starsByLevel[lvl.id] ?? 0;
                   const isCurrent = lvl.id === currentLevelId;
-                  const diffClass = `diff-${lvl.difficulty.toLowerCase()}`;
-                  const densPct = Math.round((lvl.density ?? 0) * 100);
 
                   return (
                     <button
@@ -75,6 +73,7 @@ export const LevelSelectModal: React.FC<LevelSelectModalProps> = ({
                       type="button"
                       className={[
                         'level-card-btn',
+                        'level-card-compact',
                         isCurrent ? 'level-card-current' : '',
                         stars > 0 ? 'level-card-completed' : ''
                       ]
@@ -84,30 +83,26 @@ export const LevelSelectModal: React.FC<LevelSelectModalProps> = ({
                         onSelectLevel(lvl.id);
                         onClose();
                       }}
+                      title={`Level ${lvl.id}: ${lvl.title} • ${lvl.difficulty} • ${lvl.size}×${lvl.size}`}
+                      aria-label={`Level ${lvl.id}: ${lvl.title}, ${lvl.difficulty}, ${lvl.size} by ${lvl.size}, ${stars} of 3 stars`}
                     >
                       <div className="level-card-top">
-                        <span className="level-num">#{lvl.id}</span>
+                        <span
+                          className={`diff-dot diff-${lvl.difficulty.toLowerCase()}`}
+                          title={`Difficulty: ${lvl.difficulty}`}
+                        />
                         <span className="level-size-tag">
                           {lvl.size}×{lvl.size}
                         </span>
                       </div>
 
-                      <div className="level-card-title">{lvl.title}</div>
-
-                      <div className="level-card-meta">
-                        <span className={`diff-pill ${diffClass}`}>
-                          {lvl.difficulty} ({lvl.difficultyScore ?? 50})
-                        </span>
-                        <span className="density-tag" title="Board Density">
-                          {densPct}%
-                        </span>
-                      </div>
+                      <div className="level-card-number">{lvl.id}</div>
 
                       <div className="level-card-stars">
                         {[1, 2, 3].map((s) => (
                           <Star
                             key={s}
-                            size={13}
+                            size={12}
                             className={
                               s <= stars ? 'star-icon filled' : 'star-icon empty'
                             }

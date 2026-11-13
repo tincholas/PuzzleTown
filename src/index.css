@@ -2133,105 +2133,11 @@ body,
   color: #5c3a1e;
 }
 
-.level-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(112px, 1fr));
-  gap: 8px;
-}
-
-.level-card-btn {
-  background: #fbf5e8;
-  border: 2.5px solid var(--ink);
-  border-radius: 12px;
-  padding: 8px 10px;
-  text-align: left;
-  cursor: pointer;
-  display: flex;
-  flex-direction: column;
-  gap: 4px;
-  box-shadow: 0 3px 0 rgba(43, 30, 22, 0.25);
-  transition: transform 0.1s ease;
-}
-
-.level-card-btn:hover {
-  transform: translateY(-2px);
-}
-
-.level-card-current {
-  background: #fff2be;
-  outline: 3px solid #f59f00;
-}
-
-.level-card-completed {
-  background: #eef8e3;
-}
-
-.level-card-top {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  font-weight: 800;
-  font-size: 0.8rem;
-}
-
-.level-size-tag {
-  background: #e3cfa8;
-  padding: 1px 6px;
-  border-radius: 6px;
-  font-size: 0.72rem;
-}
-
-.level-card-title {
-  font-family: var(--font-display);
-  font-size: 0.85rem;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-}
-
-.chapter-filter-tabs {
-  display: flex;
-  gap: 6px;
-  padding: 0 16px 12px;
-  overflow-x: auto;
-  border-bottom: 2px solid #ecd5b6;
-  scrollbar-width: none;
-}
-
-.chapter-filter-tabs::-webkit-scrollbar {
-  display: none;
-}
-
-.chapter-tab-btn {
-  white-space: nowrap;
-  background: #f6eedf;
-  border: 2px solid var(--ink);
-  border-radius: 20px;
-  padding: 4px 12px;
-  font-size: 0.78rem;
-  font-weight: 800;
-  font-family: var(--font-display);
-  color: #553c29;
-  cursor: pointer;
-  transition: all 0.12s ease;
-}
-
-.chapter-tab-btn:hover {
-  background: #fff;
-  transform: translateY(-1px);
-}
-
-.chapter-tab-btn.active {
-  background: #553c29;
-  color: #fff;
-  border-color: #553c29;
-}
-
 .chapter-section-header {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  margin-bottom: 8px;
+  margin-bottom: 2px;
 }
 
 .chapter-count-tag {
@@ -2243,26 +2149,108 @@ body,
   border-radius: 10px;
 }
 
-.level-card-meta {
+.level-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(78px, 1fr));
+  gap: 10px;
+}
+
+.level-card-btn {
+  background: #fbf5e8;
+  border: 2.5px solid var(--ink);
+  border-radius: 12px;
+  padding: 6px 8px 8px;
+  text-align: center;
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: stretch;
+  min-height: 82px;
+  box-shadow: 0 3px 0 rgba(43, 30, 22, 0.25);
+  transition: transform 0.1s ease, box-shadow 0.1s ease;
+  user-select: none;
+}
+
+.level-card-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 5px 0 rgba(43, 30, 22, 0.25);
+}
+
+.level-card-btn:active {
+  transform: translateY(1px);
+  box-shadow: 0 1px 0 rgba(43, 30, 22, 0.25);
+}
+
+.level-card-current {
+  background: #fff2be;
+  outline: 3px solid #f59f00;
+  outline-offset: 1px;
+}
+
+.level-card-completed {
+  background: #eef8e3;
+}
+
+.level-card-top {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: 4px;
-  margin: 1px 0;
+  width: 100%;
 }
 
-.density-tag {
-  font-size: 0.68rem;
-  font-weight: 700;
-  color: #553c29;
-  background: #e9dac0;
+.diff-dot {
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+  border: 1.5px solid var(--ink);
+  display: inline-block;
+  flex-shrink: 0;
+}
+
+.diff-dot.diff-easy {
+  background: #22c55e;
+}
+
+.diff-dot.diff-medium {
+  background: #f59e0b;
+}
+
+.diff-dot.diff-hard {
+  background: #ef4444;
+}
+
+.diff-dot.diff-expert {
+  background: #a855f7;
+}
+
+.level-size-tag {
+  background: #e3cfa8;
   padding: 1px 5px;
-  border-radius: 4px;
+  border-radius: 6px;
+  font-size: 0.68rem;
+  font-weight: 800;
+  color: #4b341f;
+  border: 1px solid rgba(43, 30, 22, 0.2);
+  line-height: 1.1;
+}
+
+.level-card-number {
+  font-family: var(--font-display);
+  font-size: 1.35rem;
+  font-weight: 800;
+  color: #3e2613;
+  line-height: 1;
+  text-align: center;
+  margin: 3px 0 2px;
 }
 
 .level-card-stars {
   display: flex;
-  gap: 2px;
+  align-items: center;
+  justify-content: center;
+  gap: 3px;
+  width: 100%;
 }
 
 .bonus-generator-banner {
