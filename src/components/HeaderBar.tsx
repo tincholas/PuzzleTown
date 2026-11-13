@@ -4,10 +4,9 @@ import {
   Grid,
   Lightbulb,
   RotateCcw,
+  Settings,
   Star,
-  Undo2,
-  Volume2,
-  VolumeX
+  Undo2
 } from 'lucide-react';
 import { LevelDefinition } from '../engine/types';
 
@@ -15,26 +14,24 @@ interface HeaderBarProps {
   level: LevelDefinition;
   currentStars: number;
   canUndo: boolean;
-  isMuted?: boolean;
   onUndo: () => void;
   onReset: () => void;
   onHint: () => void;
   onOpenRules: () => void;
   onOpenLevels: () => void;
-  onToggleSound?: () => void;
+  onOpenSettings?: () => void;
 }
 
 export const HeaderBar: React.FC<HeaderBarProps> = ({
   level,
   currentStars,
   canUndo,
-  isMuted = false,
   onUndo,
   onReset,
   onHint,
   onOpenRules,
   onOpenLevels,
-  onToggleSound
+  onOpenSettings
 }) => {
   return (
     <header className="header-bar">
@@ -88,19 +85,15 @@ export const HeaderBar: React.FC<HeaderBarProps> = ({
           >
             <Lightbulb size={21} strokeWidth={2.6} />
           </button>
-          {onToggleSound && (
+          {onOpenSettings && (
             <button
               type="button"
-              className={`round-btn btn-purple ${isMuted ? 'muted' : ''}`}
-              onClick={onToggleSound}
-              title={isMuted ? 'Turn Sound On' : 'Mute Sound'}
-              aria-label={isMuted ? 'Turn Sound On' : 'Mute Sound'}
+              className="round-btn btn-purple"
+              onClick={onOpenSettings}
+              title="Settings (Sound, Music, Vibration)"
+              aria-label="Settings"
             >
-              {isMuted ? (
-                <VolumeX size={20} strokeWidth={2.6} />
-              ) : (
-                <Volume2 size={20} strokeWidth={2.6} />
-              )}
+              <Settings size={20} strokeWidth={2.4} />
             </button>
           )}
           <button

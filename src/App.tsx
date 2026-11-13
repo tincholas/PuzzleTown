@@ -47,6 +47,7 @@ import {
   trackLevelStart
 } from './utils/analytics';
 import {
+  isSfxEnabled,
   isSoundMuted,
   playEmptyPopCascadeSound,
   playErrorSound,
@@ -56,8 +57,21 @@ import {
   playPlaceRoadSound,
   playSelectToolSound,
   playVictorySound,
+  setSfxEnabled,
   toggleSound
 } from './utils/sound';
+import {
+  isMusicEnabled,
+  setMusicEnabled,
+  startMusic,
+  stopMusic
+} from './utils/music';
+import {
+  hapticTap,
+  isVibrationEnabled,
+  setVibrationEnabled
+} from './utils/haptics';
+import { SettingsModal } from './components/SettingsModal';
 import { pwaManager } from './pwaManager';
 
 interface HistorySnapshot {
@@ -285,7 +299,36 @@ export const App: React.FC = () => {
     axis: 'row' | 'col';
     index: number;
   } | null>(null);
-  const [isMuted, setIsMuted] = useState<boolean>(() => isSoundMuted());
+  // Settings & Audio Toggles
+  const [showSettingsModal, setShowSettingsModal] = useState<boolean>(false);
+  const [sfxOn, setSfxOn] = useState<boolean>(() => isSfxEnabled());
+  const [musicOn, setMusicOn] = useState<boolean>(() => isMusicEnabled());
+  const [vibrationOn, setVibrationOn] = useState<boolean>(() => isVibrationEnabled());
+
+  const handleToggleSfx = () => {
+    const next = !sfxOn;
+    setSfxOn(next);
+    setSfxEnabled(next);
+    if (next) {
+      hapticTap('light');
+    }
+  };
+
+  const handleToggleMusic = () => {
+    const next = !musicOn;
+    setMusicOn(next);
+    setMusicEnabled(next);
+    hapticTap('light');
+  };
+
+  const handleToggleVibration = () => {
+    const next = !vibrationOn;
+    setVibrationOn(next);
+    setVibrationEnabled(next);
+    if (next) {
+      hapticTap('medium');
+    }
+  };
 
   // Player Level Feedback (Thumbs Up / Down)
   const [feedbackByLevel, setFeedbackByLevel] = useState<
@@ -304,13 +347,9 @@ export const App: React.FC = () => {
     setFeedbackSubmitted(false);
   }, [level.id]);
 
-  const handleToggleSound = () => {
-    const nextMuted = !toggleSound();
-    setIsMuted(nextMuted);
-  };
-
   const handleFeedback = (rating: FeedbackRating) => {
     playPlaceRoadSound();
+    hapticTap('light');
     setFeedbackByLevel((prev) => ({
       ...prev,
       [level.id]: rating
@@ -499,6 +538,7 @@ export const App: React.FC = () => {
     const victoryTimer = setTimeout(() => {
       setShowVictoryModal(true);
       playVictorySound();
+      hapticTap('success');
       confetti({
         particleCount: 75,
         spread: 65,
@@ -672,10 +712,12 @@ export const App: React.FC = () => {
       setBuildingMarks(nextBuildingMarks);
       if (tileType === 'road') {
         playPlaceRoadSound();
+        hapticTap('light');
         setJustPlacedCell({ r, c });
         setTimeout(() => setJustPlacedCell(null), 400);
       } else {
         playPlaceBuildingSound();
+        hapticTap('medium');
         const cellKey = `${r},${c}`;
         const timestamp = Date.now();
         setNewlyBuiltCells((prev) => ({ ...prev, [cellKey]: timestamp }));
@@ -711,6 +753,7 @@ export const App: React.FC = () => {
       nextMarks[r][c] = false;
       setMarks(nextMarks);
       playPlaceBuildingSound();
+      hapticTap('medium');
       const cellKey = `${r},${c}`;
       const timestamp = Date.now();
       setNewlyBuiltCells((prev) => ({ ...prev, [cellKey]: timestamp }));
@@ -956,10 +999,12 @@ export const App: React.FC = () => {
       nextExcluded[r][c].clear();
       if (activeTool === 'road') {
         playPlaceRoadSound();
+        hapticTap('light');
         setJustPlacedCell({ r, c });
         setTimeout(() => setJustPlacedCell(null), 400);
       } else {
         playPlaceBuildingSound();
+        hapticTap('medium');
         const cellKey = `${r},${c}`;
         const timestamp = Date.now();
         setNewlyBuiltCells((prev) => ({ ...prev, [cellKey]: timestamp }));
@@ -979,6 +1024,7 @@ export const App: React.FC = () => {
       if (newVal.cellErrors[`${r},${c}`]) {
         setMistakesMade((m) => m + 1);
         playErrorSound();
+        hapticTap('error');
       }
     }
 
@@ -1071,6 +1117,7 @@ export const App: React.FC = () => {
 
     clearActiveHint();
     playLineClueRippleSound(level.size);
+    hapticTap('light');
     setAnimatingLine({ axis, index });
     setTimeout(() => setAnimatingLine(null), 500);
 
@@ -1151,13 +1198,12 @@ export const App: React.FC = () => {
           savedProgress.starsByLevel[level.id] ?? liveStars
         }
         canUndo={history.length > 0}
-        isMuted={isMuted}
         onUndo={handleUndo}
         onReset={handleReset}
         onHint={handleHint}
         onOpenRules={() => setShowRulesModal(true)}
         onOpenLevels={() => setShowLevelsModal(true)}
-        onToggleSound={handleToggleSound}
+        onOpenSettings={() => setShowSettingsModal(true)}
       />
 
       {/* Contextual Banner Area */}
@@ -1276,6 +1322,7 @@ export const App: React.FC = () => {
         onSelectTool={(tool) => {
           if (tool !== activeTool) {
             playSelectToolSound();
+            hapticTap('light');
           }
           setActiveTool(tool);
           if (tool === 'mark_empty' || tool === 'road') {
@@ -1285,6 +1332,7 @@ export const App: React.FC = () => {
         onToggleActionMode={(mode) => {
           if (mode !== actionMode) {
             playSelectToolSound();
+            hapticTap('light');
           }
           setActionMode(mode);
         }}
@@ -1395,6 +1443,18 @@ export const App: React.FC = () => {
           onSelectLevel={handleSelectCampaignLevel}
           onGenerateBonus={handleGenerateBonus}
           onClose={() => setShowLevelsModal(false)}
+        />
+      )}
+
+      {showSettingsModal && (
+        <SettingsModal
+          sfxEnabled={sfxOn}
+          onToggleSfx={handleToggleSfx}
+          musicEnabled={musicOn}
+          onToggleMusic={handleToggleMusic}
+          vibrationEnabled={vibrationOn}
+          onToggleVibration={handleToggleVibration}
+          onClose={() => setShowSettingsModal(false)}
         />
       )}
     </div>

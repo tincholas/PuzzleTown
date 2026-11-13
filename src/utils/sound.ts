@@ -1,10 +1,20 @@
 // Procedural Web Audio API sound synthesizer for tactile cozy feedback
 // Works offline, requires 0 external audio assets, and has 0ms latency.
 
-let audioCtx: AudioContext | null = null;
-let soundEnabled = true;
+const STORAGE_KEY_SFX = 'puzzletown_sfx_enabled';
 
-function getAudioContext(): AudioContext | null {
+let audioCtx: AudioContext | null = null;
+let soundEnabled: boolean = (() => {
+  if (typeof window === 'undefined') return true;
+  try {
+    const saved = localStorage.getItem(STORAGE_KEY_SFX);
+    return saved !== null ? saved === 'true' : true;
+  } catch {
+    return true;
+  }
+})();
+
+export function getAudioContext(): AudioContext | null {
   if (typeof window === 'undefined') return null;
   if (!audioCtx) {
     const AudioContextClass =
@@ -21,12 +31,27 @@ function getAudioContext(): AudioContext | null {
   return audioCtx;
 }
 
+export function isSfxEnabled(): boolean {
+  return soundEnabled;
+}
+
+export function setSfxEnabled(enabled: boolean) {
+  soundEnabled = enabled;
+  if (typeof window !== 'undefined') {
+    try {
+      localStorage.setItem(STORAGE_KEY_SFX, String(enabled));
+    } catch {
+      // Ignore
+    }
+  }
+}
+
 export function isSoundMuted(): boolean {
   return !soundEnabled;
 }
 
 export function toggleSound(): boolean {
-  soundEnabled = !soundEnabled;
+  setSfxEnabled(!soundEnabled);
   return soundEnabled;
 }
 

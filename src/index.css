@@ -24,6 +24,7 @@
   user-select: none;
   -webkit-user-select: none;
   -webkit-tap-highlight-color: transparent;
+  -webkit-touch-callout: none;
 }
 
 html,
@@ -32,6 +33,9 @@ body,
   width: 100%;
   height: 100%;
   overflow: hidden;
+  overscroll-behavior: none;
+  -webkit-overflow-scrolling: touch;
+  touch-action: manipulation;
   font-family: var(--font-body);
   color: var(--ink);
 }
@@ -2285,6 +2289,144 @@ body,
   font-size: 0.85rem;
   line-height: 1.35;
   color: #4f3a28;
+}
+
+/* Settings Modal */
+.modal-card.settings-modal {
+  max-width: 460px;
+}
+
+.settings-modal-body {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  padding: 18px 20px;
+}
+
+.settings-list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.settings-item {
+  background: #fbf5e8;
+  border: 2.5px solid var(--ink);
+  border-radius: 14px;
+  padding: 12px 14px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  box-shadow: 0 3px 0 rgba(43, 30, 22, 0.2);
+}
+
+.settings-item-icon-box {
+  width: 44px;
+  height: 44px;
+  border-radius: 12px;
+  background: #ecd5b6;
+  border: 2px solid var(--ink);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  color: #4b321a;
+}
+
+.settings-icon.muted {
+  opacity: 0.45;
+  color: #8c735d;
+}
+
+.settings-item-info {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.settings-item-info h4 {
+  font-family: var(--font-display);
+  font-size: 1.02rem;
+  color: #3f2714;
+}
+
+.settings-item-info p {
+  font-size: 0.78rem;
+  color: #6d4e32;
+  line-height: 1.25;
+}
+
+/* Custom Cozy Tactile Toggle Switch */
+.toggle-switch {
+  position: relative;
+  display: inline-block;
+  width: 52px;
+  height: 30px;
+  flex-shrink: 0;
+  cursor: pointer;
+}
+
+.toggle-switch input {
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+.toggle-slider {
+  position: absolute;
+  inset: 0;
+  background-color: #d1bba2;
+  border: 2px solid var(--ink);
+  border-radius: 30px;
+  transition: background-color 0.2s ease;
+  box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.15);
+}
+
+.toggle-slider:before {
+  position: absolute;
+  content: "";
+  height: 18px;
+  width: 18px;
+  left: 3px;
+  bottom: 3.5px;
+  background-color: #fff;
+  border: 2px solid var(--ink);
+  border-radius: 50%;
+  transition: transform 0.22s cubic-bezier(0.18, 0.89, 0.32, 1.28);
+  box-shadow: 0 2px 4px rgba(43, 30, 22, 0.2);
+}
+
+.toggle-switch input:checked + .toggle-slider {
+  background-color: #5bb348;
+}
+
+.toggle-switch input:checked + .toggle-slider:before {
+  transform: translateX(22px);
+  background-color: #fbfbf6;
+}
+
+.settings-footer-banner {
+  background: #efe0c2;
+  border: 2px solid var(--ink);
+  border-radius: 12px;
+  padding: 10px 14px;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+
+.settings-version-tag {
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 0.88rem;
+  color: #553c29;
+}
+
+.settings-footer-banner p {
+  font-size: 0.78rem;
+  color: #795b3d;
 }
 
 /* Level Select Modal */
