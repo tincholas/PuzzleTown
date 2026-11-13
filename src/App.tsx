@@ -54,6 +54,7 @@ import {
   playMarkEmptySound,
   playPlaceBuildingSound,
   playPlaceRoadSound,
+  playSelectToolSound,
   playVictorySound,
   toggleSound
 } from './utils/sound';
@@ -1273,6 +1274,9 @@ export const App: React.FC = () => {
         activeTool={activeTool}
         actionMode={actionMode}
         onSelectTool={(tool) => {
+          if (tool !== activeTool) {
+            playSelectToolSound();
+          }
           setActiveTool(tool);
           if (tool === 'mark_empty' || tool === 'road') {
             setActionMode('build');

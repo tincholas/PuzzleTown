@@ -78,6 +78,47 @@ export function playPlaceRoadSound() {
   osc.stop(now + 0.06);
 }
 
+/** Tactile wooden click when selecting another item/tool from the tray */
+export function playSelectToolSound() {
+  if (!soundEnabled) return;
+  const ctx = getAudioContext();
+  if (!ctx) return;
+
+  const now = ctx.currentTime;
+
+  // Primary warm wooden body tap
+  const osc1 = ctx.createOscillator();
+  const gain1 = ctx.createGain();
+  osc1.type = 'triangle';
+  osc1.frequency.setValueAtTime(540, now);
+  osc1.frequency.exponentialRampToValueAtTime(260, now + 0.04);
+
+  gain1.gain.setValueAtTime(0.15, now);
+  gain1.gain.exponentialRampToValueAtTime(0.001, now + 0.045);
+
+  osc1.connect(gain1);
+  gain1.connect(ctx.destination);
+
+  osc1.start(now);
+  osc1.stop(now + 0.045);
+
+  // Subtle bright transient click for tactile snap
+  const osc2 = ctx.createOscillator();
+  const gain2 = ctx.createGain();
+  osc2.type = 'sine';
+  osc2.frequency.setValueAtTime(980, now);
+  osc2.frequency.exponentialRampToValueAtTime(420, now + 0.02);
+
+  gain2.gain.setValueAtTime(0.08, now);
+  gain2.gain.exponentialRampToValueAtTime(0.001, now + 0.025);
+
+  osc2.connect(gain2);
+  gain2.connect(ctx.destination);
+
+  osc2.start(now);
+  osc2.stop(now + 0.025);
+}
+
 /** Soft crisp rustle when marking empty grass */
 export function playMarkEmptySound() {
   if (!soundEnabled) return;
