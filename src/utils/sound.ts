@@ -30,28 +30,112 @@ export function toggleSound(): boolean {
   return soundEnabled;
 }
 
-/** Satisfying continuous woody sound when placing a building */
+let noiseBufferCache: AudioBuffer | null = null;
+function getNoiseBuffer(ctx: AudioContext): AudioBuffer {
+  if (!noiseBufferCache || noiseBufferCache.sampleRate !== ctx.sampleRate) {
+    const duration = 0.3;
+    const bufferSize = Math.floor(ctx.sampleRate * duration);
+    noiseBufferCache = ctx.createBuffer(1, bufferSize, ctx.sampleRate);
+    const data = noiseBufferCache.getChannelData(0);
+    for (let i = 0; i < bufferSize; i++) {
+      data[i] = Math.random() * 2 - 1;
+    }
+  }
+  return noiseBufferCache;
+}
+
+function playHammerStrike(
+  ctx: AudioContext,
+  time: number,
+  freqMetallic: number,
+  gainMetallic: number,
+  freqWood: number,
+  gainWood: number
+) {
+  // 1. Crisp metallic nail impact ping
+  const osc1 = ctx.createOscillator();
+  const gain1 = ctx.createGain();
+  osc1.type = 'triangle';
+  osc1.frequency.setValueAtTime(freqMetallic, time);
+  osc1.frequency.exponentialRampToValueAtTime(freqMetallic * 0.55, time + 0.035);
+
+  gain1.gain.setValueAtTime(gainMetallic, time);
+  gain1.gain.exponentialRampToValueAtTime(0.0001, time + 0.04);
+
+  osc1.connect(gain1);
+  gain1.connect(ctx.destination);
+  osc1.start(time);
+  osc1.stop(time + 0.04);
+
+  // 2. Solid wooden beam thump
+  const osc2 = ctx.createOscillator();
+  const gain2 = ctx.createGain();
+  osc2.type = 'sine';
+  osc2.frequency.setValueAtTime(freqWood, time);
+  osc2.frequency.exponentialRampToValueAtTime(freqWood * 0.45, time + 0.06);
+
+  gain2.gain.setValueAtTime(gainWood, time);
+  gain2.gain.exponentialRampToValueAtTime(0.0001, time + 0.065);
+
+  osc2.connect(gain2);
+  gain2.connect(ctx.destination);
+  osc2.start(time);
+  osc2.stop(time + 0.065);
+}
+
+function playSawStrokes(ctx: AudioContext, startTime: number) {
+  const noise = getNoiseBuffer(ctx);
+  const src = ctx.createBufferSource();
+  src.buffer = noise;
+
+  // Bandpass filter to sculpt wooden friction resonance
+  const filter = ctx.createBiquadFilter();
+  filter.type = 'bandpass';
+  filter.frequency.setValueAtTime(2400, startTime);
+  filter.Q.setValueAtTime(3.2, startTime);
+
+  // Gain envelope for 2 rhythmic saw strokes ("ziit - ziit")
+  const gain = ctx.createGain();
+  gain.gain.setValueAtTime(0.0001, startTime);
+
+  // Stroke 1 (pull stroke: 0.00s -> 0.07s)
+  gain.gain.linearRampToValueAtTime(0.11, startTime + 0.02);
+  gain.gain.exponentialRampToValueAtTime(0.005, startTime + 0.07);
+
+  // Stroke 2 (push stroke: 0.08s -> 0.15s)
+  gain.gain.linearRampToValueAtTime(0.09, startTime + 0.10);
+  gain.gain.exponentialRampToValueAtTime(0.0001, startTime + 0.15);
+
+  src.connect(filter);
+  filter.connect(gain);
+  gain.connect(ctx.destination);
+
+  src.start(startTime);
+  src.stop(startTime + 0.16);
+}
+
+/**
+ * Satisfying carpentry construction sound when placing a building:
+ * 3 rhythmic hammer strikes with a brisk wood-sawing rasp in between.
+ */
 export function playPlaceBuildingSound() {
   if (!soundEnabled) return;
   const ctx = getAudioContext();
   if (!ctx) return;
 
   const now = ctx.currentTime;
-  const osc = ctx.createOscillator();
-  const gain = ctx.createGain();
 
-  osc.type = 'triangle';
-  osc.frequency.setValueAtTime(320, now);
-  osc.frequency.exponentialRampToValueAtTime(110, now + 0.08);
+  // 1. Hammer Tap 1 (Foundation placement, t=0.00s)
+  playHammerStrike(ctx, now, 1250, 0.12, 260, 0.20);
 
-  gain.gain.setValueAtTime(0.24, now);
-  gain.gain.exponentialRampToValueAtTime(0.001, now + 0.09);
+  // 2. Rapid Timber Sawing ("ziit - ziit", t=0.10s to 0.25s)
+  playSawStrokes(ctx, now + 0.10);
 
-  osc.connect(gain);
-  gain.connect(ctx.destination);
+  // 3. Hammer Tap 2 (Wall frame nail, t=0.26s)
+  playHammerStrike(ctx, now + 0.26, 1420, 0.14, 290, 0.18);
 
-  osc.start(now);
-  osc.stop(now + 0.09);
+  // 4. Hammer Tap 3 (Final solid roof & lock-in strike, t=0.40s)
+  playHammerStrike(ctx, now + 0.40, 1100, 0.16, 210, 0.26);
 }
 
 /** Crisp light tap for roads */

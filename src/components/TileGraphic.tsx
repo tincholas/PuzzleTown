@@ -100,6 +100,16 @@ export const BuildingGraphic: React.FC<{ isNewlyBuilt?: boolean }> = ({
       className={`tile-building-img ${isNewlyBuilt ? 'is-animating-build' : ''}`}
       draggable={false}
     />
+    {isNewlyBuilt && (
+      <div className="construction-dust-emitter" aria-hidden="true">
+        <div className="dust-puff dust-puff-1" />
+        <div className="dust-puff dust-puff-2" />
+        <div className="dust-puff dust-puff-3" />
+        <div className="dust-puff dust-puff-4" />
+        <div className="dust-puff dust-puff-5" />
+        <div className="dust-puff dust-puff-6" />
+      </div>
+    )}
   </div>
 );
 
@@ -173,6 +183,16 @@ export const BuildingSprite: React.FC<BuildingSpriteProps> = ({
         className="building-layer building-layer-3"
         draggable={false}
       />
+      {isNewlyBuilt && (
+        <div className="construction-dust-emitter" aria-hidden="true">
+          <div className="dust-puff dust-puff-1" />
+          <div className="dust-puff dust-puff-2" />
+          <div className="dust-puff dust-puff-3" />
+          <div className="dust-puff dust-puff-4" />
+          <div className="dust-puff dust-puff-5" />
+          <div className="dust-puff dust-puff-6" />
+        </div>
+      )}
       {!disableSmoke && chimney && (
         <div
           className="chimney-smoke-emitter"
