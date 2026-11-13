@@ -688,7 +688,7 @@ export const App: React.FC = () => {
             }
             return prev;
           });
-        }, 500);
+        }, 750);
       }
     } else if (action === 'mark_empty') {
       const nextGrid = grid.map((row) => [...row]);
@@ -723,7 +723,7 @@ export const App: React.FC = () => {
           }
           return prev;
         });
-      }, 500);
+      }, 750);
     }
     clearActiveHint();
   };
@@ -972,7 +972,7 @@ export const App: React.FC = () => {
             }
             return prev;
           });
-        }, 500);
+        }, 750);
       }
 
       const newVal = validateBoard(nextGrid, level);

@@ -1441,10 +1441,10 @@ body,
   }
 }
 
-/* While building is being constructed (0.5s), chimney smoke remains hidden */
+/* While building is being constructed (0.75s), chimney smoke remains hidden */
 .building-sprite-container.is-animating-build .chimney-smoke-emitter {
   opacity: 0;
-  animation: smokeFadeInAfterBuild 0.4s ease-out 0.5s forwards;
+  animation: smokeFadeInAfterBuild 0.4s ease-out 0.75s forwards;
 }
 
 @keyframes smokeFadeInAfterBuild {
@@ -1486,7 +1486,7 @@ body,
   bottom: 8%;
   width: 15px;
   height: 13px;
-  animation: dustBurstBottomLeft 0.38s cubic-bezier(0.16, 0.85, 0.35, 1.25) 0.04s forwards;
+  animation: dustBurstBottomLeft 0.45s cubic-bezier(0.16, 0.85, 0.35, 1.25) 0.05s forwards;
 }
 
 .dust-puff-2 {
@@ -1494,7 +1494,7 @@ body,
   bottom: 9%;
   width: 16px;
   height: 14px;
-  animation: dustBurstBottomRight 0.38s cubic-bezier(0.16, 0.85, 0.35, 1.25) 0.06s forwards;
+  animation: dustBurstBottomRight 0.45s cubic-bezier(0.16, 0.85, 0.35, 1.25) 0.08s forwards;
 }
 
 .dust-puff-3 {
@@ -1502,7 +1502,7 @@ body,
   top: 48%;
   width: 17px;
   height: 14px;
-  animation: dustBurstMidLeft 0.36s cubic-bezier(0.16, 0.85, 0.35, 1.25) 0.18s forwards;
+  animation: dustBurstMidLeft 0.44s cubic-bezier(0.16, 0.85, 0.35, 1.25) 0.26s forwards;
 }
 
 .dust-puff-4 {
@@ -1510,7 +1510,7 @@ body,
   top: 45%;
   width: 15px;
   height: 13px;
-  animation: dustBurstMidRight 0.36s cubic-bezier(0.16, 0.85, 0.35, 1.25) 0.20s forwards;
+  animation: dustBurstMidRight 0.44s cubic-bezier(0.16, 0.85, 0.35, 1.25) 0.30s forwards;
 }
 
 .dust-puff-5 {
@@ -1518,7 +1518,7 @@ body,
   top: 22%;
   width: 14px;
   height: 12px;
-  animation: dustBurstTopLeft 0.34s ease-out 0.32s forwards;
+  animation: dustBurstTopLeft 0.42s ease-out 0.48s forwards;
 }
 
 .dust-puff-6 {
@@ -1526,7 +1526,7 @@ body,
   top: 20%;
   width: 16px;
   height: 14px;
-  animation: dustBurstTopRight 0.34s ease-out 0.34s forwards;
+  animation: dustBurstTopRight 0.42s ease-out 0.52s forwards;
 }
 
 @keyframes dustBurstBottomLeft {
@@ -1645,19 +1645,19 @@ body,
   -webkit-clip-path: inset(100% 0 0 0);
 }
 
-/* 0.5-Second 3-Phase Animation on Placement (Twice as fast) */
+/* 0.75-Second 3-Phase Animation on Placement */
 .building-sprite-container.is-animating-build .building-layer-1 {
-  animation: buildPhase1 0.5s linear forwards;
+  animation: buildPhase1 0.75s linear forwards;
 }
 
 .building-sprite-container.is-animating-build .building-layer-2 {
   opacity: 0;
-  animation: buildPhase2 0.5s linear forwards;
+  animation: buildPhase2 0.75s linear forwards;
 }
 
 .building-sprite-container.is-animating-build .building-layer-3 {
   opacity: 0;
-  animation: buildPhase3 0.5s ease-out forwards;
+  animation: buildPhase3 0.75s ease-out forwards;
 }
 
 /* Phase 1: 0ms -> 333ms (Smooth upward reveal from bottom to top, no bounce) */

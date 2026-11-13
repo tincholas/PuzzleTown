@@ -88,30 +88,56 @@ function playSawStrokes(ctx: AudioContext, startTime: number) {
   const src = ctx.createBufferSource();
   src.buffer = noise;
 
-  // Bandpass filter to sculpt wooden friction resonance
+  // Bandpass filter to sculpt wooden friction resonance (broad Q so energy isn't killed)
   const filter = ctx.createBiquadFilter();
   filter.type = 'bandpass';
-  filter.frequency.setValueAtTime(2400, startTime);
-  filter.Q.setValueAtTime(3.2, startTime);
+  filter.frequency.setValueAtTime(2200, startTime);
+  filter.Q.setValueAtTime(1.5, startTime);
 
-  // Gain envelope for 2 rhythmic saw strokes ("ziit - ziit")
-  const gain = ctx.createGain();
-  gain.gain.setValueAtTime(0.0001, startTime);
+  // Gain envelope for 2 distinct rhythmic saw strokes ("CHHK - CHHK")
+  const noiseGain = ctx.createGain();
+  noiseGain.gain.setValueAtTime(0.0001, startTime);
 
-  // Stroke 1 (pull stroke: 0.00s -> 0.07s)
-  gain.gain.linearRampToValueAtTime(0.11, startTime + 0.02);
-  gain.gain.exponentialRampToValueAtTime(0.005, startTime + 0.07);
+  // Stroke 1: Pull stroke (0.00s -> 0.12s)
+  filter.frequency.exponentialRampToValueAtTime(2800, startTime + 0.12);
+  noiseGain.gain.linearRampToValueAtTime(0.26, startTime + 0.035);
+  noiseGain.gain.exponentialRampToValueAtTime(0.01, startTime + 0.12);
 
-  // Stroke 2 (push stroke: 0.08s -> 0.15s)
-  gain.gain.linearRampToValueAtTime(0.09, startTime + 0.10);
-  gain.gain.exponentialRampToValueAtTime(0.0001, startTime + 0.15);
+  // Stroke 2: Push stroke (0.15s -> 0.27s)
+  filter.frequency.setValueAtTime(2600, startTime + 0.15);
+  filter.frequency.exponentialRampToValueAtTime(2000, startTime + 0.27);
+  noiseGain.gain.setValueAtTime(0.01, startTime + 0.15);
+  noiseGain.gain.linearRampToValueAtTime(0.22, startTime + 0.185);
+  noiseGain.gain.exponentialRampToValueAtTime(0.0001, startTime + 0.27);
 
   src.connect(filter);
-  filter.connect(gain);
-  gain.connect(ctx.destination);
+  filter.connect(noiseGain);
+  noiseGain.connect(ctx.destination);
 
   src.start(startTime);
-  src.stop(startTime + 0.16);
+  src.stop(startTime + 0.28);
+
+  // Timber tooth vibration buzz underneath to give physical weight and rasp
+  const buzz = ctx.createOscillator();
+  const buzzGain = ctx.createGain();
+  buzz.type = 'sawtooth';
+  buzz.frequency.setValueAtTime(110, startTime);
+  buzz.frequency.linearRampToValueAtTime(130, startTime + 0.12);
+  buzz.frequency.setValueAtTime(125, startTime + 0.15);
+  buzz.frequency.linearRampToValueAtTime(100, startTime + 0.27);
+
+  buzzGain.gain.setValueAtTime(0.0001, startTime);
+  buzzGain.gain.linearRampToValueAtTime(0.065, startTime + 0.035);
+  buzzGain.gain.exponentialRampToValueAtTime(0.005, startTime + 0.12);
+  buzzGain.gain.setValueAtTime(0.005, startTime + 0.15);
+  buzzGain.gain.linearRampToValueAtTime(0.055, startTime + 0.185);
+  buzzGain.gain.exponentialRampToValueAtTime(0.0001, startTime + 0.27);
+
+  buzz.connect(buzzGain);
+  buzzGain.connect(ctx.destination);
+
+  buzz.start(startTime);
+  buzz.stop(startTime + 0.28);
 }
 
 /**
@@ -126,16 +152,16 @@ export function playPlaceBuildingSound() {
   const now = ctx.currentTime;
 
   // 1. Hammer Tap 1 (Foundation placement, t=0.00s)
-  playHammerStrike(ctx, now, 1250, 0.12, 260, 0.20);
+  playHammerStrike(ctx, now, 1250, 0.13, 260, 0.22);
 
-  // 2. Rapid Timber Sawing ("ziit - ziit", t=0.10s to 0.25s)
-  playSawStrokes(ctx, now + 0.10);
+  // 2. Rapid Timber Sawing ("CHHK - CHHK", t=0.16s to 0.44s)
+  playSawStrokes(ctx, now + 0.16);
 
-  // 3. Hammer Tap 2 (Wall frame nail, t=0.26s)
-  playHammerStrike(ctx, now + 0.26, 1420, 0.14, 290, 0.18);
+  // 3. Hammer Tap 2 (Wall frame nail, t=0.47s)
+  playHammerStrike(ctx, now + 0.47, 1420, 0.14, 290, 0.18);
 
-  // 4. Hammer Tap 3 (Final solid roof & lock-in strike, t=0.40s)
-  playHammerStrike(ctx, now + 0.40, 1100, 0.16, 210, 0.26);
+  // 4. Hammer Tap 3 (Final solid roof & lock-in strike, t=0.63s)
+  playHammerStrike(ctx, now + 0.63, 1080, 0.17, 210, 0.26);
 }
 
 /** Crisp light tap for roads */
