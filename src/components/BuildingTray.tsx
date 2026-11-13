@@ -157,7 +157,7 @@ export const BuildingTray: React.FC<BuildingTrayProps> = ({
                   </span>
                 )}
                 <div className="tray-card-art">
-                  <TileGraphic type={type} />
+                  <TileGraphic type={type} disableSmoke />
                 </div>
                 <span className="tray-card-label">
                   {isRuleOutActive ? `No ${meta.shortName}` : meta.shortName}

@@ -1742,8 +1742,8 @@ body,
   filter: brightness(0.94);
 }
 
-.ruled-out-corner-active {
-  filter: drop-shadow(0 0 3px rgba(245, 159, 0, 0.65));
+.tray-card .chimney-smoke-emitter {
+  display: none !important;
 }
 
 .tile-svg {
