@@ -1,4 +1,5 @@
 import { registerSW } from 'virtual:pwa-register';
+import { Capacitor } from '@capacitor/core';
 
 export type CheckUpdateStatus =
   | 'idle'
@@ -26,6 +27,11 @@ class PwaManager {
   public init(): void {
     if (this.initialized) return;
     this.initialized = true;
+
+    // Do not register PWA service workers in native Capacitor builds (iOS / Android)
+    if (Capacitor.isNativePlatform()) {
+      return;
+    }
 
     if (typeof window === 'undefined' || !('serviceWorker' in navigator)) {
       return;
@@ -56,38 +62,30 @@ class PwaManager {
   }
 
   private setupAutoUpdateChecks(registration: ServiceWorkerRegistration): void {
-    // 1. Initial proactive check 3 seconds after boot
+    // 1. Initial proactive check 5 seconds after boot (if online)
     setTimeout(() => {
       if (navigator.onLine) {
         registration.update().catch(() => {});
       }
-    }, 3000);
+    }, 5000);
 
-    // 2. Proactive check when returning to app (visibility change)
+    // 2. Proactive check when returning to app (visibility change, throttled)
+    let lastCheck = Date.now();
     document.addEventListener('visibilitychange', () => {
-      if (document.visibilityState === 'visible' && navigator.onLine) {
+      if (
+        document.visibilityState === 'visible' &&
+        navigator.onLine &&
+        Date.now() - lastCheck > 60000
+      ) {
+        lastCheck = Date.now();
         registration.update().catch(() => {});
       }
     });
 
-    // 3. Proactive check on window focus
-    window.addEventListener('focus', () => {
-      if (navigator.onLine) {
-        registration.update().catch(() => {});
-      }
-    });
-
-    // 4. Proactive check when coming back online
+    // 3. Proactive check when coming back online
     window.addEventListener('online', () => {
       registration.update().catch(() => {});
     });
-
-    // 5. Periodic check every 15 minutes while app remains open
-    setInterval(() => {
-      if (navigator.onLine) {
-        registration.update().catch(() => {});
-      }
-    }, 15 * 60 * 1000);
   }
 
   public getHasUpdate(): boolean {

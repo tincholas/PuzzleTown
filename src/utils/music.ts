@@ -260,6 +260,26 @@ function scheduleHarpNote(
   gain2.connect(harpPanner);
   gain3.connect(harpPanner);
 
+  // Clean up AudioNodes on completion to prevent memory leaks in WebKit/Blink
+  osc1.onended = () => {
+    try {
+      osc1.disconnect();
+      gain1.disconnect();
+    } catch {}
+  };
+  osc2.onended = () => {
+    try {
+      osc2.disconnect();
+      gain2.disconnect();
+    } catch {}
+  };
+  osc3.onended = () => {
+    try {
+      osc3.disconnect();
+      gain3.disconnect();
+    } catch {}
+  };
+
   osc1.start(time);
   osc2.start(time);
   osc3.start(time);
@@ -337,6 +357,29 @@ function scheduleFluteNote(
   gain1.connect(flutePanner);
   gain2.connect(flutePanner);
 
+  // Clean up AudioNodes on completion
+  osc1.onended = () => {
+    try {
+      osc1.disconnect();
+      gain1.disconnect();
+      lfo.disconnect();
+      lfoGain.disconnect();
+    } catch {}
+  };
+  osc2.onended = () => {
+    try {
+      osc2.disconnect();
+      gain2.disconnect();
+    } catch {}
+  };
+  noiseSource.onended = () => {
+    try {
+      noiseSource.disconnect();
+      noiseFilter.disconnect();
+      noiseGain.disconnect();
+    } catch {}
+  };
+
   osc1.start(time);
   osc2.start(time);
   lfo.start(time);
@@ -382,6 +425,14 @@ function schedulePizzicatoNote(
   filter.connect(gain);
   gain.connect(pizzPanner);
 
+  osc.onended = () => {
+    try {
+      osc.disconnect();
+      filter.disconnect();
+      gain.disconnect();
+    } catch {}
+  };
+
   osc.start(time);
   osc.stop(time + 0.3);
 }
@@ -420,6 +471,14 @@ function scheduleAcousticBass(
   filter.connect(gain);
   gain.connect(masterFilter);
 
+  osc.onended = () => {
+    try {
+      osc.disconnect();
+      filter.disconnect();
+      gain.disconnect();
+    } catch {}
+  };
+
   osc.start(time);
   osc.stop(time + duration);
 }
@@ -452,6 +511,13 @@ function scheduleBellNote(
     osc.connect(gain);
     gain.connect(bellPanner!);
 
+    osc.onended = () => {
+      try {
+        osc.disconnect();
+        gain.disconnect();
+      } catch {}
+    };
+
     osc.start(time);
     osc.stop(time + dur + 0.02);
   });
@@ -474,6 +540,13 @@ function scheduleWoodClick(ctx: AudioContext, time: number, vol = 0.03) {
 
   osc.connect(gain);
   gain.connect(masterFilter);
+
+  osc.onended = () => {
+    try {
+      osc.disconnect();
+      gain.disconnect();
+    } catch {}
+  };
 
   osc.start(time);
   osc.stop(time + 0.025);
@@ -836,9 +909,16 @@ function scheduleUpcomingMusic() {
   const ctx = getAudioContext();
   if (!ctx || !isPlaying) return;
 
+  const now = ctx.currentTime;
+  // If nextSectionTime has fallen behind current audio time (e.g. sleep/background/drift),
+  // resync immediately to avoid scheduling thousands of overdue nodes in a tight loop.
+  if (nextSectionTime < now) {
+    nextSectionTime = now + 0.05;
+  }
+
   const lookahead = 2.0; // Queue up audio 2 seconds in advance
 
-  while (nextSectionTime < ctx.currentTime + lookahead) {
+  while (nextSectionTime < now + lookahead) {
     scheduleEightBarSection(ctx, nextSectionTime);
     nextSectionTime += EIGHT_BAR_DURATION;
   }
@@ -910,7 +990,7 @@ if (typeof window !== 'undefined') {
         if (musicEnabled && !isPlaying) {
           startMusic();
         }
-      });
+      }).catch(() => {});
     } else if (musicEnabled && !isPlaying) {
       startMusic();
     }

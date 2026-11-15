@@ -38,6 +38,7 @@ body,
   touch-action: manipulation;
   font-family: var(--font-body);
   color: var(--ink);
+  background-color: var(--wood-bg-mid, #dfb888);
 }
 
 /* Warm diagonal wood-grain tabletop background matching the mockup */

@@ -73,6 +73,8 @@ import {
 } from './utils/haptics';
 import { SettingsModal } from './components/SettingsModal';
 import { pwaManager } from './pwaManager';
+import { App as CapApp } from '@capacitor/app';
+import { Capacitor } from '@capacitor/core';
 
 interface HistorySnapshot {
   grid: TileType[][];
@@ -304,6 +306,35 @@ export const App: React.FC = () => {
   const [sfxOn, setSfxOn] = useState<boolean>(() => isSfxEnabled());
   const [musicOn, setMusicOn] = useState<boolean>(() => isMusicEnabled());
   const [vibrationOn, setVibrationOn] = useState<boolean>(() => isVibrationEnabled());
+
+  // Native Android hardware back-button integration
+  useEffect(() => {
+    if (!Capacitor.isNativePlatform()) return;
+
+    const backListenerPromise = CapApp.addListener('backButton', () => {
+      if (showRulesModal) {
+        setShowRulesModal(false);
+      } else if (showLevelsModal) {
+        setShowLevelsModal(false);
+      } else if (showSettingsModal) {
+        setShowSettingsModal(false);
+      } else if (showVictoryModal) {
+        setShowVictoryModal(false);
+      } else if (activeHint) {
+        clearActiveHint();
+      }
+    });
+
+    return () => {
+      backListenerPromise.then((handle) => handle.remove()).catch(() => {});
+    };
+  }, [
+    showRulesModal,
+    showLevelsModal,
+    showSettingsModal,
+    showVictoryModal,
+    activeHint
+  ]);
 
   const handleToggleSfx = () => {
     const next = !sfxOn;

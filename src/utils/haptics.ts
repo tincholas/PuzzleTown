@@ -1,5 +1,8 @@
+import { Capacitor } from '@capacitor/core';
+import { Haptics, ImpactStyle, NotificationType } from '@capacitor/haptics';
+
 // Tactile Haptic Vibration Feedback for Mobile
-// Works via Web Vibration API on Android/browsers and bridges to Capacitor on iOS/Android
+// Uses @capacitor/haptics on iOS & Android native apps, and Web Vibration API on browsers/PWA
 
 const STORAGE_KEY_VIBRATION = 'puzzletown_vibration_enabled';
 
@@ -37,7 +40,30 @@ export type HapticType = 'light' | 'medium' | 'success' | 'error';
 export function hapticTap(type: HapticType = 'light') {
   if (!vibrationEnabled || typeof window === 'undefined') return;
 
-  // 1. Check for standard navigator.vibrate (Android PWA, Chrome, mobile web)
+  // 1. Native Capacitor Haptics (iOS Taptic Engine & Android Native)
+  if (Capacitor.isNativePlatform()) {
+    try {
+      switch (type) {
+        case 'light':
+          Haptics.impact({ style: ImpactStyle.Light }).catch(() => {});
+          break;
+        case 'medium':
+          Haptics.impact({ style: ImpactStyle.Medium }).catch(() => {});
+          break;
+        case 'success':
+          Haptics.notification({ type: NotificationType.Success }).catch(() => {});
+          break;
+        case 'error':
+          Haptics.notification({ type: NotificationType.Error }).catch(() => {});
+          break;
+      }
+      return;
+    } catch {
+      // Fall through to web vibration if Capacitor call fails
+    }
+  }
+
+  // 2. Standard navigator.vibrate (Android PWA, Chrome, mobile web)
   if (typeof navigator !== 'undefined' && 'vibrate' in navigator) {
     try {
       switch (type) {
@@ -62,22 +88,5 @@ export function hapticTap(type: HapticType = 'light') {
       // Ignore security or restriction errors
     }
   }
-
-  // 2. Future-proof Capacitor Haptics bridge if window.Capacitor is present
-  const cap = (window as unknown as { Capacitor?: { Plugins?: { Haptics?: { impact?: (opts: { style: string }) => void; notification?: (opts: { type: string }) => void } } } }).Capacitor;
-  if (cap?.Plugins?.Haptics) {
-    try {
-      if (type === 'light') {
-        cap.Plugins.Haptics.impact?.({ style: 'LIGHT' });
-      } else if (type === 'medium') {
-        cap.Plugins.Haptics.impact?.({ style: 'MEDIUM' });
-      } else if (type === 'success') {
-        cap.Plugins.Haptics.notification?.({ type: 'SUCCESS' });
-      } else if (type === 'error') {
-        cap.Plugins.Haptics.notification?.({ type: 'ERROR' });
-      }
-    } catch {
-      // Ignore
-    }
-  }
 }
+
