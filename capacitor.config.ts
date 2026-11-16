@@ -4,6 +4,10 @@ const config: CapacitorConfig = {
   appId: 'com.puzzletown.game',
   appName: 'PuzzleTown',
   webDir: 'dist',
+  backgroundColor: '#dfb888',
+  ios: {
+    backgroundColor: '#dfb888'
+  },
   server: {
     androidScheme: 'https'
   },

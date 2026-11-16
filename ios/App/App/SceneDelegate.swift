@@ -7,8 +7,16 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
     func scene(_ scene: UIScene, willConnectTo session: UISceneSession, options connectionOptions: UIScene.ConnectionOptions) {
         guard let windowScene = scene as? UIWindowScene else { return }
 
+        let woodBgColor = UIColor(red: 223.0 / 255.0, green: 184.0 / 255.0, blue: 136.0 / 255.0, alpha: 1.0)
+        let bridgeVC = CAPBridgeViewController()
+        bridgeVC.view.backgroundColor = woodBgColor
+        bridgeVC.webView?.isOpaque = false
+        bridgeVC.webView?.backgroundColor = woodBgColor
+        bridgeVC.webView?.scrollView.backgroundColor = woodBgColor
+
         window = UIWindow(windowScene: windowScene)
-        window?.rootViewController = CAPBridgeViewController()
+        window?.backgroundColor = woodBgColor
+        window?.rootViewController = bridgeVC
         window?.makeKeyAndVisible()
 
         SceneDelegateProxy.shared.scene(scene, willConnectTo: session, options: connectionOptions)

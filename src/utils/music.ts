@@ -807,120 +807,114 @@ const ARRANGEMENT_SCHEDULE: ArrangementMode[] = [
 ];
 
 let cycleCount = 0;
-let nextSectionTime = 0;
+let currentBarIdx = 0;
+let nextBarTime = 0;
 
 /**
- * Schedules a coherent 8-bar musical strophe on the audio timeline.
+ * Schedules a single 6/8 measure (bar) on the audio timeline.
+ * Scheduling 1 bar at a time (~1.28s) instead of all 8 bars at once (~10.21s)
+ * reduces the number of active AudioNodes in iOS WebKit by ~88%.
  */
-function scheduleEightBarSection(ctx: AudioContext, startTime: number) {
-  const section = SECTIONS[cycleCount % SECTIONS.length];
-  const arrangement = ARRANGEMENT_SCHEDULE[cycleCount % ARRANGEMENT_SCHEDULE.length];
+function scheduleSingleBar(
+  ctx: AudioContext,
+  barTime: number,
+  sectionIdx: number,
+  barIdx: number
+) {
+  const section = SECTIONS[sectionIdx % SECTIONS.length];
+  const arrangement = ARRANGEMENT_SCHEDULE[sectionIdx % ARRANGEMENT_SCHEDULE.length];
+  const barData = section.bars[barIdx];
 
-  // 1. Schedule Harmony, Bass, Rhythmic Pulse, and Pizzicato Accompaniment
-  for (let barIdx = 0; barIdx < 8; barIdx++) {
-    const barTime = startTime + barIdx * MEASURE_DURATION;
-    const barData = section.bars[barIdx];
+  // 1. Schedule Harmony, Bass, Rhythmic Pulse, and Pizzicato Accompaniment for this bar
+  scheduleAcousticBass(ctx, barData.bassRoot, barTime, 3, 0.85);
+  scheduleAcousticBass(ctx, barData.bassFifth, barTime + 3 * STEP_DURATION, 3, 0.7);
 
-    // Acoustic Bass: Root on step 0 (downbeat), Fifth on step 3 (mid-measure)
-    scheduleAcousticBass(ctx, barData.bassRoot, barTime, 3, 0.85);
-    scheduleAcousticBass(ctx, barData.bassFifth, barTime + 3 * STEP_DURATION, 3, 0.7);
-
-    // Subtle rhythmic wooden click on steps 0 and 3 (gentle heartbeat)
-    if (arrangement !== 'peaceful_breather') {
-      scheduleWoodClick(ctx, barTime, 0.025);
-      scheduleWoodClick(ctx, barTime + 3 * STEP_DURATION, 0.02);
-    }
-
-    // Pizzicato Triad Arpeggio (steps 0, 2, 3, 5)
-    const [p1, p2, p3] = barData.pizzNotes;
-    const pizzVol = arrangement === 'peaceful_breather' ? 0.7 : 0.52;
-    schedulePizzicatoNote(ctx, p1, barTime + 0 * STEP_DURATION, pizzVol);
-    schedulePizzicatoNote(ctx, p2, barTime + 2 * STEP_DURATION, pizzVol * 0.85);
-    schedulePizzicatoNote(ctx, p3, barTime + 3 * STEP_DURATION, pizzVol * 0.95);
-    schedulePizzicatoNote(ctx, p2, barTime + 5 * STEP_DURATION, pizzVol * 0.8);
+  if (arrangement !== 'peaceful_breather') {
+    scheduleWoodClick(ctx, barTime, 0.025);
+    scheduleWoodClick(ctx, barTime + 3 * STEP_DURATION, 0.02);
   }
 
-  // 2. Schedule Sparkling Bell Cadence Accents
+  const [p1, p2, p3] = barData.pizzNotes;
+  const pizzVol = arrangement === 'peaceful_breather' ? 0.7 : 0.52;
+  schedulePizzicatoNote(ctx, p1, barTime + 0 * STEP_DURATION, pizzVol);
+  schedulePizzicatoNote(ctx, p2, barTime + 2 * STEP_DURATION, pizzVol * 0.85);
+  schedulePizzicatoNote(ctx, p3, barTime + 3 * STEP_DURATION, pizzVol * 0.95);
+  schedulePizzicatoNote(ctx, p2, barTime + 5 * STEP_DURATION, pizzVol * 0.8);
+
+  // 2. Schedule Sparkling Bell Cadence Accents for this bar
   section.bellAccents.forEach((accent) => {
-    const bellTime =
-      startTime + accent.bar * MEASURE_DURATION + accent.step * STEP_DURATION;
+    if (accent.bar !== barIdx) return;
+    const bellTime = barTime + accent.step * STEP_DURATION;
     scheduleBellNote(ctx, accent.note, bellTime, accent.vol ?? 0.5);
   });
 
-  // 3. Schedule Melodies According to Arrangement Mode
+  // 3. Schedule Melodies for this bar According to Arrangement Mode
+  const barMelody = section.mainMelody.filter((n) => n.bar === barIdx);
+
   if (arrangement === 'harp_pastoral') {
-    // Celtic Harp plays the complete 8-bar melody with expressive dynamics
-    section.mainMelody.forEach((noteItem) => {
-      const noteTime =
-        startTime + noteItem.bar * MEASURE_DURATION + noteItem.step * STEP_DURATION;
+    barMelody.forEach((noteItem) => {
+      const noteTime = barTime + noteItem.step * STEP_DURATION;
       scheduleHarpNote(ctx, noteItem.note, noteTime, noteItem.dur, noteItem.vol ?? 0.82);
     });
   } else if (arrangement === 'call_response') {
-    // Call: Harp plays antecedent phrase (bars 0-3)
-    section.mainMelody
-      .filter((n) => n.bar < 4)
-      .forEach((noteItem) => {
-        const noteTime =
-          startTime + noteItem.bar * MEASURE_DURATION + noteItem.step * STEP_DURATION;
+    if (barIdx < 4) {
+      barMelody.forEach((noteItem) => {
+        const noteTime = barTime + noteItem.step * STEP_DURATION;
         scheduleHarpNote(ctx, noteItem.note, noteTime, noteItem.dur, noteItem.vol ?? 0.85);
       });
-
-    // Response: Wooden Flute answers on consequent phrase (bars 4-7)
-    section.mainMelody
-      .filter((n) => n.bar >= 4)
-      .forEach((noteItem) => {
-        const noteTime =
-          startTime + noteItem.bar * MEASURE_DURATION + noteItem.step * STEP_DURATION;
+    } else {
+      barMelody.forEach((noteItem) => {
+        const noteTime = barTime + noteItem.step * STEP_DURATION;
         scheduleFluteNote(ctx, noteItem.note, noteTime, noteItem.dur, noteItem.vol ?? 0.8);
       });
+    }
   } else if (arrangement === 'flute_lead') {
-    // Wooden Flute plays the lead 8-bar melody
-    section.mainMelody.forEach((noteItem) => {
-      const noteTime =
-        startTime + noteItem.bar * MEASURE_DURATION + noteItem.step * STEP_DURATION;
+    barMelody.forEach((noteItem) => {
+      const noteTime = barTime + noteItem.step * STEP_DURATION;
       scheduleFluteNote(ctx, noteItem.note, noteTime, noteItem.dur, noteItem.vol ?? 0.8);
     });
   } else if (arrangement === 'full_village') {
-    // Full ensemble: Harp plays main melody
-    section.mainMelody.forEach((noteItem) => {
-      const noteTime =
-        startTime + noteItem.bar * MEASURE_DURATION + noteItem.step * STEP_DURATION;
+    barMelody.forEach((noteItem) => {
+      const noteTime = barTime + noteItem.step * STEP_DURATION;
       scheduleHarpNote(ctx, noteItem.note, noteTime, noteItem.dur, noteItem.vol ?? 0.8);
     });
 
-    // Wooden Flute joins with counter-melody / harmony in bars 4-7
     if (section.counterMelody) {
-      section.counterMelody.forEach((item) => {
-        const noteTime =
-          startTime + item.bar * MEASURE_DURATION + item.step * STEP_DURATION;
-        scheduleFluteNote(ctx, item.note, noteTime, item.dur, item.vol ?? 0.72);
-      });
+      section.counterMelody
+        .filter((item) => item.bar === barIdx)
+        .forEach((item) => {
+          const noteTime = barTime + item.step * STEP_DURATION;
+          scheduleFluteNote(ctx, item.note, noteTime, item.dur, item.vol ?? 0.72);
+        });
     }
   }
-  // (In 'peaceful_breather', lead instruments rest, creating a relaxing ambient pause)
-
-  cycleCount++;
 }
 
 /**
- * High-precision lookahead scheduler running every 350ms.
+ * High-precision lookahead scheduler running every 250ms.
  */
 function scheduleUpcomingMusic() {
+  if (!isPlaying || (typeof document !== 'undefined' && document.hidden)) return;
   const ctx = getAudioContext();
-  if (!ctx || !isPlaying) return;
+  if (!ctx || ctx.state !== 'running') return;
 
   const now = ctx.currentTime;
-  // If nextSectionTime has fallen behind current audio time (e.g. sleep/background/drift),
-  // resync immediately to avoid scheduling thousands of overdue nodes in a tight loop.
-  if (nextSectionTime < now) {
-    nextSectionTime = now + 0.05;
+  // If nextBarTime has fallen behind current audio time (e.g. sleep/background/drift),
+  // resync immediately to avoid scheduling overdue nodes in a tight loop.
+  if (nextBarTime < now) {
+    nextBarTime = now + 0.05;
   }
 
-  const lookahead = 2.0; // Queue up audio 2 seconds in advance
+  const lookahead = 0.6; // Queue up audio 0.6 seconds (less than 1 bar) in advance
 
-  while (nextSectionTime < now + lookahead) {
-    scheduleEightBarSection(ctx, nextSectionTime);
-    nextSectionTime += EIGHT_BAR_DURATION;
+  while (nextBarTime < now + lookahead) {
+    scheduleSingleBar(ctx, nextBarTime, cycleCount, currentBarIdx);
+    nextBarTime += MEASURE_DURATION;
+    currentBarIdx++;
+    if (currentBarIdx >= 8) {
+      currentBarIdx = 0;
+      cycleCount++;
+    }
   }
 }
 
@@ -950,11 +944,12 @@ export function startMusic() {
   }
 
   const now = ctx.currentTime;
-  nextSectionTime = now + 0.1;
+  nextBarTime = now + 0.1;
+  currentBarIdx = 0;
   cycleCount = 0;
 
   if (schedulerTimer === null) {
-    schedulerTimer = window.setInterval(scheduleUpcomingMusic, 350);
+    schedulerTimer = window.setInterval(scheduleUpcomingMusic, 250);
   }
 }
 
@@ -985,7 +980,7 @@ if (typeof window !== 'undefined') {
   // 1. Resume audio context & start music on first user interaction (browser policy compliance)
   const unlockAudio = () => {
     const ctx = getAudioContext();
-    if (ctx && ctx.state === 'suspended') {
+    if (ctx && ctx.state !== 'running') {
       ctx.resume().then(() => {
         if (musicEnabled && !isPlaying) {
           startMusic();
@@ -995,23 +990,42 @@ if (typeof window !== 'undefined') {
       startMusic();
     }
     window.removeEventListener('pointerdown', unlockAudio);
+    window.removeEventListener('touchend', unlockAudio);
     window.removeEventListener('keydown', unlockAudio);
   };
 
   window.addEventListener('pointerdown', unlockAudio, { passive: true });
+  window.addEventListener('touchend', unlockAudio, { passive: true });
   window.addEventListener('keydown', unlockAudio, { passive: true });
 
-  // 2. Pause music when tab/app is minimized or in background, resume when active
+  // 2. Pause music scheduler & fade out when tab/app is minimized or in background, resume when active
   document.addEventListener('visibilitychange', () => {
     if (document.hidden) {
-      if (isPlaying && masterMusicGain && getAudioContext()) {
-        const ctx = getAudioContext()!;
-        masterMusicGain.gain.setTargetAtTime(0.0001, ctx.currentTime, 0.1);
+      if (schedulerTimer !== null) {
+        clearInterval(schedulerTimer);
+        schedulerTimer = null;
+      }
+      if (isPlaying && masterMusicGain) {
+        const ctx = getAudioContext();
+        if (ctx) {
+          masterMusicGain.gain.setTargetAtTime(0.0001, ctx.currentTime, 0.1);
+        }
       }
     } else {
-      if (musicEnabled && isPlaying && masterMusicGain && getAudioContext()) {
-        const ctx = getAudioContext()!;
-        masterMusicGain.gain.setTargetAtTime(0.08, ctx.currentTime, 0.3);
+      if (musicEnabled && isPlaying) {
+        const ctx = getAudioContext();
+        if (ctx) {
+          if (ctx.state !== 'running') {
+            ctx.resume().catch(() => {});
+          }
+          nextBarTime = Math.max(nextBarTime, ctx.currentTime + 0.08);
+          if (masterMusicGain) {
+            masterMusicGain.gain.setTargetAtTime(0.08, ctx.currentTime, 0.3);
+          }
+        }
+        if (schedulerTimer === null) {
+          schedulerTimer = window.setInterval(scheduleUpcomingMusic, 250);
+        }
       } else if (musicEnabled && !isPlaying) {
         startMusic();
       }

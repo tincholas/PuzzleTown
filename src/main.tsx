@@ -11,13 +11,6 @@ import './index.css';
 // Initialize proactive PWA update checks & listeners (no-ops in native Capacitor)
 pwaManager.init();
 
-// Initialize native Capacitor settings if running as iOS/Android app
-if (Capacitor.isNativePlatform()) {
-  StatusBar.setStyle({ style: Style.Dark }).catch(() => {});
-  StatusBar.setBackgroundColor({ color: '#dfb888' }).catch(() => {});
-  SplashScreen.hide().catch(() => {});
-}
-
 ReactDOM.createRoot(document.getElementById('root')!).render(
   <React.StrictMode>
     <ErrorBoundary>
@@ -25,3 +18,14 @@ ReactDOM.createRoot(document.getElementById('root')!).render(
     </ErrorBoundary>
   </React.StrictMode>
 );
+
+// Initialize native Capacitor settings after React mounts the initial frame
+if (Capacitor.isNativePlatform()) {
+  StatusBar.setStyle({ style: Style.Dark }).catch(() => {});
+  if (Capacitor.getPlatform() === 'android') {
+    StatusBar.setBackgroundColor({ color: '#dfb888' }).catch(() => {});
+  }
+  requestAnimationFrame(() => {
+    SplashScreen.hide().catch(() => {});
+  });
+}
