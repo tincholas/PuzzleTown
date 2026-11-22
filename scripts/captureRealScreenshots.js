@@ -13,27 +13,27 @@ const baseOutDir = path.join(rootDir, 'release/ios/screenshots');
 const PROFILES = [
   {
     id: 'iphone',
-    folder: 'iphone_886x1920',
+    folder: 'iphone_1206x2622',
     viewport: {
-      width: 443,
-      height: 960,
-      deviceScaleFactor: 2, // 443 * 2 = 886, 960 * 2 = 1920
+      width: 402,
+      height: 874,
+      deviceScaleFactor: 3, // 402 * 3 = 1206, 874 * 3 = 2622
       isMobile: true,
       hasTouch: true
     },
-    expected: '886x1920'
+    expected: '1206x2622'
   },
   {
     id: 'duo',
-    folder: 'duo_1389x2034',
+    folder: 'duo_2007x2853',
     viewport: {
-      width: 1389,
-      height: 2034,
-      deviceScaleFactor: 1, // exactly 1389 x 2034
+      width: 669,
+      height: 951,
+      deviceScaleFactor: 3, // 669 * 3 = 2007, 951 * 3 = 2853
       isMobile: true,
       hasTouch: true
     },
-    expected: '1389x2034'
+    expected: '2007x2853'
   },
   {
     id: 'ipad',

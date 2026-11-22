@@ -6,14 +6,14 @@ All screenshots in this directory are captured directly from the **live PuzzleTo
 
 ## 📁 Directory Structure & Verified Resolutions
 
-### 1. `iphone_886x1920/` (Exact Resolution: `886 x 1920` px)
+### 1. `iphone_1206x2622/` (Exact Resolution: `1206 x 2622` px — iPhone 16 Pro / Super Retina XDR)
 * `screenshot-1-gameplay.png`: Mid-game board with placed Woodcutters, Houses, Trees, and row/column clue badges.
 * `screenshot-2-rules.png`: Illustrated Neighborhood Building Rules modal.
 * `screenshot-3-hints.png`: Interactive Hint Walkthrough with candidate highlighting & deduction text.
 * `screenshot-4-levels.png`: Campaign Level Selection modal with 3-star ratings across chapters.
 * `screenshot-5-victory.png`: Celebratory "Village Complete!" victory modal with 3 gold stars and confetti.
 
-### 2. `duo_1389x2034/` (Exact Resolution: `1389 x 2034` px)
+### 2. `duo_2007x2853/` (Exact Resolution: `2007 x 2853` px)
 * `screenshot-1-gameplay.png`
 * `screenshot-2-rules.png`
 * `screenshot-3-hints.png`
