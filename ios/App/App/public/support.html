@@ -1,0 +1,206 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>PuzzleTown — Support & Feedback</title>
+    <link rel="icon" type="image/png" href="./icons/app-icon.png" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@600;700&family=Nunito:wght@600;700;800&display=swap" rel="stylesheet" />
+    <style>
+      :root {
+        --ink: #2b1e16;
+        --wood-bg-mid: #dfb888;
+        --plaque-cream: #fbf3e4;
+        --plaque-border: #85522d;
+      }
+      * {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+      }
+      body {
+        font-family: 'Nunito', system-ui, -apple-system, sans-serif;
+        color: var(--ink);
+        background-color: var(--wood-bg-mid);
+        background-image:
+          radial-gradient(ellipse at 50% 30%, rgba(255, 248, 230, 0.5) 0%, rgba(223, 184, 136, 0.85) 75%, rgba(186, 138, 80, 0.95) 100%),
+          repeating-linear-gradient(
+            -28deg,
+            rgba(255, 238, 210, 0.16) 0px,
+            rgba(255, 238, 210, 0.16) 16px,
+            rgba(176, 126, 68, 0.08) 16px,
+            rgba(176, 126, 68, 0.08) 32px
+          );
+        min-height: 100vh;
+        padding: 40px 20px;
+        display: flex;
+        justify-content: center;
+        align-items: flex-start;
+      }
+      .container {
+        width: 100%;
+        max-width: 780px;
+        background: var(--plaque-cream);
+        border: 4px solid var(--plaque-border);
+        border-radius: 28px;
+        box-shadow: 0 16px 40px rgba(43, 30, 22, 0.25), 0 6px 0 var(--plaque-border);
+        padding: 40px;
+      }
+      .header {
+        display: flex;
+        align-items: center;
+        gap: 16px;
+        margin-bottom: 24px;
+        border-bottom: 2px solid #e0c8a5;
+        padding-bottom: 20px;
+      }
+      .app-icon {
+        width: 64px;
+        height: 64px;
+        border-radius: 16px;
+        border: 2px solid var(--plaque-border);
+        box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+      }
+      h1 {
+        font-family: 'Fredoka', 'Nunito', sans-serif;
+        font-size: 2rem;
+        color: #3b2414;
+      }
+      .meta {
+        font-size: 0.95rem;
+        font-weight: 700;
+        color: #7c5331;
+        margin-top: 4px;
+      }
+      h2 {
+        font-family: 'Fredoka', 'Nunito', sans-serif;
+        font-size: 1.35rem;
+        color: #4a2d18;
+        margin-top: 28px;
+        margin-bottom: 12px;
+      }
+      p, li {
+        font-size: 1.05rem;
+        line-height: 1.65;
+        color: #3f2c1f;
+        margin-bottom: 14px;
+      }
+      ul {
+        margin-left: 24px;
+        margin-bottom: 16px;
+      }
+      li {
+        margin-bottom: 8px;
+      }
+      .faq-card {
+        background: #fff;
+        border: 2px solid #bfa07d;
+        border-radius: 16px;
+        padding: 18px 22px;
+        margin-bottom: 14px;
+      }
+      .faq-q {
+        font-family: 'Fredoka', 'Nunito', sans-serif;
+        font-size: 1.15rem;
+        color: #4a2d18;
+        margin-bottom: 6px;
+      }
+      .faq-a {
+        margin: 0;
+        color: #553c29;
+        font-size: 1rem;
+      }
+      .footer-nav {
+        margin-top: 36px;
+        padding-top: 20px;
+        border-top: 2px solid #e0c8a5;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+      }
+      .btn {
+        display: inline-block;
+        font-family: 'Fredoka', 'Nunito', sans-serif;
+        font-size: 1rem;
+        font-weight: 700;
+        text-decoration: none;
+        color: #fff;
+        background: #4692d6;
+        border: 2px solid #285b88;
+        border-radius: 14px;
+        padding: 10px 22px;
+        box-shadow: 0 4px 0 #285b88;
+        transition: transform 0.1s;
+      }
+      .btn:hover {
+        transform: translateY(-2px);
+      }
+      .btn-secondary {
+        background: #10b981;
+        border-color: #059669;
+        box-shadow: 0 4px 0 #059669;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <div class="header">
+        <img class="app-icon" src="./icons/app-icon.png" alt="PuzzleTown Icon" />
+        <div>
+          <h1>Player Support</h1>
+          <div class="meta">PuzzleTown by Stonecall Studio</div>
+        </div>
+      </div>
+
+      <p>
+        Welcome to PuzzleTown support! Whether you need help with gameplay rules, encountered a bug, or want to share feedback, we're here to help.
+      </p>
+
+      <h2>Frequently Asked Questions</h2>
+
+      <div class="faq-card">
+        <div class="faq-q">Do I ever need to guess to solve a puzzle?</div>
+        <p class="faq-a">
+          No! Every single level in PuzzleTown is mathematically verified to be solvable through pure deductive logic. If you are uncertain about a cell, look for other line limits or use the in-game hint button.
+        </p>
+      </div>
+
+      <div class="faq-card">
+        <div class="faq-q">Do green grass cells block roads?</div>
+        <p class="faq-a">
+          No! Marking a tile with green grass simply indicates that no building can be placed there. Roads are free to traverse green grass cells to connect your village network.
+        </p>
+      </div>
+
+      <div class="faq-card">
+        <div class="faq-q">How does the hint engine work?</div>
+        <p class="faq-a">
+          The hint engine breaks deductions down into clear interactive steps: it identifies the premise, highlights candidate tiles, explains why alternative placements are invalid, and guides you to the correct move without spoiling the rest of the board.
+        </p>
+      </div>
+
+      <div class="faq-card">
+        <div class="faq-q">Will I lose my progress if I close the app?</div>
+        <p class="faq-a">
+          No. Your progress, current board state, and earned stars are saved automatically on your device.
+        </p>
+      </div>
+
+      <h2>Contact Stonecall Studio</h2>
+      <p>
+        Found an issue or want to suggest an improvement? We welcome your feedback:
+      </p>
+      <ul>
+        <li><strong>GitHub Issues:</strong> <a href="https://github.com/tincholas/PuzzleTown/issues" target="_blank" rel="noopener" style="color: #4692d6; font-weight: 700;">github.com/tincholas/PuzzleTown/issues</a></li>
+        <li><strong>Project Repository:</strong> <a href="https://github.com/tincholas/PuzzleTown" target="_blank" rel="noopener" style="color: #4692d6; font-weight: 700;">github.com/tincholas/PuzzleTown</a></li>
+      </ul>
+
+      <div class="footer-nav">
+        <a class="btn" href="./">← Return to Game</a>
+        <a class="btn btn-secondary" href="https://github.com/tincholas/PuzzleTown/issues" target="_blank" rel="noopener">Report an Issue</a>
+      </div>
+    </div>
+  </body>
+</html>
