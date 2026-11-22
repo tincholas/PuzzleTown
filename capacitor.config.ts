@@ -1,7 +1,7 @@
 import type { CapacitorConfig } from '@capacitor/cli';
 
 const config: CapacitorConfig = {
-  appId: 'com.puzzletown.game',
+  appId: 'com.stonecallstudio.puzzletown',
   appName: 'PuzzleTown',
   webDir: 'dist',
   server: {

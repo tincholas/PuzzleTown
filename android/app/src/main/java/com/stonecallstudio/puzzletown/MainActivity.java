@@ -1,4 +1,4 @@
-package com.puzzletown.game;
+package com.stonecallstudio.puzzletown;
 
 import com.getcapacitor.BridgeActivity;
 
