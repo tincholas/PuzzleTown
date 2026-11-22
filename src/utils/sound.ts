@@ -55,6 +55,21 @@ export function toggleSound(): boolean {
   return soundEnabled;
 }
 
+function connectAndAutoDisconnect(
+  ctx: AudioContext,
+  osc: OscillatorNode,
+  gain: GainNode
+) {
+  osc.connect(gain);
+  gain.connect(ctx.destination);
+  osc.onended = () => {
+    try {
+      osc.disconnect();
+      gain.disconnect();
+    } catch {}
+  };
+}
+
 function playHammerStrike(
   ctx: AudioContext,
   time: number,
@@ -73,8 +88,7 @@ function playHammerStrike(
   gain1.gain.setValueAtTime(gainMetallic, time);
   gain1.gain.exponentialRampToValueAtTime(0.0001, time + 0.04);
 
-  osc1.connect(gain1);
-  gain1.connect(ctx.destination);
+  connectAndAutoDisconnect(ctx, osc1, gain1);
   osc1.start(time);
   osc1.stop(time + 0.04);
 
@@ -88,8 +102,7 @@ function playHammerStrike(
   gain2.gain.setValueAtTime(gainWood, time);
   gain2.gain.exponentialRampToValueAtTime(0.0001, time + 0.07);
 
-  osc2.connect(gain2);
-  gain2.connect(ctx.destination);
+  connectAndAutoDisconnect(ctx, osc2, gain2);
   osc2.start(time);
   osc2.stop(time + 0.07);
 }
@@ -133,8 +146,7 @@ export function playPlaceRoadSound() {
   gain.gain.setValueAtTime(0.18, now);
   gain.gain.exponentialRampToValueAtTime(0.001, now + 0.06);
 
-  osc.connect(gain);
-  gain.connect(ctx.destination);
+  connectAndAutoDisconnect(ctx, osc, gain);
 
   osc.start(now);
   osc.stop(now + 0.06);
@@ -158,8 +170,7 @@ export function playSelectToolSound() {
   gain1.gain.setValueAtTime(0.15, now);
   gain1.gain.exponentialRampToValueAtTime(0.001, now + 0.045);
 
-  osc1.connect(gain1);
-  gain1.connect(ctx.destination);
+  connectAndAutoDisconnect(ctx, osc1, gain1);
 
   osc1.start(now);
   osc1.stop(now + 0.045);
@@ -174,8 +185,7 @@ export function playSelectToolSound() {
   gain2.gain.setValueAtTime(0.08, now);
   gain2.gain.exponentialRampToValueAtTime(0.001, now + 0.025);
 
-  osc2.connect(gain2);
-  gain2.connect(ctx.destination);
+  connectAndAutoDisconnect(ctx, osc2, gain2);
 
   osc2.start(now);
   osc2.stop(now + 0.025);
@@ -198,8 +208,7 @@ export function playMarkEmptySound() {
   gain.gain.setValueAtTime(0.12, now);
   gain.gain.exponentialRampToValueAtTime(0.001, now + 0.05);
 
-  osc.connect(gain);
-  gain.connect(ctx.destination);
+  connectAndAutoDisconnect(ctx, osc, gain);
 
   osc.start(now);
   osc.stop(now + 0.05);
@@ -224,8 +233,7 @@ export function playEmptyPopCascadeSound(index: number, total: number) {
   gain.gain.setValueAtTime(0.14, now);
   gain.gain.exponentialRampToValueAtTime(0.001, now + 0.06);
 
-  osc.connect(gain);
-  gain.connect(ctx.destination);
+  connectAndAutoDisconnect(ctx, osc, gain);
 
   osc.start(now);
   osc.stop(now + 0.06);
@@ -252,8 +260,7 @@ export function playLineClueRippleSound(stepCount = 5) {
     gain.gain.setValueAtTime(0.1, t);
     gain.gain.exponentialRampToValueAtTime(0.001, t + 0.09);
 
-    osc.connect(gain);
-    gain.connect(ctx.destination);
+    connectAndAutoDisconnect(ctx, osc, gain);
 
     osc.start(t);
     osc.stop(t + 0.09);
@@ -283,6 +290,18 @@ export function playClueSatisfiedSound() {
   osc2.connect(gain);
   gain.connect(ctx.destination);
 
+  osc1.onended = () => {
+    try {
+      osc1.disconnect();
+    } catch {}
+  };
+  osc2.onended = () => {
+    try {
+      osc2.disconnect();
+      gain.disconnect();
+    } catch {}
+  };
+
   osc1.start(now);
   osc2.start(now);
   osc1.stop(now + 0.22);
@@ -306,8 +325,7 @@ export function playErrorSound() {
   gain.gain.setValueAtTime(0.18, now);
   gain.gain.exponentialRampToValueAtTime(0.001, now + 0.13);
 
-  osc.connect(gain);
-  gain.connect(ctx.destination);
+  connectAndAutoDisconnect(ctx, osc, gain);
 
   osc.start(now);
   osc.stop(now + 0.13);
@@ -341,8 +359,7 @@ export function playVictorySound() {
     gain.gain.setValueAtTime(0.15, t);
     gain.gain.exponentialRampToValueAtTime(0.001, t + dur);
 
-    osc.connect(gain);
-    gain.connect(ctx.destination);
+    connectAndAutoDisconnect(ctx, osc, gain);
 
     osc.start(t);
     osc.stop(t + dur);

@@ -683,15 +683,12 @@ body,
 @keyframes emptyTilePop {
   0% {
     transform: scale(0.65);
-    filter: brightness(1.25);
   }
   60% {
     transform: scale(1.14);
-    filter: brightness(1.05);
   }
   100% {
     transform: scale(1);
-    filter: brightness(1);
   }
 }
 
@@ -745,15 +742,12 @@ body,
 @keyframes ripplePop {
   0% {
     transform: scale(0.75);
-    filter: brightness(1.3);
   }
   60% {
     transform: scale(1.15);
-    filter: brightness(1.1);
   }
   100% {
     transform: scale(1);
-    filter: brightness(1);
   }
 }
 
@@ -763,13 +757,23 @@ body,
   animation-delay: calc(var(--wave-idx, 0) * 60ms);
 }
 
+/* Pause continuous ambient child animations while victory overlay is active to avoid iOS GPU layer spikes */
+.board-solved .smoke-puff,
+.board-solved .tile-flora-img,
+.board-solved .tree-peeking-bunny,
+.board-solved .rock-peeking-animal,
+.board-solved .tile-fauna-actor,
+.board-solved .tile-butterfly-actor,
+.board-solved .tile-butterfly-img {
+  animation-play-state: paused !important;
+}
+
 @keyframes victoryTileWave {
   0% {
     transform: translateY(0) scale(1);
   }
   35% {
-    transform: translateY(-12px) scale(1.1);
-    box-shadow: 0 12px 20px rgba(43, 30, 22, 0.4);
+    transform: translateY(-10px) scale(1.08);
   }
   70% {
     transform: translateY(2px) scale(0.96);
@@ -798,7 +802,6 @@ body,
   pointer-events: none;
   user-select: none;
   z-index: 2;
-  filter: drop-shadow(0 2px 2px rgba(35, 18, 8, 0.35));
   animation: floraSway 4.8s ease-in-out infinite alternate;
   transform-origin: 50% 100%;
 }
@@ -835,8 +838,7 @@ body,
   image-rendering: crisp-edges;
   pointer-events: none;
   user-select: none;
-  z-index: 0; /* Starts behind treeImg at z-index 1 */
-  filter: drop-shadow(0 2px 1.5px rgba(28, 14, 5, 0.4));
+  z-index: 0; /* Remains behind treeImg at z-index 1 while peeking out to the side */
   transform-origin: 50% 100%;
 }
 
@@ -852,35 +854,24 @@ body,
 @keyframes bunnyPhysicalPeekLeft {
   0%, 15% {
     transform: translateX(0) scaleX(-1);
-    z-index: 0;
   }
   20% {
     transform: translateX(-15px) scaleX(-1);
-    z-index: 2; /* Clears trunk and hops into foreground */
   }
   24% {
     transform: translateX(-40px) scaleX(-1);
-    z-index: 2;
   }
   32% {
     transform: translateX(-40px) scaleX(-1) rotate(8deg);
-    z-index: 2;
   }
   40% {
     transform: translateX(-40px) scaleX(-1) rotate(-6deg);
-    z-index: 2;
   }
   48% {
     transform: translateX(-40px) scaleX(-1) rotate(0deg);
-    z-index: 2;
   }
-  56% {
+  56%, 100% {
     transform: translateX(0) scaleX(-1);
-    z-index: 0;
-  }
-  57%, 100% {
-    transform: translateX(0) scaleX(-1);
-    z-index: 0;
   }
 }
 
@@ -888,35 +879,24 @@ body,
 @keyframes bunnyPhysicalPeekRight {
   0%, 15% {
     transform: translateX(0) scaleX(1);
-    z-index: 0;
   }
   20% {
     transform: translateX(15px) scaleX(1);
-    z-index: 2;
   }
   24% {
     transform: translateX(40px) scaleX(1);
-    z-index: 2;
   }
   32% {
     transform: translateX(40px) scaleX(1) rotate(-8deg);
-    z-index: 2;
   }
   40% {
     transform: translateX(40px) scaleX(1) rotate(6deg);
-    z-index: 2;
   }
   48% {
     transform: translateX(40px) scaleX(1) rotate(0deg);
-    z-index: 2;
   }
-  56% {
+  56%, 100% {
     transform: translateX(0) scaleX(1);
-    z-index: 0;
-  }
-  57%, 100% {
-    transform: translateX(0) scaleX(1);
-    z-index: 0;
   }
 }
 
@@ -929,7 +909,7 @@ body,
   left: 50%;
   pointer-events: none;
   user-select: none;
-  z-index: 0; /* Starts behind rockImg at z-index 1 */
+  z-index: 0; /* Remains behind rockImg at z-index 1 while peeking out to the side */
   display: flex;
   align-items: center;
   justify-content: center;
@@ -966,62 +946,42 @@ body,
 @keyframes rockAnimalPeekLeft {
   0%, 15% {
     transform: translateX(0) scaleX(-1);
-    z-index: 0;
   }
   25% {
     transform: translateX(-30px) scaleX(-1);
-    z-index: 2; /* Peeks out from behind the boulder */
   }
   35% {
     transform: translateX(-30px) scaleX(-1) rotate(6deg);
-    z-index: 2;
   }
   45% {
     transform: translateX(-30px) scaleX(-1) rotate(-4deg);
-    z-index: 2;
   }
   55% {
     transform: translateX(-30px) scaleX(-1) rotate(0deg);
-    z-index: 2;
   }
-  65% {
+  65%, 100% {
     transform: translateX(0) scaleX(-1);
-    z-index: 0;
-  }
-  66%, 100% {
-    transform: translateX(0) scaleX(-1);
-    z-index: 0;
   }
 }
 
 @keyframes rockAnimalPeekRight {
   0%, 15% {
     transform: translateX(0) scaleX(1);
-    z-index: 0;
   }
   25% {
     transform: translateX(30px) scaleX(1);
-    z-index: 2;
   }
   35% {
     transform: translateX(30px) scaleX(1) rotate(-6deg);
-    z-index: 2;
   }
   45% {
     transform: translateX(30px) scaleX(1) rotate(4deg);
-    z-index: 2;
   }
   55% {
     transform: translateX(30px) scaleX(1) rotate(0deg);
-    z-index: 2;
   }
-  65% {
+  65%, 100% {
     transform: translateX(0) scaleX(1);
-    z-index: 0;
-  }
-  66%, 100% {
-    transform: translateX(0) scaleX(1);
-    z-index: 0;
   }
 }
 
@@ -1227,7 +1187,6 @@ body,
   object-fit: contain;
   image-rendering: pixelated;
   image-rendering: crisp-edges;
-  filter: drop-shadow(0 2px 2px rgba(28, 14, 5, 0.42));
 }
 
 /* Butterfly Actor */
@@ -1292,7 +1251,6 @@ body,
   object-fit: contain;
   image-rendering: pixelated;
   image-rendering: crisp-edges;
-  filter: drop-shadow(0 2px 2px rgba(28, 14, 5, 0.35));
 }
 
 /* =========================================================================
@@ -2171,8 +2129,7 @@ body,
 .victory-backdrop {
   position: fixed;
   inset: 0;
-  background: rgba(34, 22, 14, 0.62);
-  backdrop-filter: blur(3px);
+  background: rgba(34, 22, 14, 0.72);
   display: flex;
   align-items: center;
   justify-content: center;

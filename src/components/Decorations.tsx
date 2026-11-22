@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import { TileType } from '../engine/types';
 
 import bunnyImg from '../assets/Decorations/bunny.png';
@@ -133,19 +133,21 @@ export function useFaunaManager(
 ): FaunaManagerResult {
   const size = grid.length;
 
-  // 1. Gather all tree & rock coordinates
-  const trees: Array<{ r: number; c: number }> = [];
-  const rocks: Array<{ r: number; c: number }> = [];
-
-  for (let r = 0; r < size; r++) {
-    for (let c = 0; c < size; c++) {
-      if (grid[r][c] === 'tree') {
-        trees.push({ r, c });
-      } else if (grid[r][c] === 'rock') {
-        rocks.push({ r, c });
+  // 1. Gather all tree & rock coordinates (memoized by grid)
+  const { trees, rocks } = useMemo(() => {
+    const t: Array<{ r: number; c: number }> = [];
+    const rk: Array<{ r: number; c: number }> = [];
+    for (let r = 0; r < size; r++) {
+      for (let c = 0; c < size; c++) {
+        if (grid[r][c] === 'tree') {
+          t.push({ r, c });
+        } else if (grid[r][c] === 'rock') {
+          rk.push({ r, c });
+        }
       }
     }
-  }
+    return { trees: t, rocks: rk };
+  }, [grid, size]);
 
   // Active tree index rotates every 14s for bunny peek
   const [activeTreeIdx, setActiveTreeIdx] = useState(0);
@@ -166,20 +168,22 @@ export function useFaunaManager(
       }
     : null;
 
-  // 2. Gather all marked grass cells & flower cells
-  const markedGrass: Array<{ r: number; c: number }> = [];
-  const flowerCells: Array<{ r: number; c: number }> = [];
-
-  for (let r = 0; r < size; r++) {
-    for (let c = 0; c < size; c++) {
-      if (grid[r][c] === 'empty' && marks[r]?.[c]) {
-        markedGrass.push({ r, c });
-        if (getTileFlora(levelId, r, c) !== null) {
-          flowerCells.push({ r, c });
+  // 2. Gather all marked grass cells & flower cells (memoized by grid, marks, levelId)
+  const { markedGrass, flowerCells } = useMemo(() => {
+    const mg: Array<{ r: number; c: number }> = [];
+    const fc: Array<{ r: number; c: number }> = [];
+    for (let r = 0; r < size; r++) {
+      for (let c = 0; c < size; c++) {
+        if (grid[r][c] === 'empty' && marks[r]?.[c]) {
+          mg.push({ r, c });
+          if (getTileFlora(levelId, r, c) !== null) {
+            fc.push({ r, c });
+          }
         }
       }
     }
-  }
+    return { markedGrass: mg, flowerCells: fc };
+  }, [grid, marks, levelId, size]);
 
   // 3. Ground Fauna Species & Rock Hideout
   const [speciesIdx, setSpeciesIdx] = useState(
@@ -189,12 +193,15 @@ export function useFaunaManager(
   const currentSpecies = GROUND_SPECIES_ROSTER[speciesIdx % GROUND_SPECIES_ROSTER.length];
 
   // Pick the active rock hideout (fallback to tree if no rock)
-  const activeHideout =
-    rocks.length > 0
-      ? rocks[speciesIdx % rocks.length]
-      : trees.length > 0
-      ? trees[speciesIdx % trees.length]
-      : null;
+  const activeHideout = useMemo(
+    () =>
+      rocks.length > 0
+        ? rocks[speciesIdx % rocks.length]
+        : trees.length > 0
+        ? trees[speciesIdx % trees.length]
+        : null,
+    [rocks, trees, speciesIdx]
+  );
 
   const hideoutPeekDir: 'left' | 'right' =
     activeHideout?.c === 0 ? 'right' : activeHideout?.c === size - 1 ? 'left' : 'left';
@@ -202,7 +209,7 @@ export function useFaunaManager(
   // Ground Fauna & Rock State
   const [groundFauna, setGroundFauna] = useState<GroundFaunaTileState | null>(null);
   const [isFaunaRoaming, setIsFaunaRoaming] = useState(false);
-  const [wanderCount, setWanderCount] = useState(0);
+  const [, setWanderCount] = useState(0);
 
   // Peeking rock animal is visible when the animal is still at its hideout and hasn't emerged yet
   const peekingRockAnimal: PeekingRockAnimalState | null =
@@ -237,6 +244,8 @@ export function useFaunaManager(
       return;
     }
 
+    let settleTimer: ReturnType<typeof setTimeout> | null = null;
+
     // If not roaming yet, schedule emergence from behind the rock!
     const emergeTimer = setTimeout(() => {
       // Find marked grass adjacent to hideout
@@ -262,7 +271,7 @@ export function useFaunaManager(
         setWanderCount(0);
 
         // After walking out of rock (1.5s), settle on grass
-        setTimeout(() => {
+        settleTimer = setTimeout(() => {
           setGroundFauna((curr) => (curr ? { ...curr, isWalking: false } : null));
         }, 1500);
       } else {
@@ -281,12 +290,17 @@ export function useFaunaManager(
       }
     }, 2800); // Peeks behind rock for 2.8s, then emerges into the village
 
-    return () => clearTimeout(emergeTimer);
-  }, [markedGrass.length, isFaunaRoaming, currentSpecies, activeHideout]);
+    return () => {
+      clearTimeout(emergeTimer);
+      if (settleTimer) clearTimeout(settleTimer);
+    };
+  }, [markedGrass, isFaunaRoaming, groundFauna, currentSpecies, activeHideout, levelId]);
 
   // Wandering Interval (Only active while roaming on grass)
   useEffect(() => {
-    if (!isFaunaRoaming || !groundFauna) return;
+    if (!isFaunaRoaming) return;
+
+    const subTimers: Array<ReturnType<typeof setTimeout>> = [];
 
     const wanderInterval = setInterval(() => {
       setWanderCount((count) => {
@@ -295,11 +309,12 @@ export function useFaunaManager(
           // Retire with soft fade-out
           setGroundFauna((curr) => (curr ? { ...curr, isRetiring: true } : null));
 
-          setTimeout(() => {
+          const rt = setTimeout(() => {
             setGroundFauna(null);
             setIsFaunaRoaming(false);
             setSpeciesIdx((prev) => (prev + 1) % GROUND_SPECIES_ROSTER.length);
           }, 800);
+          subTimers.push(rt);
 
           return 0;
         }
@@ -338,15 +353,19 @@ export function useFaunaManager(
         });
 
         // Stop walking after walk animation (1.5s)
-        setTimeout(() => {
+        const wt = setTimeout(() => {
           setGroundFauna((curr) => (curr ? { ...curr, isWalking: false, isSpawning: false } : null));
         }, 1500);
+        subTimers.push(wt);
 
         return count + 1;
       });
     }, 5800);
 
-    return () => clearInterval(wanderInterval);
+    return () => {
+      clearInterval(wanderInterval);
+      subTimers.forEach((t) => clearTimeout(t));
+    };
   }, [isFaunaRoaming, currentSpecies, markedGrass]);
 
   // 4. Flying Butterfly State
@@ -367,6 +386,8 @@ export function useFaunaManager(
       return { r: initial.r, c: initial.c, isFlying: false };
     });
 
+    const landTimers: Array<ReturnType<typeof setTimeout>> = [];
+
     const flyInterval = setInterval(() => {
       setButterfly((curr) => {
         if (!curr || destinations.length <= 1) return curr;
@@ -381,13 +402,17 @@ export function useFaunaManager(
       });
 
       // After flight animation completes (2.5s), land and stay completely still on flower
-      setTimeout(() => {
+      const lt = setTimeout(() => {
         setButterfly((curr) => (curr ? { ...curr, isFlying: false } : null));
       }, 2500);
+      landTimers.push(lt);
     }, 8500); // 2.5s flight + 6.0s resting still on flower
 
-    return () => clearInterval(flyInterval);
-  }, [destinations.length, levelId]);
+    return () => {
+      clearInterval(flyInterval);
+      landTimers.forEach((t) => clearTimeout(t));
+    };
+  }, [destinations, levelId]);
 
   return {
     bunnyTree,

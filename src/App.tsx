@@ -571,24 +571,27 @@ export const App: React.FC = () => {
       playVictorySound();
       hapticTap('success');
       confetti({
-        particleCount: 75,
+        particleCount: 50,
         spread: 65,
         origin: { y: 0.62 },
+        disableForReducedMotion: true,
         colors: ['#f59e0b', '#10b981', '#ea580c', '#fef3c7', '#38bdf8', '#a78bfa']
       });
       const t1 = setTimeout(() => {
         confetti({
-          particleCount: 45,
+          particleCount: 30,
           angle: 60,
           spread: 55,
           origin: { x: 0.1, y: 0.7 },
+          disableForReducedMotion: true,
           colors: ['#f59e0b', '#10b981', '#ea580c', '#fef3c7']
         });
         confetti({
-          particleCount: 45,
+          particleCount: 30,
           angle: 120,
           spread: 55,
           origin: { x: 0.9, y: 0.7 },
+          disableForReducedMotion: true,
           colors: ['#f59e0b', '#10b981', '#ea580c', '#38bdf8']
         });
       }, 250);
@@ -599,10 +602,16 @@ export const App: React.FC = () => {
 
     return () => {
       timers.forEach((t) => clearTimeout(t));
+      try {
+        confetti.reset();
+      } catch {}
     };
   }, [validation.isSolved, hintsUsed, mistakesMade, level.id, activeLevelBuildings]);
 
   const startNewLevel = (newLevel: LevelDefinition) => {
+    try {
+      confetti.reset();
+    } catch {}
     try {
       localStorage.removeItem(STORAGE_KEY_ACTIVE_SESSION);
     } catch {

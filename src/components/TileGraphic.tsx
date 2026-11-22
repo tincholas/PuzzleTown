@@ -14,18 +14,22 @@ import {
   PeekingRockAnimalGraphic
 } from './Decorations';
 
+import farmComposite from '../assets/buildings/farm_composite.png';
 import farmStage1 from '../assets/buildings/farm_stage1.png';
 import farmStage2 from '../assets/buildings/farm_stage2.png';
 import farmStage3 from '../assets/buildings/farm_stage3.png';
 
+import houseComposite from '../assets/buildings/house_composite.png';
 import houseStage1 from '../assets/buildings/house_stage1.png';
 import houseStage2 from '../assets/buildings/house_stage2.png';
 import houseStage3 from '../assets/buildings/house_stage3.png';
 
+import woodcutterComposite from '../assets/buildings/woodcutter_composite.png';
 import woodcutterStage1 from '../assets/buildings/woodcutter_stage1.png';
 import woodcutterStage2 from '../assets/buildings/woodcutter_stage2.png';
 import woodcutterStage3 from '../assets/buildings/woodcutter_stage3.png';
 
+import townHallComposite from '../assets/buildings/town_hall_composite.png';
 import townHallStage1 from '../assets/buildings/town_hall_stage1.png';
 import townHallStage2 from '../assets/buildings/town_hall_stage2.png';
 import townHallStage3 from '../assets/buildings/town_hall_stage3.png';
@@ -50,18 +54,18 @@ export interface RoadConnections {
 
 export const BUILDING_STAGE_ASSETS: Record<
   BuildingType,
-  { stage1: string; stage2: string; stage3: string }
+  { composite: string; stage1: string; stage2: string; stage3: string }
 > = {
-  farm: { stage1: farmStage1, stage2: farmStage2, stage3: farmStage3 },
-  house: { stage1: houseStage1, stage2: houseStage2, stage3: houseStage3 },
-  woodcutter: { stage1: woodcutterStage1, stage2: woodcutterStage2, stage3: woodcutterStage3 },
-  town_hall: { stage1: townHallStage1, stage2: townHallStage2, stage3: townHallStage3 }
+  farm: { composite: farmComposite, stage1: farmStage1, stage2: farmStage2, stage3: farmStage3 },
+  house: { composite: houseComposite, stage1: houseStage1, stage2: houseStage2, stage3: houseStage3 },
+  woodcutter: { composite: woodcutterComposite, stage1: woodcutterStage1, stage2: woodcutterStage2, stage3: woodcutterStage3 },
+  town_hall: { composite: townHallComposite, stage1: townHallStage1, stage2: townHallStage2, stage3: townHallStage3 }
 };
 
 // Preload building & obstacle images for instant zero-lag animations
 if (typeof window !== 'undefined') {
   Object.values(BUILDING_STAGE_ASSETS).forEach((layers) => {
-    [layers.stage1, layers.stage2, layers.stage3].forEach((src) => {
+    [layers.composite, layers.stage1, layers.stage2, layers.stage3].forEach((src) => {
       const img = new Image();
       img.src = src;
     });
@@ -132,11 +136,6 @@ export const RockGraphic: React.FC<{
   </div>
 );
 
-export interface BuildingSpriteProps {
-  type: BuildingType;
-  isNewlyBuilt?: boolean;
-}
-
 const CHIMNEY_COORDS: Partial<Record<BuildingType, { x: string; y: string }>> = {
   house: { x: '76%', y: '21%' },
   town_hall: { x: '76.67%', y: '15%' },
@@ -165,33 +164,42 @@ export const BuildingSprite: React.FC<BuildingSpriteProps> = ({
       aria-label={type}
     >
       <div className={`tile-ground-shadow building-${type}-shadow`} />
-      <img
-        src={assets.stage1}
-        alt=""
-        className="building-layer building-layer-1"
-        draggable={false}
-      />
-      <img
-        src={assets.stage2}
-        alt=""
-        className="building-layer building-layer-2"
-        draggable={false}
-      />
-      <img
-        src={assets.stage3}
-        alt=""
-        className="building-layer building-layer-3"
-        draggable={false}
-      />
-      {isNewlyBuilt && (
-        <div className="construction-dust-emitter" aria-hidden="true">
-          <div className="dust-puff dust-puff-1" />
-          <div className="dust-puff dust-puff-2" />
-          <div className="dust-puff dust-puff-3" />
-          <div className="dust-puff dust-puff-4" />
-          <div className="dust-puff dust-puff-5" />
-          <div className="dust-puff dust-puff-6" />
-        </div>
+      {isNewlyBuilt ? (
+        <>
+          <img
+            src={assets.stage1}
+            alt=""
+            className="building-layer building-layer-1"
+            draggable={false}
+          />
+          <img
+            src={assets.stage2}
+            alt=""
+            className="building-layer building-layer-2"
+            draggable={false}
+          />
+          <img
+            src={assets.stage3}
+            alt=""
+            className="building-layer building-layer-3"
+            draggable={false}
+          />
+          <div className="construction-dust-emitter" aria-hidden="true">
+            <div className="dust-puff dust-puff-1" />
+            <div className="dust-puff dust-puff-2" />
+            <div className="dust-puff dust-puff-3" />
+            <div className="dust-puff dust-puff-4" />
+            <div className="dust-puff dust-puff-5" />
+            <div className="dust-puff dust-puff-6" />
+          </div>
+        </>
+      ) : (
+        <img
+          src={assets.composite}
+          alt=""
+          className="building-layer"
+          draggable={false}
+        />
       )}
       {!disableSmoke && chimney && (
         <div
@@ -200,11 +208,8 @@ export const BuildingSprite: React.FC<BuildingSpriteProps> = ({
           aria-hidden="true"
         >
           <div className="smoke-puff smoke-puff-1" />
-          <div className="smoke-puff smoke-puff-2" />
           <div className="smoke-puff smoke-puff-3" />
-          <div className="smoke-puff smoke-puff-4" />
           <div className="smoke-puff smoke-puff-5" />
-          <div className="smoke-puff smoke-puff-6" />
         </div>
       )}
     </div>
