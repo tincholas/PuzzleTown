@@ -24,6 +24,7 @@ const mockLocalStorage = {
 import {
   getSavedFeedback,
   saveFeedbackToStorage,
+  setAnalyticsEnabled,
   trackEvent,
   trackLevelFeedback
 } from '../src/utils/analytics';
@@ -31,6 +32,7 @@ import {
 describe('Level Feedback & Analytics', () => {
   beforeEach(() => {
     mockLocalStorage.clear();
+    setAnalyticsEnabled(true);
     (globalThis as unknown as { window: { gtag?: unknown } }).window.gtag = vi.fn();
   });
 

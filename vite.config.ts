@@ -2,8 +2,11 @@ import { defineConfig } from 'vite';
 import react from '@vitejs/plugin-react';
 import { VitePWA } from 'vite-plugin-pwa';
 
-export default defineConfig({
+export default defineConfig(({ mode }) => ({
   base: './',
+  esbuild: {
+    drop: mode === 'production' ? ['console', 'debugger'] : []
+  },
   define: {
     __APP_VERSION__: JSON.stringify('1.1.0'),
     __BUILD_DATE__: JSON.stringify(new Date().toISOString().split('T')[0])
@@ -51,4 +54,4 @@ export default defineConfig({
       }
     })
   ]
-});
+}));

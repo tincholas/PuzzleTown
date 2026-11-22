@@ -30,10 +30,22 @@ export interface LevelFeedbackRecord {
   timestamp: string;
 }
 
+// Master toggle: temporarily disabled for release to simplify data sharing & privacy labels
+let analyticsEnabled = false;
+
+export function setAnalyticsEnabled(enabled: boolean) {
+  analyticsEnabled = enabled;
+}
+
+export function isAnalyticsEnabled(): boolean {
+  return analyticsEnabled;
+}
+
 let isInitialized = false;
 
 /** Initialize Google Analytics 4 tag dynamically if Measurement ID is provided */
 export function initAnalytics(overrideId?: string) {
+  if (!analyticsEnabled) return;
   const measurementId = overrideId || GA_MEASUREMENT_ID;
   if (!measurementId || isInitialized || typeof window === 'undefined') return;
 
@@ -69,7 +81,7 @@ export function trackEvent(
   eventName: string,
   params: Record<string, string | number | boolean> = {}
 ) {
-  if (typeof window === 'undefined') return;
+  if (!analyticsEnabled || typeof window === 'undefined') return;
 
   // Log in development for easy verification
   if (import.meta.env.DEV) {
@@ -150,8 +162,8 @@ export async function trackLevelFeedback(record: {
     stars: record.stars
   });
 
-  // 3. Optional: Forward to custom webhook / Google Apps Script if URL is provided
-  if (FEEDBACK_WEBHOOK_URL) {
+  // 3. Optional: Forward to custom webhook / Google Apps Script if URL is provided and enabled
+  if (analyticsEnabled && FEEDBACK_WEBHOOK_URL) {
     try {
       await fetch(FEEDBACK_WEBHOOK_URL, {
         method: 'POST',
