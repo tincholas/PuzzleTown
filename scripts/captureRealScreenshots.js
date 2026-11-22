@@ -8,13 +8,48 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 const rootDir = path.resolve(__dirname, '..');
 const distDir = path.join(rootDir, 'dist');
-const outDir = path.join(rootDir, 'release/ios/screenshots');
+const baseOutDir = path.join(rootDir, 'release/ios/screenshots');
 
-if (!fs.existsSync(outDir)) {
-  fs.mkdirSync(outDir, { recursive: true });
-}
+const PROFILES = [
+  {
+    id: 'iphone',
+    folder: 'iphone_886x1920',
+    viewport: {
+      width: 443,
+      height: 960,
+      deviceScaleFactor: 2, // 443 * 2 = 886, 960 * 2 = 1920
+      isMobile: true,
+      hasTouch: true
+    },
+    expected: '886x1920'
+  },
+  {
+    id: 'duo',
+    folder: 'duo_1389x2034',
+    viewport: {
+      width: 1389,
+      height: 2034,
+      deviceScaleFactor: 1, // exactly 1389 x 2034
+      isMobile: true,
+      hasTouch: true
+    },
+    expected: '1389x2034'
+  },
+  {
+    id: 'ipad',
+    folder: 'ipad_2064x2752',
+    viewport: {
+      width: 1032,
+      height: 1376,
+      deviceScaleFactor: 2, // 1032 * 2 = 2064, 1376 * 2 = 2752
+      isMobile: false,
+      hasTouch: true
+    },
+    expected: '2064x2752'
+  }
+];
 
-// 1. Simple local static HTTP server for dist/
+// Simple local static HTTP server for dist/
 const MIME_TYPES = {
   '.html': 'text/html',
   '.js': 'application/javascript',
@@ -57,26 +92,11 @@ async function run() {
     args: ['--no-sandbox', '--disable-setuid-sandbox', '--disable-web-security']
   });
 
-  const page = await browser.newPage();
-
-  // iPhone 16 Pro Max viewport: 430 x 932 @ 3x = exactly 1290 x 2796
-  await page.setViewport({
-    width: 430,
-    height: 932,
-    deviceScaleFactor: 3,
-    isMobile: true,
-    hasTouch: true
-  });
-
-  console.log('Viewport set to 430x932 @ 3x (1290x2796 pixels).');
-
-  // Load levels to create authentic in-progress session
   const levels = JSON.parse(
     fs.readFileSync(path.join(rootDir, 'src/engine/prebakedLevels.json'), 'utf8')
   );
   const lvl12 = levels.find((l) => l.id === 12);
 
-  // Partial session for Level 12 (mid-game with realistic placements)
   const partialGrid = [
     ['empty', 'empty', 'empty', 'empty', 'house'],
     ['empty', 'empty', 'tree', 'tree', 'empty'],
@@ -95,7 +115,6 @@ async function run() {
   const excludedByCell = Array.from({ length: 5 }, () =>
     Array.from({ length: 5 }, () => [])
   );
-  // Mark column 1 cells as excluded for Woodcutter (since col 1 limit is 0)
   excludedByCell[0][1] = ['woodcutter', 'house'];
   excludedByCell[1][1] = ['woodcutter', 'house'];
 
@@ -118,89 +137,6 @@ async function run() {
     mistakesMade: 0
   };
 
-  // -------------------------------------------------------------------------
-  // SCREENSHOT 1: Core Gameplay Board (Level 12 In-Progress)
-  // -------------------------------------------------------------------------
-  console.log('Capturing Screenshot 1: Core Gameplay Board...');
-  await page.goto(`http://127.0.0.1:${PORT}`, { waitUntil: 'networkidle0' });
-  await page.evaluate((prog, sess) => {
-    localStorage.setItem('puzzletown_progress_v1', JSON.stringify(prog));
-    localStorage.setItem('puzzletown_active_session_v1', JSON.stringify(sess));
-    localStorage.setItem('puzzletown_sfx_enabled', 'false');
-    localStorage.setItem('puzzletown_music_enabled', 'false');
-  }, sampleProgress, sampleSession);
-
-  // Reload with state active
-  await page.goto(`http://127.0.0.1:${PORT}`, { waitUntil: 'networkidle0' });
-  await page.waitForSelector('.board-wrapper');
-  await new Promise((r) => setTimeout(r, 600));
-
-  const shot1Path = path.join(outDir, 'screenshot-1-gameplay.png');
-  await page.screenshot({ path: shot1Path });
-  console.log('✓ Saved screenshot-1-gameplay.png');
-
-  // -------------------------------------------------------------------------
-  // SCREENSHOT 2: Neighborhood Building Rules Modal
-  // -------------------------------------------------------------------------
-  console.log('Capturing Screenshot 2: Neighborhood Rules Modal...');
-  const rulesBtn = await page.waitForSelector('button[aria-label="Rules"]');
-  if (rulesBtn) {
-    await rulesBtn.click();
-    await new Promise((r) => setTimeout(r, 500));
-    const shot2Path = path.join(outDir, 'screenshot-2-rules.png');
-    await page.screenshot({ path: shot2Path });
-    console.log('✓ Saved screenshot-2-rules.png');
-
-    // Close rules modal
-    const closeBtn = await page.$('.modal-close-btn');
-    if (closeBtn) {
-      await closeBtn.click();
-      await new Promise((r) => setTimeout(r, 350));
-    }
-  }
-
-  // -------------------------------------------------------------------------
-  // SCREENSHOT 3: Smart Step-by-Step Hint Walkthrough
-  // -------------------------------------------------------------------------
-  console.log('Capturing Screenshot 3: Interactive Hint Walkthrough...');
-  const hintBtn = await page.waitForSelector('button[aria-label="Hint"]');
-  if (hintBtn) {
-    await hintBtn.click();
-    await new Promise((r) => setTimeout(r, 600));
-    const shot3Path = path.join(outDir, 'screenshot-3-hints.png');
-    await page.screenshot({ path: shot3Path });
-    console.log('✓ Saved screenshot-3-hints.png');
-
-    // Dismiss or close hint
-    await page.keyboard.press('Escape');
-    await new Promise((r) => setTimeout(r, 300));
-  }
-
-  // -------------------------------------------------------------------------
-  // SCREENSHOT 4: Campaign Level Select Modal
-  // -------------------------------------------------------------------------
-  console.log('Capturing Screenshot 4: Campaign Level Select Modal...');
-  const levelBtn = await page.waitForSelector('button[aria-label="Select Level"]');
-  if (levelBtn) {
-    await levelBtn.click();
-    await new Promise((r) => setTimeout(r, 500));
-    const shot4Path = path.join(outDir, 'screenshot-4-levels.png');
-    await page.screenshot({ path: shot4Path });
-    console.log('✓ Saved screenshot-4-levels.png');
-
-    // Close levels modal
-    const closeBtn = await page.$('.modal-close-btn');
-    if (closeBtn) {
-      await closeBtn.click();
-      await new Promise((r) => setTimeout(r, 350));
-    }
-  }
-
-  // -------------------------------------------------------------------------
-  // SCREENSHOT 5: Victory Celebration (Village Complete!)
-  // -------------------------------------------------------------------------
-  console.log('Capturing Screenshot 5: Victory Celebration...');
-  // Solution for level 12
   const solvedSession = {
     levelId: 12,
     grid: lvl12.solution,
@@ -212,26 +148,104 @@ async function run() {
     mistakesMade: 0
   };
 
-  await page.evaluate((sess) => {
-    localStorage.setItem('puzzletown_active_session_v1', JSON.stringify(sess));
-  }, solvedSession);
+  for (const profile of PROFILES) {
+    const targetDir = path.join(baseOutDir, profile.folder);
+    if (!fs.existsSync(targetDir)) {
+      fs.mkdirSync(targetDir, { recursive: true });
+    }
 
-  await page.goto(`http://127.0.0.1:${PORT}`, { waitUntil: 'networkidle0' });
-  await page.waitForSelector('.board-wrapper');
-  // Wait for victory modal and confetti animation
-  await new Promise((r) => setTimeout(r, 1200));
+    console.log(`\n========================================`);
+    console.log(`Capturing profile: ${profile.id} -> ${profile.expected} (${targetDir})`);
+    console.log(`========================================`);
 
-  const shot5Path = path.join(outDir, 'screenshot-5-victory.png');
-  await page.screenshot({ path: shot5Path });
-  console.log('✓ Saved screenshot-5-victory.png');
+    const page = await browser.newPage();
+    await page.setViewport(profile.viewport);
+
+    // 1. Core Gameplay Board
+    console.log('Capturing Screenshot 1: Gameplay Board...');
+    await page.goto(`http://127.0.0.1:${PORT}`, { waitUntil: 'networkidle0' });
+    await page.evaluate((prog, sess) => {
+      localStorage.setItem('puzzletown_progress_v1', JSON.stringify(prog));
+      localStorage.setItem('puzzletown_active_session_v1', JSON.stringify(sess));
+      localStorage.setItem('puzzletown_sfx_enabled', 'false');
+      localStorage.setItem('puzzletown_music_enabled', 'false');
+    }, sampleProgress, sampleSession);
+
+    await page.goto(`http://127.0.0.1:${PORT}`, { waitUntil: 'networkidle0' });
+    await page.waitForSelector('.board-wrapper');
+    await new Promise((r) => setTimeout(r, 600));
+
+    await page.screenshot({ path: path.join(targetDir, 'screenshot-1-gameplay.png') });
+    console.log(`✓ [${profile.id}] Saved screenshot-1-gameplay.png`);
+
+    // 2. Rules Modal
+    console.log('Capturing Screenshot 2: Rules Modal...');
+    const rulesBtn = await page.waitForSelector('button[aria-label="Rules"]');
+    if (rulesBtn) {
+      await rulesBtn.click();
+      await new Promise((r) => setTimeout(r, 500));
+      await page.screenshot({ path: path.join(targetDir, 'screenshot-2-rules.png') });
+      console.log(`✓ [${profile.id}] Saved screenshot-2-rules.png`);
+
+      const closeBtn = await page.$('.modal-close-btn');
+      if (closeBtn) {
+        await closeBtn.click();
+        await new Promise((r) => setTimeout(r, 350));
+      }
+    }
+
+    // 3. Hint Walkthrough
+    console.log('Capturing Screenshot 3: Hint Walkthrough...');
+    const hintBtn = await page.waitForSelector('button[aria-label="Hint"]');
+    if (hintBtn) {
+      await hintBtn.click();
+      await new Promise((r) => setTimeout(r, 600));
+      await page.screenshot({ path: path.join(targetDir, 'screenshot-3-hints.png') });
+      console.log(`✓ [${profile.id}] Saved screenshot-3-hints.png`);
+
+      await page.keyboard.press('Escape');
+      await new Promise((r) => setTimeout(r, 300));
+    }
+
+    // 4. Level Select Modal
+    console.log('Capturing Screenshot 4: Level Select Modal...');
+    const levelBtn = await page.waitForSelector('button[aria-label="Select Level"]');
+    if (levelBtn) {
+      await levelBtn.click();
+      await new Promise((r) => setTimeout(r, 500));
+      await page.screenshot({ path: path.join(targetDir, 'screenshot-4-levels.png') });
+      console.log(`✓ [${profile.id}] Saved screenshot-4-levels.png`);
+
+      const closeBtn = await page.$('.modal-close-btn');
+      if (closeBtn) {
+        await closeBtn.click();
+        await new Promise((r) => setTimeout(r, 350));
+      }
+    }
+
+    // 5. Victory Celebration
+    console.log('Capturing Screenshot 5: Victory Celebration...');
+    await page.evaluate((sess) => {
+      localStorage.setItem('puzzletown_active_session_v1', JSON.stringify(sess));
+    }, solvedSession);
+
+    await page.goto(`http://127.0.0.1:${PORT}`, { waitUntil: 'networkidle0' });
+    await page.waitForSelector('.board-wrapper');
+    await new Promise((r) => setTimeout(r, 1200));
+
+    await page.screenshot({ path: path.join(targetDir, 'screenshot-5-victory.png') });
+    console.log(`✓ [${profile.id}] Saved screenshot-5-victory.png`);
+
+    await page.close();
+  }
 
   await browser.close();
   server.close();
-  console.log('\nAll 5 authentic in-game screenshots captured successfully!');
+  console.log('\nAll profiles captured successfully!');
 }
 
 run().catch((err) => {
-  console.error('Error during screenshot capture:', err);
+  console.error('Error during capture:', err);
   server.close();
   process.exit(1);
 });
