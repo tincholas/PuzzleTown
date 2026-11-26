@@ -450,7 +450,7 @@ export function generateBonusCustomLevel(
 ): LevelDefinition {
   const cfg: GeneratorConfig = {
     id: 200 + (seed % 800),
-    chapter: 7,
+    chapter: 8,
     chapterName: 'Bonus Charter',
     title: `Charter #${200 + (seed % 800)}`,
     size,
@@ -465,5 +465,7 @@ export function generateBonusCustomLevel(
     allowTurningRoads: true,
     difficulty: size === 5 ? 'Medium' : size === 6 ? 'Hard' : 'Expert'
   };
-  return generateVerifiedLevel(cfg, seed);
+  const level = generateVerifiedLevel(cfg, seed);
+  level.bonusSeed = seed;
+  return level;
 }

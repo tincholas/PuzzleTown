@@ -85,6 +85,7 @@ export interface LevelDefinition {
   difficultyMetrics?: DifficultyMetrics;
   density?: number;
   tutorialTip?: string;
+  bonusSeed?: number;
 }
 
 export type LineStatus = 'under' | 'exact' | 'over';

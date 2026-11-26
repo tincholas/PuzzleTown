@@ -5,6 +5,8 @@ export interface ShareChallengeOptions {
   levelId: number;
   levelTitle: string;
   stars: number;
+  bonusSeed?: number;
+  size?: number;
 }
 
 export type ShareResult =
@@ -14,9 +16,19 @@ export type ShareResult =
 
 export const BASE_SHARE_URL = 'https://stonecallstudio.com/PuzzleTown/';
 
-export function buildChallengeUrl(levelId: number, stars: number): string {
+export function buildChallengeUrl(
+  levelId: number,
+  stars: number,
+  bonusSeed?: number,
+  size?: number
+): string {
   const url = new URL(BASE_SHARE_URL);
-  url.searchParams.set('level', String(levelId));
+  if (bonusSeed !== undefined && size !== undefined) {
+    url.searchParams.set('seed', String(bonusSeed));
+    url.searchParams.set('size', String(size));
+  } else {
+    url.searchParams.set('level', String(levelId));
+  }
   url.searchParams.set('challengeStars', String(stars));
   return url.toString();
 }
@@ -24,12 +36,19 @@ export function buildChallengeUrl(levelId: number, stars: number): string {
 export async function shareLevelChallenge({
   levelId,
   levelTitle,
-  stars
+  stars,
+  bonusSeed,
+  size
 }: ShareChallengeOptions): Promise<ShareResult> {
   const starIcons = '⭐'.repeat(Math.max(1, Math.min(3, stars)));
-  const shareUrl = buildChallengeUrl(levelId, stars);
-  const title = `PuzzleTown Challenge — Level ${levelId}`;
-  const text = `I just earned ${starIcons} on Level ${levelId} ("${levelTitle}") in PuzzleTown! Can you beat my score? 🏘️`;
+  const shareUrl = buildChallengeUrl(levelId, stars, bonusSeed, size);
+  const isBonus = bonusSeed !== undefined && size !== undefined;
+  const title = isBonus
+    ? `PuzzleTown Challenge — ${levelTitle} (${size}×${size})`
+    : `PuzzleTown Challenge — Level ${levelId}`;
+  const text = isBonus
+    ? `I just earned ${starIcons} on ${levelTitle} (${size}×${size} Bonus Charter) in PuzzleTown! Can you beat my score? 🏘️`
+    : `I just earned ${starIcons} on Level ${levelId} ("${levelTitle}") in PuzzleTown! Can you beat my score? 🏘️`;
 
   // 1. Native Capacitor Share (iOS & Android)
   if (Capacitor.isNativePlatform()) {

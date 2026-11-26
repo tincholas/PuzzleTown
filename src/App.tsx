@@ -311,6 +311,7 @@ export const App: React.FC = () => {
   const [shareToast, setShareToast] = useState<string | null>(null);
   const [challengeNotice, setChallengeNotice] = useState<{
     levelId: number;
+    label?: string;
     stars?: number;
   } | null>(null);
 
@@ -702,8 +703,33 @@ export const App: React.FC = () => {
     try {
       if (typeof window === 'undefined') return;
       const params = new URLSearchParams(window.location.search);
+      const seedParam = params.get('seed');
+      const sizeParam = params.get('size');
       const levelParam = params.get('level');
       const starsParam = params.get('challengeStars') || params.get('stars');
+
+      if (seedParam) {
+        const parsedSeed = parseInt(seedParam, 10);
+        const parsedSize = sizeParam ? parseInt(sizeParam, 10) : 6;
+        const validSize: 5 | 6 | 7 =
+          parsedSize === 5 || parsedSize === 6 || parsedSize === 7
+            ? parsedSize
+            : 6;
+        if (!isNaN(parsedSeed) && parsedSeed >= 0) {
+          const bonusLevel = generateBonusCustomLevel(validSize, parsedSeed);
+          startNewLevel(bonusLevel);
+          if (starsParam) {
+            const stars = parseInt(starsParam, 10);
+            setChallengeNotice({
+              levelId: bonusLevel.id,
+              label: `${bonusLevel.title} (${validSize}×${validSize})`,
+              stars: !isNaN(stars) ? stars : undefined
+            });
+          }
+          return;
+        }
+      }
+
       if (levelParam) {
         const lvl = parseInt(levelParam, 10);
         if (!isNaN(lvl) && lvl >= 1 && lvl <= CAMPAIGN_CONFIGS.length) {
@@ -729,11 +755,33 @@ export const App: React.FC = () => {
     const urlListenerPromise = CapApp.addListener('appUrlOpen', (event) => {
       try {
         const parsed = new URL(event.url);
+        const seedParam = parsed.searchParams.get('seed');
+        const sizeParam = parsed.searchParams.get('size');
         const levelParam =
           parsed.searchParams.get('level') || parsed.searchParams.get('id');
         const starsParam =
           parsed.searchParams.get('challengeStars') ||
           parsed.searchParams.get('stars');
+
+        if (seedParam) {
+          const parsedSeed = parseInt(seedParam, 10);
+          const parsedSize = sizeParam ? parseInt(sizeParam, 10) : 6;
+          const validSize: 5 | 6 | 7 =
+            parsedSize === 5 || parsedSize === 6 || parsedSize === 7
+              ? parsedSize
+              : 6;
+          if (!isNaN(parsedSeed) && parsedSeed >= 0) {
+            const bonusLevel = generateBonusCustomLevel(validSize, parsedSeed);
+            startNewLevel(bonusLevel);
+            setChallengeNotice({
+              levelId: bonusLevel.id,
+              label: `${bonusLevel.title} (${validSize}×${validSize})`,
+              stars: starsParam ? parseInt(starsParam, 10) : undefined
+            });
+            return;
+          }
+        }
+
         if (levelParam) {
           const lvl = parseInt(levelParam, 10);
           if (!isNaN(lvl) && lvl >= 1 && lvl <= CAMPAIGN_CONFIGS.length) {
@@ -1535,7 +1583,9 @@ export const App: React.FC = () => {
                   const res = await shareLevelChallenge({
                     levelId: level.id,
                     levelTitle: level.title,
-                    stars: liveStars
+                    stars: liveStars,
+                    bonusSeed: level.bonusSeed,
+                    size: level.size
                   });
                   if (res.success && res.method === 'clipboard') {
                     setShareToast('Challenge link copied to clipboard!');
@@ -1598,7 +1648,7 @@ export const App: React.FC = () => {
       {challengeNotice && (
         <div className="challenge-banner" role="status">
           <span>
-            🎯 Challenge: Can you beat {challengeNotice.stars ? '⭐'.repeat(challengeNotice.stars) : 'this score'} on Level {challengeNotice.levelId}?
+            🎯 Challenge: Can you beat {challengeNotice.stars ? '⭐'.repeat(challengeNotice.stars) : 'this score'} on {challengeNotice.label ?? `Level ${challengeNotice.levelId}`}?
           </span>
           <button
             type="button"
