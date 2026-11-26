@@ -8,6 +8,7 @@ import {
   Lightbulb,
   Sparkles,
   Star,
+  Share2,
   ThumbsDown,
   ThumbsUp
 } from 'lucide-react';
@@ -75,6 +76,7 @@ import { SettingsModal } from './components/SettingsModal';
 import { pwaManager } from './pwaManager';
 import { App as CapApp } from '@capacitor/app';
 import { Capacitor } from '@capacitor/core';
+import { shareLevelChallenge } from './utils/share';
 
 interface HistorySnapshot {
   grid: TileType[][];
@@ -306,6 +308,11 @@ export const App: React.FC = () => {
   const [sfxOn, setSfxOn] = useState<boolean>(() => isSfxEnabled());
   const [musicOn, setMusicOn] = useState<boolean>(() => isMusicEnabled());
   const [vibrationOn, setVibrationOn] = useState<boolean>(() => isVibrationEnabled());
+  const [shareToast, setShareToast] = useState<string | null>(null);
+  const [challengeNotice, setChallengeNotice] = useState<{
+    levelId: number;
+    stars?: number;
+  } | null>(null);
 
   // Native Android hardware back-button integration
   useEffect(() => {
@@ -675,6 +682,77 @@ export const App: React.FC = () => {
     const bonusLevel = generateBonusCustomLevel(size, seed);
     startNewLevel(bonusLevel);
   };
+
+  // Auto-dismiss share toast
+  useEffect(() => {
+    if (!shareToast) return;
+    const t = setTimeout(() => setShareToast(null), 3200);
+    return () => clearTimeout(t);
+  }, [shareToast]);
+
+  // Auto-dismiss challenge notice after 8 seconds
+  useEffect(() => {
+    if (!challengeNotice) return;
+    const t = setTimeout(() => setChallengeNotice(null), 8000);
+    return () => clearTimeout(t);
+  }, [challengeNotice]);
+
+  // Check initial URL parameters on Web launch
+  useEffect(() => {
+    try {
+      if (typeof window === 'undefined') return;
+      const params = new URLSearchParams(window.location.search);
+      const levelParam = params.get('level');
+      const starsParam = params.get('challengeStars') || params.get('stars');
+      if (levelParam) {
+        const lvl = parseInt(levelParam, 10);
+        if (!isNaN(lvl) && lvl >= 1 && lvl <= CAMPAIGN_CONFIGS.length) {
+          handleSelectCampaignLevel(lvl);
+          if (starsParam) {
+            const stars = parseInt(starsParam, 10);
+            setChallengeNotice({
+              levelId: lvl,
+              stars: !isNaN(stars) ? stars : undefined
+            });
+          }
+        }
+      }
+    } catch {
+      // ignore
+    }
+  }, []);
+
+  // Listen for native deep links (Universal Links & custom scheme)
+  useEffect(() => {
+    if (!Capacitor.isNativePlatform()) return;
+
+    const urlListenerPromise = CapApp.addListener('appUrlOpen', (event) => {
+      try {
+        const parsed = new URL(event.url);
+        const levelParam =
+          parsed.searchParams.get('level') || parsed.searchParams.get('id');
+        const starsParam =
+          parsed.searchParams.get('challengeStars') ||
+          parsed.searchParams.get('stars');
+        if (levelParam) {
+          const lvl = parseInt(levelParam, 10);
+          if (!isNaN(lvl) && lvl >= 1 && lvl <= CAMPAIGN_CONFIGS.length) {
+            handleSelectCampaignLevel(lvl);
+            setChallengeNotice({
+              levelId: lvl,
+              stars: starsParam ? parseInt(starsParam, 10) : undefined
+            });
+          }
+        }
+      } catch (err) {
+        console.warn('Failed to parse incoming deep link:', event.url, err);
+      }
+    });
+
+    return () => {
+      urlListenerPromise.then((handle) => handle.remove());
+    };
+  }, []);
 
   const pushHistory = () => {
     setHistory((prev) => [
@@ -1450,6 +1528,24 @@ export const App: React.FC = () => {
               >
                 All Levels
               </button>
+              <button
+                type="button"
+                className="action-pill-btn share-btn"
+                onClick={async () => {
+                  const res = await shareLevelChallenge({
+                    levelId: level.id,
+                    levelTitle: level.title,
+                    stars: liveStars
+                  });
+                  if (res.success && res.method === 'clipboard') {
+                    setShareToast('Challenge link copied to clipboard!');
+                  }
+                }}
+                title="Challenge a friend to beat your score"
+                aria-label="Challenge a friend"
+              >
+                <Share2 size={17} /> Challenge
+              </button>
               {hasNextCampaignLevel ? (
                 <button
                   type="button"
@@ -1496,6 +1592,31 @@ export const App: React.FC = () => {
           onToggleVibration={handleToggleVibration}
           onClose={() => setShowSettingsModal(false)}
         />
+      )}
+
+      {/* Incoming Challenge Banner */}
+      {challengeNotice && (
+        <div className="challenge-banner" role="status">
+          <span>
+            🎯 Challenge: Can you beat {challengeNotice.stars ? '⭐'.repeat(challengeNotice.stars) : 'this score'} on Level {challengeNotice.levelId}?
+          </span>
+          <button
+            type="button"
+            className="challenge-banner-close"
+            onClick={() => setChallengeNotice(null)}
+            aria-label="Dismiss challenge notification"
+          >
+            ✕
+          </button>
+        </div>
+      )}
+
+      {/* Share Toast */}
+      {shareToast && (
+        <div className="share-toast" role="alert">
+          <CheckCircle2 size={18} />
+          <span>{shareToast}</span>
+        </div>
       )}
     </div>
   );

@@ -2709,31 +2709,121 @@ body,
 
 .victory-actions {
   display: flex;
-  gap: 10px;
+  gap: 8px;
   margin-top: 8px;
+  flex-wrap: wrap;
+  justify-content: center;
 }
 
 .action-pill-btn {
   display: inline-flex;
   align-items: center;
   gap: 6px;
-  padding: 9px 16px;
+  padding: 9px 15px;
   border-radius: 12px;
   border: 2.8px solid var(--ink);
   background: #e3c184;
   color: var(--ink);
   font-family: var(--font-display);
-  font-size: 0.95rem;
+  font-size: 0.92rem;
   font-weight: 700;
   cursor: pointer;
   box-shadow: 0 4px 0 var(--ink);
   transition: transform 0.1s ease;
 }
 
+.action-pill-btn.share-btn {
+  background: #e09f3e;
+  color: #fff;
+  border-color: #2b1f13;
+  box-shadow: 0 4px 0 #2b1f13;
+}
+
+.action-pill-btn.share-btn:hover {
+  background: #d49132;
+}
+
 .action-pill-btn.primary {
   background: #86ba4e;
   color: #fff;
   animation: pulseGlow 1.8s infinite ease-in-out;
+}
+
+/* Incoming Challenge Banner */
+.challenge-banner {
+  position: fixed;
+  top: 14px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: #2a221b;
+  color: #fef3c7;
+  border: 2.5px solid #f59e0b;
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.45);
+  padding: 9px 18px;
+  border-radius: 30px;
+  font-size: 0.88rem;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  z-index: 3000;
+  animation: slideDownPop 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+  max-width: 90vw;
+  box-sizing: border-box;
+}
+
+.challenge-banner-close {
+  background: transparent;
+  border: none;
+  color: #f59e0b;
+  font-size: 1rem;
+  font-weight: 900;
+  cursor: pointer;
+  padding: 0 4px;
+  line-height: 1;
+}
+
+/* Share Toast */
+.share-toast {
+  position: fixed;
+  bottom: 24px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: #15803d;
+  color: #fff;
+  border: 2px solid #166534;
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.35);
+  padding: 10px 20px;
+  border-radius: 30px;
+  font-size: 0.92rem;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  z-index: 3000;
+  animation: slideUpPop 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+@keyframes slideDownPop {
+  0% {
+    opacity: 0;
+    transform: translate(-50%, -20px) scale(0.95);
+  }
+  100% {
+    opacity: 1;
+    transform: translate(-50%, 0) scale(1);
+  }
+}
+
+@keyframes slideUpPop {
+  0% {
+    opacity: 0;
+    transform: translate(-50%, 20px) scale(0.95);
+  }
+  100% {
+    opacity: 1;
+    transform: translate(-50%, 0) scale(1);
+  }
 }
 
 @keyframes pulseGlow {
