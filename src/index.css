@@ -1310,6 +1310,11 @@ body,
   animation: windmillSpin 9s linear infinite;
 }
 
+/* While masking in (build animation), keep sails in resting 0deg orientation so they do not rotate prematurely and snap */
+.building-sprite-container.is-animating-build .building-windmill-sails {
+  animation: none;
+}
+
 .building-windmill-sails {
   position: absolute;
   inset: 0;
