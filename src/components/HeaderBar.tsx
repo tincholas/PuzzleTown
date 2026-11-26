@@ -127,14 +127,12 @@ export const HeaderBar: React.FC<HeaderBarProps> = ({
       >
         <div className="plaque-inner">
           <div className="plaque-top-row">
-            <span className="plaque-title">{level.chapterName}</span>
-            <span className={`diff-pill diff-${level.difficulty.toLowerCase()}`}>
-              {level.difficulty} ({level.difficultyScore ?? 50})
+            <span className="plaque-title">
+              Level {level.id}: {level.title}
             </span>
-          </div>
-          <div className="plaque-subtitle">
-            Level {level.id}: {level.title}
-            {level.density ? ` • ${Math.round(level.density * 100)}% dense` : ''}
+            <span className={`diff-pill diff-${level.difficulty.toLowerCase()}`}>
+              {level.difficulty}
+            </span>
           </div>
         </div>
       </div>

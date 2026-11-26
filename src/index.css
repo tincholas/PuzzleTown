@@ -282,12 +282,17 @@ body,
 .context-banner-slot {
   width: 100%;
   max-width: 680px;
-  min-height: 40px;
+  min-height: 36px;
   display: flex;
   align-items: center;
   justify-content: center;
   padding: 2px 8px;
   z-index: 8;
+}
+
+.context-banner-slot:empty {
+  min-height: 0;
+  padding: 0;
 }
 
 .banner-pill {
@@ -2038,11 +2043,12 @@ body,
 
 .wooden-tray {
   width: 100%;
+  box-sizing: border-box;
   background: linear-gradient(180deg, #b8844c 0%, #cfa16b 24%, #dfb580 100%);
   border: 3.5px solid var(--ink);
   border-bottom: none;
   border-radius: 22px 22px 0 0;
-  padding: 10px 14px 12px;
+  padding: 10px 10px 12px;
   box-shadow:
     inset 0 6px 0 #916232,
     0 -6px 20px rgba(43, 30, 22, 0.24);
@@ -2052,22 +2058,25 @@ body,
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: clamp(8px, 2vw, 16px);
+  width: 100%;
+  gap: clamp(4px, 1.3vw, 12px);
   flex-wrap: nowrap;
 }
 
 .tray-card {
   position: relative;
-  width: clamp(56px, 13.8vw, 74px);
-  height: clamp(62px, 14.5vw, 78px);
+  flex: 1 1 0;
+  min-width: 0;
+  max-width: 72px;
+  height: clamp(58px, 14vw, 76px);
   background: #f9f3e6;
-  border: 3px solid var(--ink);
-  border-radius: 14px;
+  border: 2.8px solid var(--ink);
+  border-radius: 13px;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  padding: 4px 4px 6px;
+  padding: 4px 2px 5px;
   cursor: pointer;
   box-shadow:
     inset 0 2px 0 #ffffff,
@@ -2955,14 +2964,23 @@ body,
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: 8px;
+    gap: 5px;
     padding: 2px 10px 0;
   }
 
-  .context-banner-slot,
-  .tray-outer {
+  .header-left {
+    gap: 2px;
+  }
+
+  .context-banner-slot {
     padding-left: max(8px, env(safe-area-inset-left));
     padding-right: max(8px, env(safe-area-inset-right));
+  }
+
+  .tray-outer {
+    padding-left: max(4px, env(safe-area-inset-left));
+    padding-right: max(4px, env(safe-area-inset-right));
+    gap: 4px;
   }
 
   /* Board Spans Full Screen Edge to Edge with Cells Directly Touching */
@@ -3025,7 +3043,7 @@ body,
   }
 
   .brand-title {
-    font-size: 1.3rem;
+    font-size: 1.25rem;
   }
 
   .star-badge {
@@ -3047,20 +3065,66 @@ body,
     width: auto;
     max-width: 96%;
     margin: 0 auto;
-    padding: 3px;
+    padding: 2.5px;
+    border-radius: 12px;
   }
 
   .plaque-inner {
-    padding: 4px 14px;
+    padding: 3px 12px;
     min-width: auto;
+    border-radius: 8px;
   }
 
   .plaque-title {
-    font-size: 1.05rem;
+    font-size: 0.92rem;
   }
 
-  .plaque-subtitle {
-    font-size: 0.76rem;
+  .mode-hint-text {
+    font-size: 0.72rem;
+  }
+
+  .wooden-tray {
+    padding: 8px 6px 10px;
+    border-radius: 18px 18px 0 0;
+  }
+
+  .tray-items {
+    gap: 5px;
+  }
+
+  .tray-card {
+    height: 58px;
+    padding: 3px 2px 4px;
+    border-radius: 11px;
+    border-width: 2.4px;
+  }
+
+  .tray-card-art {
+    width: 31px;
+    height: 31px;
+  }
+
+  .tray-card-label {
+    font-size: 0.6rem;
+    margin-top: 1px;
+  }
+
+  .tray-count-badge {
+    min-width: 20px;
+    height: 20px;
+    padding: 0 3px;
+    font-size: 0.74rem;
+    border-width: 2px;
+    top: -5px;
+    right: -4px;
+  }
+
+  .tray-ruleout-tag {
+    width: 19px;
+    height: 19px;
+    font-size: 0.65rem;
+    top: -5px;
+    left: -5px;
   }
 }
 
