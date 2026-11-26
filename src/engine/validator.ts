@@ -187,6 +187,7 @@ export function validateBoard(
     woodcutter: 0,
     road: 0,
     farm: 0,
+    windmill: 0,
     town_hall: 0
   };
 
@@ -207,11 +208,12 @@ export function validateBoard(
   }
 
   const remainingInventory: Record<PlaceableType, number> = {
-    house: level.inventory.house - placedCounts.house,
-    woodcutter: level.inventory.woodcutter - placedCounts.woodcutter,
-    road: level.inventory.road - placedCounts.road,
-    farm: level.inventory.farm - placedCounts.farm,
-    town_hall: level.inventory.town_hall - placedCounts.town_hall
+    house: (level.inventory.house ?? 0) - placedCounts.house,
+    woodcutter: (level.inventory.woodcutter ?? 0) - placedCounts.woodcutter,
+    road: (level.inventory.road ?? 0) - placedCounts.road,
+    farm: (level.inventory.farm ?? 0) - placedCounts.farm,
+    windmill: (level.inventory.windmill ?? 0) - placedCounts.windmill,
+    town_hall: (level.inventory.town_hall ?? 0) - placedCounts.town_hall
   };
 
   // 2. Row and Column statuses
@@ -381,6 +383,12 @@ export function validateBoard(
         }
         cellSatisfied[key] =
           hasHouse && hasRoadConnection && !cellErrors[key];
+      } else if (t === 'windmill') {
+        const hasFarm = ortho.some((n) => grid[n.r][n.c] === 'farm');
+        if (allPlaceablesPlaced && !hasFarm) {
+          addError(r, c, 'Windmill must be orthogonally next to a Farm.');
+        }
+        cellSatisfied[key] = hasFarm && !cellErrors[key];
       } else if (t === 'road') {
         const onValidPath = isRoadTileOnValidPath(grid, r, c);
         if (allPlaceablesPlaced && !onValidPath) {
@@ -457,6 +465,8 @@ export function formatTileName(tile: TileType): string {
       return 'House';
     case 'farm':
       return 'Farm';
+    case 'windmill':
+      return 'Windmill';
     case 'town_hall':
       return 'Town Hall';
     case 'road':

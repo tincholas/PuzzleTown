@@ -52,9 +52,11 @@ export interface RoadConnections {
   right: boolean;
 }
 
-export const BUILDING_STAGE_ASSETS: Record<
-  BuildingType,
-  { composite: string; stage1: string; stage2: string; stage3: string }
+export const BUILDING_STAGE_ASSETS: Partial<
+  Record<
+    BuildingType,
+    { composite: string; stage1: string; stage2: string; stage3: string }
+  >
 > = {
   farm: { composite: farmComposite, stage1: farmStage1, stage2: farmStage2, stage3: farmStage3 },
   house: { composite: houseComposite, stage1: houseStage1, stage2: houseStage2, stage3: houseStage3 },
@@ -65,6 +67,7 @@ export const BUILDING_STAGE_ASSETS: Record<
 // Preload building & obstacle images for instant zero-lag animations
 if (typeof window !== 'undefined') {
   Object.values(BUILDING_STAGE_ASSETS).forEach((layers) => {
+    if (!layers) return;
     [layers.composite, layers.stage1, layers.stage2, layers.stage3].forEach((src) => {
       const img = new Image();
       img.src = src;
@@ -303,6 +306,8 @@ export const TileGraphic: React.FC<TileGraphicProps> = ({
     }
     case 'road':
       return <RoadSvg connections={roadConnections} variantSeed={variantSeed} />;
+    case 'windmill':
+      return <WindmillGraphic isNewlyBuilt={isNewlyBuilt} />;
     case 'empty':
     default:
       if (markedBuilding) {
@@ -349,6 +354,7 @@ export const RuledOutBuildingSvg: React.FC<{
       {excludedType === 'house' && <HouseSvg />}
       {excludedType === 'woodcutter' && <WoodcutterSvg />}
       {excludedType === 'farm' && <FarmSvg />}
+      {excludedType === 'windmill' && <WindmillSvg />}
       {excludedType === 'town_hall' && <TownHallSvg />}
       {excludedType === 'road' && <RoadSvg />}
     </g>
@@ -935,6 +941,150 @@ export const TownHallSvg: React.FC = () => (
       />
     ))}
   </svg>
+);
+
+export const WindmillSvg: React.FC<{ animate?: boolean }> = ({
+  animate = false
+}) => (
+  <svg viewBox="0 0 100 100" className="tile-svg windmill-svg">
+    {/* Cobblestone base foundation */}
+    <ellipse
+      cx="50"
+      cy="84"
+      rx="26"
+      ry="7.5"
+      fill="#9e9589"
+      stroke="#2b1e16"
+      strokeWidth="3.2"
+    />
+    {/* Tapered stone & timber tower body */}
+    <polygon
+      points="31,82 37,37 63,37 69,82"
+      fill="#ebd5b3"
+      stroke="#2b1e16"
+      strokeWidth="3.8"
+      strokeLinejoin="round"
+    />
+    {/* Right-side warm shading on tower */}
+    <polygon
+      points="50,37 63,37 69,82 54,82"
+      fill="rgba(166, 130, 86, 0.35)"
+    />
+    {/* Timber belt beam */}
+    <polygon
+      points="34,58 66,58 67,63 33,63"
+      fill="#8c5832"
+      stroke="#2b1e16"
+      strokeWidth="2.8"
+      strokeLinejoin="round"
+    />
+    {/* Arched wooden mill door */}
+    <path
+      d="M43,82 L43,69 A7,7 0 0,1 57,69 L57,82 Z"
+      fill="#5c3419"
+      stroke="#2b1e16"
+      strokeWidth="3.2"
+    />
+    {/* Small flour sack resting beside tower base */}
+    <ellipse
+      cx="30"
+      cy="79"
+      rx="6.5"
+      ry="5"
+      fill="#f5e6cc"
+      stroke="#2b1e16"
+      strokeWidth="2.6"
+    />
+    {/* Conical shingled roof cap */}
+    <polygon
+      points="30,39 50,17 70,39"
+      fill="#a83b28"
+      stroke="#2b1e16"
+      strokeWidth="3.8"
+      strokeLinejoin="round"
+    />
+    <polygon
+      points="36,37 50,21 52,37"
+      fill="#c9523d"
+    />
+    {/* Rotating 4-Blade Sail Assembly centered at (50, 36) */}
+    <g className={animate ? 'windmill-sails-rotor' : ''}>
+      {[0, 90, 180, 270].map((angle) => (
+        <g key={angle} transform={`rotate(${angle} 50 36)`}>
+          {/* Main wooden spar */}
+          <line
+            x1="50"
+            y1="36"
+            x2="50"
+            y2="4"
+            stroke="#4a2810"
+            strokeWidth="3.4"
+            strokeLinecap="round"
+          />
+          {/* Sailcloth canvas & lattice frame */}
+          <rect
+            x="51.5"
+            y="6"
+            width="10.5"
+            height="22"
+            rx="1.5"
+            fill="#fff8eb"
+            stroke="#2b1e16"
+            strokeWidth="2.4"
+          />
+          {/* Lattice crossbars on sail */}
+          <line
+            x1="52"
+            y1="13"
+            x2="61.5"
+            y2="13"
+            stroke="#8c5832"
+            strokeWidth="1.8"
+          />
+          <line
+            x1="52"
+            y1="20"
+            x2="61.5"
+            y2="20"
+            stroke="#8c5832"
+            strokeWidth="1.8"
+          />
+        </g>
+      ))}
+      {/* Central iron & brass rotor hub */}
+      <circle
+        cx="50"
+        cy="36"
+        r="5.2"
+        fill="#d99b26"
+        stroke="#2b1e16"
+        strokeWidth="2.8"
+      />
+      <circle cx="50" cy="36" r="1.8" fill="#2b1e16" />
+    </g>
+  </svg>
+);
+
+export const WindmillGraphic: React.FC<{ isNewlyBuilt?: boolean }> = ({
+  isNewlyBuilt = false
+}) => (
+  <div
+    className={`building-sprite-container windmill-sprite-container ${isNewlyBuilt ? 'is-animating-build' : ''}`}
+    aria-label="windmill"
+  >
+    <div className="tile-ground-shadow building-windmill-shadow" />
+    <WindmillSvg animate />
+    {isNewlyBuilt && (
+      <div className="construction-dust-emitter" aria-hidden="true">
+        <div className="dust-puff dust-puff-1" />
+        <div className="dust-puff dust-puff-2" />
+        <div className="dust-puff dust-puff-3" />
+        <div className="dust-puff dust-puff-4" />
+        <div className="dust-puff dust-puff-5" />
+        <div className="dust-puff dust-puff-6" />
+      </div>
+    )}
+  </div>
 );
 
 /**

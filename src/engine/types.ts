@@ -5,10 +5,16 @@ export type TileType =
   | 'woodcutter'
   | 'house'
   | 'farm'
+  | 'windmill'
   | 'town_hall'
   | 'road';
 
-export type BuildingType = 'woodcutter' | 'house' | 'farm' | 'town_hall';
+export type BuildingType =
+  | 'woodcutter'
+  | 'house'
+  | 'farm'
+  | 'windmill'
+  | 'town_hall';
 
 export type PlaceableType = BuildingType | 'road';
 
@@ -16,6 +22,7 @@ export const BUILDING_TYPES: BuildingType[] = [
   'woodcutter',
   'house',
   'farm',
+  'windmill',
   'town_hall'
 ];
 
@@ -23,6 +30,7 @@ export const PLACEABLE_TYPES: PlaceableType[] = [
   'woodcutter',
   'house',
   'farm',
+  'windmill',
   'town_hall',
   'road'
 ];
@@ -32,6 +40,7 @@ export function isBuilding(tile: TileType): tile is BuildingType {
     tile === 'woodcutter' ||
     tile === 'house' ||
     tile === 'farm' ||
+    tile === 'windmill' ||
     tile === 'town_hall'
   );
 }
@@ -144,6 +153,12 @@ export const BUILDING_METADATA: Record<
     shortName: 'Farm',
     description:
       'Must be orthogonally next to a House, and connected by a Road path to the Town Hall (when present). Max 1 per row/col; no two Farms may touch.'
+  },
+  windmill: {
+    name: 'Windmill',
+    shortName: 'Mill',
+    description:
+      'Must be orthogonally next to a Farm. Does not require a House or Road of its own. Max 1 per row/col; no two Windmills may touch.'
   },
   town_hall: {
     name: 'Town Hall',

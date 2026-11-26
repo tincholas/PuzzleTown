@@ -116,6 +116,20 @@ export const RulesModal: React.FC<RulesModalProps> = ({ onClose }) => {
 
             <div className="rule-item">
               <div className="rule-icon-box tile-sand">
+                <TileGraphic type="windmill" />
+              </div>
+              <div className="rule-text">
+                <h4>Windmill</h4>
+                <p>
+                  Must be orthogonally next to a <strong>Farm</strong>. As an
+                  agricultural mill attached to a Farm, it does not require a
+                  House or Road of its own.
+                </p>
+              </div>
+            </div>
+
+            <div className="rule-item">
+              <div className="rule-icon-box tile-sand">
                 <TileGraphic type="town_hall" />
               </div>
               <div className="rule-text">

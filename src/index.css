@@ -476,7 +476,7 @@ body,
 }
 
 .board-grid-with-clues {
-  --tile-size: clamp(48px, min(12vw, 10.5vh), 82px);
+  --tile-size: clamp(44px, min(11vw, 9.2vh), 80px);
   --clue-size: clamp(22px, min(5vw, 4.2vh), 32px);
   display: grid;
   grid-template-columns: var(--clue-size) repeat(var(--grid-size), var(--tile-size));
@@ -1288,10 +1288,34 @@ body,
 .building-shadow,
 .building-house-shadow,
 .building-woodcutter-shadow,
-.building-farm-shadow {
+.building-farm-shadow,
+.building-windmill-shadow {
   bottom: 5px;
   width: 72%;
   height: 22%;
+}
+
+.windmill-svg {
+  position: relative;
+  z-index: 1;
+}
+
+.windmill-sails-rotor {
+  transform-origin: 50px 36px;
+  animation: windmillSpin 9s linear infinite;
+}
+
+.windmill-sprite-container.is-animating-build .windmill-svg {
+  animation: popBounceIn 0.45s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+@keyframes windmillSpin {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
 }
 
 .building-town_hall-shadow {

@@ -256,12 +256,173 @@ export function build100Configs(): GeneratorConfig[] {
     });
   }
 
+  // -------------------------------------------------------------------------
+  // CHAPTER 6: WINDMILL RIDGE (Levels 101 to 125)
+  // Focus: Windmills adjacent to Farms & Grand 7x7 Layouts
+  // -------------------------------------------------------------------------
+  const ch6Titles = [
+    'Breezy Bluff',
+    'Millstone Meadow',
+    'Turning Sails',
+    'Graincrest Hill',
+    'Windward Acres',
+    'Miller’s Rise',
+    'Zephyr Grange',
+    'Four-Winds Crossing',
+    'Flourish Vale',
+    'Highwind Terrace',
+    'Golden Vane',
+    'Gale’s Rest',
+    'Seven-Shire Plain',
+    'Broadleaf Shire',
+    'Tailwind Commons',
+    'Harvest Spire',
+    'Sunburst Valley',
+    'Millwright Ward',
+    'Westwind Basin',
+    'Amber Panorama',
+    'Skyline Granary',
+    'Sovereign Wind',
+    'Grand Millworks',
+    'Horizon Heartland',
+    'Summit of the Winds'
+  ];
+
+  for (let i = 101; i <= 125; i++) {
+    const idx = i - 101;
+    const isIntro5x5 = idx < 4;
+    const isMid6x6 = idx >= 4 && idx < 12;
+    const size = isIntro5x5 ? 5 : isMid6x6 ? 6 : 7;
+
+    configs.push({
+      id: i,
+      chapter: 6,
+      chapterName: 'Windmill Ridge',
+      title: ch6Titles[idx],
+      size,
+      buildings: isIntro5x5
+        ? {
+            town_hall: idx >= 2 ? 1 : 0,
+            woodcutter: 2,
+            farm: 1,
+            windmill: 1,
+            house: 2
+          }
+        : isMid6x6
+          ? {
+              town_hall: 1,
+              woodcutter: 2,
+              farm: 2,
+              windmill: idx >= 8 ? 2 : 1,
+              house: 2
+            }
+          : {
+              town_hall: 1,
+              woodcutter: idx >= 20 ? 3 : 2,
+              farm: 2,
+              windmill: 2,
+              house: 3
+            },
+      extraTrees: size === 7 ? 2 : 1,
+      rocks: size === 7 ? 3 : 2,
+      allowTurningRoads: !isIntro5x5 || idx >= 2,
+      minDensity: isIntro5x5 ? 0.44 : isMid6x6 ? 0.46 : 0.42,
+      tutorialTip:
+        i === 101
+          ? 'New Building — Windmill: Every Windmill must be orthogonally next to a Farm! It does not require a House or Road of its own.'
+          : i === 113
+            ? 'Welcome to 7×7 Grand Villages! Use the line clues and 3-building Farm + House + Windmill clusters to narrow down large spaces.'
+            : undefined
+    });
+  }
+
+  // -------------------------------------------------------------------------
+  // CHAPTER 7: GRAND HEARTLAND (Levels 126 to 150)
+  // Focus: Full 7x7 Master Kingdoms with Windmills, Farms, Woodcutters & Town Hall
+  // -------------------------------------------------------------------------
+  const ch7Titles = [
+    'Heartland Gate',
+    'Seven-Mill Reach',
+    'Golden Granary',
+    'Highshire Commons',
+    'Windmill Valley',
+    'Royal Wheatfields',
+    'Timber & Sails',
+    'Sovereign Meadow',
+    'Great Mill Basin',
+    'Crownlands Crossing',
+    'Harvest Citadel',
+    'Grand Windward',
+    'Bountiful Realm',
+    'King’s Granary',
+    'Sunlit Dominion',
+    'Miller’s Capital',
+    'Four-Vane Bastion',
+    'Emerald Heartland',
+    'Highwind Metropolis',
+    'Imperial Harvest',
+    'Golden Shire Spire',
+    'Archduke’s Grange',
+    'Zenith of the Winds',
+    'Grand Kingdom',
+    'Crown of PuzzleTown'
+  ];
+
+  for (let i = 126; i <= 150; i++) {
+    const idx = i - 126;
+    const isMid = idx >= 8 && idx < 17;
+    const isLate = idx >= 17;
+
+    configs.push({
+      id: i,
+      chapter: 7,
+      chapterName: 'Grand Heartland',
+      title: ch7Titles[idx],
+      size: 7,
+      buildings: isLate
+        ? {
+            town_hall: 1,
+            woodcutter: 3,
+            farm: 2,
+            windmill: 2,
+            house: 4
+          }
+        : isMid
+          ? {
+              town_hall: 1,
+              woodcutter: 3,
+              farm: 2,
+              windmill: 2,
+              house: 3
+            }
+          : {
+              town_hall: 1,
+              woodcutter: 2,
+              farm: 2,
+              windmill: 2,
+              house: 3
+            },
+      extraTrees: 2,
+      rocks: 3,
+      allowTurningRoads: true,
+      minDensity: isLate ? 0.46 : isMid ? 0.44 : 0.42
+    });
+  }
+
   return configs;
 }
 
 export const CAMPAIGN_CONFIGS: GeneratorConfig[] = build100Configs();
 
-export const PREBAKED_LEVELS: LevelDefinition[] = prebakedData as unknown as LevelDefinition[];
+export const PREBAKED_LEVELS: LevelDefinition[] = (
+  prebakedData as unknown as LevelDefinition[]
+).map((lvl) => ({
+  ...lvl,
+  inventory: {
+    ...lvl.inventory,
+    windmill: lvl.inventory.windmill ?? 0
+  }
+}));
 
 const levelCache = new Map<number, LevelDefinition>();
 
@@ -284,23 +445,25 @@ export function getCampaignLevel(id: number): LevelDefinition {
 }
 
 export function generateBonusCustomLevel(
-  size: 5 | 6,
+  size: 5 | 6 | 7,
   seed: number
 ): LevelDefinition {
   const cfg: GeneratorConfig = {
-    id: 100 + (seed % 900),
-    chapter: 6,
+    id: 200 + (seed % 800),
+    chapter: 7,
     chapterName: 'Bonus Charter',
-    title: `Charter #${100 + (seed % 900)}`,
+    title: `Charter #${200 + (seed % 800)}`,
     size,
     buildings:
       size === 5
-        ? { town_hall: 1, woodcutter: 2, farm: 1, house: 2 }
-        : { town_hall: 1, woodcutter: 2, farm: 2, house: 3 },
-    extraTrees: 1,
-    rocks: 2,
+        ? { town_hall: 1, woodcutter: 2, farm: 1, windmill: 1, house: 2 }
+        : size === 6
+          ? { town_hall: 1, woodcutter: 2, farm: 2, windmill: 1, house: 3 }
+          : { town_hall: 1, woodcutter: 2, farm: 2, windmill: 2, house: 3 },
+    extraTrees: size === 7 ? 2 : 1,
+    rocks: size === 7 ? 3 : 2,
     allowTurningRoads: true,
-    difficulty: size === 5 ? 'Medium' : 'Hard'
+    difficulty: size === 5 ? 'Medium' : size === 6 ? 'Hard' : 'Expert'
   };
   return generateVerifiedLevel(cfg, seed);
 }

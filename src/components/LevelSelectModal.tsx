@@ -6,7 +6,7 @@ interface LevelSelectModalProps {
   currentLevelId: number;
   starsByLevel: Record<number, number>;
   onSelectLevel: (id: number) => void;
-  onGenerateBonus: (size: 5 | 6) => void;
+  onGenerateBonus: (size: 5 | 6 | 7) => void;
   onClose: () => void;
 }
 
@@ -17,7 +17,7 @@ export const LevelSelectModal: React.FC<LevelSelectModalProps> = ({
   onGenerateBonus,
   onClose
 }) => {
-  const chapters = [1, 2, 3, 4, 5].map((ch) => {
+  const chapters = [1, 2, 3, 4, 5, 6, 7].map((ch) => {
     const configs = CAMPAIGN_CONFIGS.filter((c) => c.chapter === ch);
     const levels = configs.map((cfg) => getCampaignLevel(cfg.id));
     return {
@@ -139,13 +139,23 @@ export const LevelSelectModal: React.FC<LevelSelectModalProps> = ({
               </button>
               <button
                 type="button"
-                className="action-pill-btn primary"
+                className="action-pill-btn"
                 onClick={() => {
                   onGenerateBonus(6);
                   onClose();
                 }}
               >
                 New 6×6 Town
+              </button>
+              <button
+                type="button"
+                className="action-pill-btn primary"
+                onClick={() => {
+                  onGenerateBonus(7);
+                  onClose();
+                }}
+              >
+                New 7×7 Shire
               </button>
             </div>
           </div>

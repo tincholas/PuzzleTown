@@ -44,6 +44,7 @@ describe('PuzzleTown Rule Validator', () => {
         woodcutter: 1,
         house: 1,
         farm: 0,
+        windmill: 0,
         road: 3
       },
       solution: grid,
@@ -79,6 +80,7 @@ describe('PuzzleTown Rule Validator', () => {
         woodcutter: 2,
         house: 1,
         farm: 0,
+        windmill: 0,
         road: 1
       },
       solution: grid,
@@ -118,6 +120,7 @@ describe('PuzzleTown Rule Validator', () => {
         woodcutter: 1,
         house: 1,
         farm: 1,
+        windmill: 0,
         road: 0
       },
       solution: grid,
@@ -133,6 +136,57 @@ describe('PuzzleTown Rule Validator', () => {
     // Woodcutter at (0,1) has no adjacent House
     expect(res.cellErrors['0,1']).toContain(
       'Woodcutter must be orthogonally next to a House.'
+    );
+  });
+
+  it('requires every Windmill to be orthogonally adjacent to a Farm, while not requiring its own House or Road', () => {
+    const validGrid: TileType[][] = [
+      ['tree', 'woodcutter', 'house', 'empty'],
+      ['empty', 'empty', 'farm', 'windmill'],
+      ['empty', 'empty', 'empty', 'empty'],
+      ['empty', 'empty', 'empty', 'empty']
+    ];
+
+    const level: LevelDefinition = {
+      id: 996,
+      chapter: 6,
+      chapterName: 'Windmill Ridge',
+      title: 'Windmill Test',
+      size: 4,
+      initialGrid: validGrid.map((r) =>
+        r.map((c) => (c === 'tree' ? 'tree' : 'empty'))
+      ),
+      rowClues: [2, 2, 0, 0],
+      colClues: [0, 1, 2, 1],
+      inventory: {
+        town_hall: 0,
+        woodcutter: 1,
+        house: 1,
+        farm: 1,
+        windmill: 1,
+        road: 0
+      },
+      solution: validGrid,
+      difficulty: 'Easy'
+    };
+
+    const validRes = validateBoard(validGrid, level);
+    expect(validRes.isSolved).toBe(true);
+
+    // Move Windmill to (3,3) away from the Farm at (1,2)
+    const invalidGrid: TileType[][] = [
+      ['tree', 'woodcutter', 'house', 'empty'],
+      ['empty', 'empty', 'farm', 'empty'],
+      ['empty', 'empty', 'empty', 'empty'],
+      ['empty', 'empty', 'empty', 'windmill']
+    ];
+    const invalidRes = validateBoard(invalidGrid, {
+      ...level,
+      rowClues: [2, 1, 0, 1]
+    });
+    expect(invalidRes.isSolved).toBe(false);
+    expect(invalidRes.cellErrors['3,3']).toContain(
+      'Windmill must be orthogonally next to a Farm.'
     );
   });
 });
@@ -396,6 +450,7 @@ describe('Multi-Step Hint Structure & Breakdown', () => {
         woodcutter: 2,
         road: 7,
         farm: 2,
+        windmill: 0,
         town_hall: 1
       },
       solution: [
@@ -528,11 +583,12 @@ describe('Multi-Step Hint Structure & Breakdown', () => {
     // Hint 4: Column Clue Complete for Column 2 is now satisfied because (2, 1) was already cleared!
   });
 
-  it('orders tray buttons as woodcutter (lumber), house, farm, town hall, road', () => {
+  it('orders tray buttons as woodcutter (lumber), house, farm, windmill, town hall, road', () => {
     expect(PLACEABLE_TYPES).toEqual([
       'woodcutter',
       'house',
       'farm',
+      'windmill',
       'town_hall',
       'road'
     ]);

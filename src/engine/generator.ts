@@ -26,6 +26,7 @@ export interface GeneratorConfig {
     town_hall: number;
     woodcutter: number;
     farm: number;
+    windmill?: number;
     house: number;
   };
   extraTrees?: number;
@@ -100,12 +101,19 @@ export function calculateDifficultyMetrics(
       Math.round(Math.max(0, stepCount - 12) * 0.9) +
       Math.round(Math.max(0, density - 0.40) * 20) +
       (hasContradiction ? 8 : 0);
-  } else {
+  } else if (level.size === 6) {
     // 6x6
     rawScore =
       70 +
       Math.round(Math.max(0, stepCount - 20) * 0.8) +
       Math.round(Math.max(0, density - 0.50) * 25) +
+      (hasContradiction ? 10 : 0);
+  } else {
+    // 7x7+
+    rawScore =
+      80 +
+      Math.round(Math.max(0, stepCount - 26) * 0.7) +
+      Math.round(Math.max(0, density - 0.45) * 25) +
       (hasContradiction ? 10 : 0);
   }
 
@@ -257,6 +265,7 @@ function buildLevelFromSolution(
     woodcutter: 0,
     road: 0,
     farm: 0,
+    windmill: 0,
     town_hall: 0
   };
 
@@ -268,6 +277,7 @@ function buildLevelFromSolution(
         t === 'woodcutter' ||
         t === 'road' ||
         t === 'farm' ||
+        t === 'windmill' ||
         t === 'town_hall'
       ) {
         inventory[t]++;
@@ -459,9 +469,38 @@ export function generateVerifiedLevel(
     }
     if (!ok) continue;
 
+    // 4b. Place Windmills orthogonally adjacent to Farms (only when windmill > 0 so RNG sequence is untouched for existing configs)
+    const windmillTarget = config.buildings.windmill ?? 0;
+    if (windmillTarget > 0) {
+      let windmillsPlaced = 0;
+      const farmOrder = shuffle(farms, rng);
+      for (let i = 0; i < windmillTarget; i++) {
+        const candidateFarms =
+          i < farmOrder.length ? [farmOrder[i], ...farmOrder] : shuffle(farms, rng);
+        let placedWm = false;
+        for (const f of candidateFarms) {
+          const ortho = shuffle(getOrthoNeighbors(size, f.r, f.c), rng);
+          const spot = ortho.find((n) =>
+            canPlaceBuildingOnConstructGrid(grid, thCoord, n.r, n.c, 'windmill')
+          );
+          if (spot) {
+            grid[spot.r][spot.c] = 'windmill';
+            windmillsPlaced++;
+            placedWm = true;
+            break;
+          }
+        }
+        if (!placedWm) {
+          ok = false;
+          break;
+        }
+      }
+      if (!ok || windmillsPlaced < windmillTarget) continue;
+    }
+
     if (thCoord) {
       const needRoads = shuffle([...woodcutters, ...farms], rng);
-      const maxAllowedRoads = size >= 6 ? 8 : 6;
+      const maxAllowedRoads = size >= 7 ? 10 : size >= 6 ? 8 : 6;
       for (const b of needRoads) {
         const path = findRoadPathToTownHall(grid, b.r, b.c, thCoord, rng);
         if (!path || path.length === 0 || path.length > maxAllowedRoads) {

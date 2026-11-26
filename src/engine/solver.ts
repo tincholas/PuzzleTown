@@ -41,7 +41,7 @@ function createInitialDomains(
 ): Set<TileType>[][] {
   const size = level.size;
   const activePlaceables = PLACEABLE_TYPES.filter(
-    (t) => level.inventory[t] > 0
+    (t) => (level.inventory[t] ?? 0) > 0
   );
 
   return Array.from({ length: size }, (_, r) =>
@@ -115,6 +115,7 @@ export type EliminationReason =
   | { type: 'PLAYER_MARKED_BUILDING' }
   | { type: 'NO_ADJACENT_TREE' }
   | { type: 'NO_ADJACENT_HOUSE'; buildingType: 'woodcutter' | 'farm' }
+  | { type: 'NO_ADJACENT_FARM' }
   | { type: 'NO_ADJACENT_PARTNER'; buildingType: 'house' }
   | {
       type: 'LINE_LIMIT_EXCEEDED';
@@ -220,13 +221,19 @@ export function formatEliminationReason(
       return 'no adjacent Tree';
     case 'NO_ADJACENT_HOUSE':
       return 'no adjacent spot for a House';
+    case 'NO_ADJACENT_FARM':
+      return 'no adjacent spot for a Farm';
     case 'NO_ADJACENT_PARTNER':
       return 'no adjacent spot for a Woodcutter or Farm';
     case 'LINE_LIMIT_EXCEEDED': {
       const lineName =
         reason.axis === 'row' ? `Row ${reason.index + 1}` : `Column ${reason.index + 1}`;
       const partnerName =
-        reason.forcedPartnerType === 'house' ? 'House' : 'Woodcutter/Farm';
+        reason.forcedPartnerType === 'house'
+          ? 'House'
+          : tile === 'windmill'
+            ? 'Farm'
+            : 'Woodcutter/Farm';
       return `adjacent ${partnerName} would also be in ${lineName}, exceeding ${lineName}'s limit of ${reason.limit} building`;
     }
     case 'TOWN_HALL_PERIMETER_OBSTACLE':
@@ -300,7 +307,7 @@ export function formatDisqualifiedCellReason(
   if (level.rowClues[r] === 0) return `Row ${r + 1} clue is 0`;
   if (level.colClues[c] === 0) return `Column ${c + 1} clue is 0`;
 
-  const activeBuildings = BUILDING_TYPES.filter((b) => level.inventory[b] > 0);
+  const activeBuildings = BUILDING_TYPES.filter((b) => (level.inventory[b] ?? 0) > 0);
   const activeReasons = activeBuildings
     .map((b) => reasons[b])
     .filter((reason): reason is EliminationReason | string => Boolean(reason));
@@ -372,6 +379,12 @@ export function summarizeCellNonBuildingReason(
       parts.push(fStr);
     }
   }
+  if (reasons['windmill']) {
+    const wStr = formatEliminationReason(r, c, 'windmill', reasons['windmill']);
+    if (!parts.includes(wStr)) {
+      parts.push(wStr);
+    }
+  }
   if (reasons['town_hall']) {
     parts.push(formatEliminationReason(r, c, 'town_hall', reasons['town_hall']));
   }
@@ -397,7 +410,7 @@ export function getDetailedCellDisqualificationPoints(
   level: LevelDefinition
 ): string[] {
   const points: string[] = [];
-  const activeBuildings = BUILDING_TYPES.filter((b) => level.inventory[b] > 0);
+  const activeBuildings = BUILDING_TYPES.filter((b) => (level.inventory[b] ?? 0) > 0);
 
   for (const b of activeBuildings) {
     const rawReason = reasons[b];
@@ -421,6 +434,11 @@ export function getDetailedCellDisqualificationPoints(
         ? formatEliminationReason(r, c, 'farm', rawReason)
         : 'no adjacent House';
       points.push(`Farm: ${text}`);
+    } else if (b === 'windmill') {
+      const text = rawReason
+        ? formatEliminationReason(r, c, 'windmill', rawReason)
+        : 'no adjacent Farm';
+      points.push(`Windmill: ${text}`);
     }
   }
 
@@ -1333,6 +1351,65 @@ export function solveByDeduction(
           }
         }
 
+        if (dom.has('windmill')) {
+          const farmSpots = ortho.filter((n) => domains[n.r][n.c].has('farm'));
+          if (farmSpots.length === 0) {
+            dom.delete('windmill');
+            const elimReason: EliminationReason = {
+              type: 'NO_ADJACENT_FARM'
+            };
+            recordElimReason(r, c, 'windmill', elimReason);
+            progress = true;
+            recordLockIfNew(
+              r,
+              c,
+              prev,
+              'Windmill Adjacency',
+              `${xy(r, c)} has no adjacent spot for a Farm, so it cannot be a Windmill.`
+            );
+          } else {
+            const allFarmInSameRow = farmSpots.every((n) => n.r === r);
+            const allFarmInSameCol = farmSpots.every((n) => n.c === c);
+            if (allFarmInSameRow && level.rowClues[r] < 2) {
+              dom.delete('windmill');
+              const elimReason: EliminationReason = {
+                type: 'LINE_LIMIT_EXCEEDED',
+                axis: 'row',
+                index: r,
+                limit: level.rowClues[r],
+                forcedPartnerType: 'farm'
+              };
+              recordElimReason(r, c, 'windmill', elimReason);
+              progress = true;
+              recordLockIfNew(
+                r,
+                c,
+                prev,
+                'Row Limit Exceeded',
+                `${xy(r, c)} cannot be a Windmill because its adjacent Farm would also have to be in Row ${r + 1}, exceeding Row ${r + 1}'s limit of ${level.rowClues[r]} building.`
+              );
+            } else if (allFarmInSameCol && level.colClues[c] < 2) {
+              dom.delete('windmill');
+              const elimReason: EliminationReason = {
+                type: 'LINE_LIMIT_EXCEEDED',
+                axis: 'col',
+                index: c,
+                limit: level.colClues[c],
+                forcedPartnerType: 'farm'
+              };
+              recordElimReason(r, c, 'windmill', elimReason);
+              progress = true;
+              recordLockIfNew(
+                r,
+                c,
+                prev,
+                'Column Limit Exceeded',
+                `${xy(r, c)} cannot be a Windmill because its adjacent Farm would also have to be in Column ${c + 1}, exceeding Column ${c + 1}'s limit of ${level.colClues[c]} building.`
+              );
+            }
+          }
+        }
+
         if (hasTownHall) {
           for (const roadBuilding of [
             'woodcutter',
@@ -1779,6 +1856,154 @@ export function solveByDeduction(
                     prev,
                     'Column House Claimed',
                     formatEliminationReason(rr, sharedCol, 'house', elimReason)
+                  );
+                }
+              }
+            }
+          }
+        }
+
+        if (locked === 'windmill') {
+          if (startingGrid && startingGrid[r][c] !== 'windmill') {
+            continue;
+          }
+
+          const farmNeighbors = ortho.filter((n) =>
+            domains[n.r][n.c].has('farm')
+          );
+          if (farmNeighbors.length === 1) {
+            const target = farmNeighbors[0];
+            const dom = domains[target.r][target.c];
+            if (dom.size > 1) {
+              const prev = dom.size;
+              dom.clear();
+              dom.add('farm');
+              progress = true;
+              const otherWhy = explainWhyOtherOrthoNeighborsWereRuledOut(
+                r,
+                c,
+                target,
+                'farm'
+              );
+              const otherEmpty = ortho.filter(
+                (n) =>
+                  (n.r !== target.r || n.c !== target.c) &&
+                  !isFixedObstacle(level.initialGrid[n.r][n.c]) &&
+                  (!startingGrid || startingGrid[n.r][n.c] === 'empty')
+              );
+              const customSteps: HintStep[] = [
+                {
+                  title: 'Windmill Needs Farm',
+                  message: `The Windmill at ${xy(r, c)} must touch a Farm.`,
+                  focusCells: [{ r, c }],
+                  candidateCells: [target, ...otherEmpty]
+                }
+              ];
+              for (const n of otherEmpty) {
+                const reasonObj =
+                  cellElimReasons[`${n.r},${n.c}`]?.['farm'] ??
+                  cellElimReasons[`${n.r},${n.c}`]?.['empty'];
+                const reason = reasonObj
+                  ? formatEliminationReason(n.r, n.c, 'farm', reasonObj)
+                  : undefined;
+                customSteps.push({
+                  title: 'Windmill Needs Farm',
+                  message: reason
+                    ? `${xy(n.r, n.c)} cannot be a Farm (${reason}).`
+                    : `${xy(n.r, n.c)} cannot be a Farm.`,
+                  focusCells: [{ r, c }],
+                  discardedCells: [n]
+                });
+              }
+              customSteps.push({
+                title: 'Windmill Needs Farm',
+                message:
+                  otherEmpty.length > 0
+                    ? `That leaves ${xy(target.r, target.c)} as the only valid spot next to the Windmill at ${xy(r, c)}.`
+                    : `${xy(target.r, target.c)} is the only adjacent spot next to the Windmill at ${xy(r, c)} for a Farm.`,
+                focusCells: [{ r, c }],
+                targetCell: target
+              });
+
+              recordLockIfNew(
+                target.r,
+                target.c,
+                prev,
+                'Windmill Needs Farm',
+                `The Windmill at ${xy(r, c)} must touch a Farm, and ${xy(target.r, target.c)} is its only valid neighbor${otherWhy}.`,
+                true,
+                customSteps
+              );
+            }
+          } else if (farmNeighbors.length > 1) {
+            const spotsLabel = farmNeighbors
+              .map((n) => xy(n.r, n.c))
+              .join(' or ');
+            const sharedRow = farmNeighbors.every(
+              (n) => n.r === farmNeighbors[0].r
+            )
+              ? farmNeighbors[0].r
+              : -1;
+            const sharedCol = farmNeighbors.every(
+              (n) => n.c === farmNeighbors[0].c
+            )
+              ? farmNeighbors[0].c
+              : -1;
+
+            if (sharedRow !== -1) {
+              for (let cc = 0; cc < size; cc++) {
+                if (
+                  !farmNeighbors.some((n) => n.c === cc) &&
+                  domains[sharedRow][cc].has('farm')
+                ) {
+                  const prev = domains[sharedRow][cc].size;
+                  domains[sharedRow][cc].delete('farm');
+                  const elimReason: EliminationReason = {
+                    type: 'POINTING_LINE',
+                    axis: 'row',
+                    index: sharedRow,
+                    buildingType: 'farm',
+                    spotsLabel,
+                    sourceCoord: { r, c },
+                    sourceType: 'windmill'
+                  };
+                  recordElimReason(sharedRow, cc, 'farm', elimReason);
+                  progress = true;
+                  recordLockIfNew(
+                    sharedRow,
+                    cc,
+                    prev,
+                    'Row Farm Claimed',
+                    formatEliminationReason(sharedRow, cc, 'farm', elimReason)
+                  );
+                }
+              }
+            }
+            if (sharedCol !== -1) {
+              for (let rr = 0; rr < size; rr++) {
+                if (
+                  !farmNeighbors.some((n) => n.r === rr) &&
+                  domains[rr][sharedCol].has('farm')
+                ) {
+                  const prev = domains[rr][sharedCol].size;
+                  domains[rr][sharedCol].delete('farm');
+                  const elimReason: EliminationReason = {
+                    type: 'POINTING_LINE',
+                    axis: 'col',
+                    index: sharedCol,
+                    buildingType: 'farm',
+                    spotsLabel,
+                    sourceCoord: { r, c },
+                    sourceType: 'windmill'
+                  };
+                  recordElimReason(rr, sharedCol, 'farm', elimReason);
+                  progress = true;
+                  recordLockIfNew(
+                    rr,
+                    sharedCol,
+                    prev,
+                    'Column Farm Claimed',
+                    formatEliminationReason(rr, sharedCol, 'farm', elimReason)
                   );
                 }
               }
@@ -2373,7 +2598,7 @@ export function solveByDeduction(
 
     // --- RULE 6: Inventory Exhaustion & Hidden Singles ---
     for (const pType of PLACEABLE_TYPES) {
-      const targetCount = level.inventory[pType];
+      const targetCount = level.inventory[pType] ?? 0;
       if (targetCount === 0) continue;
 
       const confirmedCells: Coord[] = [];
@@ -3056,6 +3281,13 @@ function findSpecificAssignmentContradiction(
           changed = true;
         }
         if (
+          dom.has('windmill') &&
+          !ortho.some((n) => domains[n.r][n.c].has('farm'))
+        ) {
+          dom.delete('windmill');
+          changed = true;
+        }
+        if (
           dom.has('town_hall') &&
           surr8.some(
             (n) =>
@@ -3106,6 +3338,27 @@ function findSpecificAssignmentContradiction(
             }
           }
         }
+        if (locked === 'windmill') {
+          const farmNeighbors = ortho.filter((n) =>
+            domains[n.r][n.c].has('farm')
+          );
+          if (farmNeighbors.length === 0) {
+            return `the Windmill at ${xy(r, c)} would have no valid spot for its required Farm`;
+          }
+          if (farmNeighbors.length === 1) {
+            const target = farmNeighbors[0];
+            if (domains[target.r][target.c].size > 1) {
+              domains[target.r][target.c].clear();
+              domains[target.r][target.c].add('farm');
+              changed = true;
+              forcedSteps.push({
+                text: `forcing Windmill at ${xy(r, c)}'s Farm into ${xy(target.r, target.c)}`,
+                targetR: target.r,
+                targetC: target.c
+              });
+            }
+          }
+        }
 
         if (locked && isBuilding(locked)) {
           for (let cc = 0; cc < size; cc++) {
@@ -3129,7 +3382,7 @@ function findSpecificAssignmentContradiction(
 
     // Inventory bounds
     for (const pType of PLACEABLE_TYPES) {
-      const target = level.inventory[pType];
+      const target = level.inventory[pType] ?? 0;
       let minCount = 0;
       let maxCount = 0;
       for (let r = 0; r < size; r++) {
@@ -3223,10 +3476,11 @@ export function countSolutions(
   const solutions: TileType[][][] = [];
 
   const remainingBuildings: Record<BuildingType, number> = {
-    town_hall: level.inventory.town_hall,
-    woodcutter: level.inventory.woodcutter,
-    farm: level.inventory.farm,
-    house: level.inventory.house
+    town_hall: level.inventory.town_hall ?? 0,
+    woodcutter: level.inventory.woodcutter ?? 0,
+    farm: level.inventory.farm ?? 0,
+    windmill: level.inventory.windmill ?? 0,
+    house: level.inventory.house ?? 0
   };
 
   const rowRem = [...level.rowClues];
@@ -3260,6 +3514,17 @@ export function countSolutions(
     if (bType === 'woodcutter') {
       const ortho = getOrthoNeighbors(size, r, c);
       if (!ortho.some((n) => grid[n.r][n.c] === 'tree')) return false;
+    } else if (bType === 'windmill') {
+      const ortho = getOrthoNeighbors(size, r, c);
+      if (
+        !ortho.some(
+          (n) =>
+            grid[n.r][n.c] === 'farm' ||
+            (grid[n.r][n.c] === 'empty' && remainingBuildings.farm > 0)
+        )
+      ) {
+        return false;
+      }
     }
 
     return true;
@@ -3294,6 +3559,10 @@ export function countSolutions(
             }
           } else if (t === 'farm' || t === 'woodcutter') {
             if (!ortho.some((n) => grid[n.r][n.c] === 'house')) {
+              return;
+            }
+          } else if (t === 'windmill') {
+            if (!ortho.some((n) => grid[n.r][n.c] === 'farm')) {
               return;
             }
           }

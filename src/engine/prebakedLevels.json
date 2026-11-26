@@ -48,7 +48,8 @@
       "woodcutter": 2,
       "road": 0,
       "farm": 0,
-      "town_hall": 0
+      "town_hall": 0,
+      "windmill": 0
     },
     "solution": [
       [
@@ -139,7 +140,8 @@
       "woodcutter": 2,
       "road": 0,
       "farm": 0,
-      "town_hall": 0
+      "town_hall": 0,
+      "windmill": 0
     },
     "solution": [
       [
@@ -229,7 +231,8 @@
       "woodcutter": 2,
       "road": 0,
       "farm": 0,
-      "town_hall": 0
+      "town_hall": 0,
+      "windmill": 0
     },
     "solution": [
       [
@@ -319,7 +322,8 @@
       "woodcutter": 2,
       "road": 0,
       "farm": 0,
-      "town_hall": 0
+      "town_hall": 0,
+      "windmill": 0
     },
     "solution": [
       [
@@ -409,7 +413,8 @@
       "woodcutter": 2,
       "road": 0,
       "farm": 0,
-      "town_hall": 0
+      "town_hall": 0,
+      "windmill": 0
     },
     "solution": [
       [
@@ -499,7 +504,8 @@
       "woodcutter": 2,
       "road": 0,
       "farm": 0,
-      "town_hall": 0
+      "town_hall": 0,
+      "windmill": 0
     },
     "solution": [
       [
@@ -589,7 +595,8 @@
       "woodcutter": 2,
       "road": 0,
       "farm": 0,
-      "town_hall": 0
+      "town_hall": 0,
+      "windmill": 0
     },
     "solution": [
       [
@@ -692,7 +699,8 @@
       "woodcutter": 3,
       "road": 0,
       "farm": 0,
-      "town_hall": 0
+      "town_hall": 0,
+      "windmill": 0
     },
     "solution": [
       [
@@ -806,7 +814,8 @@
       "woodcutter": 3,
       "road": 0,
       "farm": 0,
-      "town_hall": 0
+      "town_hall": 0,
+      "windmill": 0
     },
     "solution": [
       [
@@ -920,7 +929,8 @@
       "woodcutter": 3,
       "road": 0,
       "farm": 0,
-      "town_hall": 0
+      "town_hall": 0,
+      "windmill": 0
     },
     "solution": [
       [
@@ -1034,7 +1044,8 @@
       "woodcutter": 3,
       "road": 0,
       "farm": 0,
-      "town_hall": 0
+      "town_hall": 0,
+      "windmill": 0
     },
     "solution": [
       [
@@ -1148,7 +1159,8 @@
       "woodcutter": 3,
       "road": 0,
       "farm": 0,
-      "town_hall": 0
+      "town_hall": 0,
+      "windmill": 0
     },
     "solution": [
       [
@@ -1262,7 +1274,8 @@
       "woodcutter": 3,
       "road": 0,
       "farm": 0,
-      "town_hall": 0
+      "town_hall": 0,
+      "windmill": 0
     },
     "solution": [
       [
@@ -1376,7 +1389,8 @@
       "woodcutter": 3,
       "road": 0,
       "farm": 0,
-      "town_hall": 0
+      "town_hall": 0,
+      "windmill": 0
     },
     "solution": [
       [
@@ -1490,7 +1504,8 @@
       "woodcutter": 3,
       "road": 0,
       "farm": 0,
-      "town_hall": 0
+      "town_hall": 0,
+      "windmill": 0
     },
     "solution": [
       [
@@ -1604,7 +1619,8 @@
       "woodcutter": 2,
       "road": 0,
       "farm": 1,
-      "town_hall": 0
+      "town_hall": 0,
+      "windmill": 0
     },
     "solution": [
       [
@@ -1719,7 +1735,8 @@
       "woodcutter": 2,
       "road": 0,
       "farm": 1,
-      "town_hall": 0
+      "town_hall": 0,
+      "windmill": 0
     },
     "solution": [
       [
@@ -1833,7 +1850,8 @@
       "woodcutter": 2,
       "road": 0,
       "farm": 1,
-      "town_hall": 0
+      "town_hall": 0,
+      "windmill": 0
     },
     "solution": [
       [
@@ -1947,7 +1965,8 @@
       "woodcutter": 2,
       "road": 0,
       "farm": 1,
-      "town_hall": 0
+      "town_hall": 0,
+      "windmill": 0
     },
     "solution": [
       [
@@ -2061,7 +2080,8 @@
       "woodcutter": 2,
       "road": 0,
       "farm": 1,
-      "town_hall": 0
+      "town_hall": 0,
+      "windmill": 0
     },
     "solution": [
       [
@@ -2175,7 +2195,8 @@
       "woodcutter": 2,
       "road": 0,
       "farm": 1,
-      "town_hall": 0
+      "town_hall": 0,
+      "windmill": 0
     },
     "solution": [
       [
@@ -2289,7 +2310,8 @@
       "woodcutter": 2,
       "road": 0,
       "farm": 2,
-      "town_hall": 0
+      "town_hall": 0,
+      "windmill": 0
     },
     "solution": [
       [
@@ -2403,7 +2425,8 @@
       "woodcutter": 2,
       "road": 0,
       "farm": 2,
-      "town_hall": 0
+      "town_hall": 0,
+      "windmill": 0
     },
     "solution": [
       [
@@ -2517,7 +2540,8 @@
       "woodcutter": 2,
       "road": 0,
       "farm": 2,
-      "town_hall": 0
+      "town_hall": 0,
+      "windmill": 0
     },
     "solution": [
       [
@@ -2631,7 +2655,8 @@
       "woodcutter": 2,
       "road": 0,
       "farm": 2,
-      "town_hall": 0
+      "town_hall": 0,
+      "windmill": 0
     },
     "solution": [
       [
@@ -2745,7 +2770,8 @@
       "woodcutter": 2,
       "road": 0,
       "farm": 2,
-      "town_hall": 0
+      "town_hall": 0,
+      "windmill": 0
     },
     "solution": [
       [
@@ -2859,7 +2885,8 @@
       "woodcutter": 2,
       "road": 0,
       "farm": 2,
-      "town_hall": 0
+      "town_hall": 0,
+      "windmill": 0
     },
     "solution": [
       [
@@ -2973,7 +3000,8 @@
       "woodcutter": 2,
       "road": 0,
       "farm": 2,
-      "town_hall": 0
+      "town_hall": 0,
+      "windmill": 0
     },
     "solution": [
       [
@@ -3087,7 +3115,8 @@
       "woodcutter": 2,
       "road": 0,
       "farm": 2,
-      "town_hall": 0
+      "town_hall": 0,
+      "windmill": 0
     },
     "solution": [
       [
@@ -3201,7 +3230,8 @@
       "woodcutter": 2,
       "road": 0,
       "farm": 2,
-      "town_hall": 0
+      "town_hall": 0,
+      "windmill": 0
     },
     "solution": [
       [
@@ -3315,7 +3345,8 @@
       "woodcutter": 3,
       "road": 0,
       "farm": 2,
-      "town_hall": 0
+      "town_hall": 0,
+      "windmill": 0
     },
     "solution": [
       [
@@ -3429,7 +3460,8 @@
       "woodcutter": 3,
       "road": 0,
       "farm": 2,
-      "town_hall": 0
+      "town_hall": 0,
+      "windmill": 0
     },
     "solution": [
       [
@@ -3543,7 +3575,8 @@
       "woodcutter": 3,
       "road": 0,
       "farm": 2,
-      "town_hall": 0
+      "town_hall": 0,
+      "windmill": 0
     },
     "solution": [
       [
@@ -3657,7 +3690,8 @@
       "woodcutter": 3,
       "road": 0,
       "farm": 2,
-      "town_hall": 0
+      "town_hall": 0,
+      "windmill": 0
     },
     "solution": [
       [
@@ -3771,7 +3805,8 @@
       "woodcutter": 3,
       "road": 0,
       "farm": 2,
-      "town_hall": 0
+      "town_hall": 0,
+      "windmill": 0
     },
     "solution": [
       [
@@ -3885,7 +3920,8 @@
       "woodcutter": 2,
       "road": 3,
       "farm": 0,
-      "town_hall": 1
+      "town_hall": 1,
+      "windmill": 0
     },
     "solution": [
       [
@@ -4000,7 +4036,8 @@
       "woodcutter": 2,
       "road": 5,
       "farm": 0,
-      "town_hall": 1
+      "town_hall": 1,
+      "windmill": 0
     },
     "solution": [
       [
@@ -4114,7 +4151,8 @@
       "woodcutter": 2,
       "road": 6,
       "farm": 0,
-      "town_hall": 1
+      "town_hall": 1,
+      "windmill": 0
     },
     "solution": [
       [
@@ -4228,7 +4266,8 @@
       "woodcutter": 2,
       "road": 3,
       "farm": 0,
-      "town_hall": 1
+      "town_hall": 1,
+      "windmill": 0
     },
     "solution": [
       [
@@ -4342,7 +4381,8 @@
       "woodcutter": 2,
       "road": 6,
       "farm": 0,
-      "town_hall": 1
+      "town_hall": 1,
+      "windmill": 0
     },
     "solution": [
       [
@@ -4456,7 +4496,8 @@
       "woodcutter": 2,
       "road": 2,
       "farm": 0,
-      "town_hall": 1
+      "town_hall": 1,
+      "windmill": 0
     },
     "solution": [
       [
@@ -4570,7 +4611,8 @@
       "woodcutter": 2,
       "road": 5,
       "farm": 1,
-      "town_hall": 1
+      "town_hall": 1,
+      "windmill": 0
     },
     "solution": [
       [
@@ -4684,7 +4726,8 @@
       "woodcutter": 2,
       "road": 6,
       "farm": 1,
-      "town_hall": 1
+      "town_hall": 1,
+      "windmill": 0
     },
     "solution": [
       [
@@ -4798,7 +4841,8 @@
       "woodcutter": 2,
       "road": 6,
       "farm": 1,
-      "town_hall": 1
+      "town_hall": 1,
+      "windmill": 0
     },
     "solution": [
       [
@@ -4912,7 +4956,8 @@
       "woodcutter": 2,
       "road": 6,
       "farm": 1,
-      "town_hall": 1
+      "town_hall": 1,
+      "windmill": 0
     },
     "solution": [
       [
@@ -5026,7 +5071,8 @@
       "woodcutter": 2,
       "road": 4,
       "farm": 1,
-      "town_hall": 1
+      "town_hall": 1,
+      "windmill": 0
     },
     "solution": [
       [
@@ -5140,7 +5186,8 @@
       "woodcutter": 2,
       "road": 5,
       "farm": 1,
-      "town_hall": 1
+      "town_hall": 1,
+      "windmill": 0
     },
     "solution": [
       [
@@ -5254,7 +5301,8 @@
       "woodcutter": 2,
       "road": 6,
       "farm": 1,
-      "town_hall": 1
+      "town_hall": 1,
+      "windmill": 0
     },
     "solution": [
       [
@@ -5368,7 +5416,8 @@
       "woodcutter": 2,
       "road": 6,
       "farm": 1,
-      "town_hall": 1
+      "town_hall": 1,
+      "windmill": 0
     },
     "solution": [
       [
@@ -5482,7 +5531,8 @@
       "woodcutter": 2,
       "road": 4,
       "farm": 1,
-      "town_hall": 1
+      "town_hall": 1,
+      "windmill": 0
     },
     "solution": [
       [
@@ -5596,7 +5646,8 @@
       "woodcutter": 2,
       "road": 4,
       "farm": 1,
-      "town_hall": 1
+      "town_hall": 1,
+      "windmill": 0
     },
     "solution": [
       [
@@ -5710,7 +5761,8 @@
       "woodcutter": 2,
       "road": 4,
       "farm": 1,
-      "town_hall": 1
+      "town_hall": 1,
+      "windmill": 0
     },
     "solution": [
       [
@@ -5824,7 +5876,8 @@
       "woodcutter": 2,
       "road": 4,
       "farm": 1,
-      "town_hall": 1
+      "town_hall": 1,
+      "windmill": 0
     },
     "solution": [
       [
@@ -5938,7 +5991,8 @@
       "woodcutter": 2,
       "road": 5,
       "farm": 1,
-      "town_hall": 1
+      "town_hall": 1,
+      "windmill": 0
     },
     "solution": [
       [
@@ -6052,7 +6106,8 @@
       "woodcutter": 2,
       "road": 5,
       "farm": 1,
-      "town_hall": 1
+      "town_hall": 1,
+      "windmill": 0
     },
     "solution": [
       [
@@ -6166,7 +6221,8 @@
       "woodcutter": 2,
       "road": 5,
       "farm": 1,
-      "town_hall": 1
+      "town_hall": 1,
+      "windmill": 0
     },
     "solution": [
       [
@@ -6280,7 +6336,8 @@
       "woodcutter": 2,
       "road": 4,
       "farm": 1,
-      "town_hall": 1
+      "town_hall": 1,
+      "windmill": 0
     },
     "solution": [
       [
@@ -6394,7 +6451,8 @@
       "woodcutter": 2,
       "road": 4,
       "farm": 1,
-      "town_hall": 1
+      "town_hall": 1,
+      "windmill": 0
     },
     "solution": [
       [
@@ -6508,7 +6566,8 @@
       "woodcutter": 2,
       "road": 4,
       "farm": 1,
-      "town_hall": 1
+      "town_hall": 1,
+      "windmill": 0
     },
     "solution": [
       [
@@ -6622,7 +6681,8 @@
       "woodcutter": 2,
       "road": 5,
       "farm": 1,
-      "town_hall": 1
+      "town_hall": 1,
+      "windmill": 0
     },
     "solution": [
       [
@@ -6736,7 +6796,8 @@
       "woodcutter": 2,
       "road": 3,
       "farm": 1,
-      "town_hall": 1
+      "town_hall": 1,
+      "windmill": 0
     },
     "solution": [
       [
@@ -6850,7 +6911,8 @@
       "woodcutter": 2,
       "road": 4,
       "farm": 1,
-      "town_hall": 1
+      "town_hall": 1,
+      "windmill": 0
     },
     "solution": [
       [
@@ -6964,7 +7026,8 @@
       "woodcutter": 2,
       "road": 6,
       "farm": 1,
-      "town_hall": 1
+      "town_hall": 1,
+      "windmill": 0
     },
     "solution": [
       [
@@ -7078,7 +7141,8 @@
       "woodcutter": 2,
       "road": 6,
       "farm": 1,
-      "town_hall": 1
+      "town_hall": 1,
+      "windmill": 0
     },
     "solution": [
       [
@@ -7192,7 +7256,8 @@
       "woodcutter": 2,
       "road": 6,
       "farm": 1,
-      "town_hall": 1
+      "town_hall": 1,
+      "windmill": 0
     },
     "solution": [
       [
@@ -7321,7 +7386,8 @@
       "woodcutter": 2,
       "road": 7,
       "farm": 2,
-      "town_hall": 1
+      "town_hall": 1,
+      "windmill": 0
     },
     "solution": [
       [
@@ -7463,7 +7529,8 @@
       "woodcutter": 2,
       "road": 5,
       "farm": 2,
-      "town_hall": 1
+      "town_hall": 1,
+      "windmill": 0
     },
     "solution": [
       [
@@ -7605,7 +7672,8 @@
       "woodcutter": 2,
       "road": 8,
       "farm": 2,
-      "town_hall": 1
+      "town_hall": 1,
+      "windmill": 0
     },
     "solution": [
       [
@@ -7747,7 +7815,8 @@
       "woodcutter": 2,
       "road": 7,
       "farm": 2,
-      "town_hall": 1
+      "town_hall": 1,
+      "windmill": 0
     },
     "solution": [
       [
@@ -7889,7 +7958,8 @@
       "woodcutter": 2,
       "road": 7,
       "farm": 2,
-      "town_hall": 1
+      "town_hall": 1,
+      "windmill": 0
     },
     "solution": [
       [
@@ -8031,7 +8101,8 @@
       "woodcutter": 2,
       "road": 8,
       "farm": 2,
-      "town_hall": 1
+      "town_hall": 1,
+      "windmill": 0
     },
     "solution": [
       [
@@ -8173,7 +8244,8 @@
       "woodcutter": 2,
       "road": 6,
       "farm": 2,
-      "town_hall": 1
+      "town_hall": 1,
+      "windmill": 0
     },
     "solution": [
       [
@@ -8315,7 +8387,8 @@
       "woodcutter": 2,
       "road": 8,
       "farm": 2,
-      "town_hall": 1
+      "town_hall": 1,
+      "windmill": 0
     },
     "solution": [
       [
@@ -8457,7 +8530,8 @@
       "woodcutter": 2,
       "road": 7,
       "farm": 2,
-      "town_hall": 1
+      "town_hall": 1,
+      "windmill": 0
     },
     "solution": [
       [
@@ -8599,7 +8673,8 @@
       "woodcutter": 2,
       "road": 7,
       "farm": 2,
-      "town_hall": 1
+      "town_hall": 1,
+      "windmill": 0
     },
     "solution": [
       [
@@ -8741,7 +8816,8 @@
       "woodcutter": 2,
       "road": 7,
       "farm": 2,
-      "town_hall": 1
+      "town_hall": 1,
+      "windmill": 0
     },
     "solution": [
       [
@@ -8883,7 +8959,8 @@
       "woodcutter": 2,
       "road": 7,
       "farm": 2,
-      "town_hall": 1
+      "town_hall": 1,
+      "windmill": 0
     },
     "solution": [
       [
@@ -9025,7 +9102,8 @@
       "woodcutter": 2,
       "road": 7,
       "farm": 2,
-      "town_hall": 1
+      "town_hall": 1,
+      "windmill": 0
     },
     "solution": [
       [
@@ -9167,7 +9245,8 @@
       "woodcutter": 2,
       "road": 8,
       "farm": 2,
-      "town_hall": 1
+      "town_hall": 1,
+      "windmill": 0
     },
     "solution": [
       [
@@ -9309,7 +9388,8 @@
       "woodcutter": 2,
       "road": 7,
       "farm": 2,
-      "town_hall": 1
+      "town_hall": 1,
+      "windmill": 0
     },
     "solution": [
       [
@@ -9451,7 +9531,8 @@
       "woodcutter": 2,
       "road": 8,
       "farm": 2,
-      "town_hall": 1
+      "town_hall": 1,
+      "windmill": 0
     },
     "solution": [
       [
@@ -9593,7 +9674,8 @@
       "woodcutter": 2,
       "road": 7,
       "farm": 2,
-      "town_hall": 1
+      "town_hall": 1,
+      "windmill": 0
     },
     "solution": [
       [
@@ -9735,7 +9817,8 @@
       "woodcutter": 2,
       "road": 5,
       "farm": 2,
-      "town_hall": 1
+      "town_hall": 1,
+      "windmill": 0
     },
     "solution": [
       [
@@ -9877,7 +9960,8 @@
       "woodcutter": 2,
       "road": 8,
       "farm": 2,
-      "town_hall": 1
+      "town_hall": 1,
+      "windmill": 0
     },
     "solution": [
       [
@@ -10019,7 +10103,8 @@
       "woodcutter": 2,
       "road": 7,
       "farm": 2,
-      "town_hall": 1
+      "town_hall": 1,
+      "windmill": 0
     },
     "solution": [
       [
@@ -10161,7 +10246,8 @@
       "woodcutter": 2,
       "road": 7,
       "farm": 2,
-      "town_hall": 1
+      "town_hall": 1,
+      "windmill": 0
     },
     "solution": [
       [
@@ -10303,7 +10389,8 @@
       "woodcutter": 2,
       "road": 8,
       "farm": 2,
-      "town_hall": 1
+      "town_hall": 1,
+      "windmill": 0
     },
     "solution": [
       [
@@ -10445,7 +10532,8 @@
       "woodcutter": 3,
       "road": 6,
       "farm": 2,
-      "town_hall": 1
+      "town_hall": 1,
+      "windmill": 0
     },
     "solution": [
       [
@@ -10587,7 +10675,8 @@
       "woodcutter": 3,
       "road": 7,
       "farm": 2,
-      "town_hall": 1
+      "town_hall": 1,
+      "windmill": 0
     },
     "solution": [
       [
@@ -10729,7 +10818,8 @@
       "woodcutter": 3,
       "road": 8,
       "farm": 2,
-      "town_hall": 1
+      "town_hall": 1,
+      "windmill": 0
     },
     "solution": [
       [
@@ -10871,7 +10961,8 @@
       "woodcutter": 3,
       "road": 5,
       "farm": 2,
-      "town_hall": 1
+      "town_hall": 1,
+      "windmill": 0
     },
     "solution": [
       [
@@ -11013,7 +11104,8 @@
       "woodcutter": 3,
       "road": 7,
       "farm": 2,
-      "town_hall": 1
+      "town_hall": 1,
+      "windmill": 0
     },
     "solution": [
       [
@@ -11155,7 +11247,8 @@
       "woodcutter": 3,
       "road": 8,
       "farm": 2,
-      "town_hall": 1
+      "town_hall": 1,
+      "windmill": 0
     },
     "solution": [
       [
@@ -11297,7 +11390,8 @@
       "woodcutter": 3,
       "road": 8,
       "farm": 2,
-      "town_hall": 1
+      "town_hall": 1,
+      "windmill": 0
     },
     "solution": [
       [
@@ -11439,7 +11533,8 @@
       "woodcutter": 3,
       "road": 7,
       "farm": 2,
-      "town_hall": 1
+      "town_hall": 1,
+      "windmill": 0
     },
     "solution": [
       [
@@ -11581,7 +11676,8 @@
       "woodcutter": 3,
       "road": 8,
       "farm": 2,
-      "town_hall": 1
+      "town_hall": 1,
+      "windmill": 0
     },
     "solution": [
       [
@@ -11723,7 +11819,8 @@
       "woodcutter": 3,
       "road": 7,
       "farm": 2,
-      "town_hall": 1
+      "town_hall": 1,
+      "windmill": 0
     },
     "solution": [
       [
@@ -11865,7 +11962,8 @@
       "woodcutter": 3,
       "road": 7,
       "farm": 2,
-      "town_hall": 1
+      "town_hall": 1,
+      "windmill": 0
     },
     "solution": [
       [
@@ -12007,7 +12105,8 @@
       "woodcutter": 3,
       "road": 7,
       "farm": 2,
-      "town_hall": 1
+      "town_hall": 1,
+      "windmill": 0
     },
     "solution": [
       [
@@ -12149,7 +12248,8 @@
       "woodcutter": 3,
       "road": 7,
       "farm": 2,
-      "town_hall": 1
+      "town_hall": 1,
+      "windmill": 0
     },
     "solution": [
       [
@@ -12213,5 +12313,8311 @@
     },
     "difficultyScore": 80,
     "density": 0.67
+  },
+  {
+    "id": 101,
+    "chapter": 6,
+    "chapterName": "Windmill Ridge",
+    "title": "Breezy Bluff",
+    "size": 5,
+    "initialGrid": [
+      [
+        "empty",
+        "tree",
+        "empty",
+        "empty",
+        "empty"
+      ],
+      [
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "empty"
+      ],
+      [
+        "empty",
+        "tree",
+        "empty",
+        "empty",
+        "empty"
+      ],
+      [
+        "empty",
+        "tree",
+        "empty",
+        "empty",
+        "empty"
+      ],
+      [
+        "empty",
+        "empty",
+        "rock",
+        "rock",
+        "empty"
+      ]
+    ],
+    "rowClues": [
+      0,
+      2,
+      1,
+      2,
+      1
+    ],
+    "colClues": [
+      2,
+      1,
+      3,
+      0,
+      0
+    ],
+    "inventory": {
+      "house": 2,
+      "woodcutter": 2,
+      "road": 0,
+      "farm": 1,
+      "windmill": 1,
+      "town_hall": 0
+    },
+    "solution": [
+      [
+        "empty",
+        "tree",
+        "empty",
+        "empty",
+        "empty"
+      ],
+      [
+        "empty",
+        "woodcutter",
+        "house",
+        "empty",
+        "empty"
+      ],
+      [
+        "empty",
+        "tree",
+        "farm",
+        "empty",
+        "empty"
+      ],
+      [
+        "woodcutter",
+        "tree",
+        "windmill",
+        "empty",
+        "empty"
+      ],
+      [
+        "house",
+        "empty",
+        "rock",
+        "rock",
+        "empty"
+      ]
+    ],
+    "difficulty": "Medium",
+    "tutorialTip": "New Building — Windmill: Every Windmill must be orthogonally next to a Farm! It does not require a House or Road of its own.",
+    "difficultyMetrics": {
+      "score": 55,
+      "tier": "Medium",
+      "maxRuleLevel": 3,
+      "maxRuleName": "Only Remaining Spot",
+      "stepCount": 32,
+      "density": 0.44,
+      "filledTiles": 11,
+      "lookaheadCount": 0
+    },
+    "difficultyScore": 55,
+    "density": 0.44
+  },
+  {
+    "id": 102,
+    "chapter": 6,
+    "chapterName": "Windmill Ridge",
+    "title": "Millstone Meadow",
+    "size": 5,
+    "initialGrid": [
+      [
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "empty"
+      ],
+      [
+        "rock",
+        "empty",
+        "tree",
+        "empty",
+        "empty"
+      ],
+      [
+        "empty",
+        "empty",
+        "tree",
+        "empty",
+        "empty"
+      ],
+      [
+        "empty",
+        "empty",
+        "empty",
+        "tree",
+        "empty"
+      ],
+      [
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "rock"
+      ]
+    ],
+    "rowClues": [
+      0,
+      2,
+      3,
+      1,
+      0
+    ],
+    "colClues": [
+      2,
+      2,
+      0,
+      2,
+      0
+    ],
+    "inventory": {
+      "house": 2,
+      "woodcutter": 2,
+      "road": 0,
+      "farm": 1,
+      "windmill": 1,
+      "town_hall": 0
+    },
+    "solution": [
+      [
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "empty"
+      ],
+      [
+        "rock",
+        "woodcutter",
+        "tree",
+        "house",
+        "empty"
+      ],
+      [
+        "farm",
+        "house",
+        "tree",
+        "woodcutter",
+        "empty"
+      ],
+      [
+        "windmill",
+        "empty",
+        "empty",
+        "tree",
+        "empty"
+      ],
+      [
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "rock"
+      ]
+    ],
+    "difficulty": "Medium",
+    "difficultyMetrics": {
+      "score": 50,
+      "tier": "Medium",
+      "maxRuleLevel": 2,
+      "maxRuleName": "Tree Needs Woodcutter",
+      "stepCount": 26,
+      "density": 0.44,
+      "filledTiles": 11,
+      "lookaheadCount": 0
+    },
+    "difficultyScore": 50,
+    "density": 0.44
+  },
+  {
+    "id": 103,
+    "chapter": 6,
+    "chapterName": "Windmill Ridge",
+    "title": "Turning Sails",
+    "size": 5,
+    "initialGrid": [
+      [
+        "tree",
+        "empty",
+        "empty",
+        "empty",
+        "empty"
+      ],
+      [
+        "tree",
+        "empty",
+        "empty",
+        "empty",
+        "empty"
+      ],
+      [
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "empty"
+      ],
+      [
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "rock"
+      ],
+      [
+        "rock",
+        "empty",
+        "empty",
+        "empty",
+        "empty"
+      ]
+    ],
+    "rowClues": [
+      1,
+      2,
+      1,
+      3,
+      0
+    ],
+    "colClues": [
+      2,
+      3,
+      1,
+      0,
+      1
+    ],
+    "inventory": {
+      "house": 2,
+      "woodcutter": 2,
+      "road": 5,
+      "farm": 1,
+      "windmill": 1,
+      "town_hall": 1
+    },
+    "solution": [
+      [
+        "tree",
+        "woodcutter",
+        "road",
+        "empty",
+        "empty"
+      ],
+      [
+        "tree",
+        "house",
+        "road",
+        "road",
+        "town_hall"
+      ],
+      [
+        "woodcutter",
+        "road",
+        "road",
+        "empty",
+        "empty"
+      ],
+      [
+        "house",
+        "farm",
+        "windmill",
+        "empty",
+        "rock"
+      ],
+      [
+        "rock",
+        "empty",
+        "empty",
+        "empty",
+        "empty"
+      ]
+    ],
+    "difficulty": "Hard",
+    "difficultyMetrics": {
+      "score": 72,
+      "tier": "Hard",
+      "maxRuleLevel": 4,
+      "maxRuleName": "Road Entry Point",
+      "stepCount": 29,
+      "density": 0.64,
+      "filledTiles": 16,
+      "lookaheadCount": 0
+    },
+    "difficultyScore": 72,
+    "density": 0.64
+  },
+  {
+    "id": 104,
+    "chapter": 6,
+    "chapterName": "Windmill Ridge",
+    "title": "Graincrest Hill",
+    "size": 5,
+    "initialGrid": [
+      [
+        "empty",
+        "tree",
+        "empty",
+        "rock",
+        "empty"
+      ],
+      [
+        "empty",
+        "empty",
+        "tree",
+        "empty",
+        "empty"
+      ],
+      [
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "empty"
+      ],
+      [
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "empty"
+      ],
+      [
+        "empty",
+        "empty",
+        "empty",
+        "tree",
+        "rock"
+      ]
+    ],
+    "rowClues": [
+      0,
+      2,
+      0,
+      3,
+      2
+    ],
+    "colClues": [
+      2,
+      1,
+      2,
+      1,
+      1
+    ],
+    "inventory": {
+      "house": 2,
+      "woodcutter": 2,
+      "road": 5,
+      "farm": 1,
+      "windmill": 1,
+      "town_hall": 1
+    },
+    "solution": [
+      [
+        "empty",
+        "tree",
+        "empty",
+        "rock",
+        "empty"
+      ],
+      [
+        "house",
+        "woodcutter",
+        "tree",
+        "empty",
+        "empty"
+      ],
+      [
+        "empty",
+        "road",
+        "road",
+        "road",
+        "empty"
+      ],
+      [
+        "empty",
+        "road",
+        "house",
+        "farm",
+        "windmill"
+      ],
+      [
+        "town_hall",
+        "road",
+        "woodcutter",
+        "tree",
+        "rock"
+      ]
+    ],
+    "difficulty": "Expert",
+    "difficultyMetrics": {
+      "score": 87,
+      "tier": "Expert",
+      "maxRuleLevel": 4,
+      "maxRuleName": "Road Entry Point",
+      "stepCount": 35,
+      "density": 0.68,
+      "filledTiles": 17,
+      "lookaheadCount": 2
+    },
+    "difficultyScore": 87,
+    "density": 0.68
+  },
+  {
+    "id": 105,
+    "chapter": 6,
+    "chapterName": "Windmill Ridge",
+    "title": "Windward Acres",
+    "size": 6,
+    "initialGrid": [
+      [
+        "rock",
+        "empty",
+        "empty",
+        "empty",
+        "rock",
+        "empty"
+      ],
+      [
+        "tree",
+        "empty",
+        "tree",
+        "empty",
+        "empty",
+        "empty"
+      ],
+      [
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "empty"
+      ],
+      [
+        "empty",
+        "empty",
+        "empty",
+        "rock",
+        "empty",
+        "empty"
+      ],
+      [
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "empty"
+      ],
+      [
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "tree"
+      ]
+    ],
+    "rowClues": [
+      0,
+      1,
+      2,
+      2,
+      1,
+      2
+    ],
+    "colClues": [
+      0,
+      2,
+      2,
+      2,
+      1,
+      1
+    ],
+    "inventory": {
+      "house": 2,
+      "woodcutter": 2,
+      "road": 8,
+      "farm": 2,
+      "windmill": 1,
+      "town_hall": 1
+    },
+    "solution": [
+      [
+        "rock",
+        "road",
+        "road",
+        "road",
+        "rock",
+        "empty"
+      ],
+      [
+        "tree",
+        "woodcutter",
+        "tree",
+        "road",
+        "empty",
+        "empty"
+      ],
+      [
+        "empty",
+        "house",
+        "farm",
+        "road",
+        "road",
+        "empty"
+      ],
+      [
+        "empty",
+        "empty",
+        "windmill",
+        "rock",
+        "road",
+        "town_hall"
+      ],
+      [
+        "empty",
+        "empty",
+        "empty",
+        "farm",
+        "road",
+        "empty"
+      ],
+      [
+        "empty",
+        "empty",
+        "empty",
+        "house",
+        "woodcutter",
+        "tree"
+      ]
+    ],
+    "difficulty": "Expert",
+    "difficultyMetrics": {
+      "score": 99,
+      "tier": "Expert",
+      "maxRuleLevel": 4,
+      "maxRuleName": "Road Entry Point",
+      "stepCount": 45,
+      "density": 0.61,
+      "filledTiles": 22,
+      "lookaheadCount": 3
+    },
+    "difficultyScore": 99,
+    "density": 0.61
+  },
+  {
+    "id": 106,
+    "chapter": 6,
+    "chapterName": "Windmill Ridge",
+    "title": "Miller’s Rise",
+    "size": 6,
+    "initialGrid": [
+      [
+        "rock",
+        "tree",
+        "empty",
+        "empty",
+        "empty",
+        "tree"
+      ],
+      [
+        "empty",
+        "empty",
+        "tree",
+        "empty",
+        "empty",
+        "empty"
+      ],
+      [
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "empty"
+      ],
+      [
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "empty"
+      ],
+      [
+        "empty",
+        "empty",
+        "rock",
+        "empty",
+        "empty",
+        "empty"
+      ],
+      [
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "empty"
+      ]
+    ],
+    "rowClues": [
+      2,
+      3,
+      1,
+      2,
+      0,
+      0
+    ],
+    "colClues": [
+      3,
+      1,
+      0,
+      2,
+      2,
+      0
+    ],
+    "inventory": {
+      "house": 2,
+      "woodcutter": 2,
+      "road": 5,
+      "farm": 2,
+      "windmill": 1,
+      "town_hall": 1
+    },
+    "solution": [
+      [
+        "rock",
+        "tree",
+        "empty",
+        "house",
+        "woodcutter",
+        "tree"
+      ],
+      [
+        "house",
+        "woodcutter",
+        "tree",
+        "farm",
+        "road",
+        "empty"
+      ],
+      [
+        "farm",
+        "road",
+        "road",
+        "road",
+        "road",
+        "empty"
+      ],
+      [
+        "windmill",
+        "empty",
+        "empty",
+        "empty",
+        "town_hall",
+        "empty"
+      ],
+      [
+        "empty",
+        "empty",
+        "rock",
+        "empty",
+        "empty",
+        "empty"
+      ],
+      [
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "empty"
+      ]
+    ],
+    "difficulty": "Expert",
+    "difficultyMetrics": {
+      "score": 86,
+      "tier": "Expert",
+      "maxRuleLevel": 4,
+      "maxRuleName": "Road Entry Point",
+      "stepCount": 40,
+      "density": 0.5,
+      "filledTiles": 18,
+      "lookaheadCount": 0
+    },
+    "difficultyScore": 86,
+    "density": 0.5
+  },
+  {
+    "id": 107,
+    "chapter": 6,
+    "chapterName": "Windmill Ridge",
+    "title": "Zephyr Grange",
+    "size": 6,
+    "initialGrid": [
+      [
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "rock",
+        "empty"
+      ],
+      [
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "empty"
+      ],
+      [
+        "tree",
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "empty"
+      ],
+      [
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "empty"
+      ],
+      [
+        "empty",
+        "empty",
+        "tree",
+        "empty",
+        "empty",
+        "empty"
+      ],
+      [
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "rock"
+      ]
+    ],
+    "rowClues": [
+      0,
+      0,
+      1,
+      1,
+      3,
+      3
+    ],
+    "colClues": [
+      3,
+      0,
+      2,
+      2,
+      1,
+      0
+    ],
+    "inventory": {
+      "house": 2,
+      "woodcutter": 2,
+      "road": 5,
+      "farm": 2,
+      "windmill": 1,
+      "town_hall": 1
+    },
+    "solution": [
+      [
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "rock",
+        "empty"
+      ],
+      [
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "empty"
+      ],
+      [
+        "tree",
+        "empty",
+        "town_hall",
+        "empty",
+        "empty",
+        "empty"
+      ],
+      [
+        "woodcutter",
+        "road",
+        "road",
+        "road",
+        "empty",
+        "empty"
+      ],
+      [
+        "house",
+        "road",
+        "tree",
+        "farm",
+        "windmill",
+        "empty"
+      ],
+      [
+        "farm",
+        "road",
+        "woodcutter",
+        "house",
+        "empty",
+        "rock"
+      ]
+    ],
+    "difficulty": "Expert",
+    "difficultyMetrics": {
+      "score": 88,
+      "tier": "Expert",
+      "maxRuleLevel": 4,
+      "maxRuleName": "Road Entry Point",
+      "stepCount": 42,
+      "density": 0.47,
+      "filledTiles": 17,
+      "lookaheadCount": 0
+    },
+    "difficultyScore": 88,
+    "density": 0.47
+  },
+  {
+    "id": 108,
+    "chapter": 6,
+    "chapterName": "Windmill Ridge",
+    "title": "Four-Winds Crossing",
+    "size": 6,
+    "initialGrid": [
+      [
+        "rock",
+        "empty",
+        "empty",
+        "rock",
+        "empty",
+        "empty"
+      ],
+      [
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "empty"
+      ],
+      [
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "tree",
+        "empty"
+      ],
+      [
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "empty"
+      ],
+      [
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "tree",
+        "empty"
+      ],
+      [
+        "tree",
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "empty"
+      ]
+    ],
+    "rowClues": [
+      1,
+      0,
+      1,
+      2,
+      2,
+      2
+    ],
+    "colClues": [
+      0,
+      1,
+      2,
+      1,
+      1,
+      3
+    ],
+    "inventory": {
+      "house": 2,
+      "woodcutter": 2,
+      "road": 8,
+      "farm": 2,
+      "windmill": 1,
+      "town_hall": 1
+    },
+    "solution": [
+      [
+        "rock",
+        "empty",
+        "empty",
+        "rock",
+        "empty",
+        "town_hall"
+      ],
+      [
+        "empty",
+        "empty",
+        "empty",
+        "road",
+        "road",
+        "road"
+      ],
+      [
+        "empty",
+        "empty",
+        "empty",
+        "road",
+        "tree",
+        "farm"
+      ],
+      [
+        "empty",
+        "road",
+        "road",
+        "road",
+        "woodcutter",
+        "house"
+      ],
+      [
+        "empty",
+        "road",
+        "farm",
+        "windmill",
+        "tree",
+        "empty"
+      ],
+      [
+        "tree",
+        "woodcutter",
+        "house",
+        "empty",
+        "empty",
+        "empty"
+      ]
+    ],
+    "difficulty": "Expert",
+    "difficultyMetrics": {
+      "score": 99,
+      "tier": "Expert",
+      "maxRuleLevel": 4,
+      "maxRuleName": "Road Entry Point",
+      "stepCount": 54,
+      "density": 0.58,
+      "filledTiles": 21,
+      "lookaheadCount": 3
+    },
+    "difficultyScore": 99,
+    "density": 0.58
+  },
+  {
+    "id": 109,
+    "chapter": 6,
+    "chapterName": "Windmill Ridge",
+    "title": "Flourish Vale",
+    "size": 6,
+    "initialGrid": [
+      [
+        "empty",
+        "empty",
+        "empty",
+        "rock",
+        "empty",
+        "empty"
+      ],
+      [
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "empty"
+      ],
+      [
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "rock"
+      ],
+      [
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "empty"
+      ],
+      [
+        "tree",
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "empty"
+      ],
+      [
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "tree"
+      ]
+    ],
+    "rowClues": [
+      0,
+      1,
+      0,
+      2,
+      3,
+      3
+    ],
+    "colClues": [
+      0,
+      3,
+      2,
+      0,
+      3,
+      1
+    ],
+    "inventory": {
+      "house": 2,
+      "woodcutter": 2,
+      "road": 6,
+      "farm": 2,
+      "windmill": 2,
+      "town_hall": 1
+    },
+    "solution": [
+      [
+        "empty",
+        "empty",
+        "empty",
+        "rock",
+        "empty",
+        "empty"
+      ],
+      [
+        "empty",
+        "town_hall",
+        "empty",
+        "empty",
+        "empty",
+        "empty"
+      ],
+      [
+        "empty",
+        "road",
+        "empty",
+        "empty",
+        "empty",
+        "rock"
+      ],
+      [
+        "empty",
+        "road",
+        "road",
+        "road",
+        "farm",
+        "windmill"
+      ],
+      [
+        "tree",
+        "woodcutter",
+        "windmill",
+        "road",
+        "house",
+        "empty"
+      ],
+      [
+        "empty",
+        "house",
+        "farm",
+        "road",
+        "woodcutter",
+        "tree"
+      ]
+    ],
+    "difficulty": "Expert",
+    "difficultyMetrics": {
+      "score": 93,
+      "tier": "Expert",
+      "maxRuleLevel": 4,
+      "maxRuleName": "Road Entry Point",
+      "stepCount": 47,
+      "density": 0.53,
+      "filledTiles": 19,
+      "lookaheadCount": 0
+    },
+    "difficultyScore": 93,
+    "density": 0.53
+  },
+  {
+    "id": 110,
+    "chapter": 6,
+    "chapterName": "Windmill Ridge",
+    "title": "Highwind Terrace",
+    "size": 6,
+    "initialGrid": [
+      [
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "empty"
+      ],
+      [
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "empty"
+      ],
+      [
+        "rock",
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "rock"
+      ],
+      [
+        "tree",
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "empty"
+      ],
+      [
+        "empty",
+        "tree",
+        "empty",
+        "empty",
+        "empty",
+        "empty"
+      ],
+      [
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "tree"
+      ]
+    ],
+    "rowClues": [
+      0,
+      1,
+      0,
+      4,
+      2,
+      2
+    ],
+    "colClues": [
+      0,
+      1,
+      4,
+      0,
+      3,
+      1
+    ],
+    "inventory": {
+      "house": 2,
+      "woodcutter": 2,
+      "road": 6,
+      "farm": 2,
+      "windmill": 2,
+      "town_hall": 1
+    },
+    "solution": [
+      [
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "empty"
+      ],
+      [
+        "empty",
+        "empty",
+        "town_hall",
+        "empty",
+        "empty",
+        "empty"
+      ],
+      [
+        "rock",
+        "road",
+        "road",
+        "road",
+        "empty",
+        "rock"
+      ],
+      [
+        "tree",
+        "woodcutter",
+        "house",
+        "road",
+        "farm",
+        "windmill"
+      ],
+      [
+        "empty",
+        "tree",
+        "farm",
+        "road",
+        "house",
+        "empty"
+      ],
+      [
+        "empty",
+        "empty",
+        "windmill",
+        "road",
+        "woodcutter",
+        "tree"
+      ]
+    ],
+    "difficulty": "Expert",
+    "difficultyMetrics": {
+      "score": 87,
+      "tier": "Expert",
+      "maxRuleLevel": 4,
+      "maxRuleName": "Road Entry Point",
+      "stepCount": 39,
+      "density": 0.56,
+      "filledTiles": 20,
+      "lookaheadCount": 0
+    },
+    "difficultyScore": 87,
+    "density": 0.56
+  },
+  {
+    "id": 111,
+    "chapter": 6,
+    "chapterName": "Windmill Ridge",
+    "title": "Golden Vane",
+    "size": 6,
+    "initialGrid": [
+      [
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "rock"
+      ],
+      [
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "tree"
+      ],
+      [
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "empty"
+      ],
+      [
+        "empty",
+        "empty",
+        "empty",
+        "rock",
+        "empty",
+        "empty"
+      ],
+      [
+        "empty",
+        "empty",
+        "rock",
+        "empty",
+        "empty",
+        "empty"
+      ],
+      [
+        "tree",
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "empty"
+      ]
+    ],
+    "rowClues": [
+      0,
+      0,
+      2,
+      1,
+      2,
+      4
+    ],
+    "colClues": [
+      0,
+      2,
+      1,
+      2,
+      0,
+      4
+    ],
+    "inventory": {
+      "house": 2,
+      "woodcutter": 2,
+      "road": 8,
+      "farm": 2,
+      "windmill": 2,
+      "town_hall": 1
+    },
+    "solution": [
+      [
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "rock"
+      ],
+      [
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "tree"
+      ],
+      [
+        "empty",
+        "town_hall",
+        "road",
+        "road",
+        "road",
+        "woodcutter"
+      ],
+      [
+        "empty",
+        "road",
+        "empty",
+        "rock",
+        "road",
+        "house"
+      ],
+      [
+        "empty",
+        "road",
+        "rock",
+        "windmill",
+        "road",
+        "farm"
+      ],
+      [
+        "tree",
+        "woodcutter",
+        "house",
+        "farm",
+        "road",
+        "windmill"
+      ]
+    ],
+    "difficulty": "Expert",
+    "difficultyMetrics": {
+      "score": 87,
+      "tier": "Expert",
+      "maxRuleLevel": 4,
+      "maxRuleName": "Road Entry Point",
+      "stepCount": 38,
+      "density": 0.61,
+      "filledTiles": 22,
+      "lookaheadCount": 0
+    },
+    "difficultyScore": 87,
+    "density": 0.61
+  },
+  {
+    "id": 112,
+    "chapter": 6,
+    "chapterName": "Windmill Ridge",
+    "title": "Gale’s Rest",
+    "size": 6,
+    "initialGrid": [
+      [
+        "empty",
+        "empty",
+        "tree",
+        "empty",
+        "empty",
+        "empty"
+      ],
+      [
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "empty"
+      ],
+      [
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "empty"
+      ],
+      [
+        "rock",
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "empty"
+      ],
+      [
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "tree"
+      ],
+      [
+        "empty",
+        "empty",
+        "rock",
+        "empty",
+        "empty",
+        "empty"
+      ]
+    ],
+    "rowClues": [
+      1,
+      4,
+      0,
+      4,
+      0,
+      0
+    ],
+    "colClues": [
+      0,
+      2,
+      2,
+      2,
+      1,
+      2
+    ],
+    "inventory": {
+      "house": 2,
+      "woodcutter": 2,
+      "road": 8,
+      "farm": 2,
+      "windmill": 2,
+      "town_hall": 1
+    },
+    "solution": [
+      [
+        "road",
+        "woodcutter",
+        "tree",
+        "empty",
+        "empty",
+        "empty"
+      ],
+      [
+        "road",
+        "house",
+        "farm",
+        "windmill",
+        "empty",
+        "town_hall"
+      ],
+      [
+        "road",
+        "road",
+        "road",
+        "road",
+        "road",
+        "road"
+      ],
+      [
+        "rock",
+        "empty",
+        "windmill",
+        "farm",
+        "house",
+        "woodcutter"
+      ],
+      [
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "tree"
+      ],
+      [
+        "empty",
+        "empty",
+        "rock",
+        "empty",
+        "empty",
+        "empty"
+      ]
+    ],
+    "difficulty": "Expert",
+    "difficultyMetrics": {
+      "score": 99,
+      "tier": "Expert",
+      "maxRuleLevel": 4,
+      "maxRuleName": "Road Entry Point",
+      "stepCount": 59,
+      "density": 0.58,
+      "filledTiles": 21,
+      "lookaheadCount": 3
+    },
+    "difficultyScore": 99,
+    "density": 0.58
+  },
+  {
+    "id": 113,
+    "chapter": 6,
+    "chapterName": "Windmill Ridge",
+    "title": "Seven-Shire Plain",
+    "size": 7,
+    "initialGrid": [
+      [
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "rock",
+        "empty",
+        "rock"
+      ],
+      [
+        "empty",
+        "tree",
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "empty"
+      ],
+      [
+        "tree",
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "empty"
+      ],
+      [
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "empty"
+      ],
+      [
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "empty"
+      ],
+      [
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "empty"
+      ],
+      [
+        "tree",
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "rock",
+        "empty"
+      ]
+    ],
+    "rowClues": [
+      0,
+      1,
+      4,
+      2,
+      1,
+      2,
+      0
+    ],
+    "colClues": [
+      1,
+      2,
+      2,
+      1,
+      0,
+      1,
+      3
+    ],
+    "inventory": {
+      "house": 3,
+      "woodcutter": 2,
+      "road": 8,
+      "farm": 2,
+      "windmill": 2,
+      "town_hall": 1
+    },
+    "solution": [
+      [
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "rock",
+        "empty",
+        "rock"
+      ],
+      [
+        "empty",
+        "tree",
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "house"
+      ],
+      [
+        "tree",
+        "woodcutter",
+        "house",
+        "empty",
+        "empty",
+        "windmill",
+        "farm"
+      ],
+      [
+        "empty",
+        "road",
+        "farm",
+        "windmill",
+        "empty",
+        "empty",
+        "road"
+      ],
+      [
+        "road",
+        "road",
+        "road",
+        "road",
+        "road",
+        "road",
+        "town_hall"
+      ],
+      [
+        "woodcutter",
+        "house",
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "empty"
+      ],
+      [
+        "tree",
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "rock",
+        "empty"
+      ]
+    ],
+    "difficulty": "Expert",
+    "tutorialTip": "Welcome to 7×7 Grand Villages! Use the line clues and 3-building Farm + House + Windmill clusters to narrow down large spaces.",
+    "difficultyMetrics": {
+      "score": 99,
+      "tier": "Expert",
+      "maxRuleLevel": 4,
+      "maxRuleName": "Road Entry Point",
+      "stepCount": 69,
+      "density": 0.49,
+      "filledTiles": 24,
+      "lookaheadCount": 2
+    },
+    "difficultyScore": 99,
+    "density": 0.49
+  },
+  {
+    "id": 114,
+    "chapter": 6,
+    "chapterName": "Windmill Ridge",
+    "title": "Broadleaf Shire",
+    "size": 7,
+    "initialGrid": [
+      [
+        "tree",
+        "rock",
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "empty"
+      ],
+      [
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "empty"
+      ],
+      [
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "rock",
+        "rock"
+      ],
+      [
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "empty"
+      ],
+      [
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "empty"
+      ],
+      [
+        "empty",
+        "tree",
+        "empty",
+        "tree",
+        "empty",
+        "empty",
+        "empty"
+      ],
+      [
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "empty"
+      ]
+    ],
+    "rowClues": [
+      0,
+      1,
+      3,
+      3,
+      1,
+      1,
+      1
+    ],
+    "colClues": [
+      2,
+      2,
+      2,
+      1,
+      2,
+      0,
+      1
+    ],
+    "inventory": {
+      "house": 3,
+      "woodcutter": 2,
+      "road": 8,
+      "farm": 2,
+      "windmill": 2,
+      "town_hall": 1
+    },
+    "solution": [
+      [
+        "tree",
+        "rock",
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "empty"
+      ],
+      [
+        "woodcutter",
+        "road",
+        "road",
+        "empty",
+        "empty",
+        "empty",
+        "empty"
+      ],
+      [
+        "house",
+        "farm",
+        "road",
+        "empty",
+        "windmill",
+        "rock",
+        "rock"
+      ],
+      [
+        "empty",
+        "windmill",
+        "road",
+        "house",
+        "farm",
+        "empty",
+        "empty"
+      ],
+      [
+        "empty",
+        "empty",
+        "road",
+        "road",
+        "road",
+        "road",
+        "town_hall"
+      ],
+      [
+        "empty",
+        "tree",
+        "woodcutter",
+        "tree",
+        "empty",
+        "empty",
+        "empty"
+      ],
+      [
+        "empty",
+        "empty",
+        "house",
+        "empty",
+        "empty",
+        "empty",
+        "empty"
+      ]
+    ],
+    "difficulty": "Expert",
+    "difficultyMetrics": {
+      "score": 99,
+      "tier": "Expert",
+      "maxRuleLevel": 4,
+      "maxRuleName": "Road Entry Point",
+      "stepCount": 76,
+      "density": 0.49,
+      "filledTiles": 24,
+      "lookaheadCount": 3
+    },
+    "difficultyScore": 99,
+    "density": 0.49
+  },
+  {
+    "id": 115,
+    "chapter": 6,
+    "chapterName": "Windmill Ridge",
+    "title": "Tailwind Commons",
+    "size": 7,
+    "initialGrid": [
+      [
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "rock",
+        "empty"
+      ],
+      [
+        "rock",
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "empty"
+      ],
+      [
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "tree",
+        "empty",
+        "empty"
+      ],
+      [
+        "empty",
+        "empty",
+        "empty",
+        "tree",
+        "tree",
+        "empty",
+        "rock"
+      ],
+      [
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "tree",
+        "empty"
+      ],
+      [
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "empty"
+      ],
+      [
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "empty"
+      ]
+    ],
+    "rowClues": [
+      0,
+      1,
+      1,
+      1,
+      1,
+      3,
+      3
+    ],
+    "colClues": [
+      0,
+      2,
+      2,
+      2,
+      3,
+      1,
+      0
+    ],
+    "inventory": {
+      "house": 3,
+      "woodcutter": 2,
+      "road": 6,
+      "farm": 2,
+      "windmill": 2,
+      "town_hall": 1
+    },
+    "solution": [
+      [
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "rock",
+        "empty"
+      ],
+      [
+        "rock",
+        "empty",
+        "empty",
+        "house",
+        "empty",
+        "empty",
+        "empty"
+      ],
+      [
+        "empty",
+        "empty",
+        "road",
+        "woodcutter",
+        "tree",
+        "empty",
+        "empty"
+      ],
+      [
+        "empty",
+        "town_hall",
+        "road",
+        "tree",
+        "tree",
+        "empty",
+        "rock"
+      ],
+      [
+        "empty",
+        "empty",
+        "road",
+        "road",
+        "woodcutter",
+        "tree",
+        "empty"
+      ],
+      [
+        "empty",
+        "windmill",
+        "farm",
+        "road",
+        "house",
+        "empty",
+        "empty"
+      ],
+      [
+        "empty",
+        "empty",
+        "house",
+        "road",
+        "farm",
+        "windmill",
+        "empty"
+      ]
+    ],
+    "difficulty": "Expert",
+    "difficultyMetrics": {
+      "score": 99,
+      "tier": "Expert",
+      "maxRuleLevel": 4,
+      "maxRuleName": "Road Entry Point",
+      "stepCount": 59,
+      "density": 0.47,
+      "filledTiles": 23,
+      "lookaheadCount": 0
+    },
+    "difficultyScore": 99,
+    "density": 0.47
+  },
+  {
+    "id": 116,
+    "chapter": 6,
+    "chapterName": "Windmill Ridge",
+    "title": "Harvest Spire",
+    "size": 7,
+    "initialGrid": [
+      [
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "empty"
+      ],
+      [
+        "empty",
+        "empty",
+        "empty",
+        "rock",
+        "tree",
+        "empty",
+        "empty"
+      ],
+      [
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "empty"
+      ],
+      [
+        "empty",
+        "rock",
+        "rock",
+        "empty",
+        "empty",
+        "empty",
+        "empty"
+      ],
+      [
+        "rock",
+        "empty",
+        "tree",
+        "empty",
+        "tree",
+        "empty",
+        "empty"
+      ],
+      [
+        "rock",
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "empty"
+      ],
+      [
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "rock",
+        "empty",
+        "empty"
+      ]
+    ],
+    "rowClues": [
+      1,
+      0,
+      4,
+      3,
+      1,
+      1,
+      0
+    ],
+    "colClues": [
+      2,
+      2,
+      0,
+      2,
+      1,
+      2,
+      1
+    ],
+    "inventory": {
+      "house": 3,
+      "woodcutter": 2,
+      "road": 7,
+      "farm": 2,
+      "windmill": 2,
+      "town_hall": 1
+    },
+    "solution": [
+      [
+        "empty",
+        "town_hall",
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "empty"
+      ],
+      [
+        "road",
+        "road",
+        "road",
+        "rock",
+        "tree",
+        "empty",
+        "empty"
+      ],
+      [
+        "farm",
+        "windmill",
+        "road",
+        "road",
+        "woodcutter",
+        "house",
+        "empty"
+      ],
+      [
+        "house",
+        "rock",
+        "rock",
+        "road",
+        "road",
+        "farm",
+        "windmill"
+      ],
+      [
+        "rock",
+        "empty",
+        "tree",
+        "woodcutter",
+        "tree",
+        "empty",
+        "empty"
+      ],
+      [
+        "rock",
+        "empty",
+        "empty",
+        "house",
+        "empty",
+        "empty",
+        "empty"
+      ],
+      [
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "rock",
+        "empty",
+        "empty"
+      ]
+    ],
+    "difficulty": "Expert",
+    "difficultyMetrics": {
+      "score": 98,
+      "tier": "Expert",
+      "maxRuleLevel": 4,
+      "maxRuleName": "Road Entry Point",
+      "stepCount": 49,
+      "density": 0.53,
+      "filledTiles": 26,
+      "lookaheadCount": 0
+    },
+    "difficultyScore": 98,
+    "density": 0.53
+  },
+  {
+    "id": 117,
+    "chapter": 6,
+    "chapterName": "Windmill Ridge",
+    "title": "Sunburst Valley",
+    "size": 7,
+    "initialGrid": [
+      [
+        "empty",
+        "empty",
+        "empty",
+        "tree",
+        "empty",
+        "rock",
+        "empty"
+      ],
+      [
+        "empty",
+        "empty",
+        "tree",
+        "empty",
+        "empty",
+        "empty",
+        "empty"
+      ],
+      [
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "empty"
+      ],
+      [
+        "rock",
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "empty"
+      ],
+      [
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "empty"
+      ],
+      [
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "empty"
+      ],
+      [
+        "rock",
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "tree"
+      ]
+    ],
+    "rowClues": [
+      0,
+      1,
+      1,
+      2,
+      2,
+      3,
+      1
+    ],
+    "colClues": [
+      0,
+      0,
+      3,
+      2,
+      1,
+      1,
+      3
+    ],
+    "inventory": {
+      "house": 3,
+      "woodcutter": 2,
+      "road": 8,
+      "farm": 2,
+      "windmill": 2,
+      "town_hall": 1
+    },
+    "solution": [
+      [
+        "empty",
+        "empty",
+        "empty",
+        "tree",
+        "empty",
+        "rock",
+        "empty"
+      ],
+      [
+        "empty",
+        "empty",
+        "tree",
+        "woodcutter",
+        "road",
+        "empty",
+        "empty"
+      ],
+      [
+        "empty",
+        "empty",
+        "empty",
+        "house",
+        "road",
+        "road",
+        "road"
+      ],
+      [
+        "rock",
+        "empty",
+        "empty",
+        "empty",
+        "road",
+        "windmill",
+        "farm"
+      ],
+      [
+        "empty",
+        "empty",
+        "windmill",
+        "empty",
+        "road",
+        "empty",
+        "house"
+      ],
+      [
+        "empty",
+        "empty",
+        "farm",
+        "road",
+        "town_hall",
+        "road",
+        "woodcutter"
+      ],
+      [
+        "rock",
+        "empty",
+        "house",
+        "empty",
+        "empty",
+        "empty",
+        "tree"
+      ]
+    ],
+    "difficulty": "Expert",
+    "difficultyMetrics": {
+      "score": 99,
+      "tier": "Expert",
+      "maxRuleLevel": 4,
+      "maxRuleName": "Road Entry Point",
+      "stepCount": 80,
+      "density": 0.49,
+      "filledTiles": 24,
+      "lookaheadCount": 3
+    },
+    "difficultyScore": 99,
+    "density": 0.49
+  },
+  {
+    "id": 118,
+    "chapter": 6,
+    "chapterName": "Windmill Ridge",
+    "title": "Millwright Ward",
+    "size": 7,
+    "initialGrid": [
+      [
+        "rock",
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "empty"
+      ],
+      [
+        "empty",
+        "rock",
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "empty"
+      ],
+      [
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "empty"
+      ],
+      [
+        "tree",
+        "empty",
+        "empty",
+        "tree",
+        "empty",
+        "empty",
+        "empty"
+      ],
+      [
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "tree",
+        "empty",
+        "empty"
+      ],
+      [
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "empty"
+      ],
+      [
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "rock",
+        "empty"
+      ]
+    ],
+    "rowClues": [
+      1,
+      2,
+      0,
+      3,
+      2,
+      2,
+      0
+    ],
+    "colClues": [
+      2,
+      0,
+      1,
+      0,
+      3,
+      2,
+      2
+    ],
+    "inventory": {
+      "house": 3,
+      "woodcutter": 2,
+      "road": 8,
+      "farm": 2,
+      "windmill": 2,
+      "town_hall": 1
+    },
+    "solution": [
+      [
+        "rock",
+        "empty",
+        "empty",
+        "empty",
+        "house",
+        "empty",
+        "empty"
+      ],
+      [
+        "empty",
+        "rock",
+        "empty",
+        "empty",
+        "farm",
+        "windmill",
+        "empty"
+      ],
+      [
+        "empty",
+        "empty",
+        "road",
+        "road",
+        "road",
+        "road",
+        "road"
+      ],
+      [
+        "tree",
+        "empty",
+        "road",
+        "tree",
+        "woodcutter",
+        "house",
+        "farm"
+      ],
+      [
+        "woodcutter",
+        "road",
+        "road",
+        "empty",
+        "tree",
+        "empty",
+        "windmill"
+      ],
+      [
+        "house",
+        "empty",
+        "town_hall",
+        "empty",
+        "empty",
+        "empty",
+        "empty"
+      ],
+      [
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "rock",
+        "empty"
+      ]
+    ],
+    "difficulty": "Expert",
+    "difficultyMetrics": {
+      "score": 99,
+      "tier": "Expert",
+      "maxRuleLevel": 4,
+      "maxRuleName": "Road Entry Point",
+      "stepCount": 71,
+      "density": 0.49,
+      "filledTiles": 24,
+      "lookaheadCount": 2
+    },
+    "difficultyScore": 99,
+    "density": 0.49
+  },
+  {
+    "id": 119,
+    "chapter": 6,
+    "chapterName": "Windmill Ridge",
+    "title": "Westwind Basin",
+    "size": 7,
+    "initialGrid": [
+      [
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "empty"
+      ],
+      [
+        "rock",
+        "rock",
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "empty"
+      ],
+      [
+        "empty",
+        "rock",
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "empty"
+      ],
+      [
+        "empty",
+        "empty",
+        "empty",
+        "tree",
+        "empty",
+        "empty",
+        "empty"
+      ],
+      [
+        "empty",
+        "empty",
+        "tree",
+        "empty",
+        "empty",
+        "empty",
+        "empty"
+      ],
+      [
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "empty"
+      ],
+      [
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "tree",
+        "empty"
+      ]
+    ],
+    "rowClues": [
+      0,
+      0,
+      2,
+      2,
+      3,
+      1,
+      2
+    ],
+    "colClues": [
+      3,
+      0,
+      3,
+      0,
+      3,
+      1,
+      0
+    ],
+    "inventory": {
+      "house": 3,
+      "woodcutter": 2,
+      "road": 8,
+      "farm": 2,
+      "windmill": 2,
+      "town_hall": 1
+    },
+    "solution": [
+      [
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "empty"
+      ],
+      [
+        "rock",
+        "rock",
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "empty"
+      ],
+      [
+        "windmill",
+        "rock",
+        "house",
+        "empty",
+        "empty",
+        "empty",
+        "empty"
+      ],
+      [
+        "farm",
+        "road",
+        "woodcutter",
+        "tree",
+        "empty",
+        "empty",
+        "empty"
+      ],
+      [
+        "house",
+        "road",
+        "tree",
+        "road",
+        "farm",
+        "windmill",
+        "empty"
+      ],
+      [
+        "empty",
+        "road",
+        "road",
+        "road",
+        "house",
+        "empty",
+        "empty"
+      ],
+      [
+        "empty",
+        "road",
+        "town_hall",
+        "road",
+        "woodcutter",
+        "tree",
+        "empty"
+      ]
+    ],
+    "difficulty": "Expert",
+    "difficultyMetrics": {
+      "score": 99,
+      "tier": "Expert",
+      "maxRuleLevel": 4,
+      "maxRuleName": "Road Entry Point",
+      "stepCount": 57,
+      "density": 0.49,
+      "filledTiles": 24,
+      "lookaheadCount": 0
+    },
+    "difficultyScore": 99,
+    "density": 0.49
+  },
+  {
+    "id": 120,
+    "chapter": 6,
+    "chapterName": "Windmill Ridge",
+    "title": "Amber Panorama",
+    "size": 7,
+    "initialGrid": [
+      [
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "empty"
+      ],
+      [
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "empty"
+      ],
+      [
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "empty"
+      ],
+      [
+        "empty",
+        "rock",
+        "empty",
+        "empty",
+        "empty",
+        "tree",
+        "empty"
+      ],
+      [
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "tree",
+        "empty",
+        "empty"
+      ],
+      [
+        "tree",
+        "empty",
+        "tree",
+        "empty",
+        "empty",
+        "empty",
+        "rock"
+      ],
+      [
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "rock"
+      ]
+    ],
+    "rowClues": [
+      2,
+      2,
+      1,
+      2,
+      2,
+      1,
+      0
+    ],
+    "colClues": [
+      0,
+      3,
+      2,
+      0,
+      4,
+      1,
+      0
+    ],
+    "inventory": {
+      "house": 3,
+      "woodcutter": 2,
+      "road": 10,
+      "farm": 2,
+      "windmill": 2,
+      "town_hall": 1
+    },
+    "solution": [
+      [
+        "empty",
+        "empty",
+        "empty",
+        "road",
+        "farm",
+        "house",
+        "empty"
+      ],
+      [
+        "empty",
+        "town_hall",
+        "road",
+        "road",
+        "windmill",
+        "empty",
+        "empty"
+      ],
+      [
+        "empty",
+        "empty",
+        "empty",
+        "road",
+        "house",
+        "empty",
+        "empty"
+      ],
+      [
+        "empty",
+        "rock",
+        "windmill",
+        "road",
+        "woodcutter",
+        "tree",
+        "empty"
+      ],
+      [
+        "empty",
+        "house",
+        "farm",
+        "road",
+        "tree",
+        "empty",
+        "empty"
+      ],
+      [
+        "tree",
+        "woodcutter",
+        "tree",
+        "road",
+        "empty",
+        "empty",
+        "rock"
+      ],
+      [
+        "empty",
+        "road",
+        "road",
+        "road",
+        "empty",
+        "empty",
+        "rock"
+      ]
+    ],
+    "difficulty": "Expert",
+    "difficultyMetrics": {
+      "score": 99,
+      "tier": "Expert",
+      "maxRuleLevel": 4,
+      "maxRuleName": "Road Entry Point",
+      "stepCount": 51,
+      "density": 0.55,
+      "filledTiles": 27,
+      "lookaheadCount": 0
+    },
+    "difficultyScore": 99,
+    "density": 0.55
+  },
+  {
+    "id": 121,
+    "chapter": 6,
+    "chapterName": "Windmill Ridge",
+    "title": "Skyline Granary",
+    "size": 7,
+    "initialGrid": [
+      [
+        "tree",
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "empty"
+      ],
+      [
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "empty"
+      ],
+      [
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "empty"
+      ],
+      [
+        "empty",
+        "tree",
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "rock"
+      ],
+      [
+        "tree",
+        "empty",
+        "empty",
+        "tree",
+        "empty",
+        "empty",
+        "rock"
+      ],
+      [
+        "empty",
+        "empty",
+        "tree",
+        "empty",
+        "empty",
+        "empty",
+        "empty"
+      ],
+      [
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "rock"
+      ]
+    ],
+    "rowClues": [
+      1,
+      1,
+      3,
+      0,
+      1,
+      2,
+      3
+    ],
+    "colClues": [
+      2,
+      3,
+      2,
+      2,
+      1,
+      1,
+      0
+    ],
+    "inventory": {
+      "house": 3,
+      "woodcutter": 3,
+      "road": 10,
+      "farm": 2,
+      "windmill": 2,
+      "town_hall": 1
+    },
+    "solution": [
+      [
+        "tree",
+        "empty",
+        "town_hall",
+        "empty",
+        "empty",
+        "empty",
+        "empty"
+      ],
+      [
+        "woodcutter",
+        "road",
+        "road",
+        "road",
+        "empty",
+        "empty",
+        "empty"
+      ],
+      [
+        "house",
+        "farm",
+        "windmill",
+        "road",
+        "empty",
+        "empty",
+        "empty"
+      ],
+      [
+        "empty",
+        "tree",
+        "road",
+        "road",
+        "road",
+        "empty",
+        "rock"
+      ],
+      [
+        "tree",
+        "woodcutter",
+        "road",
+        "tree",
+        "road",
+        "empty",
+        "rock"
+      ],
+      [
+        "empty",
+        "house",
+        "tree",
+        "woodcutter",
+        "road",
+        "empty",
+        "empty"
+      ],
+      [
+        "empty",
+        "empty",
+        "empty",
+        "house",
+        "farm",
+        "windmill",
+        "rock"
+      ]
+    ],
+    "difficulty": "Expert",
+    "difficultyMetrics": {
+      "score": 98,
+      "tier": "Expert",
+      "maxRuleLevel": 4,
+      "maxRuleName": "Road Entry Point",
+      "stepCount": 47,
+      "density": 0.59,
+      "filledTiles": 29,
+      "lookaheadCount": 0
+    },
+    "difficultyScore": 98,
+    "density": 0.59
+  },
+  {
+    "id": 122,
+    "chapter": 6,
+    "chapterName": "Windmill Ridge",
+    "title": "Sovereign Wind",
+    "size": 7,
+    "initialGrid": [
+      [
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "empty"
+      ],
+      [
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "empty"
+      ],
+      [
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "tree",
+        "empty"
+      ],
+      [
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "tree",
+        "empty",
+        "empty"
+      ],
+      [
+        "empty",
+        "rock",
+        "empty",
+        "empty",
+        "empty",
+        "rock",
+        "empty"
+      ],
+      [
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "rock",
+        "empty"
+      ],
+      [
+        "tree",
+        "tree",
+        "empty",
+        "empty",
+        "rock",
+        "empty",
+        "empty"
+      ]
+    ],
+    "rowClues": [
+      2,
+      1,
+      3,
+      1,
+      1,
+      1,
+      2
+    ],
+    "colClues": [
+      4,
+      0,
+      2,
+      1,
+      3,
+      1,
+      0
+    ],
+    "inventory": {
+      "house": 3,
+      "woodcutter": 3,
+      "road": 8,
+      "farm": 2,
+      "windmill": 2,
+      "town_hall": 1
+    },
+    "solution": [
+      [
+        "empty",
+        "empty",
+        "empty",
+        "road",
+        "farm",
+        "windmill",
+        "empty"
+      ],
+      [
+        "empty",
+        "empty",
+        "empty",
+        "road",
+        "house",
+        "empty",
+        "empty"
+      ],
+      [
+        "windmill",
+        "empty",
+        "town_hall",
+        "road",
+        "woodcutter",
+        "tree",
+        "empty"
+      ],
+      [
+        "farm",
+        "road",
+        "road",
+        "empty",
+        "tree",
+        "empty",
+        "empty"
+      ],
+      [
+        "house",
+        "rock",
+        "road",
+        "empty",
+        "empty",
+        "rock",
+        "empty"
+      ],
+      [
+        "woodcutter",
+        "road",
+        "road",
+        "empty",
+        "empty",
+        "rock",
+        "empty"
+      ],
+      [
+        "tree",
+        "tree",
+        "woodcutter",
+        "house",
+        "rock",
+        "empty",
+        "empty"
+      ]
+    ],
+    "difficulty": "Expert",
+    "difficultyMetrics": {
+      "score": 99,
+      "tier": "Expert",
+      "maxRuleLevel": 4,
+      "maxRuleName": "Road Entry Point",
+      "stepCount": 53,
+      "density": 0.55,
+      "filledTiles": 27,
+      "lookaheadCount": 0
+    },
+    "difficultyScore": 99,
+    "density": 0.55
+  },
+  {
+    "id": 123,
+    "chapter": 6,
+    "chapterName": "Windmill Ridge",
+    "title": "Grand Millworks",
+    "size": 7,
+    "initialGrid": [
+      [
+        "empty",
+        "empty",
+        "tree",
+        "empty",
+        "empty",
+        "empty",
+        "empty"
+      ],
+      [
+        "empty",
+        "empty",
+        "empty",
+        "tree",
+        "empty",
+        "empty",
+        "rock"
+      ],
+      [
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "rock"
+      ],
+      [
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "empty"
+      ],
+      [
+        "empty",
+        "empty",
+        "rock",
+        "empty",
+        "empty",
+        "empty",
+        "empty"
+      ],
+      [
+        "empty",
+        "empty",
+        "tree",
+        "empty",
+        "empty",
+        "empty",
+        "empty"
+      ],
+      [
+        "empty",
+        "tree",
+        "empty",
+        "empty",
+        "empty",
+        "tree",
+        "empty"
+      ]
+    ],
+    "rowClues": [
+      0,
+      1,
+      1,
+      1,
+      3,
+      3,
+      2
+    ],
+    "colClues": [
+      3,
+      1,
+      2,
+      3,
+      1,
+      1,
+      0
+    ],
+    "inventory": {
+      "house": 3,
+      "woodcutter": 3,
+      "road": 9,
+      "farm": 2,
+      "windmill": 2,
+      "town_hall": 1
+    },
+    "solution": [
+      [
+        "empty",
+        "empty",
+        "tree",
+        "empty",
+        "empty",
+        "empty",
+        "empty"
+      ],
+      [
+        "empty",
+        "road",
+        "woodcutter",
+        "tree",
+        "empty",
+        "empty",
+        "rock"
+      ],
+      [
+        "empty",
+        "road",
+        "house",
+        "empty",
+        "empty",
+        "empty",
+        "rock"
+      ],
+      [
+        "windmill",
+        "road",
+        "road",
+        "road",
+        "road",
+        "empty",
+        "empty"
+      ],
+      [
+        "farm",
+        "road",
+        "rock",
+        "windmill",
+        "road",
+        "town_hall",
+        "empty"
+      ],
+      [
+        "house",
+        "woodcutter",
+        "tree",
+        "farm",
+        "road",
+        "empty",
+        "empty"
+      ],
+      [
+        "empty",
+        "tree",
+        "empty",
+        "house",
+        "woodcutter",
+        "tree",
+        "empty"
+      ]
+    ],
+    "difficulty": "Expert",
+    "difficultyMetrics": {
+      "score": 99,
+      "tier": "Expert",
+      "maxRuleLevel": 4,
+      "maxRuleName": "Road Entry Point",
+      "stepCount": 49,
+      "density": 0.57,
+      "filledTiles": 28,
+      "lookaheadCount": 0
+    },
+    "difficultyScore": 99,
+    "density": 0.57
+  },
+  {
+    "id": 124,
+    "chapter": 6,
+    "chapterName": "Windmill Ridge",
+    "title": "Horizon Heartland",
+    "size": 7,
+    "initialGrid": [
+      [
+        "empty",
+        "empty",
+        "empty",
+        "tree",
+        "empty",
+        "empty",
+        "empty"
+      ],
+      [
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "empty"
+      ],
+      [
+        "empty",
+        "empty",
+        "empty",
+        "tree",
+        "empty",
+        "empty",
+        "empty"
+      ],
+      [
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "empty"
+      ],
+      [
+        "rock",
+        "tree",
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "empty"
+      ],
+      [
+        "tree",
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "rock",
+        "empty"
+      ],
+      [
+        "empty",
+        "empty",
+        "rock",
+        "empty",
+        "empty",
+        "tree",
+        "rock"
+      ]
+    ],
+    "rowClues": [
+      0,
+      2,
+      2,
+      1,
+      2,
+      2,
+      2
+    ],
+    "colClues": [
+      0,
+      3,
+      2,
+      2,
+      3,
+      0,
+      1
+    ],
+    "inventory": {
+      "house": 3,
+      "woodcutter": 3,
+      "road": 10,
+      "farm": 2,
+      "windmill": 2,
+      "town_hall": 1
+    },
+    "solution": [
+      [
+        "empty",
+        "empty",
+        "empty",
+        "tree",
+        "empty",
+        "empty",
+        "empty"
+      ],
+      [
+        "empty",
+        "empty",
+        "house",
+        "woodcutter",
+        "road",
+        "empty",
+        "empty"
+      ],
+      [
+        "empty",
+        "windmill",
+        "farm",
+        "tree",
+        "road",
+        "empty",
+        "empty"
+      ],
+      [
+        "empty",
+        "empty",
+        "road",
+        "road",
+        "road",
+        "road",
+        "town_hall"
+      ],
+      [
+        "rock",
+        "tree",
+        "road",
+        "windmill",
+        "farm",
+        "empty",
+        "empty"
+      ],
+      [
+        "tree",
+        "woodcutter",
+        "road",
+        "road",
+        "house",
+        "rock",
+        "empty"
+      ],
+      [
+        "empty",
+        "house",
+        "rock",
+        "road",
+        "woodcutter",
+        "tree",
+        "rock"
+      ]
+    ],
+    "difficulty": "Expert",
+    "difficultyMetrics": {
+      "score": 97,
+      "tier": "Expert",
+      "maxRuleLevel": 4,
+      "maxRuleName": "Road Entry Point",
+      "stepCount": 45,
+      "density": 0.61,
+      "filledTiles": 30,
+      "lookaheadCount": 0
+    },
+    "difficultyScore": 97,
+    "density": 0.61
+  },
+  {
+    "id": 125,
+    "chapter": 6,
+    "chapterName": "Windmill Ridge",
+    "title": "Summit of the Winds",
+    "size": 7,
+    "initialGrid": [
+      [
+        "rock",
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "empty"
+      ],
+      [
+        "empty",
+        "empty",
+        "tree",
+        "empty",
+        "empty",
+        "rock",
+        "empty"
+      ],
+      [
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "rock"
+      ],
+      [
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "empty"
+      ],
+      [
+        "empty",
+        "empty",
+        "empty",
+        "tree",
+        "empty",
+        "tree",
+        "empty"
+      ],
+      [
+        "empty",
+        "empty",
+        "empty",
+        "rock",
+        "empty",
+        "empty",
+        "empty"
+      ],
+      [
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "tree"
+      ]
+    ],
+    "rowClues": [
+      0,
+      0,
+      4,
+      3,
+      1,
+      1,
+      2
+    ],
+    "colClues": [
+      1,
+      3,
+      1,
+      0,
+      3,
+      3,
+      0
+    ],
+    "inventory": {
+      "house": 3,
+      "woodcutter": 3,
+      "road": 9,
+      "farm": 2,
+      "windmill": 2,
+      "town_hall": 1
+    },
+    "solution": [
+      [
+        "rock",
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "empty"
+      ],
+      [
+        "empty",
+        "empty",
+        "tree",
+        "empty",
+        "empty",
+        "rock",
+        "empty"
+      ],
+      [
+        "empty",
+        "house",
+        "woodcutter",
+        "road",
+        "farm",
+        "windmill",
+        "rock"
+      ],
+      [
+        "windmill",
+        "farm",
+        "road",
+        "road",
+        "house",
+        "empty",
+        "empty"
+      ],
+      [
+        "empty",
+        "empty",
+        "road",
+        "tree",
+        "woodcutter",
+        "tree",
+        "empty"
+      ],
+      [
+        "empty",
+        "empty",
+        "road",
+        "rock",
+        "road",
+        "house",
+        "empty"
+      ],
+      [
+        "empty",
+        "town_hall",
+        "road",
+        "road",
+        "road",
+        "woodcutter",
+        "tree"
+      ]
+    ],
+    "difficulty": "Expert",
+    "difficultyMetrics": {
+      "score": 97,
+      "tier": "Expert",
+      "maxRuleLevel": 4,
+      "maxRuleName": "Road Entry Point",
+      "stepCount": 46,
+      "density": 0.57,
+      "filledTiles": 28,
+      "lookaheadCount": 0
+    },
+    "difficultyScore": 97,
+    "density": 0.57
+  },
+  {
+    "id": 126,
+    "chapter": 7,
+    "chapterName": "Grand Heartland",
+    "title": "Heartland Gate",
+    "size": 7,
+    "initialGrid": [
+      [
+        "empty",
+        "empty",
+        "empty",
+        "rock",
+        "empty",
+        "empty",
+        "tree"
+      ],
+      [
+        "empty",
+        "rock",
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "empty"
+      ],
+      [
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "rock",
+        "empty"
+      ],
+      [
+        "tree",
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "empty"
+      ],
+      [
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "empty"
+      ],
+      [
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "empty"
+      ],
+      [
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "empty"
+      ]
+    ],
+    "rowClues": [
+      2,
+      0,
+      1,
+      1,
+      5,
+      1,
+      0
+    ],
+    "colClues": [
+      1,
+      3,
+      0,
+      1,
+      1,
+      3,
+      1
+    ],
+    "inventory": {
+      "house": 3,
+      "woodcutter": 2,
+      "road": 10,
+      "farm": 2,
+      "windmill": 2,
+      "town_hall": 1
+    },
+    "solution": [
+      [
+        "empty",
+        "empty",
+        "empty",
+        "rock",
+        "house",
+        "woodcutter",
+        "tree"
+      ],
+      [
+        "empty",
+        "rock",
+        "empty",
+        "empty",
+        "road",
+        "road",
+        "empty"
+      ],
+      [
+        "empty",
+        "windmill",
+        "empty",
+        "empty",
+        "road",
+        "rock",
+        "empty"
+      ],
+      [
+        "tree",
+        "farm",
+        "road",
+        "empty",
+        "road",
+        "empty",
+        "empty"
+      ],
+      [
+        "woodcutter",
+        "house",
+        "road",
+        "town_hall",
+        "road",
+        "farm",
+        "windmill"
+      ],
+      [
+        "road",
+        "road",
+        "road",
+        "empty",
+        "empty",
+        "house",
+        "empty"
+      ],
+      [
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "empty"
+      ]
+    ],
+    "difficulty": "Expert",
+    "difficultyMetrics": {
+      "score": 99,
+      "tier": "Expert",
+      "maxRuleLevel": 4,
+      "maxRuleName": "Road Entry Point",
+      "stepCount": 84,
+      "density": 0.51,
+      "filledTiles": 25,
+      "lookaheadCount": 2
+    },
+    "difficultyScore": 99,
+    "density": 0.51
+  },
+  {
+    "id": 127,
+    "chapter": 7,
+    "chapterName": "Grand Heartland",
+    "title": "Seven-Mill Reach",
+    "size": 7,
+    "initialGrid": [
+      [
+        "empty",
+        "empty",
+        "empty",
+        "tree",
+        "empty",
+        "empty",
+        "empty"
+      ],
+      [
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "rock"
+      ],
+      [
+        "empty",
+        "empty",
+        "empty",
+        "tree",
+        "empty",
+        "empty",
+        "empty"
+      ],
+      [
+        "empty",
+        "empty",
+        "rock",
+        "rock",
+        "empty",
+        "empty",
+        "empty"
+      ],
+      [
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "empty"
+      ],
+      [
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "empty"
+      ],
+      [
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "tree"
+      ]
+    ],
+    "rowClues": [
+      0,
+      2,
+      0,
+      2,
+      2,
+      4,
+      0
+    ],
+    "colClues": [
+      0,
+      1,
+      3,
+      1,
+      1,
+      1,
+      3
+    ],
+    "inventory": {
+      "house": 3,
+      "woodcutter": 2,
+      "road": 8,
+      "farm": 2,
+      "windmill": 2,
+      "town_hall": 1
+    },
+    "solution": [
+      [
+        "empty",
+        "empty",
+        "empty",
+        "tree",
+        "empty",
+        "empty",
+        "empty"
+      ],
+      [
+        "empty",
+        "empty",
+        "house",
+        "woodcutter",
+        "road",
+        "empty",
+        "rock"
+      ],
+      [
+        "empty",
+        "empty",
+        "empty",
+        "tree",
+        "road",
+        "road",
+        "road"
+      ],
+      [
+        "empty",
+        "empty",
+        "rock",
+        "rock",
+        "road",
+        "windmill",
+        "farm"
+      ],
+      [
+        "empty",
+        "empty",
+        "windmill",
+        "empty",
+        "road",
+        "empty",
+        "house"
+      ],
+      [
+        "empty",
+        "house",
+        "farm",
+        "road",
+        "town_hall",
+        "road",
+        "woodcutter"
+      ],
+      [
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "tree"
+      ]
+    ],
+    "difficulty": "Expert",
+    "difficultyMetrics": {
+      "score": 99,
+      "tier": "Expert",
+      "maxRuleLevel": 4,
+      "maxRuleName": "Road Entry Point",
+      "stepCount": 59,
+      "density": 0.49,
+      "filledTiles": 24,
+      "lookaheadCount": 0
+    },
+    "difficultyScore": 99,
+    "density": 0.49
+  },
+  {
+    "id": 128,
+    "chapter": 7,
+    "chapterName": "Grand Heartland",
+    "title": "Golden Granary",
+    "size": 7,
+    "initialGrid": [
+      [
+        "empty",
+        "empty",
+        "rock",
+        "empty",
+        "empty",
+        "empty",
+        "tree"
+      ],
+      [
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "empty"
+      ],
+      [
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "empty"
+      ],
+      [
+        "rock",
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "empty"
+      ],
+      [
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "empty"
+      ],
+      [
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "tree",
+        "empty",
+        "rock"
+      ],
+      [
+        "empty",
+        "empty",
+        "empty",
+        "tree",
+        "empty",
+        "empty",
+        "empty"
+      ]
+    ],
+    "rowClues": [
+      0,
+      1,
+      1,
+      2,
+      3,
+      3,
+      0
+    ],
+    "colClues": [
+      0,
+      1,
+      1,
+      3,
+      1,
+      2,
+      2
+    ],
+    "inventory": {
+      "house": 3,
+      "woodcutter": 2,
+      "road": 10,
+      "farm": 2,
+      "windmill": 2,
+      "town_hall": 1
+    },
+    "solution": [
+      [
+        "empty",
+        "empty",
+        "rock",
+        "empty",
+        "empty",
+        "empty",
+        "tree"
+      ],
+      [
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "road",
+        "woodcutter"
+      ],
+      [
+        "empty",
+        "road",
+        "road",
+        "road",
+        "road",
+        "road",
+        "house"
+      ],
+      [
+        "rock",
+        "road",
+        "windmill",
+        "farm",
+        "empty",
+        "road",
+        "empty"
+      ],
+      [
+        "empty",
+        "road",
+        "empty",
+        "house",
+        "windmill",
+        "farm",
+        "empty"
+      ],
+      [
+        "empty",
+        "town_hall",
+        "road",
+        "woodcutter",
+        "tree",
+        "house",
+        "rock"
+      ],
+      [
+        "empty",
+        "empty",
+        "empty",
+        "tree",
+        "empty",
+        "empty",
+        "empty"
+      ]
+    ],
+    "difficulty": "Expert",
+    "difficultyMetrics": {
+      "score": 99,
+      "tier": "Expert",
+      "maxRuleLevel": 4,
+      "maxRuleName": "Road Entry Point",
+      "stepCount": 56,
+      "density": 0.53,
+      "filledTiles": 26,
+      "lookaheadCount": 0
+    },
+    "difficultyScore": 99,
+    "density": 0.53
+  },
+  {
+    "id": 129,
+    "chapter": 7,
+    "chapterName": "Grand Heartland",
+    "title": "Highshire Commons",
+    "size": 7,
+    "initialGrid": [
+      [
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "empty"
+      ],
+      [
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "empty"
+      ],
+      [
+        "empty",
+        "tree",
+        "rock",
+        "empty",
+        "empty",
+        "empty",
+        "empty"
+      ],
+      [
+        "tree",
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "empty"
+      ],
+      [
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "empty"
+      ],
+      [
+        "empty",
+        "empty",
+        "empty",
+        "tree",
+        "empty",
+        "empty",
+        "empty"
+      ],
+      [
+        "empty",
+        "rock",
+        "tree",
+        "empty",
+        "rock",
+        "empty",
+        "empty"
+      ]
+    ],
+    "rowClues": [
+      1,
+      2,
+      2,
+      3,
+      0,
+      2,
+      0
+    ],
+    "colClues": [
+      1,
+      4,
+      2,
+      2,
+      0,
+      0,
+      1
+    ],
+    "inventory": {
+      "house": 3,
+      "woodcutter": 2,
+      "road": 10,
+      "farm": 2,
+      "windmill": 2,
+      "town_hall": 1
+    },
+    "solution": [
+      [
+        "empty",
+        "windmill",
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "empty"
+      ],
+      [
+        "house",
+        "farm",
+        "road",
+        "road",
+        "road",
+        "empty",
+        "empty"
+      ],
+      [
+        "empty",
+        "tree",
+        "rock",
+        "windmill",
+        "road",
+        "road",
+        "town_hall"
+      ],
+      [
+        "tree",
+        "woodcutter",
+        "house",
+        "farm",
+        "road",
+        "empty",
+        "empty"
+      ],
+      [
+        "empty",
+        "road",
+        "road",
+        "road",
+        "road",
+        "empty",
+        "empty"
+      ],
+      [
+        "empty",
+        "house",
+        "woodcutter",
+        "tree",
+        "empty",
+        "empty",
+        "empty"
+      ],
+      [
+        "empty",
+        "rock",
+        "tree",
+        "empty",
+        "rock",
+        "empty",
+        "empty"
+      ]
+    ],
+    "difficulty": "Expert",
+    "difficultyMetrics": {
+      "score": 99,
+      "tier": "Expert",
+      "maxRuleLevel": 4,
+      "maxRuleName": "Road Entry Point",
+      "stepCount": 50,
+      "density": 0.55,
+      "filledTiles": 27,
+      "lookaheadCount": 0
+    },
+    "difficultyScore": 99,
+    "density": 0.55
+  },
+  {
+    "id": 130,
+    "chapter": 7,
+    "chapterName": "Grand Heartland",
+    "title": "Windmill Valley",
+    "size": 7,
+    "initialGrid": [
+      [
+        "empty",
+        "rock",
+        "tree",
+        "rock",
+        "empty",
+        "rock",
+        "empty"
+      ],
+      [
+        "empty",
+        "tree",
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "empty"
+      ],
+      [
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "empty"
+      ],
+      [
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "tree"
+      ],
+      [
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "tree",
+        "empty"
+      ],
+      [
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "empty"
+      ],
+      [
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "empty"
+      ]
+    ],
+    "rowClues": [
+      0,
+      2,
+      3,
+      2,
+      2,
+      1,
+      0
+    ],
+    "colClues": [
+      0,
+      1,
+      1,
+      3,
+      3,
+      2,
+      0
+    ],
+    "inventory": {
+      "house": 3,
+      "woodcutter": 2,
+      "road": 4,
+      "farm": 2,
+      "windmill": 2,
+      "town_hall": 1
+    },
+    "solution": [
+      [
+        "empty",
+        "rock",
+        "tree",
+        "rock",
+        "empty",
+        "rock",
+        "empty"
+      ],
+      [
+        "empty",
+        "tree",
+        "woodcutter",
+        "house",
+        "empty",
+        "empty",
+        "empty"
+      ],
+      [
+        "empty",
+        "empty",
+        "road",
+        "farm",
+        "windmill",
+        "house",
+        "empty"
+      ],
+      [
+        "empty",
+        "town_hall",
+        "road",
+        "road",
+        "road",
+        "woodcutter",
+        "tree"
+      ],
+      [
+        "empty",
+        "empty",
+        "empty",
+        "windmill",
+        "farm",
+        "tree",
+        "empty"
+      ],
+      [
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "house",
+        "empty",
+        "empty"
+      ],
+      [
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "empty"
+      ]
+    ],
+    "difficulty": "Expert",
+    "difficultyMetrics": {
+      "score": 99,
+      "tier": "Expert",
+      "maxRuleLevel": 4,
+      "maxRuleName": "Road Entry Point",
+      "stepCount": 60,
+      "density": 0.43,
+      "filledTiles": 21,
+      "lookaheadCount": 1
+    },
+    "difficultyScore": 99,
+    "density": 0.43
+  },
+  {
+    "id": 131,
+    "chapter": 7,
+    "chapterName": "Grand Heartland",
+    "title": "Royal Wheatfields",
+    "size": 7,
+    "initialGrid": [
+      [
+        "tree",
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "empty"
+      ],
+      [
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "empty"
+      ],
+      [
+        "empty",
+        "empty",
+        "empty",
+        "rock",
+        "empty",
+        "empty",
+        "empty"
+      ],
+      [
+        "rock",
+        "rock",
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "empty"
+      ],
+      [
+        "empty",
+        "empty",
+        "empty",
+        "rock",
+        "empty",
+        "empty",
+        "empty"
+      ],
+      [
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "rock",
+        "empty"
+      ],
+      [
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "tree",
+        "rock"
+      ]
+    ],
+    "rowClues": [
+      2,
+      2,
+      0,
+      0,
+      3,
+      1,
+      2
+    ],
+    "colClues": [
+      0,
+      1,
+      3,
+      1,
+      3,
+      1,
+      1
+    ],
+    "inventory": {
+      "house": 3,
+      "woodcutter": 2,
+      "road": 10,
+      "farm": 2,
+      "windmill": 2,
+      "town_hall": 1
+    },
+    "solution": [
+      [
+        "tree",
+        "woodcutter",
+        "house",
+        "empty",
+        "empty",
+        "empty",
+        "empty"
+      ],
+      [
+        "empty",
+        "road",
+        "farm",
+        "windmill",
+        "empty",
+        "empty",
+        "empty"
+      ],
+      [
+        "empty",
+        "road",
+        "road",
+        "rock",
+        "empty",
+        "empty",
+        "empty"
+      ],
+      [
+        "rock",
+        "rock",
+        "road",
+        "road",
+        "road",
+        "road",
+        "empty"
+      ],
+      [
+        "empty",
+        "empty",
+        "road",
+        "rock",
+        "windmill",
+        "farm",
+        "house"
+      ],
+      [
+        "empty",
+        "empty",
+        "road",
+        "empty",
+        "house",
+        "rock",
+        "empty"
+      ],
+      [
+        "empty",
+        "empty",
+        "town_hall",
+        "road",
+        "woodcutter",
+        "tree",
+        "rock"
+      ]
+    ],
+    "difficulty": "Expert",
+    "difficultyMetrics": {
+      "score": 99,
+      "tier": "Expert",
+      "maxRuleLevel": 4,
+      "maxRuleName": "Road Entry Point",
+      "stepCount": 52,
+      "density": 0.57,
+      "filledTiles": 28,
+      "lookaheadCount": 0
+    },
+    "difficultyScore": 99,
+    "density": 0.57
+  },
+  {
+    "id": 132,
+    "chapter": 7,
+    "chapterName": "Grand Heartland",
+    "title": "Timber & Sails",
+    "size": 7,
+    "initialGrid": [
+      [
+        "empty",
+        "tree",
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "rock"
+      ],
+      [
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "empty"
+      ],
+      [
+        "rock",
+        "tree",
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "empty"
+      ],
+      [
+        "tree",
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "empty"
+      ],
+      [
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "empty"
+      ],
+      [
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "rock",
+        "empty"
+      ],
+      [
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "empty"
+      ]
+    ],
+    "rowClues": [
+      2,
+      2,
+      0,
+      4,
+      1,
+      1,
+      0
+    ],
+    "colClues": [
+      0,
+      1,
+      2,
+      3,
+      1,
+      2,
+      1
+    ],
+    "inventory": {
+      "house": 3,
+      "woodcutter": 2,
+      "road": 8,
+      "farm": 2,
+      "windmill": 2,
+      "town_hall": 1
+    },
+    "solution": [
+      [
+        "empty",
+        "tree",
+        "woodcutter",
+        "house",
+        "empty",
+        "empty",
+        "rock"
+      ],
+      [
+        "empty",
+        "empty",
+        "road",
+        "farm",
+        "windmill",
+        "empty",
+        "empty"
+      ],
+      [
+        "rock",
+        "tree",
+        "road",
+        "road",
+        "empty",
+        "empty",
+        "empty"
+      ],
+      [
+        "tree",
+        "woodcutter",
+        "house",
+        "road",
+        "road",
+        "farm",
+        "windmill"
+      ],
+      [
+        "empty",
+        "road",
+        "road",
+        "road",
+        "empty",
+        "house",
+        "empty"
+      ],
+      [
+        "empty",
+        "empty",
+        "empty",
+        "town_hall",
+        "empty",
+        "rock",
+        "empty"
+      ],
+      [
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "empty"
+      ]
+    ],
+    "difficulty": "Expert",
+    "difficultyMetrics": {
+      "score": 99,
+      "tier": "Expert",
+      "maxRuleLevel": 4,
+      "maxRuleName": "Road Entry Point",
+      "stepCount": 62,
+      "density": 0.49,
+      "filledTiles": 24,
+      "lookaheadCount": 0
+    },
+    "difficultyScore": 99,
+    "density": 0.49
+  },
+  {
+    "id": 133,
+    "chapter": 7,
+    "chapterName": "Grand Heartland",
+    "title": "Sovereign Meadow",
+    "size": 7,
+    "initialGrid": [
+      [
+        "empty",
+        "tree",
+        "rock",
+        "empty",
+        "empty",
+        "empty",
+        "rock"
+      ],
+      [
+        "tree",
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "empty"
+      ],
+      [
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "empty"
+      ],
+      [
+        "empty",
+        "empty",
+        "tree",
+        "rock",
+        "empty",
+        "rock",
+        "empty"
+      ],
+      [
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "empty"
+      ],
+      [
+        "empty",
+        "empty",
+        "tree",
+        "empty",
+        "empty",
+        "empty",
+        "empty"
+      ],
+      [
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "empty"
+      ]
+    ],
+    "rowClues": [
+      0,
+      3,
+      1,
+      3,
+      2,
+      1,
+      0
+    ],
+    "colClues": [
+      1,
+      3,
+      2,
+      0,
+      1,
+      0,
+      3
+    ],
+    "inventory": {
+      "house": 3,
+      "woodcutter": 2,
+      "road": 8,
+      "farm": 2,
+      "windmill": 2,
+      "town_hall": 1
+    },
+    "solution": [
+      [
+        "empty",
+        "tree",
+        "rock",
+        "empty",
+        "empty",
+        "empty",
+        "rock"
+      ],
+      [
+        "tree",
+        "woodcutter",
+        "house",
+        "empty",
+        "empty",
+        "empty",
+        "windmill"
+      ],
+      [
+        "empty",
+        "road",
+        "road",
+        "road",
+        "road",
+        "road",
+        "farm"
+      ],
+      [
+        "windmill",
+        "farm",
+        "tree",
+        "rock",
+        "road",
+        "rock",
+        "house"
+      ],
+      [
+        "empty",
+        "house",
+        "woodcutter",
+        "road",
+        "road",
+        "empty",
+        "empty"
+      ],
+      [
+        "empty",
+        "empty",
+        "tree",
+        "empty",
+        "town_hall",
+        "empty",
+        "empty"
+      ],
+      [
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "empty"
+      ]
+    ],
+    "difficulty": "Expert",
+    "difficultyMetrics": {
+      "score": 97,
+      "tier": "Expert",
+      "maxRuleLevel": 4,
+      "maxRuleName": "Road Entry Point",
+      "stepCount": 47,
+      "density": 0.53,
+      "filledTiles": 26,
+      "lookaheadCount": 0
+    },
+    "difficultyScore": 97,
+    "density": 0.53
+  },
+  {
+    "id": 134,
+    "chapter": 7,
+    "chapterName": "Grand Heartland",
+    "title": "Great Mill Basin",
+    "size": 7,
+    "initialGrid": [
+      [
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "tree"
+      ],
+      [
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "empty"
+      ],
+      [
+        "tree",
+        "empty",
+        "empty",
+        "rock",
+        "rock",
+        "empty",
+        "empty"
+      ],
+      [
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "empty"
+      ],
+      [
+        "empty",
+        "empty",
+        "tree",
+        "empty",
+        "empty",
+        "rock",
+        "empty"
+      ],
+      [
+        "empty",
+        "tree",
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "empty"
+      ],
+      [
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "rock"
+      ]
+    ],
+    "rowClues": [
+      2,
+      3,
+      1,
+      1,
+      0,
+      1,
+      3
+    ],
+    "colClues": [
+      0,
+      3,
+      2,
+      2,
+      2,
+      2,
+      0
+    ],
+    "inventory": {
+      "house": 3,
+      "woodcutter": 3,
+      "road": 10,
+      "farm": 2,
+      "windmill": 2,
+      "town_hall": 1
+    },
+    "solution": [
+      [
+        "empty",
+        "town_hall",
+        "road",
+        "road",
+        "road",
+        "woodcutter",
+        "tree"
+      ],
+      [
+        "empty",
+        "road",
+        "road",
+        "windmill",
+        "farm",
+        "house",
+        "empty"
+      ],
+      [
+        "tree",
+        "woodcutter",
+        "road",
+        "rock",
+        "rock",
+        "empty",
+        "empty"
+      ],
+      [
+        "empty",
+        "house",
+        "road",
+        "road",
+        "empty",
+        "empty",
+        "empty"
+      ],
+      [
+        "empty",
+        "empty",
+        "tree",
+        "road",
+        "empty",
+        "rock",
+        "empty"
+      ],
+      [
+        "empty",
+        "tree",
+        "woodcutter",
+        "road",
+        "empty",
+        "empty",
+        "empty"
+      ],
+      [
+        "empty",
+        "empty",
+        "house",
+        "farm",
+        "windmill",
+        "empty",
+        "rock"
+      ]
+    ],
+    "difficulty": "Expert",
+    "difficultyMetrics": {
+      "score": 99,
+      "tier": "Expert",
+      "maxRuleLevel": 4,
+      "maxRuleName": "Road Entry Point",
+      "stepCount": 59,
+      "density": 0.59,
+      "filledTiles": 29,
+      "lookaheadCount": 0
+    },
+    "difficultyScore": 99,
+    "density": 0.59
+  },
+  {
+    "id": 135,
+    "chapter": 7,
+    "chapterName": "Grand Heartland",
+    "title": "Crownlands Crossing",
+    "size": 7,
+    "initialGrid": [
+      [
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "empty"
+      ],
+      [
+        "rock",
+        "empty",
+        "rock",
+        "empty",
+        "empty",
+        "empty",
+        "tree"
+      ],
+      [
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "empty"
+      ],
+      [
+        "rock",
+        "tree",
+        "empty",
+        "rock",
+        "empty",
+        "empty",
+        "empty"
+      ],
+      [
+        "tree",
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "empty"
+      ],
+      [
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "tree",
+        "empty",
+        "empty"
+      ],
+      [
+        "empty",
+        "empty",
+        "empty",
+        "tree",
+        "empty",
+        "empty",
+        "empty"
+      ]
+    ],
+    "rowClues": [
+      0,
+      1,
+      1,
+      2,
+      3,
+      2,
+      2
+    ],
+    "colClues": [
+      1,
+      3,
+      0,
+      2,
+      3,
+      0,
+      2
+    ],
+    "inventory": {
+      "house": 3,
+      "woodcutter": 3,
+      "road": 10,
+      "farm": 2,
+      "windmill": 2,
+      "town_hall": 1
+    },
+    "solution": [
+      [
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "empty"
+      ],
+      [
+        "rock",
+        "empty",
+        "rock",
+        "empty",
+        "town_hall",
+        "empty",
+        "tree"
+      ],
+      [
+        "empty",
+        "empty",
+        "road",
+        "road",
+        "road",
+        "road",
+        "woodcutter"
+      ],
+      [
+        "rock",
+        "tree",
+        "road",
+        "rock",
+        "windmill",
+        "road",
+        "house"
+      ],
+      [
+        "tree",
+        "woodcutter",
+        "road",
+        "house",
+        "farm",
+        "road",
+        "empty"
+      ],
+      [
+        "empty",
+        "house",
+        "road",
+        "woodcutter",
+        "tree",
+        "empty",
+        "empty"
+      ],
+      [
+        "windmill",
+        "farm",
+        "road",
+        "tree",
+        "empty",
+        "empty",
+        "empty"
+      ]
+    ],
+    "difficulty": "Expert",
+    "difficultyMetrics": {
+      "score": 97,
+      "tier": "Expert",
+      "maxRuleLevel": 4,
+      "maxRuleName": "Road Entry Point",
+      "stepCount": 45,
+      "density": 0.61,
+      "filledTiles": 30,
+      "lookaheadCount": 0
+    },
+    "difficultyScore": 97,
+    "density": 0.61
+  },
+  {
+    "id": 136,
+    "chapter": 7,
+    "chapterName": "Grand Heartland",
+    "title": "Harvest Citadel",
+    "size": 7,
+    "initialGrid": [
+      [
+        "empty",
+        "tree",
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "rock"
+      ],
+      [
+        "empty",
+        "empty",
+        "empty",
+        "rock",
+        "empty",
+        "tree",
+        "empty"
+      ],
+      [
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "empty"
+      ],
+      [
+        "empty",
+        "empty",
+        "empty",
+        "rock",
+        "empty",
+        "empty",
+        "empty"
+      ],
+      [
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "empty"
+      ],
+      [
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "rock",
+        "tree",
+        "empty"
+      ],
+      [
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "empty"
+      ]
+    ],
+    "rowClues": [
+      4,
+      0,
+      3,
+      2,
+      0,
+      1,
+      1
+    ],
+    "colClues": [
+      0,
+      1,
+      1,
+      1,
+      1,
+      3,
+      4
+    ],
+    "inventory": {
+      "house": 3,
+      "woodcutter": 3,
+      "road": 9,
+      "farm": 2,
+      "windmill": 2,
+      "town_hall": 1
+    },
+    "solution": [
+      [
+        "empty",
+        "tree",
+        "woodcutter",
+        "house",
+        "farm",
+        "windmill",
+        "rock"
+      ],
+      [
+        "empty",
+        "empty",
+        "road",
+        "rock",
+        "road",
+        "tree",
+        "empty"
+      ],
+      [
+        "empty",
+        "town_hall",
+        "road",
+        "road",
+        "road",
+        "woodcutter",
+        "windmill"
+      ],
+      [
+        "empty",
+        "empty",
+        "empty",
+        "rock",
+        "road",
+        "house",
+        "farm"
+      ],
+      [
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "road",
+        "road",
+        "road"
+      ],
+      [
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "rock",
+        "tree",
+        "woodcutter"
+      ],
+      [
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "house"
+      ]
+    ],
+    "difficulty": "Expert",
+    "difficultyMetrics": {
+      "score": 99,
+      "tier": "Expert",
+      "maxRuleLevel": 4,
+      "maxRuleName": "Road Entry Point",
+      "stepCount": 51,
+      "density": 0.55,
+      "filledTiles": 27,
+      "lookaheadCount": 0
+    },
+    "difficultyScore": 99,
+    "density": 0.55
+  },
+  {
+    "id": 137,
+    "chapter": 7,
+    "chapterName": "Grand Heartland",
+    "title": "Grand Windward",
+    "size": 7,
+    "initialGrid": [
+      [
+        "rock",
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "empty"
+      ],
+      [
+        "empty",
+        "empty",
+        "empty",
+        "rock",
+        "empty",
+        "empty",
+        "empty"
+      ],
+      [
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "empty"
+      ],
+      [
+        "tree",
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "tree",
+        "tree"
+      ],
+      [
+        "empty",
+        "tree",
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "tree"
+      ],
+      [
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "empty"
+      ],
+      [
+        "rock",
+        "empty",
+        "empty",
+        "rock",
+        "empty",
+        "empty",
+        "empty"
+      ]
+    ],
+    "rowClues": [
+      0,
+      3,
+      2,
+      2,
+      1,
+      2,
+      1
+    ],
+    "colClues": [
+      0,
+      3,
+      1,
+      1,
+      2,
+      2,
+      2
+    ],
+    "inventory": {
+      "house": 3,
+      "woodcutter": 3,
+      "road": 10,
+      "farm": 2,
+      "windmill": 2,
+      "town_hall": 1
+    },
+    "solution": [
+      [
+        "rock",
+        "road",
+        "road",
+        "road",
+        "road",
+        "empty",
+        "empty"
+      ],
+      [
+        "empty",
+        "farm",
+        "windmill",
+        "rock",
+        "road",
+        "empty",
+        "house"
+      ],
+      [
+        "empty",
+        "house",
+        "empty",
+        "empty",
+        "road",
+        "road",
+        "woodcutter"
+      ],
+      [
+        "tree",
+        "woodcutter",
+        "road",
+        "town_hall",
+        "road",
+        "tree",
+        "tree"
+      ],
+      [
+        "empty",
+        "tree",
+        "empty",
+        "empty",
+        "road",
+        "woodcutter",
+        "tree"
+      ],
+      [
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "farm",
+        "house",
+        "empty"
+      ],
+      [
+        "rock",
+        "empty",
+        "empty",
+        "rock",
+        "windmill",
+        "empty",
+        "empty"
+      ]
+    ],
+    "difficulty": "Expert",
+    "difficultyMetrics": {
+      "score": 95,
+      "tier": "Expert",
+      "maxRuleLevel": 4,
+      "maxRuleName": "Road Entry Point",
+      "stepCount": 42,
+      "density": 0.61,
+      "filledTiles": 30,
+      "lookaheadCount": 0
+    },
+    "difficultyScore": 95,
+    "density": 0.61
+  },
+  {
+    "id": 138,
+    "chapter": 7,
+    "chapterName": "Grand Heartland",
+    "title": "Bountiful Realm",
+    "size": 7,
+    "initialGrid": [
+      [
+        "empty",
+        "rock",
+        "empty",
+        "tree",
+        "empty",
+        "empty",
+        "empty"
+      ],
+      [
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "empty"
+      ],
+      [
+        "empty",
+        "empty",
+        "empty",
+        "tree",
+        "empty",
+        "rock",
+        "empty"
+      ],
+      [
+        "rock",
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "empty"
+      ],
+      [
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "tree"
+      ],
+      [
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "tree"
+      ],
+      [
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "tree",
+        "empty"
+      ]
+    ],
+    "rowClues": [
+      0,
+      2,
+      3,
+      1,
+      3,
+      1,
+      1
+    ],
+    "colClues": [
+      0,
+      1,
+      3,
+      2,
+      1,
+      2,
+      2
+    ],
+    "inventory": {
+      "house": 3,
+      "woodcutter": 3,
+      "road": 10,
+      "farm": 2,
+      "windmill": 2,
+      "town_hall": 1
+    },
+    "solution": [
+      [
+        "empty",
+        "rock",
+        "empty",
+        "tree",
+        "empty",
+        "empty",
+        "empty"
+      ],
+      [
+        "empty",
+        "empty",
+        "house",
+        "woodcutter",
+        "road",
+        "empty",
+        "empty"
+      ],
+      [
+        "empty",
+        "windmill",
+        "farm",
+        "tree",
+        "road",
+        "rock",
+        "house"
+      ],
+      [
+        "rock",
+        "empty",
+        "road",
+        "road",
+        "road",
+        "road",
+        "woodcutter"
+      ],
+      [
+        "empty",
+        "empty",
+        "road",
+        "windmill",
+        "farm",
+        "house",
+        "tree"
+      ],
+      [
+        "empty",
+        "empty",
+        "road",
+        "road",
+        "road",
+        "woodcutter",
+        "tree"
+      ],
+      [
+        "empty",
+        "empty",
+        "town_hall",
+        "empty",
+        "empty",
+        "tree",
+        "empty"
+      ]
+    ],
+    "difficulty": "Expert",
+    "difficultyMetrics": {
+      "score": 98,
+      "tier": "Expert",
+      "maxRuleLevel": 4,
+      "maxRuleName": "Road Entry Point",
+      "stepCount": 47,
+      "density": 0.59,
+      "filledTiles": 29,
+      "lookaheadCount": 0
+    },
+    "difficultyScore": 98,
+    "density": 0.59
+  },
+  {
+    "id": 139,
+    "chapter": 7,
+    "chapterName": "Grand Heartland",
+    "title": "King’s Granary",
+    "size": 7,
+    "initialGrid": [
+      [
+        "tree",
+        "empty",
+        "empty",
+        "rock",
+        "rock",
+        "empty",
+        "empty"
+      ],
+      [
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "empty"
+      ],
+      [
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "empty"
+      ],
+      [
+        "empty",
+        "empty",
+        "empty",
+        "rock",
+        "empty",
+        "empty",
+        "empty"
+      ],
+      [
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "tree",
+        "empty",
+        "tree"
+      ],
+      [
+        "rock",
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "empty"
+      ],
+      [
+        "empty",
+        "empty",
+        "empty",
+        "tree",
+        "empty",
+        "empty",
+        "empty"
+      ]
+    ],
+    "rowClues": [
+      2,
+      1,
+      2,
+      1,
+      2,
+      1,
+      2
+    ],
+    "colClues": [
+      0,
+      5,
+      2,
+      0,
+      0,
+      4,
+      0
+    ],
+    "inventory": {
+      "house": 3,
+      "woodcutter": 3,
+      "road": 10,
+      "farm": 2,
+      "windmill": 2,
+      "town_hall": 1
+    },
+    "solution": [
+      [
+        "tree",
+        "woodcutter",
+        "house",
+        "rock",
+        "rock",
+        "empty",
+        "empty"
+      ],
+      [
+        "empty",
+        "road",
+        "empty",
+        "empty",
+        "empty",
+        "windmill",
+        "empty"
+      ],
+      [
+        "empty",
+        "town_hall",
+        "road",
+        "road",
+        "road",
+        "farm",
+        "empty"
+      ],
+      [
+        "empty",
+        "empty",
+        "road",
+        "rock",
+        "empty",
+        "house",
+        "empty"
+      ],
+      [
+        "empty",
+        "windmill",
+        "road",
+        "empty",
+        "tree",
+        "woodcutter",
+        "tree"
+      ],
+      [
+        "rock",
+        "farm",
+        "road",
+        "road",
+        "road",
+        "road",
+        "empty"
+      ],
+      [
+        "empty",
+        "house",
+        "woodcutter",
+        "tree",
+        "empty",
+        "empty",
+        "empty"
+      ]
+    ],
+    "difficulty": "Expert",
+    "difficultyMetrics": {
+      "score": 99,
+      "tier": "Expert",
+      "maxRuleLevel": 4,
+      "maxRuleName": "Road Entry Point",
+      "stepCount": 51,
+      "density": 0.59,
+      "filledTiles": 29,
+      "lookaheadCount": 0
+    },
+    "difficultyScore": 99,
+    "density": 0.59
+  },
+  {
+    "id": 140,
+    "chapter": 7,
+    "chapterName": "Grand Heartland",
+    "title": "Sunlit Dominion",
+    "size": 7,
+    "initialGrid": [
+      [
+        "empty",
+        "empty",
+        "empty",
+        "tree",
+        "empty",
+        "empty",
+        "rock"
+      ],
+      [
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "tree",
+        "empty",
+        "empty"
+      ],
+      [
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "tree"
+      ],
+      [
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "empty"
+      ],
+      [
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "empty"
+      ],
+      [
+        "tree",
+        "rock",
+        "empty",
+        "rock",
+        "empty",
+        "empty",
+        "empty"
+      ],
+      [
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "empty"
+      ]
+    ],
+    "rowClues": [
+      0,
+      3,
+      1,
+      3,
+      3,
+      1,
+      0
+    ],
+    "colClues": [
+      4,
+      0,
+      2,
+      1,
+      0,
+      2,
+      2
+    ],
+    "inventory": {
+      "house": 3,
+      "woodcutter": 3,
+      "road": 7,
+      "farm": 2,
+      "windmill": 2,
+      "town_hall": 1
+    },
+    "solution": [
+      [
+        "empty",
+        "empty",
+        "empty",
+        "tree",
+        "empty",
+        "empty",
+        "rock"
+      ],
+      [
+        "windmill",
+        "empty",
+        "house",
+        "woodcutter",
+        "tree",
+        "empty",
+        "empty"
+      ],
+      [
+        "farm",
+        "road",
+        "empty",
+        "road",
+        "empty",
+        "empty",
+        "tree"
+      ],
+      [
+        "house",
+        "road",
+        "town_hall",
+        "road",
+        "road",
+        "road",
+        "woodcutter"
+      ],
+      [
+        "woodcutter",
+        "road",
+        "empty",
+        "empty",
+        "empty",
+        "farm",
+        "house"
+      ],
+      [
+        "tree",
+        "rock",
+        "empty",
+        "rock",
+        "empty",
+        "windmill",
+        "empty"
+      ],
+      [
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "empty"
+      ]
+    ],
+    "difficulty": "Expert",
+    "difficultyMetrics": {
+      "score": 99,
+      "tier": "Expert",
+      "maxRuleLevel": 4,
+      "maxRuleName": "Road Entry Point",
+      "stepCount": 50,
+      "density": 0.51,
+      "filledTiles": 25,
+      "lookaheadCount": 0
+    },
+    "difficultyScore": 99,
+    "density": 0.51
+  },
+  {
+    "id": 141,
+    "chapter": 7,
+    "chapterName": "Grand Heartland",
+    "title": "Miller’s Capital",
+    "size": 7,
+    "initialGrid": [
+      [
+        "empty",
+        "tree",
+        "empty",
+        "empty",
+        "tree",
+        "empty",
+        "empty"
+      ],
+      [
+        "empty",
+        "rock",
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "empty"
+      ],
+      [
+        "empty",
+        "empty",
+        "empty",
+        "rock",
+        "empty",
+        "empty",
+        "empty"
+      ],
+      [
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "empty"
+      ],
+      [
+        "empty",
+        "empty",
+        "rock",
+        "empty",
+        "rock",
+        "empty",
+        "empty"
+      ],
+      [
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "tree"
+      ],
+      [
+        "empty",
+        "rock",
+        "rock",
+        "empty",
+        "empty",
+        "tree",
+        "empty"
+      ]
+    ],
+    "rowClues": [
+      2,
+      2,
+      2,
+      1,
+      0,
+      4,
+      0
+    ],
+    "colClues": [
+      1,
+      0,
+      2,
+      2,
+      3,
+      3,
+      0
+    ],
+    "inventory": {
+      "house": 3,
+      "woodcutter": 3,
+      "road": 10,
+      "farm": 2,
+      "windmill": 2,
+      "town_hall": 1
+    },
+    "solution": [
+      [
+        "empty",
+        "tree",
+        "woodcutter",
+        "house",
+        "tree",
+        "empty",
+        "empty"
+      ],
+      [
+        "empty",
+        "rock",
+        "road",
+        "road",
+        "woodcutter",
+        "house",
+        "empty"
+      ],
+      [
+        "empty",
+        "empty",
+        "road",
+        "rock",
+        "windmill",
+        "farm",
+        "empty"
+      ],
+      [
+        "town_hall",
+        "road",
+        "road",
+        "road",
+        "road",
+        "road",
+        "empty"
+      ],
+      [
+        "empty",
+        "empty",
+        "rock",
+        "road",
+        "rock",
+        "road",
+        "empty"
+      ],
+      [
+        "empty",
+        "empty",
+        "windmill",
+        "farm",
+        "house",
+        "woodcutter",
+        "tree"
+      ],
+      [
+        "empty",
+        "rock",
+        "rock",
+        "empty",
+        "empty",
+        "tree",
+        "empty"
+      ]
+    ],
+    "difficulty": "Expert",
+    "difficultyMetrics": {
+      "score": 99,
+      "tier": "Expert",
+      "maxRuleLevel": 4,
+      "maxRuleName": "Road Entry Point",
+      "stepCount": 52,
+      "density": 0.63,
+      "filledTiles": 31,
+      "lookaheadCount": 0
+    },
+    "difficultyScore": 99,
+    "density": 0.63
+  },
+  {
+    "id": 142,
+    "chapter": 7,
+    "chapterName": "Grand Heartland",
+    "title": "Four-Vane Bastion",
+    "size": 7,
+    "initialGrid": [
+      [
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "empty"
+      ],
+      [
+        "tree",
+        "empty",
+        "tree",
+        "empty",
+        "empty",
+        "empty",
+        "empty"
+      ],
+      [
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "tree",
+        "empty"
+      ],
+      [
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "tree",
+        "empty",
+        "empty"
+      ],
+      [
+        "empty",
+        "empty",
+        "empty",
+        "rock",
+        "empty",
+        "empty",
+        "empty"
+      ],
+      [
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "rock",
+        "empty"
+      ],
+      [
+        "rock",
+        "empty",
+        "empty",
+        "tree",
+        "empty",
+        "empty",
+        "empty"
+      ]
+    ],
+    "rowClues": [
+      3,
+      2,
+      1,
+      1,
+      2,
+      1,
+      1
+    ],
+    "colClues": [
+      1,
+      2,
+      4,
+      0,
+      3,
+      1,
+      0
+    ],
+    "inventory": {
+      "house": 3,
+      "woodcutter": 3,
+      "road": 9,
+      "farm": 2,
+      "windmill": 2,
+      "town_hall": 1
+    },
+    "solution": [
+      [
+        "empty",
+        "house",
+        "empty",
+        "road",
+        "farm",
+        "windmill",
+        "empty"
+      ],
+      [
+        "tree",
+        "woodcutter",
+        "tree",
+        "road",
+        "house",
+        "empty",
+        "empty"
+      ],
+      [
+        "empty",
+        "road",
+        "road",
+        "road",
+        "woodcutter",
+        "tree",
+        "empty"
+      ],
+      [
+        "empty",
+        "road",
+        "windmill",
+        "empty",
+        "tree",
+        "empty",
+        "empty"
+      ],
+      [
+        "town_hall",
+        "road",
+        "farm",
+        "rock",
+        "empty",
+        "empty",
+        "empty"
+      ],
+      [
+        "empty",
+        "road",
+        "house",
+        "empty",
+        "empty",
+        "rock",
+        "empty"
+      ],
+      [
+        "rock",
+        "road",
+        "woodcutter",
+        "tree",
+        "empty",
+        "empty",
+        "empty"
+      ]
+    ],
+    "difficulty": "Expert",
+    "difficultyMetrics": {
+      "score": 97,
+      "tier": "Expert",
+      "maxRuleLevel": 4,
+      "maxRuleName": "Road Entry Point",
+      "stepCount": 46,
+      "density": 0.57,
+      "filledTiles": 28,
+      "lookaheadCount": 0
+    },
+    "difficultyScore": 97,
+    "density": 0.57
+  },
+  {
+    "id": 143,
+    "chapter": 7,
+    "chapterName": "Grand Heartland",
+    "title": "Emerald Heartland",
+    "size": 7,
+    "initialGrid": [
+      [
+        "empty",
+        "empty",
+        "empty",
+        "rock",
+        "empty",
+        "empty",
+        "empty"
+      ],
+      [
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "empty"
+      ],
+      [
+        "empty",
+        "empty",
+        "tree",
+        "tree",
+        "empty",
+        "empty",
+        "empty"
+      ],
+      [
+        "empty",
+        "tree",
+        "tree",
+        "empty",
+        "empty",
+        "empty",
+        "empty"
+      ],
+      [
+        "empty",
+        "empty",
+        "rock",
+        "empty",
+        "empty",
+        "empty",
+        "empty"
+      ],
+      [
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "empty"
+      ],
+      [
+        "empty",
+        "empty",
+        "rock",
+        "tree",
+        "empty",
+        "empty",
+        "rock"
+      ]
+    ],
+    "rowClues": [
+      1,
+      2,
+      1,
+      2,
+      3,
+      1,
+      2
+    ],
+    "colClues": [
+      3,
+      2,
+      0,
+      1,
+      3,
+      2,
+      1
+    ],
+    "inventory": {
+      "house": 4,
+      "woodcutter": 3,
+      "road": 9,
+      "farm": 2,
+      "windmill": 2,
+      "town_hall": 1
+    },
+    "solution": [
+      [
+        "windmill",
+        "empty",
+        "empty",
+        "rock",
+        "empty",
+        "empty",
+        "empty"
+      ],
+      [
+        "farm",
+        "house",
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "empty"
+      ],
+      [
+        "road",
+        "woodcutter",
+        "tree",
+        "tree",
+        "empty",
+        "empty",
+        "empty"
+      ],
+      [
+        "road",
+        "tree",
+        "tree",
+        "woodcutter",
+        "house",
+        "empty",
+        "empty"
+      ],
+      [
+        "road",
+        "empty",
+        "rock",
+        "road",
+        "windmill",
+        "farm",
+        "house"
+      ],
+      [
+        "town_hall",
+        "road",
+        "road",
+        "road",
+        "road",
+        "road",
+        "empty"
+      ],
+      [
+        "empty",
+        "empty",
+        "rock",
+        "tree",
+        "woodcutter",
+        "house",
+        "rock"
+      ]
+    ],
+    "difficulty": "Expert",
+    "difficultyMetrics": {
+      "score": 99,
+      "tier": "Expert",
+      "maxRuleLevel": 4,
+      "maxRuleName": "Road Entry Point",
+      "stepCount": 62,
+      "density": 0.61,
+      "filledTiles": 30,
+      "lookaheadCount": 2
+    },
+    "difficultyScore": 99,
+    "density": 0.61
+  },
+  {
+    "id": 144,
+    "chapter": 7,
+    "chapterName": "Grand Heartland",
+    "title": "Highwind Metropolis",
+    "size": 7,
+    "initialGrid": [
+      [
+        "empty",
+        "tree",
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "empty"
+      ],
+      [
+        "tree",
+        "empty",
+        "empty",
+        "rock",
+        "empty",
+        "empty",
+        "empty"
+      ],
+      [
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "empty"
+      ],
+      [
+        "empty",
+        "tree",
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "empty"
+      ],
+      [
+        "empty",
+        "empty",
+        "tree",
+        "rock",
+        "empty",
+        "empty",
+        "empty"
+      ],
+      [
+        "empty",
+        "rock",
+        "empty",
+        "tree",
+        "empty",
+        "empty",
+        "empty"
+      ],
+      [
+        "empty",
+        "rock",
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "empty"
+      ]
+    ],
+    "rowClues": [
+      1,
+      2,
+      2,
+      3,
+      2,
+      1,
+      1
+    ],
+    "colClues": [
+      0,
+      2,
+      1,
+      1,
+      4,
+      0,
+      4
+    ],
+    "inventory": {
+      "house": 4,
+      "woodcutter": 3,
+      "road": 9,
+      "farm": 2,
+      "windmill": 2,
+      "town_hall": 1
+    },
+    "solution": [
+      [
+        "empty",
+        "tree",
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "house"
+      ],
+      [
+        "tree",
+        "woodcutter",
+        "road",
+        "rock",
+        "empty",
+        "road",
+        "farm"
+      ],
+      [
+        "empty",
+        "house",
+        "road",
+        "road",
+        "road",
+        "road",
+        "windmill"
+      ],
+      [
+        "empty",
+        "tree",
+        "woodcutter",
+        "house",
+        "farm",
+        "road",
+        "empty"
+      ],
+      [
+        "empty",
+        "empty",
+        "tree",
+        "rock",
+        "windmill",
+        "road",
+        "town_hall"
+      ],
+      [
+        "empty",
+        "rock",
+        "empty",
+        "tree",
+        "woodcutter",
+        "road",
+        "empty"
+      ],
+      [
+        "empty",
+        "rock",
+        "empty",
+        "empty",
+        "house",
+        "empty",
+        "empty"
+      ]
+    ],
+    "difficulty": "Expert",
+    "difficultyMetrics": {
+      "score": 99,
+      "tier": "Expert",
+      "maxRuleLevel": 4,
+      "maxRuleName": "Road Entry Point",
+      "stepCount": 63,
+      "density": 0.61,
+      "filledTiles": 30,
+      "lookaheadCount": 2
+    },
+    "difficultyScore": 99,
+    "density": 0.61
+  },
+  {
+    "id": 145,
+    "chapter": 7,
+    "chapterName": "Grand Heartland",
+    "title": "Imperial Harvest",
+    "size": 7,
+    "initialGrid": [
+      [
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "empty"
+      ],
+      [
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "tree"
+      ],
+      [
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "empty"
+      ],
+      [
+        "empty",
+        "empty",
+        "rock",
+        "empty",
+        "empty",
+        "empty",
+        "empty"
+      ],
+      [
+        "tree",
+        "empty",
+        "tree",
+        "empty",
+        "empty",
+        "empty",
+        "empty"
+      ],
+      [
+        "empty",
+        "empty",
+        "rock",
+        "tree",
+        "empty",
+        "empty",
+        "empty"
+      ],
+      [
+        "empty",
+        "rock",
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "empty"
+      ]
+    ],
+    "rowClues": [
+      3,
+      0,
+      3,
+      2,
+      3,
+      1,
+      0
+    ],
+    "colClues": [
+      3,
+      1,
+      1,
+      1,
+      2,
+      0,
+      4
+    ],
+    "inventory": {
+      "house": 4,
+      "woodcutter": 3,
+      "road": 9,
+      "farm": 2,
+      "windmill": 2,
+      "town_hall": 1
+    },
+    "solution": [
+      [
+        "windmill",
+        "farm",
+        "house",
+        "empty",
+        "empty",
+        "empty",
+        "empty"
+      ],
+      [
+        "empty",
+        "road",
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "tree"
+      ],
+      [
+        "house",
+        "road",
+        "road",
+        "road",
+        "town_hall",
+        "road",
+        "woodcutter"
+      ],
+      [
+        "woodcutter",
+        "road",
+        "rock",
+        "road",
+        "empty",
+        "road",
+        "house"
+      ],
+      [
+        "tree",
+        "empty",
+        "tree",
+        "woodcutter",
+        "house",
+        "road",
+        "farm"
+      ],
+      [
+        "empty",
+        "empty",
+        "rock",
+        "tree",
+        "empty",
+        "empty",
+        "windmill"
+      ],
+      [
+        "empty",
+        "rock",
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "empty"
+      ]
+    ],
+    "difficulty": "Expert",
+    "difficultyMetrics": {
+      "score": 99,
+      "tier": "Expert",
+      "maxRuleLevel": 4,
+      "maxRuleName": "Road Entry Point",
+      "stepCount": 70,
+      "density": 0.57,
+      "filledTiles": 28,
+      "lookaheadCount": 1
+    },
+    "difficultyScore": 99,
+    "density": 0.57
+  },
+  {
+    "id": 146,
+    "chapter": 7,
+    "chapterName": "Grand Heartland",
+    "title": "Golden Shire Spire",
+    "size": 7,
+    "initialGrid": [
+      [
+        "empty",
+        "tree",
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "empty"
+      ],
+      [
+        "rock",
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "empty"
+      ],
+      [
+        "tree",
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "empty"
+      ],
+      [
+        "empty",
+        "tree",
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "empty"
+      ],
+      [
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "empty"
+      ],
+      [
+        "empty",
+        "rock",
+        "empty",
+        "rock",
+        "empty",
+        "empty",
+        "empty"
+      ],
+      [
+        "empty",
+        "empty",
+        "empty",
+        "tree",
+        "empty",
+        "empty",
+        "empty"
+      ]
+    ],
+    "rowClues": [
+      2,
+      3,
+      3,
+      0,
+      0,
+      2,
+      2
+    ],
+    "colClues": [
+      0,
+      2,
+      1,
+      2,
+      1,
+      3,
+      3
+    ],
+    "inventory": {
+      "house": 4,
+      "woodcutter": 3,
+      "road": 10,
+      "farm": 2,
+      "windmill": 2,
+      "town_hall": 1
+    },
+    "solution": [
+      [
+        "empty",
+        "tree",
+        "woodcutter",
+        "house",
+        "road",
+        "road",
+        "road"
+      ],
+      [
+        "rock",
+        "house",
+        "road",
+        "empty",
+        "road",
+        "windmill",
+        "farm"
+      ],
+      [
+        "tree",
+        "woodcutter",
+        "road",
+        "town_hall",
+        "road",
+        "empty",
+        "house"
+      ],
+      [
+        "empty",
+        "tree",
+        "empty",
+        "empty",
+        "road",
+        "empty",
+        "empty"
+      ],
+      [
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "road",
+        "empty",
+        "empty"
+      ],
+      [
+        "empty",
+        "rock",
+        "empty",
+        "rock",
+        "road",
+        "farm",
+        "windmill"
+      ],
+      [
+        "empty",
+        "empty",
+        "empty",
+        "tree",
+        "woodcutter",
+        "house",
+        "empty"
+      ]
+    ],
+    "difficulty": "Expert",
+    "difficultyMetrics": {
+      "score": 99,
+      "tier": "Expert",
+      "maxRuleLevel": 4,
+      "maxRuleName": "Road Entry Point",
+      "stepCount": 49,
+      "density": 0.59,
+      "filledTiles": 29,
+      "lookaheadCount": 0
+    },
+    "difficultyScore": 99,
+    "density": 0.59
+  },
+  {
+    "id": 147,
+    "chapter": 7,
+    "chapterName": "Grand Heartland",
+    "title": "Archduke’s Grange",
+    "size": 7,
+    "initialGrid": [
+      [
+        "empty",
+        "tree",
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "rock"
+      ],
+      [
+        "tree",
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "rock"
+      ],
+      [
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "tree"
+      ],
+      [
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "empty"
+      ],
+      [
+        "empty",
+        "empty",
+        "rock",
+        "empty",
+        "empty",
+        "empty",
+        "empty"
+      ],
+      [
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "tree"
+      ],
+      [
+        "rock",
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "empty"
+      ]
+    ],
+    "rowClues": [
+      0,
+      2,
+      0,
+      2,
+      1,
+      4,
+      3
+    ],
+    "colClues": [
+      0,
+      3,
+      2,
+      0,
+      3,
+      2,
+      2
+    ],
+    "inventory": {
+      "house": 4,
+      "woodcutter": 3,
+      "road": 10,
+      "farm": 2,
+      "windmill": 2,
+      "town_hall": 1
+    },
+    "solution": [
+      [
+        "empty",
+        "tree",
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "rock"
+      ],
+      [
+        "tree",
+        "woodcutter",
+        "house",
+        "empty",
+        "empty",
+        "empty",
+        "rock"
+      ],
+      [
+        "empty",
+        "road",
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "tree"
+      ],
+      [
+        "empty",
+        "road",
+        "road",
+        "road",
+        "town_hall",
+        "road",
+        "woodcutter"
+      ],
+      [
+        "empty",
+        "road",
+        "rock",
+        "road",
+        "empty",
+        "road",
+        "house"
+      ],
+      [
+        "empty",
+        "farm",
+        "windmill",
+        "road",
+        "house",
+        "woodcutter",
+        "tree"
+      ],
+      [
+        "rock",
+        "house",
+        "empty",
+        "road",
+        "farm",
+        "windmill",
+        "empty"
+      ]
+    ],
+    "difficulty": "Expert",
+    "difficultyMetrics": {
+      "score": 99,
+      "tier": "Expert",
+      "maxRuleLevel": 4,
+      "maxRuleName": "Road Entry Point",
+      "stepCount": 71,
+      "density": 0.61,
+      "filledTiles": 30,
+      "lookaheadCount": 1
+    },
+    "difficultyScore": 99,
+    "density": 0.61
+  },
+  {
+    "id": 148,
+    "chapter": 7,
+    "chapterName": "Grand Heartland",
+    "title": "Zenith of the Winds",
+    "size": 7,
+    "initialGrid": [
+      [
+        "empty",
+        "empty",
+        "empty",
+        "rock",
+        "empty",
+        "empty",
+        "empty"
+      ],
+      [
+        "empty",
+        "tree",
+        "empty",
+        "empty",
+        "tree",
+        "empty",
+        "tree"
+      ],
+      [
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "empty"
+      ],
+      [
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "empty"
+      ],
+      [
+        "empty",
+        "empty",
+        "empty",
+        "rock",
+        "empty",
+        "empty",
+        "empty"
+      ],
+      [
+        "empty",
+        "rock",
+        "empty",
+        "empty",
+        "tree",
+        "empty",
+        "empty"
+      ],
+      [
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "empty"
+      ]
+    ],
+    "rowClues": [
+      1,
+      2,
+      4,
+      2,
+      1,
+      0,
+      2
+    ],
+    "colClues": [
+      3,
+      1,
+      1,
+      3,
+      1,
+      3,
+      0
+    ],
+    "inventory": {
+      "house": 4,
+      "woodcutter": 3,
+      "road": 8,
+      "farm": 2,
+      "windmill": 2,
+      "town_hall": 1
+    },
+    "solution": [
+      [
+        "empty",
+        "empty",
+        "empty",
+        "rock",
+        "empty",
+        "house",
+        "empty"
+      ],
+      [
+        "empty",
+        "tree",
+        "empty",
+        "windmill",
+        "tree",
+        "woodcutter",
+        "tree"
+      ],
+      [
+        "windmill",
+        "woodcutter",
+        "house",
+        "farm",
+        "empty",
+        "road",
+        "empty"
+      ],
+      [
+        "farm",
+        "road",
+        "road",
+        "road",
+        "road",
+        "town_hall",
+        "empty"
+      ],
+      [
+        "house",
+        "empty",
+        "empty",
+        "rock",
+        "empty",
+        "road",
+        "empty"
+      ],
+      [
+        "empty",
+        "rock",
+        "empty",
+        "empty",
+        "tree",
+        "road",
+        "empty"
+      ],
+      [
+        "empty",
+        "empty",
+        "empty",
+        "house",
+        "woodcutter",
+        "road",
+        "empty"
+      ]
+    ],
+    "difficulty": "Expert",
+    "difficultyMetrics": {
+      "score": 99,
+      "tier": "Expert",
+      "maxRuleLevel": 4,
+      "maxRuleName": "Road Entry Point",
+      "stepCount": 53,
+      "density": 0.55,
+      "filledTiles": 27,
+      "lookaheadCount": 0
+    },
+    "difficultyScore": 99,
+    "density": 0.55
+  },
+  {
+    "id": 149,
+    "chapter": 7,
+    "chapterName": "Grand Heartland",
+    "title": "Grand Kingdom",
+    "size": 7,
+    "initialGrid": [
+      [
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "tree",
+        "empty",
+        "empty"
+      ],
+      [
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "empty"
+      ],
+      [
+        "rock",
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "empty"
+      ],
+      [
+        "empty",
+        "empty",
+        "empty",
+        "rock",
+        "tree",
+        "empty",
+        "empty"
+      ],
+      [
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "tree",
+        "empty"
+      ],
+      [
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "tree",
+        "rock"
+      ],
+      [
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "tree",
+        "empty",
+        "empty"
+      ]
+    ],
+    "rowClues": [
+      1,
+      2,
+      2,
+      4,
+      1,
+      2,
+      0
+    ],
+    "colClues": [
+      1,
+      2,
+      1,
+      2,
+      2,
+      1,
+      3
+    ],
+    "inventory": {
+      "house": 4,
+      "woodcutter": 3,
+      "road": 9,
+      "farm": 2,
+      "windmill": 2,
+      "town_hall": 1
+    },
+    "solution": [
+      [
+        "empty",
+        "empty",
+        "road",
+        "woodcutter",
+        "tree",
+        "empty",
+        "empty"
+      ],
+      [
+        "empty",
+        "empty",
+        "road",
+        "house",
+        "empty",
+        "empty",
+        "windmill"
+      ],
+      [
+        "rock",
+        "house",
+        "road",
+        "road",
+        "road",
+        "road",
+        "farm"
+      ],
+      [
+        "windmill",
+        "farm",
+        "road",
+        "rock",
+        "tree",
+        "woodcutter",
+        "house"
+      ],
+      [
+        "empty",
+        "empty",
+        "road",
+        "empty",
+        "house",
+        "tree",
+        "empty"
+      ],
+      [
+        "empty",
+        "empty",
+        "town_hall",
+        "road",
+        "woodcutter",
+        "tree",
+        "rock"
+      ],
+      [
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "tree",
+        "empty",
+        "empty"
+      ]
+    ],
+    "difficulty": "Expert",
+    "difficultyMetrics": {
+      "score": 99,
+      "tier": "Expert",
+      "maxRuleLevel": 4,
+      "maxRuleName": "Road Entry Point",
+      "stepCount": 52,
+      "density": 0.59,
+      "filledTiles": 29,
+      "lookaheadCount": 0
+    },
+    "difficultyScore": 99,
+    "density": 0.59
+  },
+  {
+    "id": 150,
+    "chapter": 7,
+    "chapterName": "Grand Heartland",
+    "title": "Crown of PuzzleTown",
+    "size": 7,
+    "initialGrid": [
+      [
+        "rock",
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "rock"
+      ],
+      [
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "empty"
+      ],
+      [
+        "tree",
+        "rock",
+        "tree",
+        "empty",
+        "empty",
+        "empty",
+        "empty"
+      ],
+      [
+        "empty",
+        "empty",
+        "empty",
+        "tree",
+        "empty",
+        "empty",
+        "empty"
+      ],
+      [
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "empty"
+      ],
+      [
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "tree",
+        "empty"
+      ],
+      [
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "empty"
+      ]
+    ],
+    "rowClues": [
+      0,
+      3,
+      2,
+      4,
+      0,
+      2,
+      1
+    ],
+    "colClues": [
+      1,
+      2,
+      0,
+      2,
+      1,
+      3,
+      3
+    ],
+    "inventory": {
+      "house": 4,
+      "woodcutter": 3,
+      "road": 9,
+      "farm": 2,
+      "windmill": 2,
+      "town_hall": 1
+    },
+    "solution": [
+      [
+        "rock",
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "rock"
+      ],
+      [
+        "empty",
+        "empty",
+        "empty",
+        "house",
+        "farm",
+        "windmill",
+        "empty"
+      ],
+      [
+        "tree",
+        "rock",
+        "tree",
+        "woodcutter",
+        "road",
+        "house",
+        "empty"
+      ],
+      [
+        "woodcutter",
+        "house",
+        "empty",
+        "tree",
+        "road",
+        "farm",
+        "windmill"
+      ],
+      [
+        "road",
+        "road",
+        "road",
+        "road",
+        "road",
+        "road",
+        "road"
+      ],
+      [
+        "empty",
+        "town_hall",
+        "empty",
+        "empty",
+        "empty",
+        "tree",
+        "woodcutter"
+      ],
+      [
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "house"
+      ]
+    ],
+    "difficulty": "Expert",
+    "difficultyMetrics": {
+      "score": 99,
+      "tier": "Expert",
+      "maxRuleLevel": 4,
+      "maxRuleName": "Road Entry Point",
+      "stepCount": 52,
+      "density": 0.57,
+      "filledTiles": 28,
+      "lookaheadCount": 0
+    },
+    "difficultyScore": 99,
+    "density": 0.57
   }
 ]

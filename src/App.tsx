@@ -677,7 +677,7 @@ export const App: React.FC = () => {
     startNewLevel(getCampaignLevel(id));
   };
 
-  const handleGenerateBonus = (size: 5 | 6) => {
+  const handleGenerateBonus = (size: 5 | 6 | 7) => {
     const seed = Date.now() % 100000;
     const bonusLevel = generateBonusCustomLevel(size, seed);
     startNewLevel(bonusLevel);
