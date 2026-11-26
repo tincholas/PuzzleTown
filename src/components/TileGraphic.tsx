@@ -34,6 +34,11 @@ import townHallStage1 from '../assets/buildings/town_hall_stage1.png';
 import townHallStage2 from '../assets/buildings/town_hall_stage2.png';
 import townHallStage3 from '../assets/buildings/town_hall_stage3.png';
 
+import windmillComposite from '../assets/buildings/windmill_composite.png';
+import windmillStage1 from '../assets/buildings/windmill_stage1.png';
+import windmillStage2 from '../assets/buildings/windmill_stage2.png';
+import windmillStage3 from '../assets/buildings/windmill_stage3.png';
+
 import treeImg from '../assets/obstacles/tree.png';
 import rockImg from '../assets/obstacles/rock.png';
 import tileBgImg from '../assets/tile_bg.png';
@@ -61,7 +66,8 @@ export const BUILDING_STAGE_ASSETS: Partial<
   farm: { composite: farmComposite, stage1: farmStage1, stage2: farmStage2, stage3: farmStage3 },
   house: { composite: houseComposite, stage1: houseStage1, stage2: houseStage2, stage3: houseStage3 },
   woodcutter: { composite: woodcutterComposite, stage1: woodcutterStage1, stage2: woodcutterStage2, stage3: woodcutterStage3 },
-  town_hall: { composite: townHallComposite, stage1: townHallStage1, stage2: townHallStage2, stage3: townHallStage3 }
+  town_hall: { composite: townHallComposite, stage1: townHallStage1, stage2: townHallStage2, stage3: townHallStage3 },
+  windmill: { composite: windmillComposite, stage1: windmillStage1, stage2: windmillStage2, stage3: windmillStage3 }
 };
 
 // Preload building & obstacle images for instant zero-lag animations
@@ -160,10 +166,11 @@ export const BuildingSprite: React.FC<BuildingSpriteProps> = ({
   if (!assets) return null;
 
   const chimney = CHIMNEY_COORDS[type];
+  const isWindmill = type === 'windmill';
 
   return (
     <div
-      className={`building-sprite-container ${isNewlyBuilt ? 'is-animating-build' : ''}`}
+      className={`building-sprite-container building-${type}-container ${isNewlyBuilt ? 'is-animating-build' : ''}`}
       aria-label={type}
     >
       <div className={`tile-ground-shadow building-${type}-shadow`} />
@@ -181,12 +188,23 @@ export const BuildingSprite: React.FC<BuildingSpriteProps> = ({
             className="building-layer building-layer-2"
             draggable={false}
           />
-          <img
-            src={assets.stage3}
-            alt=""
-            className="building-layer building-layer-3"
-            draggable={false}
-          />
+          {isWindmill ? (
+            <div className="building-layer building-layer-3">
+              <img
+                src={assets.stage3}
+                alt=""
+                className="building-windmill-sails"
+                draggable={false}
+              />
+            </div>
+          ) : (
+            <img
+              src={assets.stage3}
+              alt=""
+              className="building-layer building-layer-3"
+              draggable={false}
+            />
+          )}
           <div className="construction-dust-emitter" aria-hidden="true">
             <div className="dust-puff dust-puff-1" />
             <div className="dust-puff dust-puff-2" />
@@ -194,6 +212,23 @@ export const BuildingSprite: React.FC<BuildingSpriteProps> = ({
             <div className="dust-puff dust-puff-4" />
             <div className="dust-puff dust-puff-5" />
             <div className="dust-puff dust-puff-6" />
+          </div>
+        </>
+      ) : isWindmill ? (
+        <>
+          <img
+            src={assets.stage2}
+            alt=""
+            className="building-layer"
+            draggable={false}
+          />
+          <div className="building-layer">
+            <img
+              src={assets.stage3}
+              alt=""
+              className="building-windmill-sails"
+              draggable={false}
+            />
           </div>
         </>
       ) : (
@@ -1068,23 +1103,11 @@ export const WindmillSvg: React.FC<{ animate?: boolean }> = ({
 export const WindmillGraphic: React.FC<{ isNewlyBuilt?: boolean }> = ({
   isNewlyBuilt = false
 }) => (
-  <div
-    className={`building-sprite-container windmill-sprite-container ${isNewlyBuilt ? 'is-animating-build' : ''}`}
-    aria-label="windmill"
-  >
-    <div className="tile-ground-shadow building-windmill-shadow" />
-    <WindmillSvg animate />
-    {isNewlyBuilt && (
-      <div className="construction-dust-emitter" aria-hidden="true">
-        <div className="dust-puff dust-puff-1" />
-        <div className="dust-puff dust-puff-2" />
-        <div className="dust-puff dust-puff-3" />
-        <div className="dust-puff dust-puff-4" />
-        <div className="dust-puff dust-puff-5" />
-        <div className="dust-puff dust-puff-6" />
-      </div>
-    )}
-  </div>
+  <BuildingSprite
+    type="windmill"
+    isNewlyBuilt={isNewlyBuilt}
+    disableSmoke
+  />
 );
 
 /**
