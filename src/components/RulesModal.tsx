@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { Check, RefreshCw, Sparkles, X } from 'lucide-react';
 import { TileGraphic } from './TileGraphic';
 import { CheckUpdateResult, pwaManager } from '../pwaManager';
+import { Capacitor } from '@capacitor/core';
 
 interface RulesModalProps {
   onClose: () => void;
@@ -166,33 +167,37 @@ export const RulesModal: React.FC<RulesModalProps> = ({ onClose }) => {
               <span className="app-build-date">Build {__BUILD_DATE__}</span>
             </div>
 
-            <div className="rules-app-info-actions">
-              {hasUpdate ? (
-                <button
-                  type="button"
-                  className="update-check-btn ready"
-                  onClick={() => pwaManager.applyUpdate()}
-                >
-                  <Sparkles size={16} />
-                  <span>Update Ready (Reload)</span>
-                </button>
-              ) : (
-                <button
-                  type="button"
-                  className={`update-check-btn ${checking ? 'checking' : ''}`}
-                  onClick={handleCheckUpdate}
-                  disabled={checking}
-                >
-                  <RefreshCw size={15} className={checking ? 'spin' : ''} />
-                  <span>{checking ? 'Checking...' : 'Check for Updates'}</span>
-                </button>
-              )}
-            </div>
-            {updateResult && (
-              <div className={`update-status-msg ${updateResult.status}`}>
-                {updateResult.status === 'up-to-date' && <Check size={15} />}
-                <span>{updateResult.message}</span>
-              </div>
+            {!Capacitor.isNativePlatform() && (
+              <>
+                <div className="rules-app-info-actions">
+                  {hasUpdate ? (
+                    <button
+                      type="button"
+                      className="update-check-btn ready"
+                      onClick={() => pwaManager.applyUpdate()}
+                    >
+                      <Sparkles size={16} />
+                      <span>Update Ready (Reload)</span>
+                    </button>
+                  ) : (
+                    <button
+                      type="button"
+                      className={`update-check-btn ${checking ? 'checking' : ''}`}
+                      onClick={handleCheckUpdate}
+                      disabled={checking}
+                    >
+                      <RefreshCw size={15} className={checking ? 'spin' : ''} />
+                      <span>{checking ? 'Checking...' : 'Check for Updates'}</span>
+                    </button>
+                  )}
+                </div>
+                {updateResult && (
+                  <div className={`update-status-msg ${updateResult.status}`}>
+                    {updateResult.status === 'up-to-date' && <Check size={15} />}
+                    <span>{updateResult.message}</span>
+                  </div>
+                )}
+              </>
             )}
           </div>
         </div>
