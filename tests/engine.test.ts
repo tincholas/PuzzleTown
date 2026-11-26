@@ -737,4 +737,40 @@ describe('Multi-Step Hint Structure & Breakdown', () => {
       expect(['mark_empty', 'mark_building', 'place']).toContain(nextHint?.action);
     }
   });
+
+  it('uses 1-to-1 Farm-Windmill pairing on Level 113 so (3, 2) has a direct local explanation with 0 lookaheads', () => {
+    const level113 = getCampaignLevel(113);
+    const trace = solveByDeduction(level113);
+    expect(trace.solved).toBe(true);
+    expect(trace.lookaheadCount).toBe(0);
+
+    const step32 = trace.steps.find((s) => s.c === 2 && s.r === 1);
+    expect(step32).toBeDefined();
+    expect(step32!.explanation).toContain(
+      "Farm: adjacent Windmill would also be in Row 2, exceeding Row 2's limit of 1 building"
+    );
+  });
+
+  it('generates visual What-If hypotheticalPlacements walkthrough steps and clears them on the final slide when lookahead is used', () => {
+    const level112 = getCampaignLevel(112);
+    const trace = solveByDeduction(level112);
+    expect(trace.solved).toBe(true);
+    expect(trace.lookaheadCount).toBeLessThanOrEqual(2);
+
+    const stepWithHypothetical = trace.steps.find((s) =>
+      s.steps?.some(
+        (sl) => sl.hypotheticalPlacements && sl.hypotheticalPlacements.length > 0
+      )
+    );
+    expect(stepWithHypothetical).toBeDefined();
+    const slides = stepWithHypothetical!.steps!;
+    // At least one slide has non-empty hypotheticalPlacements
+    const whatIfSlides = slides.filter(
+      (sl) => sl.hypotheticalPlacements && sl.hypotheticalPlacements.length > 0
+    );
+    expect(whatIfSlides.length).toBeGreaterThanOrEqual(2);
+    // Final slide clears hypotheticalPlacements back to empty
+    const finalSlide = slides[slides.length - 1];
+    expect(finalSlide.hypotheticalPlacements).toEqual([]);
+  });
 });

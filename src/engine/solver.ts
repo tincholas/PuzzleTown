@@ -4,6 +4,7 @@ import {
   Coord,
   DeductionHint,
   HintStep,
+  HypotheticalPlacement,
   isBuilding,
   isFixedObstacle,
   LevelDefinition,
@@ -110,12 +111,31 @@ function canBeRoadEndpointOrRoad(domain: Set<TileType>): boolean {
   );
 }
 
+export interface ContradictionWaveStep {
+  message: string;
+  placements: HypotheticalPlacement[];
+  focusCells?: Coord[];
+  highlightLine?: { axis: 'row' | 'col'; index: number };
+  affectedRows: number[];
+  affectedCols: number[];
+}
+
+export interface ContradictionDetails {
+  summary: string;
+  waveCount: number;
+  walkthroughSteps: ContradictionWaveStep[];
+  contradictionMessage: string;
+  contradictionCells?: Coord[];
+  contradictionLine?: { axis: 'row' | 'col'; index: number };
+}
+
 export type EliminationReason =
   | { type: 'PLAYER_MARKED_EMPTY' }
   | { type: 'PLAYER_MARKED_BUILDING' }
   | { type: 'NO_ADJACENT_TREE' }
   | { type: 'NO_ADJACENT_HOUSE'; buildingType: 'woodcutter' | 'farm' }
   | { type: 'NO_ADJACENT_FARM' }
+  | { type: 'NO_ADJACENT_WINDMILL' }
   | { type: 'NO_ADJACENT_PARTNER'; buildingType: 'house' }
   | {
       type: 'LINE_LIMIT_EXCEEDED';
@@ -203,7 +223,11 @@ export type EliminationReason =
       spotText: string;
       discText: string;
     }
-  | { type: 'CONTRADICTION'; contradiction: string };
+  | {
+      type: 'CONTRADICTION';
+      contradiction: string;
+      details?: ContradictionDetails;
+    };
 
 export function formatEliminationReason(
   r: number,
@@ -223,6 +247,8 @@ export function formatEliminationReason(
       return 'no adjacent spot for a House';
     case 'NO_ADJACENT_FARM':
       return 'no adjacent spot for a Farm';
+    case 'NO_ADJACENT_WINDMILL':
+      return 'no adjacent spot for a Windmill';
     case 'NO_ADJACENT_PARTNER':
       return 'no adjacent spot for a Woodcutter or Farm';
     case 'LINE_LIMIT_EXCEEDED': {
@@ -231,9 +257,11 @@ export function formatEliminationReason(
       const partnerName =
         reason.forcedPartnerType === 'house'
           ? 'House'
-          : tile === 'windmill'
-            ? 'Farm'
-            : 'Woodcutter/Farm';
+          : reason.forcedPartnerType === 'windmill'
+            ? 'Windmill'
+            : tile === 'windmill'
+              ? 'Farm'
+              : 'Woodcutter/Farm';
       return `adjacent ${partnerName} would also be in ${lineName}, exceeding ${lineName}'s limit of ${reason.limit} building`;
     }
     case 'TOWN_HALL_PERIMETER_OBSTACLE':
@@ -447,6 +475,176 @@ export function getDetailedCellDisqualificationPoints(
   }
 
   return points;
+}
+
+export function buildContradictionWalkthroughSlides(
+  r: number,
+  c: number,
+  candidate: TileType,
+  details: ContradictionDetails,
+  baseTitle: string
+): HintStep[] {
+  const slides: HintStep[] = [];
+  const activeMap = new Map<string, HypotheticalPlacement>();
+
+  const setPlacement = (p: HypotheticalPlacement) => {
+    activeMap.set(`${p.r},${p.c}`, p);
+  };
+  const currentList = () => Array.from(activeMap.values());
+
+  setPlacement({ r, c, tileType: candidate });
+
+  // 1. "Suppose..." slide
+  slides.push({
+    title: `${baseTitle} — What If?`,
+    message:
+      candidate === 'empty'
+        ? `Suppose ${xy(r, c)} were left empty (no building)...`
+        : `Suppose we placed a ${formatTileName(candidate)} at ${xy(r, c)}...`,
+    focusCells: [{ r, c }],
+    hypotheticalPlacements: currentList()
+  });
+
+  // 2. Intermediate forced wave slides (1–2 steps)
+  for (const wStep of details.walkthroughSteps) {
+    for (const p of wStep.placements) {
+      setPlacement(p);
+    }
+    slides.push({
+      title: `${baseTitle} — Consequence`,
+      message: wStep.message,
+      focusCells: wStep.focusCells ?? [{ r, c }],
+      highlightLine: wStep.highlightLine,
+      hypotheticalPlacements: currentList()
+    });
+  }
+
+  // 3. Contradiction slide
+  slides.push({
+    title: `${baseTitle} — Contradiction!`,
+    message: `${details.contradictionMessage} Therefore, ${xy(r, c)} cannot be ${
+      candidate === 'empty' ? 'empty' : `a ${formatTileName(candidate)}`
+    }.`,
+    focusCells: [{ r, c }],
+    discardedCells:
+      details.contradictionCells && details.contradictionCells.length > 0
+        ? details.contradictionCells
+        : [{ r, c }],
+    highlightLine: details.contradictionLine,
+    hypotheticalPlacements: currentList()
+  });
+
+  return slides;
+}
+
+export function buildCannotHoldBuildingWalkthroughSteps(
+  r: number,
+  c: number,
+  reasons: Partial<Record<TileType, EliminationReason | string>>,
+  level: LevelDefinition,
+  ruleName: string
+): HintStep[] {
+  const activeBuildings = BUILDING_TYPES.filter(
+    (b) => (level.inventory[b] ?? 0) > 0
+  );
+  const directPoints: string[] = [];
+  const contradictionBuildings: Array<{
+    building: BuildingType;
+    reason: Extract<EliminationReason, { type: 'CONTRADICTION' }>;
+  }> = [];
+
+  for (const b of activeBuildings) {
+    const rawReason = reasons[b];
+    if (
+      rawReason &&
+      typeof rawReason !== 'string' &&
+      rawReason.type === 'CONTRADICTION'
+    ) {
+      contradictionBuildings.push({ building: b, reason: rawReason });
+    } else {
+      const text = rawReason
+        ? formatEliminationReason(r, c, b, rawReason)
+        : 'requirements not met';
+      directPoints.push(`${formatTileName(b)}: ${text}`);
+    }
+  }
+
+  if (level.inventory.road > 0 && reasons['road']) {
+    const roadR = reasons['road'];
+    if (typeof roadR === 'string' || roadR.type !== 'CONTRADICTION') {
+      directPoints.push(
+        `Road: ${formatEliminationReason(r, c, 'road', roadR)}`
+      );
+    }
+  }
+
+  if (contradictionBuildings.length === 0) {
+    const points = getDetailedCellDisqualificationPoints(r, c, reasons, level);
+    return [
+      {
+        title: ruleName,
+        message:
+          `No village buildings can be placed at ${xy(r, c)}:\n` +
+          points.map((p) => `• ${p}`).join('\n'),
+        focusCells: [{ r, c }],
+        candidateCells: [{ r, c }],
+        discardedCells: [{ r, c }]
+      },
+      {
+        title: 'Mark as Clear Ground',
+        message: `Since no buildings can fit at ${xy(r, c)}, mark it as clear ground (Grass).`,
+        targetCell: { r, c }
+      }
+    ];
+  }
+
+  const steps: HintStep[] = [];
+  if (directPoints.length > 0) {
+    const remainingNames = contradictionBuildings
+      .map((cb) => formatTileName(cb.building))
+      .join(' or ');
+    steps.push({
+      title: ruleName,
+      message:
+        `At ${xy(r, c)}, we can immediately rule out:\n` +
+        directPoints.map((p) => `• ${p}`).join('\n') +
+        `\n\nNow let's see why ${xy(r, c)} also cannot be a ${remainingNames}...`,
+      focusCells: [{ r, c }],
+      candidateCells: [{ r, c }]
+    });
+  }
+
+  for (const cb of contradictionBuildings) {
+    if (cb.reason.details) {
+      steps.push(
+        ...buildContradictionWalkthroughSlides(
+          r,
+          c,
+          cb.building,
+          cb.reason.details,
+          `What If ${formatTileName(cb.building)}?`
+        )
+      );
+    } else {
+      steps.push({
+        title: `What If ${formatTileName(cb.building)}?`,
+        message: `If ${xy(r, c)} were a ${formatTileName(cb.building)}, ${cb.reason.contradiction}.`,
+        focusCells: [{ r, c }],
+        discardedCells: [{ r, c }],
+        hypotheticalPlacements: [{ r, c, tileType: cb.building }]
+      });
+    }
+  }
+
+  steps.push({
+    title: 'Mark as Clear Ground',
+    message: `Removing the temporary "what-if" preview: since no building type can fit at ${xy(r, c)}, mark it as clear ground (Grass).`,
+    focusCells: [{ r, c }],
+    targetCell: { r, c },
+    hypotheticalPlacements: []
+  });
+
+  return steps;
 }
 
 function shortestPossibleRoadDistance(
@@ -931,40 +1129,83 @@ export function solveByDeduction(
                   candidateCells: remainingBuildingSpots
                 });
               } else {
-                const premiseMsg =
-                  lookaheadEliminatedCells.has(`${r},${c}`) ||
-                  mustBeBuildingReason.includes("wouldn't have") ||
-                  mustBeBuildingReason.includes('would exceed')
-                    ? `If ${xy(r, c)} were empty, it would lead to a contradiction (${mustBeBuildingReason}), so this spot must contain a building.`
-                    : `${xy(r, c)} must contain a building (${mustBeBuildingReason}).`;
+                const emptyReasonObj = reasons['empty'];
+                if (
+                  emptyReasonObj &&
+                  typeof emptyReasonObj !== 'string' &&
+                  emptyReasonObj.type === 'CONTRADICTION' &&
+                  emptyReasonObj.details
+                ) {
+                  finalSteps = [
+                    ...buildContradictionWalkthroughSlides(
+                      r,
+                      c,
+                      'empty',
+                      emptyReasonObj.details,
+                      finalRuleName
+                    ),
+                    {
+                      title: finalRuleName,
+                      message: `So ${xy(r, c)} must contain a building!`,
+                      focusCells: [{ r, c }],
+                      candidateCells: [{ r, c }],
+                      hypotheticalPlacements: []
+                    }
+                  ];
+                } else {
+                  const premiseMsg =
+                    lookaheadEliminatedCells.has(`${r},${c}`) ||
+                    mustBeBuildingReason.includes("wouldn't have") ||
+                    mustBeBuildingReason.includes('would exceed')
+                      ? `If ${xy(r, c)} were empty, it would lead to a contradiction (${mustBeBuildingReason}), so this spot must contain a building.`
+                      : `${xy(r, c)} must contain a building (${mustBeBuildingReason}).`;
 
-                finalSteps = [
-                  {
-                    title: finalRuleName,
-                    message: premiseMsg,
-                    highlightLine,
-                    focusCells: [{ r, c }],
-                    candidateCells: [{ r, c }]
-                  }
-                ];
+                  finalSteps = [
+                    {
+                      title: finalRuleName,
+                      message: premiseMsg,
+                      highlightLine,
+                      focusCells: [{ r, c }],
+                      candidateCells: [{ r, c }]
+                    }
+                  ];
+                }
               }
 
               for (const b of otherBuildings) {
                 const rObj = reasons[b];
-                const rText = rObj ? formatEliminationReason(r, c, b, rObj) : undefined;
-                finalSteps.push({
-                  title: finalRuleName,
-                  message: `${xy(r, c)} cannot be a ${formatTileName(b)}${rText ? ` (${rText})` : ''}.`,
-                  focusCells: [{ r, c }],
-                  discardedCells: [{ r, c }]
-                });
+                if (
+                  rObj &&
+                  typeof rObj !== 'string' &&
+                  rObj.type === 'CONTRADICTION' &&
+                  rObj.details
+                ) {
+                  finalSteps.push(
+                    ...buildContradictionWalkthroughSlides(
+                      r,
+                      c,
+                      b,
+                      rObj.details,
+                      `What If ${formatTileName(b)}?`
+                    )
+                  );
+                } else {
+                  const rText = rObj ? formatEliminationReason(r, c, b, rObj) : undefined;
+                  finalSteps.push({
+                    title: finalRuleName,
+                    message: `${xy(r, c)} cannot be a ${formatTileName(b)}${rText ? ` (${rText})` : ''}.`,
+                    focusCells: [{ r, c }],
+                    discardedCells: [{ r, c }]
+                  });
+                }
               }
 
               finalSteps.push({
                 title: finalRuleName,
                 message: `Therefore, ${xy(r, c)} must be a ${formatTileName(locked)}!`,
                 focusCells: [{ r, c }],
-                targetCell: { r, c }
+                targetCell: { r, c },
+                hypotheticalPlacements: []
               });
             }
           } else {
@@ -1347,6 +1588,72 @@ export function solveByDeduction(
                 'Column Limit Exceeded',
                 `${xy(r, c)} cannot be a Farm because its adjacent House would also have to be in Column ${c + 1}, exceeding Column ${c + 1}'s limit of ${level.colClues[c]} building.`
               );
+            }
+          }
+
+          if (
+            dom.has('farm') &&
+            (level.inventory.windmill ?? 0) > 0 &&
+            level.inventory.windmill === level.inventory.farm
+          ) {
+            const wmSpots = ortho.filter((n) => domains[n.r][n.c].has('windmill'));
+            const distinctPairPossible = houseSpots.some((h) =>
+              wmSpots.some((w) => h.r !== w.r || h.c !== w.c)
+            );
+            if (wmSpots.length === 0 || !distinctPairPossible) {
+              dom.delete('farm');
+              const elimReason: EliminationReason = {
+                type: 'NO_ADJACENT_WINDMILL'
+              };
+              recordElimReason(r, c, 'farm', elimReason);
+              progress = true;
+              recordLockIfNew(
+                r,
+                c,
+                prev,
+                'Farm Adjacency',
+                `${xy(r, c)} has no adjacent spot for a Windmill, so it cannot be a Farm.`
+              );
+            } else {
+              const allWmInSameRow = wmSpots.every((n) => n.r === r);
+              const allWmInSameCol = wmSpots.every((n) => n.c === c);
+              if (allWmInSameRow && level.rowClues[r] < 2) {
+                dom.delete('farm');
+                const elimReason: EliminationReason = {
+                  type: 'LINE_LIMIT_EXCEEDED',
+                  axis: 'row',
+                  index: r,
+                  limit: level.rowClues[r],
+                  forcedPartnerType: 'windmill'
+                };
+                recordElimReason(r, c, 'farm', elimReason);
+                progress = true;
+                recordLockIfNew(
+                  r,
+                  c,
+                  prev,
+                  'Row Limit Exceeded',
+                  `${xy(r, c)} cannot be a Farm because its adjacent Windmill would also have to be in Row ${r + 1}, exceeding Row ${r + 1}'s limit of ${level.rowClues[r]} building.`
+                );
+              } else if (allWmInSameCol && level.colClues[c] < 2) {
+                dom.delete('farm');
+                const elimReason: EliminationReason = {
+                  type: 'LINE_LIMIT_EXCEEDED',
+                  axis: 'col',
+                  index: c,
+                  limit: level.colClues[c],
+                  forcedPartnerType: 'windmill'
+                };
+                recordElimReason(r, c, 'farm', elimReason);
+                progress = true;
+                recordLockIfNew(
+                  r,
+                  c,
+                  prev,
+                  'Column Limit Exceeded',
+                  `${xy(r, c)} cannot be a Farm because its adjacent Windmill would also have to be in Column ${c + 1}, exceeding Column ${c + 1}'s limit of ${level.colClues[c]} building.`
+                );
+              }
             }
           }
         }
@@ -2011,6 +2318,158 @@ export function solveByDeduction(
           }
         }
 
+        if (
+          locked === 'farm' &&
+          (level.inventory.windmill ?? 0) > 0 &&
+          level.inventory.windmill === level.inventory.farm
+        ) {
+          if (startingGrid && startingGrid[r][c] !== 'farm') {
+            continue;
+          }
+
+          const wmNeighbors = ortho.filter((n) =>
+            domains[n.r][n.c].has('windmill')
+          );
+          if (wmNeighbors.length === 1) {
+            const target = wmNeighbors[0];
+            const dom = domains[target.r][target.c];
+            if (dom.size > 1) {
+              const prev = dom.size;
+              dom.clear();
+              dom.add('windmill');
+              progress = true;
+              const otherWhy = explainWhyOtherOrthoNeighborsWereRuledOut(
+                r,
+                c,
+                target,
+                'windmill'
+              );
+              const otherEmpty = ortho.filter(
+                (n) =>
+                  (n.r !== target.r || n.c !== target.c) &&
+                  !isFixedObstacle(level.initialGrid[n.r][n.c]) &&
+                  (!startingGrid || startingGrid[n.r][n.c] === 'empty')
+              );
+              const customSteps: HintStep[] = [
+                {
+                  title: 'Farm Needs Windmill',
+                  message: `Each Windmill requires its own Farm, so the Farm at ${xy(r, c)} must touch a Windmill.`,
+                  focusCells: [{ r, c }],
+                  candidateCells: [target, ...otherEmpty]
+                }
+              ];
+              for (const n of otherEmpty) {
+                const reasonObj =
+                  cellElimReasons[`${n.r},${n.c}`]?.['windmill'] ??
+                  cellElimReasons[`${n.r},${n.c}`]?.['empty'];
+                const reason = reasonObj
+                  ? formatEliminationReason(n.r, n.c, 'windmill', reasonObj)
+                  : undefined;
+                customSteps.push({
+                  title: 'Farm Needs Windmill',
+                  message: reason
+                    ? `${xy(n.r, n.c)} cannot be a Windmill (${reason}).`
+                    : `${xy(n.r, n.c)} cannot be a Windmill.`,
+                  focusCells: [{ r, c }],
+                  discardedCells: [n]
+                });
+              }
+              customSteps.push({
+                title: 'Farm Needs Windmill',
+                message:
+                  otherEmpty.length > 0
+                    ? `That leaves ${xy(target.r, target.c)} as the only valid spot next to the Farm at ${xy(r, c)} for its Windmill.`
+                    : `${xy(target.r, target.c)} is the only adjacent spot next to the Farm at ${xy(r, c)} for a Windmill.`,
+                focusCells: [{ r, c }],
+                targetCell: target
+              });
+
+              recordLockIfNew(
+                target.r,
+                target.c,
+                prev,
+                'Farm Needs Windmill',
+                `The Farm at ${xy(r, c)} must touch a Windmill, and ${xy(target.r, target.c)} is its only valid neighbor${otherWhy}.`,
+                true,
+                customSteps
+              );
+            }
+          } else if (wmNeighbors.length > 1) {
+            const spotsLabel = wmNeighbors
+              .map((n) => xy(n.r, n.c))
+              .join(' or ');
+            const sharedRow = wmNeighbors.every(
+              (n) => n.r === wmNeighbors[0].r
+            )
+              ? wmNeighbors[0].r
+              : -1;
+            const sharedCol = wmNeighbors.every(
+              (n) => n.c === wmNeighbors[0].c
+            )
+              ? wmNeighbors[0].c
+              : -1;
+
+            if (sharedRow !== -1) {
+              for (let cc = 0; cc < size; cc++) {
+                if (
+                  !wmNeighbors.some((n) => n.c === cc) &&
+                  domains[sharedRow][cc].has('windmill')
+                ) {
+                  const prev = domains[sharedRow][cc].size;
+                  domains[sharedRow][cc].delete('windmill');
+                  const elimReason: EliminationReason = {
+                    type: 'POINTING_LINE',
+                    axis: 'row',
+                    index: sharedRow,
+                    buildingType: 'windmill',
+                    spotsLabel,
+                    sourceCoord: { r, c },
+                    sourceType: 'farm'
+                  };
+                  recordElimReason(sharedRow, cc, 'windmill', elimReason);
+                  progress = true;
+                  recordLockIfNew(
+                    sharedRow,
+                    cc,
+                    prev,
+                    'Row Windmill Claimed',
+                    formatEliminationReason(sharedRow, cc, 'windmill', elimReason)
+                  );
+                }
+              }
+            }
+            if (sharedCol !== -1) {
+              for (let rr = 0; rr < size; rr++) {
+                if (
+                  !wmNeighbors.some((n) => n.r === rr) &&
+                  domains[rr][sharedCol].has('windmill')
+                ) {
+                  const prev = domains[rr][sharedCol].size;
+                  domains[rr][sharedCol].delete('windmill');
+                  const elimReason: EliminationReason = {
+                    type: 'POINTING_LINE',
+                    axis: 'col',
+                    index: sharedCol,
+                    buildingType: 'windmill',
+                    spotsLabel,
+                    sourceCoord: { r, c },
+                    sourceType: 'farm'
+                  };
+                  recordElimReason(rr, sharedCol, 'windmill', elimReason);
+                  progress = true;
+                  recordLockIfNew(
+                    rr,
+                    sharedCol,
+                    prev,
+                    'Column Windmill Claimed',
+                    formatEliminationReason(rr, sharedCol, 'windmill', elimReason)
+                  );
+                }
+              }
+            }
+          }
+        }
+
         if (locked === 'house') {
           if (startingGrid && startingGrid[r][c] !== 'house') {
             continue;
@@ -2296,22 +2755,13 @@ export function solveByDeduction(
                     action: 'mark_empty',
                     ruleName: 'Cannot Hold Building',
                     explanation: `No village buildings can be placed at ${xy(r, c)} (${points.join('; ')}), so this space must be marked as clear ground.`,
-                    steps: [
-                      {
-                        title: 'Cannot Hold Building',
-                        message:
-                          `No village buildings can be placed at ${xy(r, c)}:\n` +
-                          points.map((p) => `• ${p}`).join('\n'),
-                        focusCells: [{ r, c }],
-                        candidateCells: [{ r, c }],
-                        discardedCells: [{ r, c }]
-                      },
-                      {
-                        title: 'Mark as Clear Ground',
-                        message: `Since no buildings can fit at ${xy(r, c)}, mark it as clear ground.`,
-                        targetCell: { r, c }
-                      }
-                    ]
+                    steps: buildCannotHoldBuildingWalkthroughSteps(
+                      r,
+                      c,
+                      reasons,
+                      level,
+                      'Cannot Hold Building'
+                    )
                   });
                 }
                 progress = true;
@@ -2503,22 +2953,13 @@ export function solveByDeduction(
                     action: 'mark_empty',
                     ruleName: 'Cannot Hold Building',
                     explanation: `No village buildings can be placed at ${xy(r, c)} (${points.join('; ')}), so this space must be marked as clear ground.`,
-                    steps: [
-                      {
-                        title: 'Cannot Hold Building',
-                        message:
-                          `No village buildings can be placed at ${xy(r, c)}:\n` +
-                          points.map((p) => `• ${p}`).join('\n'),
-                        focusCells: [{ r, c }],
-                        candidateCells: [{ r, c }],
-                        discardedCells: [{ r, c }]
-                      },
-                      {
-                        title: 'Mark as Clear Ground',
-                        message: `Since no buildings can fit at ${xy(r, c)}, mark it as clear ground.`,
-                        targetCell: { r, c }
-                      }
-                    ]
+                    steps: buildCannotHoldBuildingWalkthroughSteps(
+                      r,
+                      c,
+                      reasons,
+                      level,
+                      'Cannot Hold Building'
+                    )
                   });
                 }
                 progress = true;
@@ -2930,22 +3371,13 @@ export function solveByDeduction(
                 action: 'mark_empty',
                 ruleName,
                 explanation,
-                steps: [
-                  {
-                    title: 'No Buildings Fit',
-                    message:
-                      `No village buildings can be placed at ${xy(r, c)}:\n` +
-                      points.map((p) => `• ${p}`).join('\n'),
-                    focusCells: [{ r, c }],
-                    candidateCells: [{ r, c }],
-                    discardedCells: [{ r, c }]
-                  },
-                  {
-                    title: 'Mark as Clear Ground',
-                    message: `Since no buildings can fit at ${xy(r, c)}, this space must be marked as clear ground (Grass).`,
-                    targetCell: { r, c }
-                  }
-                ]
+                steps: buildCannotHoldBuildingWalkthroughSteps(
+                  r,
+                  c,
+                  reasons,
+                  level,
+                  ruleName
+                )
               });
               progress = true;
               break;
@@ -3002,28 +3434,52 @@ export function solveByDeduction(
               }
             }
 
+            const foundationSteps: HintStep[] =
+              emptyReasonObj &&
+              typeof emptyReasonObj !== 'string' &&
+              emptyReasonObj.type === 'CONTRADICTION' &&
+              emptyReasonObj.details
+                ? [
+                    ...buildContradictionWalkthroughSlides(
+                      r,
+                      c,
+                      'empty',
+                      emptyReasonObj.details,
+                      ruleName
+                    ),
+                    {
+                      title: ruleName,
+                      message: `Removing the temporary "what-if" preview: ${xy(r, c)} must contain a building! Mark it as a Building foundation.`,
+                      highlightLine: axis,
+                      focusCells: [{ r, c }],
+                      targetCell: { r, c },
+                      hypotheticalPlacements: []
+                    }
+                  ]
+                : [
+                    {
+                      title: ruleName,
+                      message: `${emptyReason}.`,
+                      highlightLine: axis,
+                      focusCells: [{ r, c }],
+                      candidateCells: [{ r, c }]
+                    },
+                    {
+                      title: ruleName,
+                      message: `${xy(r, c)} must contain a building! Mark it as a Building foundation.`,
+                      highlightLine: axis,
+                      focusCells: [{ r, c }],
+                      targetCell: { r, c }
+                    }
+                  ];
+
             steps.push({
               r,
               c,
               action: 'mark_building',
               ruleName,
               explanation: `${emptyReason}. Mark ${xy(r, c)} as a Building.`,
-              steps: [
-                {
-                  title: ruleName,
-                  message: `${emptyReason}.`,
-                  highlightLine: axis,
-                  focusCells: [{ r, c }],
-                  candidateCells: [{ r, c }]
-                },
-                {
-                  title: ruleName,
-                  message: `${xy(r, c)} must contain a building! Mark it as a Building foundation.`,
-                  highlightLine: axis,
-                  focusCells: [{ r, c }],
-                  targetCell: { r, c }
-                }
-              ]
+              steps: foundationSteps
             });
             progress = true;
             break;
@@ -3033,27 +3489,28 @@ export function solveByDeduction(
       }
     }
 
-    // --- RULE 8: Specific Contradiction Lookahead ---
+    // --- RULE 8: Specific Contradiction Lookahead (Bounded to 1–2 Waves) ---
     if (!progress) {
       outerLookahead: for (let r = 0; r < size; r++) {
         for (let c = 0; c < size; c++) {
           if (domains[r][c].size <= 1) continue;
           for (const candidate of Array.from(domains[r][c])) {
-            const contradiction = findSpecificAssignmentContradiction(
+            const contradictionDetails = findSpecificAssignmentContradiction(
               domains,
               level,
               r,
               c,
               candidate
             );
-            if (contradiction !== null) {
+            if (contradictionDetails !== null) {
               lookaheadCount++;
               const prev = domains[r][c].size;
               domains[r][c].delete(candidate);
               lookaheadEliminatedCells.add(`${r},${c}`);
               const elimReason: EliminationReason = {
                 type: 'CONTRADICTION',
-                contradiction
+                contradiction: contradictionDetails.summary,
+                details: contradictionDetails
               };
               recordElimReason(r, c, candidate, elimReason);
               progress = true;
@@ -3063,8 +3520,8 @@ export function solveByDeduction(
                 prev,
                 'Logical Elimination',
                 candidate === 'empty'
-                  ? `${xy(r, c)} cannot be empty because ${contradiction}.`
-                  : `${xy(r, c)} cannot be ${formatTileName(candidate)} because ${contradiction}.`,
+                  ? `${xy(r, c)} cannot be empty because ${contradictionDetails.summary}.`
+                  : `${xy(r, c)} cannot be ${formatTileName(candidate)} because ${contradictionDetails.summary}.`,
                 false
               );
               break outerLookahead;
@@ -3086,8 +3543,8 @@ export function solveByDeduction(
 }
 
 /**
- * Tests if setting (testR, testC) = candidate leads to a direct logical contradiction,
- * and returns a specific, human-readable explanation of WHICH rule breaks (or null if consistent).
+ * Tests if setting (testR, testC) = candidate leads to a direct logical contradiction
+ * within at most 2 causal propagation waves, and returns structured "What-If" walkthrough steps.
  */
 function findSpecificAssignmentContradiction(
   baseDomains: Set<TileType>[][],
@@ -3095,12 +3552,16 @@ function findSpecificAssignmentContradiction(
   testR: number,
   testC: number,
   candidate: TileType
-): string | null {
+): ContradictionDetails | null {
   const size = level.size;
   const domains: Set<TileType>[][] = baseDomains.map((row) =>
     row.map((s) => new Set(s))
   );
   domains[testR][testC] = new Set([candidate]);
+
+  const everyFarmNeedsWindmill =
+    (level.inventory.windmill ?? 0) > 0 &&
+    level.inventory.windmill === level.inventory.farm;
 
   interface ForcedStep {
     text: string;
@@ -3108,29 +3569,103 @@ function findSpecificAssignmentContradiction(
     targetC: number;
   }
   const forcedSteps: ForcedStep[] = [];
+  const waveSteps: ContradictionWaveStep[] = [];
+  const recordedStepKeys = new Set<string>();
+  const causalRows = new Set<number>([testR]);
+  const causalCols = new Set<number>([testC]);
+  const causalCells = new Set<string>([`${testR},${testC}`]);
+
+  const markCellCausal = (r: number, c: number) => {
+    causalRows.add(r);
+    causalCols.add(c);
+    causalCells.add(`${r},${c}`);
+  };
+
+  const addWaveStep = (key: string, step: ContradictionWaveStep) => {
+    if (recordedStepKeys.has(key)) return;
+    recordedStepKeys.add(key);
+    waveSteps.push(step);
+  };
+
+  const selectWalkthroughSteps = (
+    conflictRow?: number,
+    conflictCol?: number
+  ): ContradictionWaveStep[] => {
+    if (waveSteps.length === 0) return [];
+    const relevant = waveSteps.filter(
+      (s) =>
+        (conflictRow !== undefined && s.affectedRows.includes(conflictRow)) ||
+        (conflictCol !== undefined && s.affectedCols.includes(conflictCol)) ||
+        s.affectedRows.includes(testR) ||
+        s.affectedCols.includes(testC)
+    );
+    const chosen = relevant.length > 0 ? relevant : waveSteps;
+    return chosen.slice(0, 2);
+  };
+
+  const makeDetails = (
+    wave: number,
+    summary: string,
+    contradictionMessage: string,
+    contradictionCells?: Coord[],
+    contradictionLine?: { axis: 'row' | 'col'; index: number }
+  ): ContradictionDetails => {
+    const conflictRow =
+      contradictionLine?.axis === 'row'
+        ? contradictionLine.index
+        : contradictionCells?.[0]?.r;
+    const conflictCol =
+      contradictionLine?.axis === 'col'
+        ? contradictionLine.index
+        : contradictionCells?.[0]?.c;
+    const walkthroughSteps = selectWalkthroughSteps(conflictRow, conflictCol);
+    return {
+      summary,
+      waveCount: wave,
+      walkthroughSteps,
+      contradictionMessage,
+      contradictionCells,
+      contradictionLine
+    };
+  };
+
+  const MAX_LOOKAHEAD_WAVES = 2;
   let changed = true;
-  while (changed) {
+  let wave = 0;
+
+  while (changed && wave < MAX_LOOKAHEAD_WAVES) {
+    wave++;
     changed = false;
 
     for (let r = 0; r < size; r++) {
       for (let c = 0; c < size; c++) {
         if (domains[r][c].size === 0) {
-          return `${xy(r, c)} would have no valid tile options left`;
+          return makeDetails(
+            wave,
+            `${xy(r, c)} would have no valid tile options left`,
+            `Wait — that leaves ${xy(r, c)} with no valid tile options at all!`,
+            [{ r, c }]
+          );
         }
       }
     }
 
-    // Row building count bounds
+    // 1. Row building count bounds
     for (let r = 0; r < size; r++) {
       let minB = 0;
       let maxB = 0;
+      const mustCoords: Coord[] = [];
       for (let c = 0; c < size; c++) {
-        if (mustBeBuilding(domains[r][c])) minB++;
+        if (mustBeBuilding(domains[r][c])) {
+          minB++;
+          mustCoords.push({ r, c });
+        }
         if (canBeAnyBuilding(domains[r][c])) maxB++;
       }
       if (minB > level.rowClues[r]) {
         const relevant = forcedSteps.filter((s) => s.targetR === r);
         const stepsToUse = relevant.length > 0 ? relevant : forcedSteps;
+        let summary = `Row ${r + 1} would exceed its limit of ${level.rowClues[r]} building(s)`;
         if (stepsToUse.length > 0) {
           const fillCol =
             candidate === 'town_hall' || isBuilding(candidate)
@@ -3153,46 +3688,104 @@ function findSpecificAssignmentContradiction(
               }
               return `${xy(r, cc)} (needed for Column ${cc + 1})`;
             });
-            return `${fillCol}${stepsToUse.map((s) => s.text).join(', ')}. Along with ${names.join(' and ')}, Row ${r + 1} would have ${minB} buildings, exceeding its limit of ${level.rowClues[r]} building(s)`;
+            summary = `${fillCol}${stepsToUse.map((s) => s.text).join(', ')}. Along with ${names.join(' and ')}, Row ${r + 1} would have ${minB} buildings, exceeding its limit of ${level.rowClues[r]} building(s)`;
+          } else {
+            summary = `${fillCol}${stepsToUse.map((s) => s.text).join(', ')}, which causes Row ${r + 1} to exceed its limit of ${level.rowClues[r]} building(s)`;
           }
-          return `${fillCol}${stepsToUse.map((s) => s.text).join(', ')}, which causes Row ${r + 1} to exceed its limit of ${level.rowClues[r]} building(s)`;
         }
-        return `Row ${r + 1} would exceed its limit of ${level.rowClues[r]} building(s)`;
+        return makeDetails(
+          wave,
+          summary,
+          `Contradiction! Row ${r + 1} would end up with ${minB} buildings (${mustCoords.map((p) => xy(p.r, p.c)).join(', ')}), exceeding Row ${r + 1}'s limit of ${level.rowClues[r]} building(s).`,
+          mustCoords,
+          { axis: 'row', index: r }
+        );
       }
       if (maxB < level.rowClues[r]) {
-        return `Row ${r + 1} wouldn't have enough valid spots left for its ${level.rowClues[r]} required building(s)`;
+        return makeDetails(
+          wave,
+          `Row ${r + 1} wouldn't have enough valid spots left for its ${level.rowClues[r]} required building(s)`,
+          `Contradiction! Row ${r + 1} needs ${level.rowClues[r]} building(s), but would only have ${maxB} valid spot(s) left.`,
+          [{ r: testR, c: testC }],
+          { axis: 'row', index: r }
+        );
       }
       if (minB === level.rowClues[r]) {
+        const isRowCausal = causalRows.has(r);
+        const clearedInRow: Coord[] = [];
         for (let c = 0; c < size; c++) {
           if (
             !mustBeBuilding(domains[r][c]) &&
+            canBeAnyBuilding(domains[r][c]) &&
             removeBuildingsFromDomain(domains[r][c])
           ) {
             changed = true;
+            clearedInRow.push({ r, c });
+            if (isRowCausal) markCellCausal(r, c);
           }
+        }
+        if (isRowCausal && clearedInRow.length > 0) {
+          addWaveStep(`row-full-${r}`, {
+            message: `That fills Row ${r + 1}'s limit of ${level.rowClues[r]} building(s), forcing ${clearedInRow.map((p) => xy(p.r, p.c)).join(' and ')} to be clear ground (Grass).`,
+            placements: clearedInRow.map((p) => ({
+              r: p.r,
+              c: p.c,
+              tileType: 'empty'
+            })),
+            focusCells: clearedInRow,
+            highlightLine: { axis: 'row', index: r },
+            affectedRows: [r],
+            affectedCols: clearedInRow.map((p) => p.c)
+          });
         }
       }
       if (maxB === level.rowClues[r]) {
+        const isRowCausal = causalRows.has(r);
+        const forcedInRow: Coord[] = [];
         for (let c = 0; c < size; c++) {
-          if (canBeAnyBuilding(domains[r][c])) {
-            if (domains[r][c].delete('empty')) changed = true;
-            if (domains[r][c].delete('road')) changed = true;
+          if (canBeAnyBuilding(domains[r][c]) && !mustBeBuilding(domains[r][c])) {
+            const remE = domains[r][c].delete('empty');
+            const remR = domains[r][c].delete('road');
+            if (remE || remR) {
+              changed = true;
+              forcedInRow.push({ r, c });
+              if (isRowCausal) markCellCausal(r, c);
+            }
           }
+        }
+        if (isRowCausal && forcedInRow.length > 0) {
+          addWaveStep(`row-force-${r}`, {
+            message: `Then Row ${r + 1} needs ${level.rowClues[r]} building(s), forcing ${forcedInRow.map((p) => xy(p.r, p.c)).join(' and ')} to hold a building.`,
+            placements: forcedInRow.map((p) => ({
+              r: p.r,
+              c: p.c,
+              tileType: getLockedTile(domains[p.r][p.c]) ?? 'building'
+            })),
+            focusCells: forcedInRow,
+            highlightLine: { axis: 'row', index: r },
+            affectedRows: [r],
+            affectedCols: forcedInRow.map((p) => p.c)
+          });
         }
       }
     }
 
-    // Col building count bounds
+    // 2. Column building count bounds
     for (let c = 0; c < size; c++) {
       let minB = 0;
       let maxB = 0;
+      const mustCoords: Coord[] = [];
       for (let r = 0; r < size; r++) {
-        if (mustBeBuilding(domains[r][c])) minB++;
+        if (mustBeBuilding(domains[r][c])) {
+          minB++;
+          mustCoords.push({ r, c });
+        }
         if (canBeAnyBuilding(domains[r][c])) maxB++;
       }
       if (minB > level.colClues[c]) {
         const relevant = forcedSteps.filter((s) => s.targetC === c);
         const stepsToUse = relevant.length > 0 ? relevant : forcedSteps;
+        let summary = `Column ${c + 1} would exceed its limit of ${level.colClues[c]} building(s)`;
         if (stepsToUse.length > 0) {
           const fillRow =
             candidate === 'town_hall' || isBuilding(candidate)
@@ -3215,41 +3808,99 @@ function findSpecificAssignmentContradiction(
               }
               return `${xy(rr, c)} (needed for Row ${rr + 1})`;
             });
-            return `${fillRow}${stepsToUse.map((s) => s.text).join(', ')}. Along with ${names.join(' and ')}, Column ${c + 1} would have ${minB} buildings, exceeding its limit of ${level.colClues[c]} building(s)`;
+            summary = `${fillRow}${stepsToUse.map((s) => s.text).join(', ')}. Along with ${names.join(' and ')}, Column ${c + 1} would have ${minB} buildings, exceeding its limit of ${level.colClues[c]} building(s)`;
+          } else {
+            summary = `${fillRow}${stepsToUse.map((s) => s.text).join(', ')}, which causes Column ${c + 1} to exceed its limit of ${level.colClues[c]} building(s)`;
           }
-          return `${fillRow}${stepsToUse.map((s) => s.text).join(', ')}, which causes Column ${c + 1} to exceed its limit of ${level.colClues[c]} building(s)`;
         }
-        return `Column ${c + 1} would exceed its limit of ${level.colClues[c]} building(s)`;
+        return makeDetails(
+          wave,
+          summary,
+          `Contradiction! Column ${c + 1} would end up with ${minB} buildings (${mustCoords.map((p) => xy(p.r, p.c)).join(', ')}), exceeding Column ${c + 1}'s limit of ${level.colClues[c]} building(s).`,
+          mustCoords,
+          { axis: 'col', index: c }
+        );
       }
       if (maxB < level.colClues[c]) {
-        return `Column ${c + 1} wouldn't have enough valid spots left for its ${level.colClues[c]} required building(s)`;
+        return makeDetails(
+          wave,
+          `Column ${c + 1} wouldn't have enough valid spots left for its ${level.colClues[c]} required building(s)`,
+          `Contradiction! Column ${c + 1} needs ${level.colClues[c]} building(s), but would only have ${maxB} valid spot(s) left.`,
+          [{ r: testR, c: testC }],
+          { axis: 'col', index: c }
+        );
       }
       if (minB === level.colClues[c]) {
+        const isColCausal = causalCols.has(c);
+        const clearedInCol: Coord[] = [];
         for (let r = 0; r < size; r++) {
           if (
             !mustBeBuilding(domains[r][c]) &&
+            canBeAnyBuilding(domains[r][c]) &&
             removeBuildingsFromDomain(domains[r][c])
           ) {
             changed = true;
+            clearedInCol.push({ r, c });
+            if (isColCausal) markCellCausal(r, c);
           }
+        }
+        if (isColCausal && clearedInCol.length > 0) {
+          addWaveStep(`col-full-${c}`, {
+            message: `That fills Column ${c + 1}'s limit of ${level.colClues[c]} building(s), forcing ${clearedInCol.map((p) => xy(p.r, p.c)).join(' and ')} to be clear ground (Grass).`,
+            placements: clearedInCol.map((p) => ({
+              r: p.r,
+              c: p.c,
+              tileType: 'empty'
+            })),
+            focusCells: clearedInCol,
+            highlightLine: { axis: 'col', index: c },
+            affectedRows: clearedInCol.map((p) => p.r),
+            affectedCols: [c]
+          });
         }
       }
       if (maxB === level.colClues[c]) {
+        const isColCausal = causalCols.has(c);
+        const forcedInCol: Coord[] = [];
         for (let r = 0; r < size; r++) {
-          if (canBeAnyBuilding(domains[r][c])) {
-            if (domains[r][c].delete('empty')) changed = true;
-            if (domains[r][c].delete('road')) changed = true;
+          if (canBeAnyBuilding(domains[r][c]) && !mustBeBuilding(domains[r][c])) {
+            const remE = domains[r][c].delete('empty');
+            const remR = domains[r][c].delete('road');
+            if (remE || remR) {
+              changed = true;
+              forcedInCol.push({ r, c });
+              if (isColCausal) markCellCausal(r, c);
+            }
           }
+        }
+        if (isColCausal && forcedInCol.length > 0) {
+          addWaveStep(`col-force-${c}`, {
+            message: `Then Column ${c + 1} needs ${level.colClues[c]} building(s), forcing ${forcedInCol.map((p) => xy(p.r, p.c)).join(' and ')} to hold a building.`,
+            placements: forcedInCol.map((p) => ({
+              r: p.r,
+              c: p.c,
+              tileType: getLockedTile(domains[p.r][p.c]) ?? 'building'
+            })),
+            focusCells: forcedInCol,
+            highlightLine: { axis: 'col', index: c },
+            affectedRows: forcedInCol.map((p) => p.r),
+            affectedCols: [c]
+          });
         }
       }
     }
 
-    // Adjacency & locked propagation
+    // 3. Adjacency & locked propagation
     for (let r = 0; r < size; r++) {
       for (let c = 0; c < size; c++) {
         const dom = domains[r][c];
         if (dom.size === 0) {
-          return `${xy(r, c)} would have no valid tile options left`;
+          return makeDetails(
+            wave,
+            `${xy(r, c)} would have no valid tile options left`,
+            `Wait — that leaves ${xy(r, c)} with no valid tile options at all!`,
+            [{ r, c }]
+          );
         }
         const ortho = getOrthoNeighbors(size, r, c);
         const surr8 = getSurrounding8Neighbors(size, r, c);
@@ -3275,7 +3926,9 @@ function findSpecificAssignmentContradiction(
         }
         if (
           dom.has('farm') &&
-          !ortho.some((n) => domains[n.r][n.c].has('house'))
+          (!ortho.some((n) => domains[n.r][n.c].has('house')) ||
+            (everyFarmNeedsWindmill &&
+              !ortho.some((n) => domains[n.r][n.c].has('windmill'))))
         ) {
           dom.delete('farm');
           changed = true;
@@ -3306,7 +3959,12 @@ function findSpecificAssignmentContradiction(
             domains[n.r][n.c].has('woodcutter')
           );
           if (wcNeighbors.length === 0) {
-            return `the Tree at ${xy(r, c)} would have no valid spot for its required Woodcutter`;
+            return makeDetails(
+              wave,
+              `the Tree at ${xy(r, c)} would have no valid spot for its required Woodcutter`,
+              `Contradiction! The Tree at ${xy(r, c)} would have no valid adjacent spot left for its required Woodcutter.`,
+              [{ r, c }]
+            );
           }
           if (wcNeighbors.length === 1) {
             const target = wcNeighbors[0];
@@ -3314,15 +3972,29 @@ function findSpecificAssignmentContradiction(
               domains[target.r][target.c].clear();
               domains[target.r][target.c].add('woodcutter');
               changed = true;
+              markCellCausal(target.r, target.c);
+              addWaveStep(`tree-wc-${r},${c}`, {
+                message: `Then the Tree at ${xy(r, c)} would force its Woodcutter into ${xy(target.r, target.c)}.`,
+                placements: [{ r: target.r, c: target.c, tileType: 'woodcutter' }],
+                focusCells: [{ r, c }, target],
+                affectedRows: [r, target.r],
+                affectedCols: [c, target.c]
+              });
             }
           }
         }
+
         if (locked === 'woodcutter' || locked === 'farm') {
           const houseNeighbors = ortho.filter((n) =>
             domains[n.r][n.c].has('house')
           );
           if (houseNeighbors.length === 0) {
-            return `the ${formatTileName(locked)} at ${xy(r, c)} would have no valid spot for its required House`;
+            return makeDetails(
+              wave,
+              `the ${formatTileName(locked)} at ${xy(r, c)} would have no valid spot for its required House`,
+              `Contradiction! The ${formatTileName(locked)} at ${xy(r, c)} would have no valid adjacent spot left for its required House.`,
+              [{ r, c }]
+            );
           }
           if (houseNeighbors.length === 1) {
             const target = houseNeighbors[0];
@@ -3330,20 +4002,69 @@ function findSpecificAssignmentContradiction(
               domains[target.r][target.c].clear();
               domains[target.r][target.c].add('house');
               changed = true;
+              markCellCausal(target.r, target.c);
               forcedSteps.push({
                 text: `forcing ${formatTileName(locked)} at ${xy(r, c)}'s House into ${xy(target.r, target.c)}`,
                 targetR: target.r,
                 targetC: target.c
               });
+              addWaveStep(`need-house-${r},${c}`, {
+                message: `Then the ${formatTileName(locked)} at ${xy(r, c)} would force its required House into ${xy(target.r, target.c)}.`,
+                placements: [{ r: target.r, c: target.c, tileType: 'house' }],
+                focusCells: [{ r, c }, target],
+                affectedRows: [r, target.r],
+                affectedCols: [c, target.c]
+              });
             }
           }
         }
+
+        if (locked === 'farm' && everyFarmNeedsWindmill) {
+          const wmNeighbors = ortho.filter((n) =>
+            domains[n.r][n.c].has('windmill')
+          );
+          if (wmNeighbors.length === 0) {
+            return makeDetails(
+              wave,
+              `the Farm at ${xy(r, c)} would have no valid spot for its required Windmill`,
+              `Contradiction! The Farm at ${xy(r, c)} would have no valid adjacent spot left for its required Windmill.`,
+              [{ r, c }]
+            );
+          }
+          if (wmNeighbors.length === 1) {
+            const target = wmNeighbors[0];
+            if (domains[target.r][target.c].size > 1) {
+              domains[target.r][target.c].clear();
+              domains[target.r][target.c].add('windmill');
+              changed = true;
+              markCellCausal(target.r, target.c);
+              forcedSteps.push({
+                text: `forcing Farm at ${xy(r, c)}'s Windmill into ${xy(target.r, target.c)}`,
+                targetR: target.r,
+                targetC: target.c
+              });
+              addWaveStep(`need-wm-${r},${c}`, {
+                message: `Then the Farm at ${xy(r, c)} would force its required Windmill into ${xy(target.r, target.c)}.`,
+                placements: [{ r: target.r, c: target.c, tileType: 'windmill' }],
+                focusCells: [{ r, c }, target],
+                affectedRows: [r, target.r],
+                affectedCols: [c, target.c]
+              });
+            }
+          }
+        }
+
         if (locked === 'windmill') {
           const farmNeighbors = ortho.filter((n) =>
             domains[n.r][n.c].has('farm')
           );
           if (farmNeighbors.length === 0) {
-            return `the Windmill at ${xy(r, c)} would have no valid spot for its required Farm`;
+            return makeDetails(
+              wave,
+              `the Windmill at ${xy(r, c)} would have no valid spot for its required Farm`,
+              `Contradiction! The Windmill at ${xy(r, c)} would have no valid adjacent spot left for its required Farm.`,
+              [{ r, c }]
+            );
           }
           if (farmNeighbors.length === 1) {
             const target = farmNeighbors[0];
@@ -3351,51 +4072,100 @@ function findSpecificAssignmentContradiction(
               domains[target.r][target.c].clear();
               domains[target.r][target.c].add('farm');
               changed = true;
+              markCellCausal(target.r, target.c);
               forcedSteps.push({
                 text: `forcing Windmill at ${xy(r, c)}'s Farm into ${xy(target.r, target.c)}`,
                 targetR: target.r,
                 targetC: target.c
+              });
+              addWaveStep(`need-farm-${r},${c}`, {
+                message: `Then the Windmill at ${xy(r, c)} would force its required Farm into ${xy(target.r, target.c)}.`,
+                placements: [{ r: target.r, c: target.c, tileType: 'farm' }],
+                focusCells: [{ r, c }, target],
+                affectedRows: [r, target.r],
+                affectedCols: [c, target.c]
               });
             }
           }
         }
 
         if (locked && isBuilding(locked)) {
+          const isLockCausal = causalCells.has(`${r},${c}`);
           for (let cc = 0; cc < size; cc++) {
-            if (cc !== c && domains[r][cc].delete(locked)) changed = true;
+            if (cc !== c && domains[r][cc].delete(locked)) {
+              changed = true;
+              if (isLockCausal) markCellCausal(r, cc);
+            }
           }
           for (let rr = 0; rr < size; rr++) {
-            if (rr !== r && domains[rr][c].delete(locked)) changed = true;
+            if (rr !== r && domains[rr][c].delete(locked)) {
+              changed = true;
+              if (isLockCausal) markCellCausal(rr, c);
+            }
           }
+          const clearedPerim: Coord[] = [];
           for (const n of surr8) {
-            if (domains[n.r][n.c].delete(locked)) changed = true;
+            if (domains[n.r][n.c].delete(locked)) {
+              changed = true;
+              if (isLockCausal) markCellCausal(n.r, n.c);
+            }
             if (
               locked === 'town_hall' &&
+              canBeAnyBuilding(domains[n.r][n.c]) &&
               removeBuildingsFromDomain(domains[n.r][n.c])
             ) {
               changed = true;
+              if (isLockCausal) markCellCausal(n.r, n.c);
+              clearedPerim.push(n);
             }
+          }
+          if (isLockCausal && clearedPerim.length > 0) {
+            addWaveStep(`th-perim-${r},${c}`, {
+              message: `Town Hall at ${xy(r, c)} requires a clear 8-square perimeter, forcing ${clearedPerim.map((p) => xy(p.r, p.c)).join(', ')} to be clear ground.`,
+              placements: clearedPerim.map((p) => ({
+                r: p.r,
+                c: p.c,
+                tileType: 'empty'
+              })),
+              focusCells: [{ r, c }, ...clearedPerim],
+              affectedRows: Array.from(new Set([r, ...clearedPerim.map((p) => p.r)])),
+              affectedCols: Array.from(new Set([c, ...clearedPerim.map((p) => p.c)]))
+            });
           }
         }
       }
     }
 
-    // Inventory bounds
+    // 4. Inventory bounds
     for (const pType of PLACEABLE_TYPES) {
       const target = level.inventory[pType] ?? 0;
       let minCount = 0;
       let maxCount = 0;
+      const lockedCells: Coord[] = [];
       for (let r = 0; r < size; r++) {
         for (let c = 0; c < size; c++) {
-          if (getLockedTile(domains[r][c]) === pType) minCount++;
+          if (getLockedTile(domains[r][c]) === pType) {
+            minCount++;
+            lockedCells.push({ r, c });
+          }
           if (domains[r][c].has(pType)) maxCount++;
         }
       }
       if (minCount > target) {
-        return `more than ${target} ${formatTileName(pType)}(s) would be forced`;
+        return makeDetails(
+          wave,
+          `more than ${target} ${formatTileName(pType)}(s) would be forced`,
+          `Contradiction! That would force ${minCount} ${formatTileName(pType)}(s) on the board, but the level only has ${target}.`,
+          lockedCells
+        );
       }
       if (maxCount < target) {
-        return `there wouldn't be enough valid spots left to place all ${target} required ${formatTileName(pType)}(s)`;
+        return makeDetails(
+          wave,
+          `there wouldn't be enough valid spots left to place all ${target} required ${formatTileName(pType)}(s)`,
+          `Contradiction! That would leave only ${maxCount} valid spot(s) on the board for the ${target} required ${formatTileName(pType)}(s).`,
+          [{ r: testR, c: testC }]
+        );
       }
       if (minCount === target) {
         for (let r = 0; r < size; r++) {
@@ -3428,7 +4198,11 @@ function findSpecificAssignmentContradiction(
     const grid = domains.map((row) => row.map((d) => getLockedTile(d)!));
     const val = validateBoard(grid, level);
     if (!val.isSolved) {
-      return `the road network could not connect all Woodcutters and Farms to the Town Hall within ${level.inventory.road} Road tile(s)`;
+      return makeDetails(
+        wave,
+        `the road network could not connect all Woodcutters and Farms to the Town Hall within ${level.inventory.road} Road tile(s)`,
+        `Contradiction! The road network could not connect all Woodcutters and Farms to the Town Hall within ${level.inventory.road} Road tile(s).`
+      );
     }
     return null;
   }
@@ -3441,7 +4215,11 @@ function findSpecificAssignmentContradiction(
       }
     }
     if (thCells.length === 0) {
-      return `no valid spot would remain for the Town Hall`;
+      return makeDetails(
+        wave,
+        `no valid spot would remain for the Town Hall`,
+        `Contradiction! No valid spot with a clear 8-square perimeter would remain for the Town Hall.`
+      );
     }
 
     for (let r = 0; r < size; r++) {
@@ -3454,7 +4232,12 @@ function findSpecificAssignmentContradiction(
               level.inventory.road
           );
           if (!canConnect) {
-            return `the ${formatTileName(locked)} at ${xy(r, c)} could no longer connect to the Town Hall within ${level.inventory.road} Road tile(s)`;
+            return makeDetails(
+              wave,
+              `the ${formatTileName(locked)} at ${xy(r, c)} could no longer connect to the Town Hall within ${level.inventory.road} Road tile(s)`,
+              `Contradiction! The ${formatTileName(locked)} at ${xy(r, c)} could no longer connect to the Town Hall within ${level.inventory.road} Road tile(s).`,
+              [{ r, c }]
+            );
           }
         }
       }

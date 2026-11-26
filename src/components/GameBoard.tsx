@@ -307,13 +307,30 @@ export const GameBoard: React.FC<GameBoardProps> = ({
                       (activeHintStep.highlightLine.axis === 'col' &&
                         activeHintStep.highlightLine.index === c))
                 );
+                const hypothetical =
+                  tile === 'empty'
+                    ? activeHintStep?.hypotheticalPlacements?.find(
+                        (h) => h.r === r && h.c === c
+                      )
+                    : undefined;
+                const effectiveTile: TileType =
+                  hypothetical &&
+                  hypothetical.tileType !== 'empty' &&
+                  hypothetical.tileType !== 'building'
+                    ? hypothetical.tileType
+                    : tile;
+                const effectiveMarkedEmpty =
+                  (tile === 'empty' && isMarkedAllEmpty) ||
+                  hypothetical?.tileType === 'empty';
+                const effectiveMarkedBuilding =
+                  isMarkedBuilding || hypothetical?.tileType === 'building';
                 const isHinted = isHintTarget;
                 const isSelected =
                   selectedCell?.r === r && selectedCell?.c === c;
 
                 let bgClass = 'tile-bg-grass';
-                if (tile === 'empty') {
-                  if (isMarkedAllEmpty) {
+                if (effectiveTile === 'empty') {
+                  if (effectiveMarkedEmpty) {
                     const emptyIdx = ((r * 11 + c * 17 + level.id * 7) % 3) + 1;
                     bgClass = `tile-bg-empty-${emptyIdx}`;
                   } else {
@@ -415,14 +432,15 @@ export const GameBoard: React.FC<GameBoardProps> = ({
                       isHintDiscarded ? 'tile-hint-discarded' : '',
                       isHintTarget ? 'tile-hint-target tile-hinted' : '',
                       isHintLine ? 'tile-hint-line' : '',
+                      hypothetical ? 'tile-hypothetical' : '',
                       isSelected ? 'tile-selected' : '',
                       isJustPlacedRoad ? 'tile-just-placed' : '',
                       isNewlyBuilt ? 'tile-building-active' : '',
-                      isMarkedBuilding ? 'tile-marked-building' : '',
+                      effectiveMarkedBuilding ? 'tile-marked-building' : '',
                       isPoppingEmpty ? 'tile-empty-popping' : '',
                       isRippling ? 'tile-line-ripple' : '',
                       isVictoryVisible ? 'tile-victory-wave' : '',
-                      tile === 'empty' && isRuledOutForActive
+                      effectiveTile === 'empty' && !hypothetical && isRuledOutForActive
                         ? 'tile-ruled-out-active'
                         : '',
                       isBunnyTree ? 'tile-has-bunny' : '',
@@ -443,12 +461,12 @@ export const GameBoard: React.FC<GameBoardProps> = ({
                     }
                   >
                     <TileGraphic
-                      key={isNewlyBuilt ? `built-${buildTimestamp}` : `static-${tile}-${key}`}
-                      type={tile}
-                      markedEmpty={tile === 'empty' && isMarkedAllEmpty}
-                      markedBuilding={isMarkedBuilding}
+                      key={isNewlyBuilt ? `built-${buildTimestamp}` : `static-${effectiveTile}-${hypothetical?.tileType ?? 'real'}-${key}`}
+                      type={effectiveTile}
+                      markedEmpty={effectiveMarkedEmpty}
+                      markedBuilding={effectiveMarkedBuilding}
                       ruledOutForActiveType={
-                        tile === 'empty' && isRuledOutForActive
+                        effectiveTile === 'empty' && !hypothetical && isRuledOutForActive
                           ? activeTool
                           : null
                       }
@@ -466,6 +484,14 @@ export const GameBoard: React.FC<GameBoardProps> = ({
                       chickenState={tileGroundFauna}
                       butterflyState={tileButterfly}
                     />
+                    {hypothetical && (
+                      <span
+                        className="tile-hypothetical-badge"
+                        aria-label="What-If temporary placement"
+                      >
+                        ?
+                      </span>
+                    )}
                     {hasError && (
                       <span
                         className="tile-error-badge"

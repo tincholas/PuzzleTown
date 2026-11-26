@@ -101,6 +101,12 @@ export interface BoardValidationResult {
   remainingInventory: Record<PlaceableType, number>;
 }
 
+export interface HypotheticalPlacement {
+  r: number;
+  c: number;
+  tileType: TileType | 'building';
+}
+
 export interface HintStep {
   title?: string;
   message: string;
@@ -109,6 +115,7 @@ export interface HintStep {
   discardedCells?: Coord[];
   targetCell?: Coord;
   highlightLine?: { axis: 'row' | 'col'; index: number };
+  hypotheticalPlacements?: HypotheticalPlacement[];
 }
 
 export interface DeductionHint {

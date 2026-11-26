@@ -617,7 +617,7 @@ export function generateVerifiedLevel(
 
     const deduction = solveByDeduction(candidateLevel);
     if (!deduction.solved) continue;
-    if (deduction.lookaheadCount > 3) continue;
+    if (deduction.lookaheadCount > 2) continue;
 
     const metrics = calculateDifficultyMetrics(candidateLevel);
     candidateLevel.difficultyMetrics = metrics;
